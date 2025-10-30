@@ -1,47 +1,48 @@
+#!/usr/bin/env python3
 """
 Script name: tom_words.py
 Purpose: Analyze Theory of Mind (ToM) word use in participant transcripts.
-    - Count ToM-related phrases in participant responses.
-    - Save per-trial and per-subject totals.
-    - Compare Human vs Bot totals (paired t-test + plot).
-    - Save results (CSVs, plots, stats) to results/<model>/<temperature>/tom_words/.
+    - Reads from the combined transcript CSV created by combine_text_data.py.
+    - Counts ToM-related phrases in participant responses.
+    - Saves per-trial and per-subject totals.
+    - Compares Human vs Bot totals (paired t-test + plots).
+    - Saves results (CSVs, plots, stats) to results/<model>/<temperature>/tom_words/.
 
 Inputs:
-    - Per-subject transcript CSVs in data/<model>/<temperature>/{s###}.csv
+    - Combined transcript CSV: data/<model>/<temperature>/combined_text_data.csv
 
 Outputs:
-    - Trial-level and summary CSVs.
-    - Statistical output text files (detailed, explicit).
-    - Figures (bar plots with subject-level lines).
-    - Run log + config snapshot.
+    - tom_by_interaction.csv
+    - tom_subject_summary.csv
+    - tom_stats.txt
+    - tom_barplot.png
+    - tom_violinplot.png
 
 Usage:
     python code/analysis/tom_words.py --config configs/behavior.json
 
 Author: Rachel C. Metzgar
-Date: 2025-10-29
+Date: 2025-10-31
 """
 
 from __future__ import annotations
 import os, re
-from typing import List
-
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
+from scipy.stats import ttest_rel
 
-from utils.globals import DATA_DIR, RESULTS_DIR
-from utils.run_logger import init_run
+from utils.globals import DATA_DIR, RESULTS_DIR, PROJECT_ROOT
 from utils.cli_helpers import parse_and_load_config
-from utils.stats_helpers import paired_ttest_report, paired_clean
-from utils.print_helpers import print_header, print_warn, print_save, print_info
+from utils.run_logger import init_run
+from utils.stats_helpers import paired_clean
+from utils.print_helpers import print_header, print_save, print_info, print_warn
+from utils.plot_helpers import barplot_with_lines, main_effect_violin_lines, DEFAULT_PALETTE
 
 SCRIPT_NAME = "tom_words"
 
-# -------------------------------
+# ------------------------------------------------------------
 # ToM Word List
-# -------------------------------
+# ------------------------------------------------------------
 TOM_WORDS = [
     "you think", "you believe", "you know", "you feel", "you understand",
     "you guess", "you imagine", "you wonder", "you consider", "you expect",
@@ -54,113 +55,126 @@ def count_tom_words(text: str) -> int:
     if pd.isna(text) or not isinstance(text, str):
         return 0
     text = text.lower()
-    count = 0
-    for phrase in TOM_WORDS:
-        count += len(re.findall(rf"\b{re.escape(phrase)}\b", text))
-    return count
+    return sum(len(re.findall(rf"\b{re.escape(phrase)}\b", text)) for phrase in TOM_WORDS)
 
 
-# -------------------------------
-# Analysis
-# -------------------------------
-
-def analyze_tom_words(sub_ids: List[str], data_dir: str, out_dir: str) -> None:
+# ------------------------------------------------------------
+# Core analysis
+# ------------------------------------------------------------
+def analyze_tom_words(combined_path: str, out_dir: str) -> None:
     print_header("1) Theory of Mind Word Analysis — Humans vs Bots")
 
-    trials, totals = [], []
-    tom_hum, tom_bot = [], []
+    if not os.path.exists(combined_path):
+        raise FileNotFoundError(f"Combined CSV not found: {combined_path}")
 
-    for sub_id in sub_ids:
-        csv_path = os.path.join(data_dir, f"{sub_id}.csv")
-        if not os.path.exists(csv_path):
-            print_warn(f"Missing transcript CSV for {sub_id}, skipping.")
-            continue
+    df = pd.read_csv(combined_path, on_bad_lines="skip")
+    df.columns = df.columns.str.strip()
 
-        print(f"[LOAD] {sub_id}: {csv_path}")
-        df = pd.read_csv(csv_path, on_bad_lines="skip")
-        df.columns = df.columns.str.strip()
-        df["agent"] = df["agent"].astype(str).str.strip()
-        df["Condition"] = df["agent"].str.extract(r"(hum|bot)", expand=False)
-        df["Subject"] = sub_id
+    required = {"subject", "agent", "transcript_sub"}
+    missing = required.difference(df.columns)
+    if missing:
+        raise ValueError(f"Combined CSV missing required columns: {missing}")
 
-        # Count ToM words
-        df["ToM_count"] = df["transcript_sub"].apply(count_tom_words)
-        trials.append(df)
+    # Derive Condition and Subject columns
+    df["Condition"] = df["agent"].astype(str).str.extract(r"(hum|bot)", expand=False)
+    df["Subject"] = df["subject"].astype(str)
 
-        total = df.groupby("Condition")["ToM_count"].sum().to_dict()
-        tom_hum.append(total.get("hum", 0))
-        tom_bot.append(total.get("bot", 0))
-        totals.append({"Subject": sub_id, "Hum": total.get("hum", 0), "Bot": total.get("bot", 0)})
+    # ------------------------------------------------------------
+    # Count ToM words
+    # ------------------------------------------------------------
+    print_info("Counting Theory of Mind phrases...")
+    df["ToM_Count"] = df["transcript_sub"].apply(count_tom_words)
 
-        print_info(f"{sub_id}: total ToM words (hum={total.get('hum', 0)}, bot={total.get('bot', 0)})")
+    # ------------------------------------------------------------
+    # Save detailed per-utterance data
+    # ------------------------------------------------------------
+    out_interactions = os.path.join(out_dir, "tom_by_interaction.csv")
+    cols = ["Subject", "agent", "Condition", "topic", "transcript_sub", "ToM_Count"]
+    df[cols].to_csv(out_interactions, index=False)
+    print_save(out_interactions, kind="CSV (per-interaction ToM counts)")
 
-    if not trials:
-        print_warn("No data available — analysis aborted.")
-        return
+    # ------------------------------------------------------------
+    # Subject-level summary
+    # ------------------------------------------------------------
+    summary = df.groupby(["Subject", "Condition"])["ToM_Count"].sum().unstack().reset_index()
+    out_summary = os.path.join(out_dir, "tom_subject_summary.csv")
+    summary.to_csv(out_summary, index=False)
+    print_save(out_summary, kind="CSV (subject-level totals)")
 
-    # Save interaction-level data
-    trial_df = pd.concat(trials, ignore_index=True)
-    out_interactions = os.path.join(out_dir, "tom_counts_by_interaction.csv")
-    trial_df.to_csv(out_interactions, index=False)
-    print_save(out_interactions, kind="CSV")
+    # ------------------------------------------------------------
+    # Paired t-test (Hum vs Bot)
+    # ------------------------------------------------------------
+    p_val_main = None
+    if "hum" in summary.columns and "bot" in summary.columns:
+        x, y = paired_clean(summary["hum"], summary["bot"])
+        if x.size > 0:
+            t_stat, p_val_main = ttest_rel(x, y, nan_policy="omit")
 
-    # Save subject-level totals
-    totals_df = pd.DataFrame(totals)
-    out_totals = os.path.join(out_dir, "tom_word_totals_by_subject.csv")
-    totals_df.to_csv(out_totals, index=False)
-    print_save(out_totals, kind="CSV")
+            mean_hum, mean_bot = x.mean(), y.mean()
+            sem_hum = x.std(ddof=1) / np.sqrt(len(x))
+            sem_bot = y.std(ddof=1) / np.sqrt(len(x))
+            diff = x - y
+            cohens_d = diff.mean() / diff.std(ddof=1) if diff.std(ddof=1) > 0 else np.nan
 
-    # Run paired t-test
-    stats_path = os.path.join(out_dir, "tom_words_stats.txt")
-    with open(stats_path, "w", encoding="utf-8") as f:
-        f.write("--- Paired-samples t-test: Theory of Mind Words ---\n")
-        f.write("Analysis: Do participants use more ToM-related words when speaking with Humans vs Bots?\n\n")
+            lines = [
+                "--- Paired t-test: Theory of Mind Words (Hum vs Bot) ---",
+                f"N = {len(x)} paired subjects",
+                f"Mean (Human) = {mean_hum:.3f} ± {sem_hum:.3f} SEM",
+                f"Mean (Bot)   = {mean_bot:.3f} ± {sem_bot:.3f} SEM",
+                f"Mean difference (Human - Bot) = {(mean_hum - mean_bot):.3f}",
+                f"t({len(x)-1}) = {t_stat:.3f}, p = {p_val_main:.4f}",
+                f"Cohen's d = {cohens_d:.3f}",
+                "Interpretation: "
+                + ("Significant (p < .05)" if p_val_main < 0.05 else "Not significant (p > .05)"),
+            ]
 
-        res = paired_ttest_report(tom_hum, tom_bot, "Humans", "Bots", "ToM Words", out_file=f)
-        a, b = paired_clean(tom_hum, tom_bot)
-        if a.size > 0:
-            sems = (a.std(ddof=1) / np.sqrt(a.size), b.std(ddof=1) / np.sqrt(b.size))
-            f.write(f"\nN = {a.size} paired observations\n")
-            f.write(f"Mean (Humans) = {a.mean():.2f} ± {sems[0]:.3f} SEM\n")
-            f.write(f"Mean (Bots)   = {b.mean():.2f} ± {sems[1]:.3f} SEM\n\n")
-            f.write(f"t({a.size-1}) = {res[0]:.3f}, p = {res[1]:.4f}\n")
-            f.write(f"Effect size (Cohen’s dz) = {res[2]:.3f}\n\n")
-            f.write("Interpretation: " +
-                    ("Significant difference (p < .05)." if res[1] < 0.05
-                     else "No significant difference (p > .05)."))
-    print_save(stats_path, kind="stats")
+            stats_path = os.path.join(out_dir, "tom_words_stats.txt")
+            with open(stats_path, "w") as f:
+                f.write("\n".join(lines) + "\n")
+            print_save(stats_path, kind="stats")
 
-    # Plot
-    long_df = totals_df.melt(id_vars="Subject", var_name="Condition", value_name="ToM_Words")
-    plt.figure(figsize=(6, 5))
-    sns.barplot(data=long_df, x="Condition", y="ToM_Words",
-                palette={"Hum": "skyblue", "Bot": "sandybrown"}, ci="sd")
-    for _, row in totals_df.iterrows():
-        plt.plot(["Hum", "Bot"], [row["Hum"], row["Bot"]],
-                 color="gray", alpha=0.5, linewidth=1)
-    plt.title("Total ToM Words by Condition")
-    plt.ylabel("Total ToM Words (per subject)")
-    plt.xlabel("Condition")
-    plt.tight_layout()
-    out_fig = os.path.join(out_dir, "tom_words_barplot.png")
-    plt.savefig(out_fig, dpi=300)
-    plt.close()
-    print_save(out_fig, kind="figure")
+    # ------------------------------------------------------------
+    # Plots (bar + violin)
+    # ------------------------------------------------------------
+    long_df = summary.rename(columns={"hum": "Hum", "bot": "Bot"}).melt(
+        id_vars="Subject", var_name="Condition", value_name="ToM_Count"
+    )
+
+    # Bar plot
+    barplot_with_lines(
+        df_long=long_df,
+        x_col="Condition",
+        y_col="ToM_Count",
+        out_path=os.path.join(out_dir, "tom_barplot.png"),
+        title="Theory of Mind Words by Condition (Human vs Bot)",
+        palette={"Hum": "steelblue", "Bot": "sandybrown"},
+        p_val=p_val_main,
+    )
+
+    # Violin plot
+    main_effect_violin_lines(
+        df_summary=summary.rename(columns={"hum": "Hum", "bot": "Bot"}),
+        cond_a="Hum",
+        cond_b="Bot",
+        y_col="ToM_Count",
+        out_path=os.path.join(out_dir, "tom_violinplot.png"),
+        title="ToM Word Totals per Subject (Human vs Bot)",
+        palette=DEFAULT_PALETTE,
+        p_val=p_val_main,
+    )
 
 
-# -------------------------------
+# ------------------------------------------------------------
 # Main
-# -------------------------------
-
+# ------------------------------------------------------------
 def main():
-    args, cfg = parse_and_load_config("ToM Words analysis")
-
-    subjects = [str(s) for s in cfg["subject_ids"]]
+    args, cfg = parse_and_load_config("Theory of Mind Words analysis")
     model = cfg.get("model")
     temp = cfg.get("temperature")
 
     data_dir = os.path.join(DATA_DIR, model, str(temp))
-    out_dir = os.path.join(RESULTS_DIR, model, str(temp), "tom_words")  # ✅ results/model/temp/tom_words
+    combined_path = os.path.join(data_dir, "combined_text_data.csv")
+    out_dir = os.path.join(RESULTS_DIR, model, str(temp), "tom_words")
     os.makedirs(out_dir, exist_ok=True)
 
     logger, seed, overwrite, dry_run = init_run(
@@ -171,10 +185,10 @@ def main():
         used_alias=False,
     )
 
-    analyze_tom_words(subjects, data_dir, out_dir)
+    analyze_tom_words(combined_path, out_dir)
 
-    logger.info("✅ ToM words analysis complete.")
-    print("\n[DONE] ✅ ToM words analysis complete.\n")
+    logger.info("✅ ToM word analysis complete.")
+    print("\n[DONE] ✅ ToM word analysis complete.\n")
 
 
 if __name__ == "__main__":

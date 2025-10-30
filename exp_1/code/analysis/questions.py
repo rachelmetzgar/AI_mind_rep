@@ -1,61 +1,62 @@
+#!/usr/bin/env python3
 """
 Script name: questions.py
 Purpose: Analyze total number of questions participants asked across the experiment.
-    - Count questions by question marks (?) in participant responses.
-    - Exclude participants who asked 0 questions in both conditions.
-    - Re-run analysis using regex-based detection of questions.
-    - Save results (CSVs, plots, stats) to results/<model>/<temperature>/questions/.
+    - Reads from the combined transcript CSV created by combine_text_data.py.
+    - Counts questions using two methods: question marks (?) and regex-based patterns.
+    - Saves per-trial and per-subject averages.
+    - Compares Human vs Bot question frequency (paired t-tests).
+    - Saves results (CSVs, plots, stats) to results/<model>/<temperature>/questions/.
 
 Inputs:
-    - Per-subject transcript CSVs in data/<model>/<temperature>/{s###}.csv
-    - Each file must include 'transcript_sub', 'agent', and 'topic' columns.
+    - Combined transcript CSV: data/<model>/<temperature>/combined_text_data.csv
 
 Outputs:
-    - Trial-level and summary CSVs.
-    - Statistical output text files.
-    - Figures (bar plots with subject-level lines).
-    - Run log + config snapshot.
+    - questions_by_interaction_<method>.csv
+    - questions_subject_summary_<method>.csv
+    - questions_stats_<method>.txt
+    - questions_barplot_<method>.png
+    - questions_violinplot_<method>.png
 
 Usage:
     python code/analysis/questions.py --config configs/behavior.json
 
 Author: Rachel C. Metzgar
-Date: 2025-10-29
+Date: 2025-10-31
 """
 
 from __future__ import annotations
 import os, re
-from typing import List
-
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
+from scipy.stats import ttest_rel
 
-from utils.globals import DATA_DIR, RESULTS_DIR
-from utils.run_logger import init_run
+from utils.globals import DATA_DIR, RESULTS_DIR, PROJECT_ROOT
 from utils.cli_helpers import parse_and_load_config
-from utils.stats_helpers import paired_ttest_report, paired_clean
-from utils.print_helpers import print_header, print_warn, print_save, print_info
+from utils.run_logger import init_run
+from utils.stats_helpers import paired_clean
+from utils.print_helpers import print_header, print_save, print_info, print_warn
+from utils.plot_helpers import barplot_with_lines, main_effect_violin_lines, DEFAULT_PALETTE
 
 SCRIPT_NAME = "questions"
 
-
-# -------------------------------
-# Helpers
-# -------------------------------
-
+# ------------------------------------------------------------
+# Question detection helpers
+# ------------------------------------------------------------
 QUESTION_STARTS = re.compile(
-    r'^\s*(who|what|when|where|why|how|which|do|does|did|can|could|would|will|should|is|are|am|was|were)\b',
-    re.I
+    r"^\s*(who|what|when|where|why|how|which|do|does|did|can|could|would|will|should|is|are|am|was|were)\b",
+    re.I,
 )
 
+
 def regex_question_count(text: str) -> int:
-    """Count sentences that look like questions:
+    """Count sentences that appear to be questions:
     - end with '?'
-    - OR start with interrogative words (who, what, why, do, is, etc.)
+    - OR start with interrogative words
     """
-    sentences = re.split(r'(?<=[.?!])\s+', str(text))
+    if pd.isna(text):
+        return 0
+    sentences = re.split(r"(?<=[.?!])\s+", str(text))
     count = 0
     for s in sentences:
         s = s.strip()
@@ -66,168 +67,143 @@ def regex_question_count(text: str) -> int:
     return count
 
 
-def run_paired_test_and_save(q_hum, q_bot, label, out_path, description):
-    """Run paired t-test and save detailed results."""
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(f"--- Paired-samples t-test: {label} ---\n")
-        f.write(f"Analysis: {description}\n\n")
+# ------------------------------------------------------------
+# Core analysis
+# ------------------------------------------------------------
+def analyze_questions(combined_path: str, out_dir: str, method: str = "question_mark"):
+    """Analyze total participant questions (Hum vs Bot) using the specified detection method."""
+    label = "?" if method == "question_mark" else "regex-based"
+    print_header(f"1) Total Questions — Method: {label}")
 
-        res = paired_ttest_report(q_hum, q_bot, "Humans", "Bots", label, out_file=f)
+    if not os.path.exists(combined_path):
+        raise FileNotFoundError(f"Combined CSV not found: {combined_path}")
 
-        a, b = paired_clean(q_hum, q_bot)
-        if a.size > 0:
-            sems = (a.std(ddof=1) / np.sqrt(a.size), b.std(ddof=1) / np.sqrt(b.size))
-            f.write(f"\nN = {a.size} paired observations\n")
-            f.write(f"Mean (Humans) = {a.mean():.2f} ± {sems[0]:.3f} SEM\n")
-            f.write(f"Mean (Bots)   = {b.mean():.2f} ± {sems[1]:.3f} SEM\n\n")
-            f.write(f"t({a.size-1}) = {res[0]:.3f}, p = {res[1]:.4f}, dz = {res[2]:.3f}\n")
-            f.write("Significant" if res[1] < 0.05 else "Not significant")
-            f.write("\n")
-    print_save(out_path, kind="stats")
+    df = pd.read_csv(combined_path, on_bad_lines="skip")
+    df.columns = df.columns.str.strip()
 
+    required = {"subject", "agent", "transcript_sub"}
+    missing = required.difference(df.columns)
+    if missing:
+        raise ValueError(f"Combined CSV missing required columns: {missing}")
 
-def plot_totals(df_totals: pd.DataFrame, title: str, out_path: str):
-    """Bar plot with subject-level lines for totals."""
-    long_df = df_totals.melt(id_vars="Subject", var_name="Condition", value_name="Question_Count")
-    plt.figure(figsize=(6, 5))
-    sns.barplot(
-        data=long_df, x="Condition", y="Question_Count",
-        palette={"Hum": "skyblue", "Bot": "sandybrown"}, ci="sd"
+    # Derive Condition and Subject columns
+    df["Condition"] = df["agent"].astype(str).str.extract(r"(hum|bot)", expand=False)
+    df["Subject"] = df["subject"].astype(str)
+
+    # ------------------------------------------------------------
+    # Count questions per utterance
+    # ------------------------------------------------------------
+    print_info(f"Counting questions using method: {method}")
+    if method == "regex":
+        df["Question_Count"] = df["transcript_sub"].apply(regex_question_count)
+    else:
+        df["Question_Count"] = df["transcript_sub"].astype(str).apply(lambda x: x.count("?"))
+
+    # ------------------------------------------------------------
+    # Save per-utterance data
+    # ------------------------------------------------------------
+    out_interactions = os.path.join(out_dir, f"questions_by_interaction_{method}.csv")
+    cols = ["Subject", "agent", "Condition", "topic", "transcript_sub", "Question_Count"]
+    df[cols].to_csv(out_interactions, index=False)
+    print_save(out_interactions, kind="CSV (per-interaction question counts)")
+
+    # ------------------------------------------------------------
+    # Subject-level totals
+    # ------------------------------------------------------------
+    summary = df.groupby(["Subject", "Condition"])["Question_Count"].sum().unstack().reset_index()
+    out_summary = os.path.join(out_dir, f"questions_subject_summary_{method}.csv")
+    summary.to_csv(out_summary, index=False)
+    print_save(out_summary, kind="CSV (subject-level totals)")
+
+    # ------------------------------------------------------------
+    # Paired t-test (Hum vs Bot)
+    # ------------------------------------------------------------
+    p_val_main = None
+    if "hum" in summary.columns and "bot" in summary.columns:
+        x, y = paired_clean(summary["hum"], summary["bot"])
+        if x.size > 0:
+            t_stat, p_val_main = ttest_rel(x, y, nan_policy="omit")
+            mean_hum, mean_bot = x.mean(), y.mean()
+            sem_hum = x.std(ddof=1) / np.sqrt(len(x))
+            sem_bot = y.std(ddof=1) / np.sqrt(len(x))
+            diff = x - y
+            cohens_d = diff.mean() / diff.std(ddof=1) if diff.std(ddof=1) > 0 else np.nan
+
+            lines = [
+                f"--- Paired t-test: Total Questions (Hum vs Bot, {method}) ---",
+                f"N = {len(x)} paired subjects",
+                f"Mean (Human) = {mean_hum:.3f} ± {sem_hum:.3f} SEM",
+                f"Mean (Bot)   = {mean_bot:.3f} ± {sem_bot:.3f} SEM",
+                f"Mean difference (Human - Bot) = {(mean_hum - mean_bot):.3f}",
+                f"t({len(x)-1}) = {t_stat:.3f}, p = {p_val_main:.4f}",
+                f"Cohen's d = {cohens_d:.3f}",
+                "Interpretation: "
+                + ("Significant (p < .05)" if p_val_main < 0.05 else "Not significant (p > .05)"),
+            ]
+
+            stats_path = os.path.join(out_dir, f"questions_stats_{method}.txt")
+            with open(stats_path, "w") as f:
+                f.write("\n".join(lines) + "\n")
+            print_save(stats_path, kind="stats")
+
+    # ------------------------------------------------------------
+    # Plots (bar + violin)
+    # ------------------------------------------------------------
+    long_df = summary.rename(columns={"hum": "Hum", "bot": "Bot"}).melt(
+        id_vars="Subject", var_name="Condition", value_name="Question_Count"
     )
-    for _, row in df_totals.iterrows():
-        plt.plot(["Hum", "Bot"], [row["Hum"], row["Bot"]], color="gray", alpha=0.5, linewidth=1)
-    plt.title(title)
-    plt.ylabel("Total Questions per Subject")
-    plt.xlabel("Condition")
-    plt.tight_layout()
-    plt.savefig(out_path, dpi=300)
-    plt.close()
-    print_save(out_path, kind="figure")
+
+    # Bar plot
+    barplot_with_lines(
+        df_long=long_df,
+        x_col="Condition",
+        y_col="Question_Count",
+        out_path=os.path.join(out_dir, f"questions_barplot_{method}.png"),
+        title=f"Total Questions by Condition ({label})",
+        palette={"Hum": "steelblue", "Bot": "sandybrown"},
+        p_val=p_val_main,
+    )
+
+    # Violin plot
+    main_effect_violin_lines(
+        df_summary=summary.rename(columns={"hum": "Hum", "bot": "Bot"}),
+        cond_a="Hum",
+        cond_b="Bot",
+        y_col="Question_Count",
+        out_path=os.path.join(out_dir, f"questions_violinplot_{method}.png"),
+        title=f"Total Questions per Subject ({label})",
+        palette=DEFAULT_PALETTE,
+        p_val=p_val_main,
+    )
 
 
-# -------------------------------
-# Analyses
-# -------------------------------
-
-def analyze_by_method(sub_ids: List[str], data_dir: str, out_dir: str, method: str = "question_mark"):
-    """Run question analyses using different detection methods."""
-    if method == "question_mark":
-        print_header("1) Total Participant Questions — Question Mark Method")
-    elif method == "regex":
-        print_header("3) Total Participant Questions — Regex Method")
-
-    trials, totals = [], []
-    q_hum, q_bot = [], []
-
-    for sub_id in sub_ids:
-        csv_path = os.path.join(data_dir, f"{sub_id}.csv")
-        if not os.path.exists(csv_path):
-            print_warn(f"Missing transcript CSV for {sub_id}, skipping.")
-            continue
-
-        print(f"[LOAD] {sub_id}: {csv_path}")
-        df = pd.read_csv(csv_path, on_bad_lines="skip")
-        df.columns = df.columns.str.strip()
-        df["agent"] = df["agent"].astype(str).str.strip()
-        df["Condition"] = df["agent"].str.extract(r"(hum|bot)", expand=False)
-        df["Subject"] = sub_id
-
-        # Count questions
-        if method == "regex":
-            df["question_count"] = df["transcript_sub"].astype(str).apply(regex_question_count)
-        else:
-            df["question_count"] = df["transcript_sub"].astype(str).apply(lambda x: x.count("?"))
-
-        trials.append(df)
-
-        total = df.groupby("Condition")["question_count"].sum().to_dict()
-        q_hum.append(total.get("hum", 0))
-        q_bot.append(total.get("bot", 0))
-        totals.append({"Subject": sub_id, "Hum": total.get("hum", 0), "Bot": total.get("bot", 0)})
-
-        print_info(f"{sub_id}: total questions (hum={total.get('hum', 0)}, bot={total.get('bot', 0)})")
-
-    if not trials:
-        print_warn("No data available — analysis aborted.")
-        return
-
-    # Save trial-level data
-    trial_df = pd.concat(trials, ignore_index=True)
-    trial_path = os.path.join(out_dir, f"question_counts_by_interaction_{method}.csv")
-    trial_df.to_csv(trial_path, index=False)
-    print_save(trial_path, kind="CSV")
-
-    # Save subject-level totals
-    totals_df = pd.DataFrame(totals)
-    totals_path = os.path.join(out_dir, f"total_questions_by_subject_{method}.csv")
-    totals_df.to_csv(totals_path, index=False)
-    print_save(totals_path, kind="CSV")
-
-    # Run paired t-test
-    stats_path = os.path.join(out_dir, f"statistical_output_{method}.txt")
-    desc = f"Do participants ask more questions (method={method}) when speaking with Humans vs Bots?"
-    run_paired_test_and_save(q_hum, q_bot, f"Total Questions ({method})", stats_path, desc)
-
-    # Plot
-    plot_path = os.path.join(out_dir, f"total_questions_barplot_{method}.png")
-    plot_totals(totals_df, f"Total Questions by Condition ({method})", plot_path)
-
-    # Secondary analysis: excluding non-askers
-    analyze_excluding_nonaskers(totals_df, out_dir, method)
-
-
-def analyze_excluding_nonaskers(df_totals: pd.DataFrame, out_dir: str, method: str):
-    """Repeat analysis excluding participants with 0 questions in both conditions."""
-    print_header(f"2) Excluding Non-Askers — Method={method}")
-
-    filtered = df_totals[(df_totals["Hum"] > 0) | (df_totals["Bot"] > 0)]
-    if filtered.empty:
-        print_warn("No subjects left after excluding non-askers.")
-        return
-
-    q_hum = filtered["Hum"].tolist()
-    q_bot = filtered["Bot"].tolist()
-    print_info(f"Retained {len(filtered)} subjects (excluded {len(df_totals) - len(filtered)} non-askers).")
-
-    # Save filtered totals
-    out_totals = os.path.join(out_dir, f"total_questions_excluding_nonaskers_{method}.csv")
-    filtered.to_csv(out_totals, index=False)
-    print_save(out_totals, kind="CSV")
-
-    # Run paired t-test
-    stats_path = os.path.join(out_dir, f"statistical_output_excluding_nonaskers_{method}.txt")
-    desc = f"Do participants who asked ≥1 question differ between Humans vs Bots? (method={method})"
-    run_paired_test_and_save(q_hum, q_bot, f"Questions (Excluding Non-Askers, {method})", stats_path, desc)
-
-    # Plot
-    out_fig = os.path.join(out_dir, f"questions_barplot_excluding_nonaskers_{method}.png")
-    plot_totals(filtered, f"Total Questions (Excluding Non-Askers, {method})", out_fig)
-
-
-# -------------------------------
+# ------------------------------------------------------------
 # Main
-# -------------------------------
-
+# ------------------------------------------------------------
 def main():
-    args, cfg = parse_and_load_config("Total Questions analysis")
-
-    subjects = [str(s) for s in cfg["subject_ids"]]
+    args, cfg = parse_and_load_config("Questions analysis")
     model = cfg.get("model")
     temp = cfg.get("temperature")
 
     data_dir = os.path.join(DATA_DIR, model, str(temp))
-    out_dir = os.path.join(RESULTS_DIR, model, str(temp), "questions")  # ✅ results/model/temp/questions
+    combined_path = os.path.join(data_dir, "combined_text_data.csv")
+    out_dir = os.path.join(RESULTS_DIR, model, str(temp), "questions")
     os.makedirs(out_dir, exist_ok=True)
 
     logger, seed, overwrite, dry_run = init_run(
-        output_dir=out_dir, script_name=SCRIPT_NAME, args=args, cfg=cfg, used_alias=False
+        output_dir=out_dir,
+        script_name=SCRIPT_NAME,
+        args=args,
+        cfg=cfg,
+        used_alias=False,
     )
 
-    analyze_by_method(subjects, data_dir, out_dir, method="question_mark")
-    analyze_by_method(subjects, data_dir, out_dir, method="regex")
+    # Run both detection methods
+    analyze_questions(combined_path, out_dir, method="question_mark")
+    analyze_questions(combined_path, out_dir, method="regex")
 
-    logger.info("✅ Total questions analysis complete.")
-    print("\n[DONE] ✅ Total questions analysis complete.\n")
+    logger.info("✅ Questions analysis complete.")
+    print("\n[DONE] ✅ Questions analysis complete.\n")
 
 
 if __name__ == "__main__":

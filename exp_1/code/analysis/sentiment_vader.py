@@ -2,48 +2,50 @@
 """
 Script name: sentiment_vader.py
 Purpose: Analyze sentiment in participant transcripts using VADER sentiment analysis.
-    - Compute sentiment scores (compound, pos, neg, neu).
-    - Save per-trial and per-subject averages.
-    - Compare Human vs Bot conditions with paired t-tests.
-    - Save results (CSVs, plots, stats) to results/<model>/<temperature>/sentiment/.
+    - Reads from the combined transcript CSV created by combine_text_data.py.
+    - Computes sentiment scores (compound, pos, neg, neu).
+    - Saves per-trial and per-subject averages.
+    - Compares Human vs Bot sentiment (paired t-tests).
+    - Saves results (CSVs, plots, stats) to results/<model>/<temperature>/sentiment_vader/.
 
 Inputs:
-    - Per-subject transcript CSVs in data/<model>/<temperature>/{s###}.csv
+    - Combined transcript CSV: data/<model>/<temperature>/combined_text_data.csv
 
 Outputs:
-    - Trial-level and summary CSVs.
-    - Statistical output text files.
-    - Figures (bar/violin plots).
-    - Run log + config snapshot.
+    - sentiment_by_interaction.csv
+    - sentiment_subject_summary.csv
+    - sentiment_stats.txt
+    - sentiment_barplot.png
+    - sentiment_violinplot.png
 
 Usage:
-    python code/analysis/sentiment.py --config configs/behavior.json
+    python code/analysis/sentiment_vader.py --config configs/behavior.json
 
 Author: Rachel C. Metzgar
-Date: 2025-10-29
+Date: 2025-10-31
 """
 
 from __future__ import annotations
 import os
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 from scipy.stats import ttest_rel
 from nltk.sentiment import SentimentIntensityAnalyzer
 
-from utils.globals import DATA_DIR, RESULTS_DIR
+from utils.globals import DATA_DIR, RESULTS_DIR, PROJECT_ROOT
 from utils.cli_helpers import parse_and_load_config
 from utils.run_logger import init_run
 from utils.stats_helpers import paired_clean
-from utils.print_helpers import print_header, print_save, print_warn
+from utils.print_helpers import print_header, print_save, print_info, print_warn
+from utils.plot_helpers import barplot_with_lines, main_effect_violin_lines, DEFAULT_PALETTE
 
 SCRIPT_NAME = "sentiment_vader"
 
-# -------------------------------
+# ------------------------------------------------------------
 # Sentiment Analyzer
-# -------------------------------
+# ------------------------------------------------------------
 sia = SentimentIntensityAnalyzer()
+
 
 def compute_sentiment(text: str) -> dict[str, float]:
     """Compute sentiment scores (compound, pos, neg, neu) using VADER."""
@@ -52,116 +54,130 @@ def compute_sentiment(text: str) -> dict[str, float]:
     return sia.polarity_scores(text)
 
 
-# -------------------------------
-# Analysis
-# -------------------------------
-
-def analyze_sentiment(data_dir: str, out_dir: str):
+# ------------------------------------------------------------
+# Core Analysis
+# ------------------------------------------------------------
+def analyze_sentiment(combined_path: str, out_dir: str):
     """Compute sentiment and compare Human vs Bot conditions."""
     print_header("1) Sentiment Analysis — Humans vs Bots")
 
-    trials = []
-    for subfile in sorted(os.listdir(data_dir)):
-        if not subfile.endswith(".csv"):
-            continue
-        sub_id = os.path.splitext(subfile)[0]
-        csv_path = os.path.join(data_dir, subfile)
+    if not os.path.exists(combined_path):
+        raise FileNotFoundError(f"Combined CSV not found: {combined_path}")
 
-        df = pd.read_csv(csv_path, on_bad_lines="skip")
-        df.columns = df.columns.str.strip()
-        if "agent" not in df.columns or "transcript_sub" not in df.columns:
-            print_warn(f"{sub_id}: Missing required columns; skipping.")
-            continue
+    df = pd.read_csv(combined_path, on_bad_lines="skip")
+    df.columns = df.columns.str.strip()
 
-        df["Condition"] = df["agent"].str.extract(r"(hum|bot)", expand=False)
-        df["Subject"] = sub_id
+    required = {"subject", "agent", "transcript_sub"}
+    missing = required.difference(df.columns)
+    if missing:
+        raise ValueError(f"Combined CSV missing required columns: {missing}")
 
-        # Compute sentiment scores
-        sent_scores = df["transcript_sub"].apply(compute_sentiment)
-        sent_df = pd.DataFrame(list(sent_scores))
-        df = pd.concat([df, sent_df], axis=1)
-        trials.append(df)
+    # Derive Condition and Subject columns
+    df["Condition"] = df["agent"].astype(str).str.extract(r"(hum|bot)", expand=False)
+    df["Subject"] = df["subject"].astype(str)
 
-    if not trials:
-        print_warn("No transcript CSVs found — analysis aborted.")
-        return
+    # ------------------------------------------------------------
+    # Compute sentiment scores
+    # ------------------------------------------------------------
+    print_info("Computing VADER sentiment scores...")
+    sent_scores = df["transcript_sub"].apply(compute_sentiment)
+    sent_df = pd.DataFrame(list(sent_scores))
+    df = pd.concat([df, sent_df], axis=1)
 
-    df = pd.concat(trials, ignore_index=True)
-
+    # ------------------------------------------------------------
     # Save trial-level data
-    trial_out = os.path.join(out_dir, "sentiment_triallevel.csv")
-    df.to_csv(trial_out, index=False)
-    print_save(trial_out, kind="CSV")
+    # ------------------------------------------------------------
+    out_interactions = os.path.join(out_dir, "sentiment_by_interaction.csv")
+    cols = [
+        "Subject", "agent", "Condition", "topic",
+        "transcript_sub", "compound", "pos", "neg", "neu"
+    ]
+    df[cols].to_csv(out_interactions, index=False)
+    print_save(out_interactions, kind="CSV (per-interaction sentiment scores)")
 
-    # Subject-level summary (compound score)
+    # ------------------------------------------------------------
+    # Subject-level summary (compound)
+    # ------------------------------------------------------------
     summary = df.groupby(["Subject", "Condition"])["compound"].mean().unstack().reset_index()
-    out_summary = os.path.join(out_dir, "sentiment_summary_all_subjects.csv")
+    out_summary = os.path.join(out_dir, "sentiment_subject_summary.csv")
     summary.to_csv(out_summary, index=False)
-    print_save(out_summary, kind="CSV")
+    print_save(out_summary, kind="CSV (subject-level compound means)")
 
+    # ------------------------------------------------------------
     # Paired t-test (compound)
-    if "hum" in summary and "bot" in summary:
+    # ------------------------------------------------------------
+    p_val_main = None
+    if "hum" in summary.columns and "bot" in summary.columns:
         x, y = paired_clean(summary["hum"], summary["bot"])
-        t_stat, p_val = ttest_rel(x, y, nan_policy="omit")
+        if x.size > 0:
+            t_stat, p_val_main = ttest_rel(x, y, nan_policy="omit")
 
-        mean_hum, mean_bot = x.mean(), y.mean()
-        sem_hum = x.std(ddof=1) / np.sqrt(len(x))
-        sem_bot = y.std(ddof=1) / np.sqrt(len(y))
-        diff = x - y
-        cohens_d = diff.mean() / diff.std(ddof=1) if diff.std(ddof=1) > 0 else np.nan
+            mean_hum, mean_bot = x.mean(), y.mean()
+            sem_hum = x.std(ddof=1) / np.sqrt(len(x))
+            sem_bot = y.std(ddof=1) / np.sqrt(len(x))
+            diff = x - y
+            cohens_d = diff.mean() / diff.std(ddof=1) if diff.std(ddof=1) > 0 else np.nan
 
-        lines = [
-            "--- Sentiment Analysis (compound score) ---",
-            "Compound sentiment ranges from -1 (negative) to +1 (positive).",
-            f"N = {len(x)} paired subjects",
-            f"Mean (Human) = {mean_hum:.3f} ± {sem_hum:.3f} SEM",
-            f"Mean (Bot)   = {mean_bot:.3f} ± {sem_bot:.3f} SEM",
-            f"Mean difference (Human - Bot) = {(mean_hum - mean_bot):.3f}",
-            f"t({len(x)-1}) = {t_stat:.3f}, p = {p_val:.4f}",
-            f"Cohen's d = {cohens_d:.3f}",
-            "Interpretation: " + (
-                "Significant difference (p < .05)"
-                if p_val < 0.05 else
-                "No significant difference (p > .05)"
-            )
-        ]
+            lines = [
+                "--- Sentiment Analysis (compound score) ---",
+                "Compound sentiment ranges from -1 (negative) to +1 (positive).",
+                f"N = {len(x)} paired subjects",
+                f"Mean (Human) = {mean_hum:.3f} ± {sem_hum:.3f} SEM",
+                f"Mean (Bot)   = {mean_bot:.3f} ± {sem_bot:.3f} SEM",
+                f"Mean difference (Human - Bot) = {(mean_hum - mean_bot):.3f}",
+                f"t({len(x)-1}) = {t_stat:.3f}, p = {p_val_main:.4f}",
+                f"Cohen's d = {cohens_d:.3f}",
+                "Interpretation: "
+                + ("Significant (p < .05)" if p_val_main < 0.05 else "Not significant (p > .05)")
+            ]
 
-        stats_path = os.path.join(out_dir, "sentiment_stats.txt")
-        with open(stats_path, "w") as f:
-            f.write("\n".join(lines) + "\n")
-        print_save(stats_path, kind="stats")
+            stats_path = os.path.join(out_dir, "sentiment_stats.txt")
+            with open(stats_path, "w") as f:
+                f.write("\n".join(lines) + "\n")
+            print_save(stats_path, kind="stats")
+
+    # ------------------------------------------------------------
+    # Plots (bar + violin)
+    # ------------------------------------------------------------
+    long_df = summary.rename(columns={"hum": "Hum", "bot": "Bot"}).melt(
+        id_vars="Subject", var_name="Condition", value_name="compound"
+    )
+
+    # Bar plot
+    barplot_with_lines(
+        df_long=long_df,
+        x_col="Condition",
+        y_col="compound",
+        out_path=os.path.join(out_dir, "sentiment_barplot.png"),
+        title="Average Sentiment by Condition (Human vs Bot)",
+        palette={"Hum": "steelblue", "Bot": "sandybrown"},
+        p_val=p_val_main,
+    )
 
     # Violin plot
-    long_df = summary.melt(id_vars="Subject", var_name="Condition", value_name="compound")
-    plt.figure(figsize=(6, 5))
-    sns.violinplot(
-        data=long_df, x="Condition", y="compound",
-        palette={"hum": "skyblue", "bot": "sandybrown"}, inner="box", cut=0
+    main_effect_violin_lines(
+        df_summary=summary.rename(columns={"hum": "Hum", "bot": "Bot"}),
+        cond_a="Hum",
+        cond_b="Bot",
+        y_col="compound",
+        out_path=os.path.join(out_dir, "sentiment_violinplot.png"),
+        title="Sentiment per Subject (Human vs Bot)",
+        palette=DEFAULT_PALETTE,
+        p_val=p_val_main,
     )
-    for _, row in summary.iterrows():
-        plt.plot(["hum", "bot"], [row["hum"], row["bot"]], color="gray", alpha=0.4)
-    plt.ylabel("Avg. Compound Sentiment (per subject)")
-    plt.title("Sentiment by Condition (Human vs Bot)")
-    plt.tight_layout()
-    out_fig = os.path.join(out_dir, "sentiment_violinplot.png")
-    plt.savefig(out_fig, dpi=300)
-    plt.close()
-    print_save(out_fig, kind="figure")
 
 
-# -------------------------------
+# ------------------------------------------------------------
 # Main
-# -------------------------------
-
+# ------------------------------------------------------------
 def main():
-    args, cfg = parse_and_load_config("Sentiment analysis")
-
-    subjects = [str(s) for s in cfg["subject_ids"]]
+    args, cfg = parse_and_load_config("Sentiment VADER analysis")
     model = cfg.get("model")
     temp = cfg.get("temperature")
 
     data_dir = os.path.join(DATA_DIR, model, str(temp))
-    out_dir = os.path.join(RESULTS_DIR, model, str(temp), "sentiment_vader")  # ✅ results/model/temp/sentiment
+    combined_path = os.path.join(data_dir, "combined_text_data.csv")
+    out_dir = os.path.join(RESULTS_DIR, model, str(temp), "sentiment_vader")
     os.makedirs(out_dir, exist_ok=True)
 
     logger, seed, overwrite, dry_run = init_run(
@@ -172,10 +188,10 @@ def main():
         used_alias=False,
     )
 
-    analyze_sentiment(data_dir, out_dir)
+    analyze_sentiment(combined_path, out_dir)
 
-    logger.info("✅ Sentiment analysis complete.")
-    print("\n[DONE] ✅ Sentiment analysis complete.\n")
+    logger.info("✅ Sentiment VADER analysis complete.")
+    print("\n[DONE] ✅ Sentiment VADER analysis complete.\n")
 
 
 if __name__ == "__main__":

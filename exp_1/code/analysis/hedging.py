@@ -2,46 +2,46 @@
 """
 Script name: hedging.py
 Purpose: Analyze hedging in participant transcripts using regex markers.
-    - Compute hedging scores (# of hedges per utterance).
-    - Save per-trial and per-subject averages.
-    - Compare Human vs Bot conditions with paired t-tests.
-    - Save results (CSVs, plots, stats) to results/<model>/<temperature>/hedging/.
+    - Reads from the combined transcript CSV created by combine_text_data.py.
+    - Counts hedging markers per utterance.
+    - Saves per-trial and per-subject averages.
+    - Compares Human vs Bot conditions (paired t-test).
+    - Saves results (CSVs, plots, stats) to results/<model>/<temperature>/hedging/.
 
 Inputs:
-    - Per-subject transcript CSVs in data/<model>/<temperature>/{s###}.csv
+    - Combined transcript CSV: data/<model>/<temperature>/combined_text_data.csv
 
 Outputs:
-    - Trial-level and summary CSVs.
-    - Statistical output text files.
-    - Figures (bar/violin plots).
-    - Run log + config snapshot.
+    - hedging_by_interaction.csv
+    - hedging_subject_summary.csv
+    - hedging_stats.txt
+    - hedging_main_effect_lines.png
 
 Usage:
     python code/analysis/hedging.py --config configs/behavior.json
 
 Author: Rachel C. Metzgar
-Date: 2025-10-29
+Date: 2025-10-31
 """
 
 from __future__ import annotations
 import os, re
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 from scipy.stats import ttest_rel
 
-from utils.globals import DATA_DIR, RESULTS_DIR
+from utils.globals import DATA_DIR, RESULTS_DIR, PROJECT_ROOT
 from utils.cli_helpers import parse_and_load_config
 from utils.run_logger import init_run
 from utils.stats_helpers import paired_clean
-from utils.print_helpers import print_header, print_save, print_warn
+from utils.print_helpers import print_header, print_save, print_warn, print_info
+from utils.plot_helpers import main_effect_violin_lines, DEFAULT_PALETTE
 
 SCRIPT_NAME = "hedging"
 
-# -------------------------------
+# ------------------------------------------------------------
 # Hedging markers
-# -------------------------------
+# ------------------------------------------------------------
 HEDGE_MARKERS = [
     r"\bmaybe\b", r"\bperhaps\b", r"\bprobably\b", r"\bmight\b", r"\bcould be\b",
     r"\bit seems\b", r"\bi think\b", r"\bin a way\b", r"\bsort of\b", r"\bkind of\b",
@@ -55,101 +55,126 @@ def count_hedges(text: str) -> int:
         return 0
     text = text.lower()
     return sum(1 for pattern in HEDGE_MARKERS if re.search(pattern, text))
+    # Detect which hedge words were used
 
+def detect_hedges(text: str):
+    """Detect which specific hedge markers appear in text."""
+    text_l = str(text).lower()
+    found = []
+    for pattern in HEDGE_MARKERS:
+        if re.search(pattern, text_l):
+            display = pattern.replace("\\b", "")
+            found.append(display)
+    return len(found), ", ".join(found) if found else ""
 
-# -------------------------------
-# Main Analysis
-# -------------------------------
-
-def analyze_hedging(data_dir: str, out_dir: str):
-    """Compute per-subject and per-condition hedging statistics."""
+# ------------------------------------------------------------
+# Core analysis
+# ------------------------------------------------------------
+def analyze_hedging(combined_path: str, out_dir: str):
+    """Compute hedging statistics from combined transcript data."""
     print_header("1) Hedging Analysis — Humans vs Bots")
 
-    trials = []
-    for subfile in sorted(os.listdir(data_dir)):
-        if not subfile.endswith(".csv"):
-            continue
-        sub_id = os.path.splitext(subfile)[0]
-        csv_path = os.path.join(data_dir, subfile)
+    if not os.path.exists(combined_path):
+        raise FileNotFoundError(f"Combined CSV not found: {combined_path}")
 
-        df = pd.read_csv(csv_path, on_bad_lines="skip")
-        df.columns = df.columns.str.strip()
-        if "agent" not in df.columns or "transcript_sub" not in df.columns:
-            print_warn(f"{sub_id}: Missing expected columns; skipping.")
-            continue
+    df = pd.read_csv(combined_path, on_bad_lines="skip")
+    df.columns = df.columns.str.strip()
 
-        df["Condition"] = df["agent"].str.extract(r"(hum|bot)", expand=False)
-        df["Subject"] = sub_id
-        df["Hedge_Count"] = df["transcript_sub"].apply(count_hedges)
-        trials.append(df)
+    required = {"subject", "agent", "transcript_sub"}
+    missing = required.difference(df.columns)
+    if missing:
+        raise ValueError(f"Combined CSV missing required columns: {missing}")
 
-    if not trials:
-        print_warn("No transcript CSVs found — analysis aborted.")
-        return
+    # Derive Condition and Subject columns
+    df["Condition"] = df["agent"].astype(str).str.extract(r"(hum|bot)", expand=False)
+    df["Subject"] = df["subject"].astype(str)
 
-    df = pd.concat(trials, ignore_index=True)
+    # ------------------------------------------------------------
+    # Count hedging markers
+    # ------------------------------------------------------------
+    print_info("Counting hedging markers...")
+    df["Hedge_Count"] = df["transcript_sub"].apply(count_hedges)
 
+    df[["Hedge_Unique_Count", "Hedge_Words"]] = df["transcript_sub"].apply(
+        lambda t: pd.Series(detect_hedges(t))
+    )
+
+    # ------------------------------------------------------------
+    # Save detailed per-utterance data
+    # ------------------------------------------------------------
+    out_interactions = os.path.join(out_dir, "hedging_by_interaction.csv")
+    cols = [
+        "Subject", "agent", "Condition", "topic",
+        "transcript_sub", "Hedge_Count", "Hedge_Unique_Count", "Hedge_Words"
+    ]
+    df[cols].to_csv(out_interactions, index=False)
+    print_save(out_interactions, kind="CSV (per-interaction with hedge words)")
+
+    # ------------------------------------------------------------
     # Subject-level summary
+    # ------------------------------------------------------------
     summary = df.groupby(["Subject", "Condition"])["Hedge_Count"].mean().unstack().reset_index()
-    out_summary = os.path.join(out_dir, "hedging_summary_all_subjects.csv")
+    out_summary = os.path.join(out_dir, "hedging_subject_summary.csv")
     summary.to_csv(out_summary, index=False)
-    print_save(out_summary, kind="CSV")
+    print_save(out_summary, kind="CSV (subject-level summary)")
 
-    # Paired t-test
-    if "hum" in summary and "bot" in summary:
+    # ------------------------------------------------------------
+    # Stats: Paired t-test (Human vs Bot)
+    # ------------------------------------------------------------
+    p_val_main = None
+    if "hum" in summary.columns and "bot" in summary.columns:
         x, y = paired_clean(summary["hum"], summary["bot"])
-        t_stat, p_val = ttest_rel(x, y, nan_policy="omit")
-        mean_hum, mean_bot = x.mean(), y.mean()
-        sem_hum = x.std(ddof=1) / np.sqrt(len(x))
-        sem_bot = y.std(ddof=1) / np.sqrt(len(y))
-        diff = x - y
-        cohens_d = diff.mean() / diff.std(ddof=1) if diff.std(ddof=1) > 0 else np.nan
+        if x.size > 0:
+            t_stat, p_val_main = ttest_rel(x, y, nan_policy="omit")
 
-        lines = [
-            "--- Paired t-test: Hedging (Hum vs Bot) ---",
-            f"N = {len(x)} paired subjects",
-            f"Mean (Human) = {mean_hum:.3f} ± {sem_hum:.3f} SEM",
-            f"Mean (Bot)   = {mean_bot:.3f} ± {sem_bot:.3f} SEM",
-            f"Mean difference (Human - Bot) = {(mean_hum - mean_bot):.3f}",
-            f"t({len(x)-1}) = {t_stat:.3f}, p = {p_val:.4f}",
-            f"Cohen's d = {cohens_d:.3f}",
-            "Interpretation: " + ("Significant (p < .05)" if p_val < 0.05 else "Not significant (p > .05)")
-        ]
+            mean_hum, mean_bot = x.mean(), y.mean()
+            sem_hum = x.std(ddof=1) / np.sqrt(len(x))
+            sem_bot = y.std(ddof=1) / np.sqrt(len(x))
+            diff = x - y
+            cohens_d = diff.mean() / diff.std(ddof=1) if diff.std(ddof=1) > 0 else np.nan
 
-        stats_path = os.path.join(out_dir, "hedging_stats.txt")
-        with open(stats_path, "w") as f:
-            f.write("\n".join(lines) + "\n")
-        print_save(stats_path, kind="stats")
+            lines = [
+                "--- Paired t-test: Hedging (Hum vs Bot) ---",
+                f"N = {len(x)} paired subjects",
+                f"Mean (Human) = {mean_hum:.3f} ± {sem_hum:.3f} SEM",
+                f"Mean (Bot)   = {mean_bot:.3f} ± {sem_bot:.3f} SEM",
+                f"Mean difference (Human - Bot) = {(mean_hum - mean_bot):.3f}",
+                f"t({len(x)-1}) = {t_stat:.3f}, p = {p_val_main:.4f}",
+                f"Cohen's d = {cohens_d:.3f}",
+                "Interpretation: " + ("Significant (p < .05)" if p_val_main < 0.05 else "Not significant (p > .05)")
+            ]
 
-    # Plot
-    long_df = summary.melt(id_vars="Subject", var_name="Condition", value_name="Hedge_Count")
-    plt.figure(figsize=(6, 5))
-    sns.violinplot(data=long_df, x="Condition", y="Hedge_Count",
-                   palette={"hum": "skyblue", "bot": "sandybrown"}, inner="box")
-    for _, row in summary.iterrows():
-        plt.plot(["hum", "bot"], [row["hum"], row["bot"]], color="gray", alpha=0.4)
-    plt.title("Hedging by Condition")
-    plt.ylabel("Average Hedge Count per Utterance")
-    plt.tight_layout()
-    out_fig = os.path.join(out_dir, "hedging_violin.png")
-    plt.savefig(out_fig, dpi=300)
-    plt.close()
-    print_save(out_fig, kind="figure")
+            stats_path = os.path.join(out_dir, "hedging_stats.txt")
+            with open(stats_path, "w") as f:
+                f.write("\n".join(lines) + "\n")
+            print_save(stats_path, kind="stats")
+
+    # ------------------------------------------------------------
+    # Plot (main effect: Human vs Bot)
+    # ------------------------------------------------------------
+    main_effect_violin_lines(
+        df_summary=summary.rename(columns={"hum": "Hum", "bot": "Bot"}),
+        cond_a="Hum",
+        cond_b="Bot",
+        y_col="Hedge_Count",
+        out_path=os.path.join(out_dir, "hedging_main_effect_lines.png"),
+        title="Hedging Markers per Utterance: Human vs Bot",
+        palette=DEFAULT_PALETTE,
+        p_val=p_val_main,
+    )
 
 
-# -------------------------------
+# ------------------------------------------------------------
 # Main
-# -------------------------------
-
+# ------------------------------------------------------------
 def main():
     args, cfg = parse_and_load_config("Hedging analysis")
-
-    subjects = [str(s) for s in cfg["subject_ids"]]
     model = cfg.get("model")
     temp = cfg.get("temperature")
 
     data_dir = os.path.join(DATA_DIR, model, str(temp))
-    out_dir = os.path.join(RESULTS_DIR, model, str(temp), "hedging")  # ✅ results/model/temp/hedging
+    combined_path = os.path.join(data_dir, "combined_text_data.csv")
+    out_dir = os.path.join(RESULTS_DIR, model, str(temp), "hedging")
     os.makedirs(out_dir, exist_ok=True)
 
     logger, seed, overwrite, dry_run = init_run(
@@ -160,7 +185,7 @@ def main():
         used_alias=False,
     )
 
-    analyze_hedging(data_dir, out_dir)
+    analyze_hedging(combined_path, out_dir)
 
     logger.info("✅ Hedging analysis complete.")
     print("\n[DONE] ✅ Hedging analysis complete.\n")
