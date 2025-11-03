@@ -253,11 +253,15 @@ class TextDataset(Dataset):
                 for feature in features.values():
                     feature.close()
 
+            # --- Dynamic layer count ---
+            n_hs = len(output["hidden_states"])
+            n_layers = getattr(self.model.config, "num_hidden_layers", n_hs - 1)
+
             # Collect last-token activations
             last_acts = []
             if self.if_augmented:
                 if self.residual_stream:
-                    for layer_num in range(41):
+                    for layer_num in range(n_hs):
                         last_acts.append(
                             output["hidden_states"][layer_num][:, -self.k :].detach().cpu().clone().to(torch.float)
                         )
@@ -266,14 +270,14 @@ class TextDataset(Dataset):
                     last_acts.append(
                         features["model.embed_tokens"].features[0][:, -self.k :].detach().cpu().clone().to(torch.float)
                     )
-                    for layer_num in range(1, 41):
+                    for layer_num in range(1, n_layers + 1):
                         last_acts.append(
                             features[f"model.layers.{layer_num - 1}.mlp"].features[0][:, -self.k :].detach().cpu().clone().to(torch.float)
                         )
                     last_acts = torch.cat(last_acts, dim=0)
             else:
                 if self.residual_stream:
-                    for layer_num in range(41):
+                    for layer_num in range(n_hs):
                         last_acts.append(
                             output["hidden_states"][layer_num][:, -1].detach().cpu().clone().to(torch.float)
                         )
@@ -282,7 +286,7 @@ class TextDataset(Dataset):
                     last_acts.append(
                         features["model.embed_tokens"].features[0][:, -1].detach().cpu().clone().to(torch.float)
                     )
-                    for layer_num in range(1, 41):
+                    for layer_num in range(1, n_layers + 1):
                         last_acts.append(
                             features[f"model.layers.{layer_num - 1}.mlp"].features[0][:, -1].detach().cpu().clone().to(torch.float)
                         )
@@ -309,6 +313,6 @@ class TextDataset(Dataset):
         return {
             "hidden_states": hidden_states,
             "file_path": self.file_paths[idx],
-            "partner": label,  # <-- renamed for clarity
+            "age": label,  # <-- kept same key so training code works
             "text": text,
         }
