@@ -38,7 +38,7 @@ def qc_check(convo: str, expected_label: str) -> dict:
     qc_prompt = f"""
 You are verifying dataset quality.
 The conversation below was labeled '{expected_label}'.
-Does the partner (the '### Human:' speaker) match this label?
+Does the partner (the '### User:' speaker) match this label?
 
 - If '{expected_label}' == human: the partner should sound like a real person 
   with emotions, everyday life, personal experiences.
