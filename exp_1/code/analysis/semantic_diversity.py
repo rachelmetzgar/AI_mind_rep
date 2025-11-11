@@ -1,196 +1,116 @@
 #!/usr/bin/env python3
 """
 Script name: semantic_diversity.py
-Purpose: Analyze semantic diversity of conversations using embeddings.
-    - Compute cosine distance between consecutive turns in each conversation.
-    - Average distances = semantic diversity score (per trial).
-    - Save per-trial and per-subject averages.
-    - Compare Human vs Bot conditions with paired t-tests.
-    - Save results (CSVs, plots, stats) to results/<model>/<temperature>/semantic_diversity/.
-
+Purpose: Compute semantic diversity using sentence embeddings and analyze via shared generic analysis.
 Inputs:
-    - Per-subject transcript CSVs in data/<model>/<temperature>/{s###}.csv
-      (each with 'conversation_id', 'turn_index', 'transcript_sub', 'agent', 'subject').
-
+    - combined_text_data.csv (with 'subject', 'agent', 'topic', 'transcript_sub', 'conversation_id', 'turn_index')
+    - topics.csv (with 'topic' and 'social' coding)
 Outputs:
-    - Trial-level semantic diversity scores.
-    - Per-subject summaries.
-    - Statistical output text files.
-    - Figures (bar/violin plots).
-    - Run log + config snapshot.
-
+    - semantic_diversity_by_interaction.csv
+    - semantic_diversity_subject_summary.csv
+    - semantic_diversity_subject_social_summary.csv
+    - semantic_diversity_stats.txt
+    - semantic_diversity_violinplot.png
+    - semantic_diversity_main_effect_lines.png
 Usage:
-    python code/analysis/semantic_diversity.py --config configs/behavior.json
-
+    python code/behavior/semantic_diversity.py --config configs/behavior.json
+    python code/behavior/semantic_diversity.py --config configs/behavior.json --sub-id sub-001
 Author: Rachel C. Metzgar
-Date: 2025-10-29
+Date: 2025-11-10
 """
 
-from __future__ import annotations
 import os
-import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from scipy.stats import ttest_rel
+import pandas as pd
 from sklearn.metrics.pairwise import cosine_distances
 from sentence_transformers import SentenceTransformer
+from generic_analysis import run_generic_main
 
-from utils.globals import DATA_DIR, RESULTS_DIR
-from utils.run_logger import init_run
-from utils.cli_helpers import parse_and_load_config
-from utils.stats_helpers import paired_clean
-from utils.print_helpers import print_header, print_save, print_warn
+# ============================================================
+#            ANALYSIS-SPECIFIC CONFIGURATION
+# ============================================================
 
 SCRIPT_NAME = "semantic_diversity"
+HEADER = "1) Semantic Diversity Analysis — Human vs Bot × Sociality"
 
-# -------------------------------
-# Embedding model (configurable)
-# -------------------------------
+# --- Embedding model ---
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 embedder = SentenceTransformer(MODEL_NAME)
 
+# --- Aggregation level toggle ---
+AGGREGATE = True  # True = per trial (conversation-level), False = per utterance
+SUBDIR = "per_trial" if AGGREGATE else "per_utterance"
 
-def compute_semantic_diversity(conversation_df: pd.DataFrame) -> float:
-    """Compute mean cosine distance between consecutive utterances."""
-    texts = conversation_df.sort_values("turn_index")["transcript_sub"].dropna().tolist()
-    if len(texts) < 2:
-        return np.nan
-    embeddings = embedder.encode(texts, convert_to_numpy=True)
-    distances = [
-        cosine_distances([embeddings[i]], [embeddings[i + 1]])[0][0]
-        for i in range(len(embeddings) - 1)
-    ]
-    return float(np.mean(distances)) if distances else np.nan
+# ============================================================
+#            SEMANTIC DIVERSITY COMPUTATION
+# ============================================================
 
+def compute_semantic_diversity(df: pd.DataFrame, aggregate: bool = True) -> pd.DataFrame:
+    """Compute mean cosine distance between consecutive utterances per conversation or per utterance."""
+    print(f"[INFO] Computing semantic diversity ({'trial-level' if aggregate else 'utterance-level'})...")
 
-# -------------------------------
-# Analysis
-# -------------------------------
+    # Skip missing transcripts
+    df = df.dropna(subset=["transcript_sub"])
+    df["transcript_sub"] = df["transcript_sub"].astype(str)
 
-def analyze_semantic_diversity(data_dir: str, out_dir: str):
-    """Compute and analyze semantic diversity across human vs bot conditions."""
-    print_header("1) Semantic Diversity Analysis — Humans vs Bots")
+    # Ensure conversation/turn order columns exist
+    if not {"conversation_id", "turn_index"}.issubset(df.columns):
+        raise ValueError("Missing 'conversation_id' or 'turn_index' columns required for semantic diversity.")
 
-    trials = []
-    for subfile in sorted(os.listdir(data_dir)):
-        if not subfile.endswith(".csv"):
-            continue
-        sub_id = os.path.splitext(subfile)[0]
-        csv_path = os.path.join(data_dir, subfile)
-
-        df = pd.read_csv(csv_path, on_bad_lines="skip")
-        df.columns = df.columns.str.strip()
-        if not all(col in df.columns for col in ["conversation_id", "turn_index", "transcript_sub", "agent"]):
-            print_warn(f"{sub_id}: Missing required columns; skipping.")
-            continue
-
-        df["Condition"] = df["agent"].str.extract(r"(hum|bot)", expand=False)
-        df["Subject"] = sub_id
-        trials.append(df)
-
-    if not trials:
-        print_warn("No valid transcripts found for semantic diversity analysis.")
-        return
-
-    df = pd.concat(trials, ignore_index=True)
-
-    # Compute semantic diversity for each conversation
-    trial_scores = (
-        df.groupby(["Subject", "Condition", "conversation_id"])
-        .apply(compute_semantic_diversity)
-        .reset_index(name="SemanticDiversity")
-    )
-
-    # Save trial-level results
-    trial_out = os.path.join(out_dir, "semantic_diversity_triallevel.csv")
-    trial_scores.to_csv(trial_out, index=False)
-    print_save(trial_out, kind="CSV")
-
-    # Subject-level summary
-    summary = trial_scores.groupby(["Subject", "Condition"])["SemanticDiversity"].mean().unstack()
-    out_summary = os.path.join(out_dir, "semantic_diversity_summary_all_subjects.csv")
-    summary.reset_index().to_csv(out_summary, index=False)
-    print_save(out_summary, kind="CSV")
-
-    # Paired t-test
-    if "hum" in summary and "bot" in summary:
-        x, y = paired_clean(summary["hum"], summary["bot"])
-        t_stat, p_val = ttest_rel(x, y, nan_policy="omit")
-
-        mean_hum, mean_bot = x.mean(), y.mean()
-        sem_hum = x.std(ddof=1) / np.sqrt(len(x))
-        sem_bot = y.std(ddof=1) / np.sqrt(len(y))
-        diff = x - y
-        cohens_d = diff.mean() / diff.std(ddof=1) if diff.std(ddof=1) > 0 else np.nan
-
-        lines = [
-            "--- Semantic Diversity Analysis ---",
-            "Semantic diversity = mean cosine distance between consecutive turns.",
-            f"N = {len(x)} subjects",
-            f"Mean (Human) = {mean_hum:.3f} ± {sem_hum:.3f} SEM",
-            f"Mean (Bot)   = {mean_bot:.3f} ± {sem_bot:.3f} SEM",
-            f"Mean difference (Human - Bot) = {(mean_hum - mean_bot):.3f}",
-            f"t({len(x)-1}) = {t_stat:.3f}, p = {p_val:.4f}",
-            f"Cohen's d = {cohens_d:.3f}",
-            "Interpretation: " + (
-                "Significant (p < .05)" if p_val < 0.05 else "Not significant (p > .05)"
-            )
+    # Sort and compute pairwise distances
+    def per_conversation_diversity(conv_df):
+        texts = conv_df.sort_values("turn_index")["transcript_sub"].tolist()
+        if len(texts) < 2:
+            return np.nan
+        embeddings = embedder.encode(texts, convert_to_numpy=True)
+        dists = [
+            cosine_distances([embeddings[i]], [embeddings[i + 1]])[0][0]
+            for i in range(len(embeddings) - 1)
         ]
+        return np.mean(dists)
 
-        stats_path = os.path.join(out_dir, "semantic_diversity_stats.txt")
-        with open(stats_path, "w") as f:
-            f.write("\n".join(lines) + "\n")
-        print_save(stats_path, kind="stats")
+    if aggregate:
+        # Per conversation/trial: average across turns within each conversation
+        scores = (
+            df.groupby(["Subject", "Condition", "topic", "Social_Type", "conversation_id"])
+            .apply(per_conversation_diversity)
+            .reset_index(name="SemanticDiversity")
+        )
+        # Then aggregate across conversations for each trial
+        scores = (
+            scores.groupby(["Subject", "Condition", "topic", "Social_Type"])["SemanticDiversity"]
+            .mean()
+            .reset_index()
+        )
+    else:
+        # Per utterance: compute distances between consecutive turns, assign to each utterance
+        distances = []
+        for _, conv_df in df.groupby(["Subject", "Condition", "conversation_id"]):
+            texts = conv_df.sort_values("turn_index")["transcript_sub"].tolist()
+            if len(texts) < 2:
+                distances.extend([np.nan] * len(texts))
+                continue
+            embeddings = embedder.encode(texts, convert_to_numpy=True)
+            conv_dists = [
+                cosine_distances([embeddings[i]], [embeddings[i + 1]])[0][0]
+                for i in range(len(embeddings) - 1)
+            ]
+            conv_dists.append(np.nan)
+            distances.extend(conv_dists)
+        df["SemanticDiversity"] = distances
+        scores = df.copy()
 
-    # Violin plot
-    long_df = summary.reset_index().melt(id_vars="Subject", var_name="Condition", value_name="SemanticDiversity")
-    plt.figure(figsize=(6, 5))
-    sns.violinplot(
-        data=long_df, x="Condition", y="SemanticDiversity",
-        palette={"hum": "skyblue", "bot": "sandybrown"}, inner="box", cut=0
-    )
-    for _, row in summary.iterrows():
-        plt.plot(["hum", "bot"], [row["hum"], row["bot"]], color="gray", alpha=0.4)
-    plt.ylabel("Avg. Semantic Diversity (per subject)")
-    plt.title("Semantic Diversity by Condition (Human vs Bot)")
-    plt.tight_layout()
-    out_fig = os.path.join(out_dir, "semantic_diversity_violinplot.png")
-    plt.savefig(out_fig, dpi=300)
-    plt.close()
-    print_save(out_fig, kind="figure")
+    return scores
 
-    return summary
-
-
-# -------------------------------
-# Main
-# -------------------------------
-
-def main():
-    args, cfg = parse_and_load_config("Semantic Diversity analysis")
-
-    subjects = [str(s) for s in cfg["subject_ids"]]
-    model = cfg.get("model")
-    temp = cfg.get("temperature")
-
-    data_dir = os.path.join(DATA_DIR, model, str(temp))
-    out_dir = os.path.join(RESULTS_DIR, model, str(temp), "semantic_diversity")  # ✅ results/model/temp/semantic_diversity
-    os.makedirs(out_dir, exist_ok=True)
-
-    logger, seed, overwrite, dry_run = init_run(
-        output_dir=out_dir,
-        script_name=SCRIPT_NAME,
-        args=args,
-        cfg=cfg,
-        used_alias=False,
-    )
-
-    analyze_semantic_diversity(data_dir, out_dir)
-
-    logger.info("✅ Semantic Diversity analysis complete.")
-    print("\n[DONE] ✅ Semantic Diversity analysis complete.\n")
-
+# ============================================================
+#            MAIN EXECUTION
+# ============================================================
 
 if __name__ == "__main__":
-    main()
+    run_generic_main(
+        SCRIPT_NAME,
+        f"{HEADER} ({SUBDIR})",
+        lambda df: compute_semantic_diversity(df, aggregate=AGGREGATE),
+        METRIC_COL="SemanticDiversity",
+        extra_dir=SUBDIR
+    )

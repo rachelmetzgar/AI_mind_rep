@@ -41,7 +41,7 @@ def combine_text_data(sub_ids: List[str], data_dir: str, output_path: str) -> pd
         df = pd.read_csv(csv_path, on_bad_lines="skip")  # Pandas ≥1.3
 
 
-        required = {"subject", "run", "order", "agent", "topic", "transcript_sub", "transcript_llm"}
+        required = {"subject", "run", "order", "agent", "topic", "transcript_sub", "transcript_llm","Quality","Connectedness"}
         missing = required.difference(df.columns)
         if missing:
             print(f"[WARN] {csv_path} missing columns: {sorted(missing)}. Skipping.")

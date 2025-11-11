@@ -1,27 +1,26 @@
 #!/usr/bin/env python3
 """
 Script name: tom_ai_ratings.py
-Purpose: Use an LLM to rate conversational transcripts for Theory of Mind (ToM) content.
-    - Query LLM 5 times per transcript (independent calls).
-    - Save checkpoints every N rows.
-    - Supports SLURM array chunking (via --chunk-size).
-    - Automatically merges all chunks + runs stats when last array task finishes.
-
+Purpose: Generate and analyze Theory of Mind (ToM) ratings for participant transcripts.
+    - Uses an OpenAI model to rate each transcript (1–5 scale) for ToM content.
+    - Supports chunked SLURM execution with checkpoints.
+    - After merging chunks, uses shared generic analysis for summary statistics and plots.
 Inputs:
-    - {EXP_CSV_DIR}/combined_text_data.csv
-      Columns: order, run, transcript_sub, topic, subject, agent
-
+    - combined_text_data.csv (with 'subject', 'agent', 'topic', 'transcript_sub')
 Outputs:
-    - Per-chunk CSVs: tom_ai_ratings_START_END.csv
-    - Merged CSV: tom_ai_ratings_all.csv
-    - Subject summary, t-test, bar plot
-    - Logs in results/behavior/tom_ai_ratings/
-
+    - tom_ai_ratings_START_END.csv (per chunk)
+    - tom_ai_ratings_all.csv (merged)
+    - tom_ai_subject_summary.csv
+    - tom_ai_subject_social_summary.csv
+    - tom_ai_stats.txt
+    - tom_ai_violinplot.png
+    - tom_ai_main_effect_lines.png
 Usage:
     sbatch --array=0-N tom_ai_ratings.slurm
-
+    or
+    python code/behavior/tom_ai_ratings.py --merge
 Author: Rachel C. Metzgar
-Date: 2025-10-02
+Date: 2025-11-10
 """
 
 from __future__ import annotations
@@ -30,12 +29,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from openai import OpenAI
-from scipy.stats import ttest_rel
 
-# --- Import bootstrap ---
-_CODE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if _CODE_DIR not in sys.path:
-    sys.path.insert(0, _CODE_DIR)
+from generic_analysis import run_generic_main
 
 from utils.globals import RESULTS_DIR, EXP_CSV_DIR
 from utils.run_logger import init_run
@@ -58,8 +53,12 @@ Scale:
 Return only a number from 1–5.
 """
 
-# -------------------------------
+# ============================================================
+#                   LLM RATING PHASE
+# ============================================================
+
 def get_rating(client: OpenAI, text: str, model: str) -> int | None:
+    """Query the LLM to obtain a ToM score."""
     response = client.chat.completions.create(
         model=model,
         messages=[{"role": "system", "content": PROMPT},
@@ -72,10 +71,11 @@ def get_rating(client: OpenAI, text: str, model: str) -> int | None:
     except ValueError:
         return None
 
-# -------------------------------
+
 def run_chunk(input_file: str, out_dir: str, model: str,
               start: int, end: int, checkpoint_interval: int = 100) -> str:
-    df_full = pd.read_csv(csv_path, on_bad_lines="skip")
+    """Run a chunk of the dataset and save checkpointed LLM ratings."""
+    df_full = pd.read_csv(input_file, on_bad_lines="skip")
     if end > len(df_full):
         end = len(df_full)
     df = df_full.iloc[start:end].copy()
@@ -110,50 +110,41 @@ def run_chunk(input_file: str, out_dir: str, model: str,
     print_save(out_csv, kind="CSV")
     return out_csv
 
-# -------------------------------
-def merge_and_stats(out_dir: str) -> None:
+
+def merge_chunks(out_dir: str) -> str:
+    """Merge all chunked rating outputs into one master CSV."""
     files = sorted(glob.glob(os.path.join(out_dir, f"{SCRIPT_NAME}_*.csv")))
     if not files:
         print_warn("No chunk outputs found.")
-        return
+        return ""
     dfs = [pd.read_csv(f) for f in files]
     merged = pd.concat(dfs, ignore_index=True)
+    merged["mean_rating"] = merged[[f"ai_rating_{i}" for i in range(1, 6)]].mean(axis=1)
     out_csv = os.path.join(out_dir, f"{SCRIPT_NAME}_all.csv")
     merged.to_csv(out_csv, index=False)
     print_save(out_csv, kind="merged CSV")
+    return out_csv
 
-    # Aggregate
-    print_header("Aggregate + t-test")
-    merged["Condition"] = merged["agent"].astype(str).str.extract(r"(hum|bot)", expand=False)
-    merged["mean_rating"] = merged[[f"ai_rating_{i}" for i in range(1, 6)]].mean(axis=1)
-    subj_summary = merged.groupby(["subject", "Condition"])["mean_rating"].mean().unstack().reset_index()
-    subj_summary.to_csv(os.path.join(out_dir, "tom_ai_subject_summary.csv"), index=False)
 
-    # t-test
-    if "hum" in subj_summary and "bot" in subj_summary:
-        x, y = subj_summary["hum"].dropna(), subj_summary["bot"].dropna()
-        if len(x) and len(y):
-            t_stat, p_val = ttest_rel(x, y, nan_policy="omit")
-            with open(os.path.join(out_dir, "tom_ai_stats.txt"), "w") as f:
-                f.write(f"N={len(x)}\nMean hum={x.mean():.3f}, bot={y.mean():.3f}\n"
-                        f"t={t_stat:.3f}, p={p_val:.4f}\n")
+# ============================================================
+#                   ANALYSIS PHASE (GENERIC)
+# ============================================================
 
-    # Plot
-    plt.figure(figsize=(6,5))
-    plot_df = subj_summary.melt(id_vars="subject", value_vars=["hum","bot"],
-                                var_name="Condition", value_name="AvgRating")
-    sns.barplot(data=plot_df, x="Condition", y="AvgRating", ci=68,
-                palette={"hum":"steelblue","bot":"sandybrown"})
-    sns.stripplot(data=plot_df, x="Condition", y="AvgRating", color="black", alpha=0.5)
-    plt.title("Average ToM Ratings: Human vs Bot")
-    plt.ylabel("Avg ToM rating (1–5)")
-    plt.tight_layout()
-    out_fig = os.path.join(out_dir, "tom_ai_barplot.png")
-    plt.savefig(out_fig, dpi=300); plt.close()
+def compute_tom_ai(df: pd.DataFrame) -> pd.DataFrame:
+    """Prepare dataset for generic analysis using mean ToM AI scores."""
+    print_info("Preparing merged ToM AI ratings for generic analysis...")
+    if "mean_rating" not in df.columns:
+        rating_cols = [c for c in df.columns if c.startswith("ai_rating_")]
+        df["mean_rating"] = df[rating_cols].mean(axis=1)
+    df["ToM_AI_Score"] = df["mean_rating"]
+    return df
 
-# -------------------------------
+
+# ============================================================
+#                           MAIN
+# ============================================================
+
 def main():
-    # Parse args/config in one step (includes chunk-size + merge)
     args, cfg = parse_and_load_config(
         "ToM AI ratings",
         add_overwrite=False,
@@ -167,24 +158,45 @@ def main():
     input_file = os.path.join(EXP_CSV_DIR, "combined_text_data.csv")
     out_dir = os.path.join(RESULTS_DIR, "behavior", SCRIPT_NAME)
     os.makedirs(out_dir, exist_ok=True)
-
     logger, _, _, _ = init_run(output_dir=out_dir, script_name=SCRIPT_NAME, args=args, cfg=cfg)
 
-    rows = sum(1 for _ in open(input_file)) - 1  # minus header
+    rows = sum(1 for _ in open(input_file)) - 1
+
+    # --- Phase 1: Chunked LLM inference ---
     if args.chunk_size:
         tid = int(os.environ.get("SLURM_ARRAY_TASK_ID", 0))
         array_max = int(os.environ.get("SLURM_ARRAY_TASK_MAX", tid))
         start = tid * args.chunk_size
         end = (tid + 1) * args.chunk_size
         run_chunk(input_file, out_dir, model="gpt-4o-mini", start=start, end=end)
-
         if tid == array_max or args.merge:
-            merge_and_stats(out_dir)
+            merged_path = merge_chunks(out_dir)
+            if merged_path:
+                df = pd.read_csv(merged_path)
+                run_generic_main(
+                    SCRIPT_NAME,
+                    "2) ToM AI Ratings — Human vs Bot × Sociality",
+                    compute_tom_ai,
+                    METRIC_COL="ToM_AI_Score",
+                    extra_dir="merged_analysis"
+                )
     else:
+        # Single-run mode
         run_chunk(input_file, out_dir, model="gpt-4o-mini", start=0, end=rows)
-        merge_and_stats(out_dir)
+        merged_path = merge_chunks(out_dir)
+        if merged_path:
+            df = pd.read_csv(merged_path)
+            run_generic_main(
+                SCRIPT_NAME,
+                "2) ToM AI Ratings — Human vs Bot × Sociality",
+                compute_tom_ai,
+                METRIC_COL="ToM_AI_Score",
+                extra_dir="merged_analysis"
+            )
 
     logger.info("✅ ToM AI ratings complete.")
+    print("\n[DONE] ✅ ToM AI ratings complete.\n")
+
 
 if __name__ == "__main__":
     main()

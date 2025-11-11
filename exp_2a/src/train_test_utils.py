@@ -38,6 +38,7 @@ def train(
         # --- FIXED: handle BCELoss shape + dtype ---
         if isinstance(loss_func, torch.nn.BCELoss):
             loss = loss_func(output[0].squeeze(), target.float())
+            #loss = loss_func(output[0], target)
         else:
             loss = loss_func(output[0], target, **kwargs)
 
@@ -103,6 +104,8 @@ def test(
             # --- FIXED: handle BCELoss shape + dtype ---
             if isinstance(loss_func, torch.nn.BCELoss):
                 loss = loss_func(output[0].squeeze(), target.float())
+                #loss = loss_func(output[0], target)
+                
             else:
                 loss = loss_func(output[0], target, **kwargs)
 

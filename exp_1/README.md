@@ -21,7 +21,7 @@ Generated CSVs: `data/temp_<temperature>/<model>/sXXX.csv`
 
 2) **Run behavioral analyses**
 ```bash
-bash code/analysis/run_all_behavior.sh
+sbatch code/analysis/run_all_behavior.sh
 ```
 
 Or run individual scripts:
@@ -32,6 +32,8 @@ python code/analysis/combine_text_data.py --config configs/behavior.json
 ```
 Then run individual scripts:
 ```bash
+modoule load pyger
+conda activate behavior_env
 python code/analysis/politeness.py --config configs/behavior.json
 python code/analysis/sentiment_vader.py --config configs/behavior.json
 python code/analysis/wordcount.py --config configs/behavior.json

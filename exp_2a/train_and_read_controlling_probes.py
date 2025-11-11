@@ -72,8 +72,8 @@ def run_probe_train(model, tokenizer, control_probe=False, out_subdir="reading_p
         stratify=dataset.labels,
     )
     train_ds, test_ds = Subset(dataset, idx_train), Subset(dataset, idx_test)
-    train_loader = DataLoader(train_ds, shuffle=True, batch_size=BATCH_SIZE_TRAIN, num_workers=1)
-    test_loader = DataLoader(test_ds, shuffle=False, batch_size=BATCH_SIZE_TEST, num_workers=1)
+    train_loader = DataLoader(train_ds, shuffle=True, batch_size=BATCH_SIZE_TRAIN, num_workers=1, drop_last=True)
+    test_loader = DataLoader(test_ds, shuffle=False, batch_size=BATCH_SIZE_TEST, num_workers=1, drop_last=True)
 
     # Loss configuration
     if UNCERTAINTY:

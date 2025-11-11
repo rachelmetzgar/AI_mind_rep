@@ -1,209 +1,163 @@
-#!/usr/bin/env python3
 """
 Script name: questions.py
 Purpose: Analyze total number of questions participants asked across the experiment.
-    - Reads from the combined transcript CSV created by combine_text_data.py.
-    - Counts questions using two methods: question marks (?) and regex-based patterns.
-    - Saves per-trial and per-subject averages.
-    - Compares Human vs Bot question frequency (paired t-tests).
-    - Saves results (CSVs, plots, stats) to results/<model>/<temperature>/questions/.
+    - Count questions using two methods:
+        (1) question marks ("?")
+        (2) regex-based interrogative detection.
+    - Exclude participants who asked 0 questions in both conditions.
+    - Test for effects of Condition × Sociality (Human vs Bot × Topic type).
+    - Save results (CSVs, plots, stats) to results/behavior/questions/[method]/.
 
 Inputs:
-    - Combined transcript CSV: data/<model>/<temperature>/combined_text_data.csv
+    - combined_text_data.csv (with 'subject', 'agent', 'topic', 'transcript_sub')
+    - topics.csv (with 'topic' and 'social' coding)
 
 Outputs:
-    - questions_by_interaction_<method>.csv
-    - questions_subject_summary_<method>.csv
-    - questions_stats_<method>.txt
-    - questions_barplot_<method>.png
-    - questions_violinplot_<method>.png
+    - Separate subfolders for each analysis method:
+        question_marks/
+        regex/
+        nonaskers/question_marks/
+        nonaskers/regex/
+    - Each includes:
+        - per-trial and per-subject CSVs
+        - combined stats file (paired t-tests + ANOVA)
+        - violin plots (main effect + Condition × Sociality)
+        - run log + config snapshot
 
 Usage:
-    python code/analysis/questions.py --config configs/behavior.json
+    python code/behavior/questions.py --config configs/behavior.json
+    python code/behavior/questions.py --config configs/behavior.json --sub-id sub-001
 
 Author: Rachel C. Metzgar
-Date: 2025-10-31
+Date: 2025-11-10
 """
 
 from __future__ import annotations
-import os, re
+import os, re, sys
 import pandas as pd
-import numpy as np
-from scipy.stats import ttest_rel
 
-from utils.globals import DATA_DIR, RESULTS_DIR, PROJECT_ROOT
-from utils.cli_helpers import parse_and_load_config
+# --- Ensure project utils import works ---
+_CODE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if _CODE_DIR not in sys.path:
+    sys.path.insert(0, _CODE_DIR)
+
+from utils.generic_analysis import run_generic_main, load_experiment_data, run_generic_analysis
+from utils.globals import RESULTS_DIR
 from utils.run_logger import init_run
-from utils.stats_helpers import paired_clean
-from utils.print_helpers import print_header, print_save, print_info, print_warn
-from utils.plot_helpers import barplot_with_lines, main_effect_violin_lines, DEFAULT_PALETTE
+from utils.cli_helpers import parse_and_load_config
+from utils.print_helpers import print_warn, print_header, print_info
 
 SCRIPT_NAME = "questions"
+HEADER = "Total Questions — Human vs Bot × Sociality"
 
-# ------------------------------------------------------------
-# Question detection helpers
-# ------------------------------------------------------------
+# ============================================================
+# Regex-based question detection
+# ============================================================
+
 QUESTION_STARTS = re.compile(
-    r"^\s*(who|what|when|where|why|how|which|do|does|did|can|could|would|will|should|is|are|am|was|were)\b",
+    r'^\s*(who|what|when|where|why|how|which|do|does|did|can|could|would|will|should|is|are|am|was|were)\b',
     re.I,
 )
 
-
 def regex_question_count(text: str) -> int:
-    """Count sentences that appear to be questions:
-    - end with '?'
-    - OR start with interrogative words
-    """
-    if pd.isna(text):
+    """Count sentences that look like questions using regex patterns."""
+    if pd.isna(text) or not isinstance(text, str):
         return 0
-    sentences = re.split(r"(?<=[.?!])\s+", str(text))
-    count = 0
-    for s in sentences:
-        s = s.strip()
-        if not s:
-            continue
-        if s.endswith("?") or QUESTION_STARTS.match(s):
-            count += 1
-    return count
+    sentences = re.split(r'(?<=[.?!])\s+', text)
+    return sum(bool(s.strip() and (s.strip().endswith("?") or QUESTION_STARTS.match(s.strip()))) for s in sentences)
 
 
-# ------------------------------------------------------------
-# Core analysis
-# ------------------------------------------------------------
-def analyze_questions(combined_path: str, out_dir: str, method: str = "question_mark"):
-    """Analyze total participant questions (Hum vs Bot) using the specified detection method."""
-    label = "?" if method == "question_mark" else "regex-based"
-    print_header(f"1) Total Questions — Method: {label}")
+# ============================================================
+# Feature computation functions
+# ============================================================
 
-    if not os.path.exists(combined_path):
-        raise FileNotFoundError(f"Combined CSV not found: {combined_path}")
-
-    df = pd.read_csv(combined_path, on_bad_lines="skip")
-    df.columns = df.columns.str.strip()
-
-    required = {"subject", "agent", "transcript_sub"}
-    missing = required.difference(df.columns)
-    if missing:
-        raise ValueError(f"Combined CSV missing required columns: {missing}")
-
-    # Derive Condition and Subject columns
-    df["Condition"] = df["agent"].astype(str).str.extract(r"(hum|bot)", expand=False)
-    df["Subject"] = df["subject"].astype(str)
-
-    # ------------------------------------------------------------
-    # Count questions per utterance
-    # ------------------------------------------------------------
-    print_info(f"Counting questions using method: {method}")
-    if method == "regex":
-        df["Question_Count"] = df["transcript_sub"].apply(regex_question_count)
-    else:
-        df["Question_Count"] = df["transcript_sub"].astype(str).apply(lambda x: x.count("?"))
-
-    # ------------------------------------------------------------
-    # Save per-utterance data
-    # ------------------------------------------------------------
-    out_interactions = os.path.join(out_dir, f"questions_by_interaction_{method}.csv")
-    cols = ["Subject", "agent", "Condition", "topic", "transcript_sub", "Question_Count"]
-    df[cols].to_csv(out_interactions, index=False)
-    print_save(out_interactions, kind="CSV (per-interaction question counts)")
-
-    # ------------------------------------------------------------
-    # Subject-level totals
-    # ------------------------------------------------------------
-    summary = df.groupby(["Subject", "Condition"])["Question_Count"].sum().unstack().reset_index()
-    out_summary = os.path.join(out_dir, f"questions_subject_summary_{method}.csv")
-    summary.to_csv(out_summary, index=False)
-    print_save(out_summary, kind="CSV (subject-level totals)")
-
-    # ------------------------------------------------------------
-    # Paired t-test (Hum vs Bot)
-    # ------------------------------------------------------------
-    p_val_main = None
-    if "hum" in summary.columns and "bot" in summary.columns:
-        x, y = paired_clean(summary["hum"], summary["bot"])
-        if x.size > 0:
-            t_stat, p_val_main = ttest_rel(x, y, nan_policy="omit")
-            mean_hum, mean_bot = x.mean(), y.mean()
-            sem_hum = x.std(ddof=1) / np.sqrt(len(x))
-            sem_bot = y.std(ddof=1) / np.sqrt(len(x))
-            diff = x - y
-            cohens_d = diff.mean() / diff.std(ddof=1) if diff.std(ddof=1) > 0 else np.nan
-
-            lines = [
-                f"--- Paired t-test: Total Questions (Hum vs Bot, {method}) ---",
-                f"N = {len(x)} paired subjects",
-                f"Mean (Human) = {mean_hum:.3f} ± {sem_hum:.3f} SEM",
-                f"Mean (Bot)   = {mean_bot:.3f} ± {sem_bot:.3f} SEM",
-                f"Mean difference (Human - Bot) = {(mean_hum - mean_bot):.3f}",
-                f"t({len(x)-1}) = {t_stat:.3f}, p = {p_val_main:.4f}",
-                f"Cohen's d = {cohens_d:.3f}",
-                "Interpretation: "
-                + ("Significant (p < .05)" if p_val_main < 0.05 else "Not significant (p > .05)"),
-            ]
-
-            stats_path = os.path.join(out_dir, f"questions_stats_{method}.txt")
-            with open(stats_path, "w") as f:
-                f.write("\n".join(lines) + "\n")
-            print_save(stats_path, kind="stats")
-
-    # ------------------------------------------------------------
-    # Plots (bar + violin)
-    # ------------------------------------------------------------
-    long_df = summary.rename(columns={"hum": "Hum", "bot": "Bot"}).melt(
-        id_vars="Subject", var_name="Condition", value_name="Question_Count"
-    )
-
-    # Bar plot
-    barplot_with_lines(
-        df_long=long_df,
-        x_col="Condition",
-        y_col="Question_Count",
-        out_path=os.path.join(out_dir, f"questions_barplot_{method}.png"),
-        title=f"Total Questions by Condition ({label})",
-        palette={"Hum": "steelblue", "Bot": "sandybrown"},
-        p_val=p_val_main,
-    )
-
-    # Violin plot
-    main_effect_violin_lines(
-        df_summary=summary.rename(columns={"hum": "Hum", "bot": "Bot"}),
-        cond_a="Hum",
-        cond_b="Bot",
-        y_col="Question_Count",
-        out_path=os.path.join(out_dir, f"questions_violinplot_{method}.png"),
-        title=f"Total Questions per Subject ({label})",
-        palette=DEFAULT_PALETTE,
-        p_val=p_val_main,
-    )
+def add_question_mark_metric(df: pd.DataFrame) -> pd.DataFrame:
+    """Add question count via question-mark detection."""
+    df = df.copy()
+    df["Question_Count"] = df["transcript_sub"].astype(str).apply(lambda x: x.count("?"))
+    return df
 
 
-# ------------------------------------------------------------
-# Main
-# ------------------------------------------------------------
-def main():
-    args, cfg = parse_and_load_config("Questions analysis")
-    model = cfg.get("model")
-    temp = cfg.get("temperature")
+def add_regex_metric(df: pd.DataFrame) -> pd.DataFrame:
+    """Add question count via regex-based interrogative detection."""
+    df = df.copy()
+    df["Question_Count"] = df["transcript_sub"].apply(regex_question_count)
+    return df
 
-    data_dir = os.path.join(DATA_DIR, model, str(temp))
-    combined_path = os.path.join(data_dir, "combined_text_data.csv")
-    out_dir = os.path.join(RESULTS_DIR, model, str(temp), "questions")
+
+# ============================================================
+# Re-run analysis excluding non-askers
+# ============================================================
+
+def run_excluding_nonaskers(feature_func, method: str, base_out_dir: str):
+    """Rerun generic analysis after filtering out subjects who asked 0 questions in both conditions."""
+    df = feature_func(load_experiment_data())
+
+    # Identify subjects with >0 questions in either condition
+    totals = df.groupby(["Subject", "Condition"])["Question_Count"].sum().unstack(fill_value=0)
+    keep_subjects = totals[(totals["hum"] > 0) | (totals["bot"] > 0)].index
+    df = df[df["Subject"].isin(keep_subjects)]
+
+    if df.empty:
+        print_warn("No subjects left after excluding non-askers.")
+        return
+
+    out_dir = os.path.join(base_out_dir, "nonaskers", method)
     os.makedirs(out_dir, exist_ok=True)
 
-    logger, seed, overwrite, dry_run = init_run(
-        output_dir=out_dir,
+    print_header(f"Excluding Non-Askers — {method.upper()} Method")
+    run_generic_analysis(
+        df=df,
+        SCRIPT_NAME=SCRIPT_NAME,
+        HEADER=f"{HEADER} — Excluding Non-Askers ({method})",
+        METRIC_COL="Question_Count",
+        out_dir=out_dir,
+    )
+
+
+# ============================================================
+# Main
+# ============================================================
+
+def main():
+    args, cfg = parse_and_load_config("Total Questions Analysis")
+    base_out_dir = os.path.join(RESULTS_DIR, SCRIPT_NAME)
+    os.makedirs(base_out_dir, exist_ok=True)
+
+    logger, _, _, _ = init_run(
+        output_dir=base_out_dir,
         script_name=SCRIPT_NAME,
         args=args,
         cfg=cfg,
         used_alias=False,
     )
 
-    # Run both detection methods
-    analyze_questions(combined_path, out_dir, method="question_mark")
-    analyze_questions(combined_path, out_dir, method="regex")
+    # -----------------------------
+    # (1) Question-mark method
+    # -----------------------------
+    run_generic_main(
+        SCRIPT_NAME=SCRIPT_NAME,
+        HEADER=f"{HEADER} — Question Mark Method",
+        feature_func=add_question_mark_metric,
+        METRIC_COL="Question_Count",
+        extra_dir="question_marks",
+    )
+    run_excluding_nonaskers(add_question_mark_metric, "question_marks", base_out_dir)
 
-    logger.info("✅ Questions analysis complete.")
-    print("\n[DONE] ✅ Questions analysis complete.\n")
+    # -----------------------------
+    # (2) Regex method
+    # -----------------------------
+    run_generic_main(
+        SCRIPT_NAME=SCRIPT_NAME,
+        HEADER=f"{HEADER} — Regex Method",
+        feature_func=add_regex_metric,
+        METRIC_COL="Question_Count",
+        extra_dir="regex",
+    )
+    run_excluding_nonaskers(add_regex_metric, "regex", base_out_dir)
+
+    logger.info("✅ Total questions analysis complete.")
+    print("\n[DONE] ✅ Total questions analysis complete.\n")
 
 
 if __name__ == "__main__":
