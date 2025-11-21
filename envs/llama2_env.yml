@@ -1,0 +1,11 @@
+name: llama2_env
+channels:
+  - brainiak
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.10
+  - scikit-learn
+  - matplotlib
+  - seaborn
+prefix: /usr/people/rm9561/.conda/envs/llama2_env
