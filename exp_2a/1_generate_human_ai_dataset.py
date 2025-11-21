@@ -2,12 +2,12 @@
 Generate synthetic Human vs AI conversation dataset
 mirroring TalkTuner's pipeline (Chen et al., 2024).
 
-- Generation: GPT-3.5-Turbo (as in the paper)
+- Generation: GPT-3.5-Turbo (as in the Chen paper)
 - QC: GPT-4o-mini (or GPT-4) checks whether label matches conversation
 - Format: alternating "### User:" / "### Assistant:"
 - Files saved as conversation_XXXX_partner_{label}.txt
 
-Use: behavior_env
+Env: behavior_env
 
 Rachel C. Metzgar · October 2025
 """
@@ -23,10 +23,10 @@ OUT_DIR = "data/human_ai_conversations"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 GEN_MODEL = "gpt-3.5-turbo"
-QC_MODEL = "gpt-4o-mini"     # or "gpt-4" for consistency
+QC_MODEL = "gpt-4o-mini" 
 TEMPERATURE = 0.9
 MAX_TOKENS = 700
-N_PER_LABEL = 1000           # ~1000 per label like the paper (~2000 total)
+N_PER_LABEL = 1000       
 
 PROMPTS = {
     "human": """Generate a conversation between a human user and an AI assistant (14–16 turns).

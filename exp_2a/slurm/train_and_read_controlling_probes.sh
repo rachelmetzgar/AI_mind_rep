@@ -9,7 +9,7 @@
 #SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_2a/logs/train_probes_%A.err
 
 # -------------------------------------------------------------
-# TRAIN PROBES — TalkTuner replication (Human vs AI)
+# TRAIN PROBES — Human vs AI
 # -------------------------------------------------------------
 
 # Prevent conda / module PS1 bug under -u
@@ -28,7 +28,7 @@ trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 # === Project paths ===
 PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_2a"
-PY_SCRIPT="$PROJECT_ROOT/train_and_read_controlling_probes.py"
+PY_SCRIPT="$PROJECT_ROOT/2_train_and_read_controlling_probes.py"
 LOG_DIR="$PROJECT_ROOT/logs"
 
 # Make sure log dir exists
