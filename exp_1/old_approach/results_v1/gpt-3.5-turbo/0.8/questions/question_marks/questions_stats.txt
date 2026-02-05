@@ -1,0 +1,47 @@
+--- Questions Statistical Summary ---
+
+Human vs Bot:
+  N=50
+  Mean(Human)=0.4000 ± 0.0066, Mean(Bot)=0.3080 ± 0.0078
+  t(49)=8.436, p=0.0000
+
+
+--- Paired-samples t-tests: Condition × Sociality ---
+hum_social vs hum_nonsocial:
+  Mean hum_social=0.3204 ± 0.0065, Mean hum_nonsocial=0.4796 ± 0.0118
+  t(49)=-11.569, p=0.0000
+
+bot_social vs bot_nonsocial:
+  Mean bot_social=0.2292 ± 0.0109, Mean bot_nonsocial=0.3868 ± 0.0117
+  t(49)=-9.598, p=0.0000
+
+hum_social vs bot_social:
+  Mean hum_social=0.3204 ± 0.0065, Mean bot_social=0.2292 ± 0.0109
+  t(49)=6.649, p=0.0000
+
+hum_nonsocial vs bot_nonsocial:
+  Mean hum_nonsocial=0.4796 ± 0.0118, Mean bot_nonsocial=0.3868 ± 0.0117
+  t(49)=5.081, p=0.0000
+
+
+--- 2-Way Repeated-Measures ANOVA (Condition × Sociality) ---
+                               sum_sq     df           F        PR(>F)
+C(Condition)                 0.423200    1.0   72.876622  1.582364e-14
+C(Social_Type)               1.254528    1.0  216.034413  1.174776e-30
+C(Subject)                   0.220600   49.0    0.775268  8.474170e-01
+C(Condition):C(Social_Type)  0.000032    1.0    0.005511  9.409260e-01
+Residual                     0.853640  147.0         NaN           NaN
+
+Cell means ± SEM (avg questions per condition/topic):
+                         mean     sem
+Condition Social_Type                
+bot       nonsocial    0.3868  0.0117
+          social       0.2292  0.0109
+hum       nonsocial    0.4796  0.0118
+          social       0.3204  0.0065
+
+--- Collapsed by Topic Type (Social vs Nonsocial) ---
+               mean     sem
+Social_Type                
+nonsocial    0.4332  0.0095
+social       0.2748  0.0078

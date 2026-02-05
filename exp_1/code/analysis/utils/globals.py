@@ -39,3 +39,34 @@ ENV_FILE    = f"{PROJECT_ROOT}/environment.yml"
 # Optional: expose for logging/sanity
 REPO_ROOT = PROJECT_ROOT
 CODE_DIR  = f"{PROJECT_ROOT}/code"
+HUMAN_DIR = "data/exp_csv_human/"  
+TOPICS_PATH = "data/conds/topics.csv"
+HUMAN_FILE_PATTERN = "{sub_id}.csv"
+
+def get_sub_id_map():
+    """Legacy behavioral ID -> standardized MRI ID mapping."""
+    return {
+        "P08": "sub-001", "s08": "sub-001",
+        "P12": "sub-002", "s12": "sub-002",
+        "P13": "sub-003", "s13": "sub-003",
+        "P14": "sub-004", "s14": "sub-004",
+        "P15": "sub-005", "s15": "sub-005",
+        "P16": "sub-006", "s16": "sub-006",
+        "P17": "sub-007", "s17": "sub-007",
+        "P18": "sub-008", "s18": "sub-008",
+        "P20": "sub-009", "s20": "sub-009",
+        "P21": "sub-010", "s21": "sub-010",
+        "P22": "sub-011", "s22": "sub-011",
+        "P24": "sub-012", "s24": "sub-012",
+        "P25": "sub-013", "s25": "sub-013",
+        "P26": "sub-014", "s26": "sub-014",
+        "P27": "sub-015", "s27": "sub-015",
+        "P28": "sub-016", "s28": "sub-016",
+        "P30": "sub-017", "s30": "sub-017",
+        "P31": "sub-018", "s31": "sub-018",
+        "P32": "sub-019", "s32": "sub-019",
+        "P33": "sub-020", "s33": "sub-020",
+        "P34": "sub-021", "s34": "sub-021",
+        "P35": "sub-022", "s35": "sub-022",
+        "P36": "sub-023", "s36": "sub-023",
+    }

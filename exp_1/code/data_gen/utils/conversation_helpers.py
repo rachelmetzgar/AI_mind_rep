@@ -41,7 +41,6 @@ def run_topic_dialogue_chat(
     # === Neutral topic framing ===
     topic_intro = (
         f"The conversation topic is: '{topic_text}'.\n\n"
-        f"Your conversation partner is named {partner_name}.\n"
         f"Please begin by producing only your first message to start the conversation.\n"
         f"Do not simulate both sides of the dialogue."
     )

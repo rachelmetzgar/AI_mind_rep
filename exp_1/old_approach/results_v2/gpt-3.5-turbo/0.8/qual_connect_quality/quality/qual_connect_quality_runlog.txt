@@ -1,0 +1,15 @@
+2026-01-29 17:08:23,008 - INFO - 3069476 - ===== Started qual_connect_quality.py =====
+2026-01-29 17:08:23,008 - INFO - 3069476 - ---- Runtime Environment ----
+2026-01-29 17:08:23,008 - INFO - 3069476 - Datetime (UTC/local): 2026-01-29T22:08:23.008639Z / 2026-01-29T17:08:23.008651
+2026-01-29 17:08:23,008 - INFO - 3069476 - Hostname: spockmk2-22-05
+2026-01-29 17:08:23,008 - INFO - 3069476 - OS: Linux 5.14.0-570.28.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Thu Jul 24 10:32:22 UTC 2025)
+2026-01-29 17:08:23,008 - INFO - 3069476 - Python: 3.11.13
+2026-01-29 17:08:23,008 - INFO - 3069476 - Conda env: behavior_env
+2026-01-29 17:08:23,008 - INFO - 3069476 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2026-01-29 17:08:23,013 - INFO - 3069476 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2026-01-29 17:08:23,013 - INFO - 3069476 - SLURM_JOB_ID: 3288865
+2026-01-29 17:08:23,013 - INFO - 3069476 - SLURM_CPUS_PER_TASK: 2
+2026-01-29 17:08:23,013 - INFO - 3069476 - SLURM_MEM_PER_NODE: 8192
+2026-01-29 17:08:23,013 - INFO - 3069476 - SLURM_NODELIST: spockmk2-22-05
+2026-01-29 17:08:23,015 - INFO - 3069476 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/qual_connect_quality/quality/config_used.json
+2026-01-29 17:08:24,385 - INFO - 3069476 - ✅ Qual_Connect_Quality analysis complete.

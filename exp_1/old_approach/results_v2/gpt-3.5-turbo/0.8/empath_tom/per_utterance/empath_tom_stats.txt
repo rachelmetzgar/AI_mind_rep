@@ -1,0 +1,47 @@
+--- Empath_Tom Statistical Summary ---
+
+Human vs Bot:
+  N=50
+  Mean(Human)=1.5542 ± 0.0235, Mean(Bot)=1.3620 ± 0.0245
+  t(49)=4.986, p=0.0000
+
+
+--- Paired-samples t-tests: Condition × Sociality ---
+hum_social vs hum_nonsocial:
+  Mean hum_social=1.5888 ± 0.0376, Mean hum_nonsocial=1.5196 ± 0.0271
+  t(49)=1.521, p=0.1348
+
+bot_social vs bot_nonsocial:
+  Mean bot_social=1.3780 ± 0.0386, Mean bot_nonsocial=1.3460 ± 0.0287
+  t(49)=0.678, p=0.5009
+
+hum_social vs bot_social:
+  Mean hum_social=1.5888 ± 0.0376, Mean bot_social=1.3780 ± 0.0386
+  t(49)=3.106, p=0.0032
+
+hum_nonsocial vs bot_nonsocial:
+  Mean hum_nonsocial=1.5196 ± 0.0271, Mean bot_nonsocial=1.3460 ± 0.0287
+  t(49)=4.812, p=0.0000
+
+
+--- 2-Way Repeated-Measures ANOVA (Condition × Sociality) ---
+                               sum_sq     df          F        PR(>F)
+C(Condition)                 1.847042    1.0  30.489023  1.481489e-07
+C(Social_Type)               0.128018    1.0   2.113186  1.481666e-01
+C(Subject)                   2.017178   49.0   0.679540  9.403217e-01
+C(Condition):C(Social_Type)  0.017298    1.0   0.285537  5.939020e-01
+Residual                     8.905342  147.0        NaN           NaN
+
+Cell means ± SEM (avg empath_tom per condition/topic):
+                         mean     sem
+Condition Social_Type                
+bot       nonsocial    1.3460  0.0287
+          social       1.3780  0.0386
+hum       nonsocial    1.5196  0.0271
+          social       1.5888  0.0376
+
+--- Collapsed by Topic Type (Social vs Nonsocial) ---
+               mean     sem
+Social_Type                
+nonsocial    1.4328  0.0215
+social       1.4834  0.0288

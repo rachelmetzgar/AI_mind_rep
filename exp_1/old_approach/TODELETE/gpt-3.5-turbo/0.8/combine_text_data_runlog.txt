@@ -1,0 +1,24 @@
+2025-10-29 16:49:40,438 - INFO - 537334 - ===== Started combine_text_data.py =====
+2025-10-29 16:49:40,439 - INFO - 537334 - ---- Runtime Environment ----
+2025-10-29 16:49:40,439 - INFO - 537334 - Datetime (UTC/local): 2025-10-29T20:49:40.439188Z / 2025-10-29T16:49:40.439207
+2025-10-29 16:49:40,439 - INFO - 537334 - Hostname: spockmk2-23-06
+2025-10-29 16:49:40,439 - INFO - 537334 - OS: Linux 5.14.0-570.39.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Sat Sep 6 20:23:03 UTC 2025)
+2025-10-29 16:49:40,439 - INFO - 537334 - Python: 3.11.13
+2025-10-29 16:49:40,439 - INFO - 537334 - Conda env: behavior_env
+2025-10-29 16:49:40,439 - INFO - 537334 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-10-29 16:49:40,448 - INFO - 537334 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-10-29 16:49:40,449 - INFO - 537334 - SLURM_JOB_ID: 2104126
+2025-10-29 16:49:40,449 - INFO - 537334 - SLURM_CPUS_PER_TASK: 2
+2025-10-29 16:49:40,449 - INFO - 537334 - SLURM_MEM_PER_NODE: 8192
+2025-10-29 16:49:40,449 - INFO - 537334 - SLURM_NODELIST: spockmk2-23-06
+2025-10-29 16:49:40,452 - INFO - 537334 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/config_used.json
+2025-10-29 16:49:40,459 - ERROR - 537334 - Unhandled exception
+Traceback (most recent call last):
+  File "/jukebox/graziano/rachel/ai_mind_rep/exp_1/code/analysis/combine_text_data.py", line 99, in <module>
+    main()
+  File "/jukebox/graziano/rachel/ai_mind_rep/exp_1/code/analysis/combine_text_data.py", line 93, in main
+    _ = combine_text_data(subjects, data_dir, output_path)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/jukebox/graziano/rachel/ai_mind_rep/exp_1/code/analysis/combine_text_data.py", line 58, in combine_text_data
+    raise RuntimeError("No valid subject data found. Check input paths and filenames in EXP_CSV_DIR.")
+RuntimeError: No valid subject data found. Check input paths and filenames in EXP_CSV_DIR.

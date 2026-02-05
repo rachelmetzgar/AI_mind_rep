@@ -1,0 +1,39 @@
+2026-01-29 15:23:37,786 - INFO - 2548726 - ===== Started empath_tom.py =====
+2026-01-29 15:23:37,786 - INFO - 2548726 - ---- Runtime Environment ----
+2026-01-29 15:23:37,786 - INFO - 2548726 - Datetime (UTC/local): 2026-01-29T20:23:37.786488Z / 2026-01-29T15:23:37.786497
+2026-01-29 15:23:37,786 - INFO - 2548726 - Hostname: spockmk2-22-06
+2026-01-29 15:23:37,786 - INFO - 2548726 - OS: Linux 5.14.0-570.28.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Thu Jul 24 10:32:22 UTC 2025)
+2026-01-29 15:23:37,786 - INFO - 2548726 - Python: 3.11.13
+2026-01-29 15:23:37,786 - INFO - 2548726 - Conda env: behavior_env
+2026-01-29 15:23:37,786 - INFO - 2548726 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2026-01-29 15:23:37,790 - INFO - 2548726 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2026-01-29 15:23:37,791 - INFO - 2548726 - SLURM_JOB_ID: 3288045
+2026-01-29 15:23:37,791 - INFO - 2548726 - SLURM_CPUS_PER_TASK: 2
+2026-01-29 15:23:37,791 - INFO - 2548726 - SLURM_MEM_PER_NODE: 8192
+2026-01-29 15:23:37,791 - INFO - 2548726 - SLURM_NODELIST: spockmk2-22-06
+2026-01-29 15:23:37,794 - INFO - 2548726 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/empath_tom/per_utterance/config_used.json
+2026-01-29 15:23:37,795 - ERROR - 2548726 - Unhandled exception
+Traceback (most recent call last):
+  File "/jukebox/graziano/rachel/ai_mind_rep/exp_1/code/analysis/empath_tom.py", line 79, in <module>
+    run_generic_main(
+  File "/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_1/code/analysis/utils/generic_analysis.py", line 221, in run_generic_main
+    df = load_experiment_data(model, temp)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_1/code/analysis/utils/generic_analysis.py", line 48, in load_experiment_data
+    raise FileNotFoundError(f"Missing combined CSV: {combined_path}")
+FileNotFoundError: Missing combined CSV: /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/combined_text_data.csv
+2026-01-29 15:28:14,285 - INFO - 3339652 - ===== Started empath_tom.py =====
+2026-01-29 15:28:14,286 - INFO - 3339652 - ---- Runtime Environment ----
+2026-01-29 15:28:14,286 - INFO - 3339652 - Datetime (UTC/local): 2026-01-29T20:28:14.286041Z / 2026-01-29T15:28:14.286048
+2026-01-29 15:28:14,286 - INFO - 3339652 - Hostname: spockmk2-11
+2026-01-29 15:28:14,286 - INFO - 3339652 - OS: Linux 5.14.0-570.25.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Mon Jul 7 18:09:10 UTC 2025)
+2026-01-29 15:28:14,286 - INFO - 3339652 - Python: 3.11.13
+2026-01-29 15:28:14,286 - INFO - 3339652 - Conda env: behavior_env
+2026-01-29 15:28:14,286 - INFO - 3339652 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2026-01-29 15:28:14,290 - INFO - 3339652 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2026-01-29 15:28:14,290 - INFO - 3339652 - SLURM_JOB_ID: 3288074
+2026-01-29 15:28:14,290 - INFO - 3339652 - SLURM_CPUS_PER_TASK: 2
+2026-01-29 15:28:14,290 - INFO - 3339652 - SLURM_MEM_PER_NODE: 8192
+2026-01-29 15:28:14,290 - INFO - 3339652 - SLURM_NODELIST: spockmk2-11
+2026-01-29 15:28:14,293 - INFO - 3339652 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/empath_tom/per_utterance/config_used.json
+2026-01-29 15:28:16,112 - INFO - 3339652 - ✅ Empath_Tom analysis complete.

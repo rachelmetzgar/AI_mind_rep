@@ -88,7 +88,7 @@ def run_subject(subject: str):
     prompts_dir = UTILS_DIR / "prompts"
 
     safe_model_name = MODEL_NAME.replace("/", "-")
-    out_dir = BASE_DIR / "data" / f"temp_{TEMPERATURE}" / safe_model_name
+    out_dir = BASE_DIR / "data" / safe_model_name / f"{TEMPERATURE}"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_csv = out_dir / f"{subject}.csv"
 

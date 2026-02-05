@@ -1,0 +1,47 @@
+--- Qual_Connect_Quality Statistical Summary ---
+
+Human vs Bot:
+  N=50
+  Mean(Human)=3.9660 ± 0.0068, Mean(Bot)=3.9770 ± 0.0052
+  t(49)=-1.502, p=0.1396
+
+
+--- Paired-samples t-tests: Condition × Sociality ---
+hum_social vs hum_nonsocial:
+  Mean hum_social=3.9640 ± 0.0080, Mean hum_nonsocial=3.9680 ± 0.0083
+  t(49)=-0.444, p=0.6593
+
+bot_social vs bot_nonsocial:
+  Mean bot_social=3.9860 ± 0.0064, Mean bot_nonsocial=3.9680 ± 0.0073
+  t(49)=2.024, p=0.0485
+
+hum_social vs bot_social:
+  Mean hum_social=3.9640 ± 0.0080, Mean bot_social=3.9860 ± 0.0064
+  t(49)=-2.292, p=0.0263
+
+hum_nonsocial vs bot_nonsocial:
+  Mean hum_nonsocial=3.9680 ± 0.0083, Mean bot_nonsocial=3.9680 ± 0.0073
+  t(49)=0.000, p=1.0000
+
+
+--- 2-Way Repeated-Measures ANOVA (Condition × Sociality) ---
+                              sum_sq     df         F    PR(>F)
+C(Condition)                 0.00605    1.0  2.711846  0.101742
+C(Social_Type)               0.00245    1.0  1.098186  0.296385
+C(Subject)                   0.22505   49.0  2.058698  0.000498
+C(Condition):C(Social_Type)  0.00605    1.0  2.711846  0.101742
+Residual                     0.32795  147.0       NaN       NaN
+
+Cell means ± SEM (avg qual_connect_quality per condition/topic):
+                        mean     sem
+Condition Social_Type               
+bot       nonsocial    3.968  0.0073
+          social       3.986  0.0064
+hum       nonsocial    3.968  0.0083
+          social       3.964  0.0080
+
+--- Collapsed by Topic Type (Social vs Nonsocial) ---
+              mean     sem
+Social_Type               
+nonsocial    3.968  0.0055
+social       3.975  0.0052

@@ -1,0 +1,47 @@
+--- Wordcount Statistical Summary ---
+
+Human vs Bot:
+  N=50
+  Mean(Human)=73.4964 ± 0.5064, Mean(Bot)=79.5468 ± 0.4674
+  t(49)=-7.683, p=0.0000
+
+
+--- Paired-samples t-tests: Condition × Sociality ---
+hum_social vs hum_nonsocial:
+  Mean hum_social=74.4088 ± 0.6623, Mean hum_nonsocial=72.5840 ± 0.7275
+  t(49)=1.913, p=0.0616
+
+bot_social vs bot_nonsocial:
+  Mean bot_social=79.2640 ± 0.6355, Mean bot_nonsocial=79.8296 ± 0.6791
+  t(49)=-0.611, p=0.5439
+
+hum_social vs bot_social:
+  Mean hum_social=74.4088 ± 0.6623, Mean bot_social=79.2640 ± 0.6355
+  t(49)=-4.851, p=0.0000
+
+hum_nonsocial vs bot_nonsocial:
+  Mean hum_nonsocial=72.5840 ± 0.7275, Mean bot_nonsocial=79.8296 ± 0.6791
+  t(49)=-6.575, p=0.0000
+
+
+--- 2-Way Repeated-Measures ANOVA (Condition × Sociality) ---
+                                  sum_sq     df          F        PR(>F)
+C(Condition)                 1830.367008    1.0  73.051989  1.491153e-14
+C(Social_Type)                 19.819808    1.0   0.791031  3.752418e-01
+C(Subject)                    807.267888   49.0   0.657530  9.543267e-01
+C(Condition):C(Social_Type)    71.425152    1.0   2.850658  9.345688e-02
+Residual                     3683.184432  147.0        NaN           NaN
+
+Cell means ± SEM (avg wordcount per condition/topic):
+                          mean     sem
+Condition Social_Type                 
+bot       nonsocial    79.8296  0.6791
+          social       79.2640  0.6355
+hum       nonsocial    72.5840  0.7275
+          social       74.4088  0.6623
+
+--- Collapsed by Topic Type (Social vs Nonsocial) ---
+                mean     sem
+Social_Type                 
+nonsocial    76.2068  0.6146
+social       76.8364  0.5177

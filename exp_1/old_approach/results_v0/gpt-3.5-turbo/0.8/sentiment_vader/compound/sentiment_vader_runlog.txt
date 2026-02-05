@@ -1,0 +1,240 @@
+2025-11-10 16:01:35,958 - INFO - 2443005 - ===== Started sentiment_vader.py =====
+2025-11-10 16:01:35,958 - INFO - 2443005 - ---- Runtime Environment ----
+2025-11-10 16:01:35,958 - INFO - 2443005 - Datetime (UTC/local): 2025-11-10T21:01:35.958389Z / 2025-11-10T16:01:35.958401
+2025-11-10 16:01:35,958 - INFO - 2443005 - Hostname: spockmk2-22-02
+2025-11-10 16:01:35,958 - INFO - 2443005 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:01:35,958 - INFO - 2443005 - Python: 3.11.13
+2025-11-10 16:01:35,958 - INFO - 2443005 - Conda env: behavior_env
+2025-11-10 16:01:35,958 - INFO - 2443005 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:01:35,969 - INFO - 2443005 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:01:35,969 - INFO - 2443005 - SLURM_JOB_ID: 2676463
+2025-11-10 16:01:35,969 - INFO - 2443005 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:01:35,969 - INFO - 2443005 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:01:35,969 - INFO - 2443005 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:01:35,973 - INFO - 2443005 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/compound/config_used.json
+2025-11-10 16:01:41,572 - INFO - 2443005 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:01:41,582 - INFO - 2443005 - ===== Started sentiment_vader.py =====
+2025-11-10 16:01:41,582 - INFO - 2443005 - ---- Runtime Environment ----
+2025-11-10 16:01:41,582 - INFO - 2443005 - Datetime (UTC/local): 2025-11-10T21:01:41.582936Z / 2025-11-10T16:01:41.582951
+2025-11-10 16:01:41,583 - INFO - 2443005 - Hostname: spockmk2-22-02
+2025-11-10 16:01:41,583 - INFO - 2443005 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:01:41,583 - INFO - 2443005 - Python: 3.11.13
+2025-11-10 16:01:41,583 - INFO - 2443005 - Conda env: behavior_env
+2025-11-10 16:01:41,583 - INFO - 2443005 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:01:41,583 - INFO - 2443005 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:01:41,583 - INFO - 2443005 - SLURM_JOB_ID: 2676463
+2025-11-10 16:01:41,583 - INFO - 2443005 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:01:41,583 - INFO - 2443005 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:01:41,583 - INFO - 2443005 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:01:41,587 - INFO - 2443005 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/pos/config_used.json
+2025-11-10 16:01:47,253 - INFO - 2443005 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:01:47,263 - INFO - 2443005 - ===== Started sentiment_vader.py =====
+2025-11-10 16:01:47,263 - INFO - 2443005 - ---- Runtime Environment ----
+2025-11-10 16:01:47,263 - INFO - 2443005 - Datetime (UTC/local): 2025-11-10T21:01:47.263634Z / 2025-11-10T16:01:47.263650
+2025-11-10 16:01:47,263 - INFO - 2443005 - Hostname: spockmk2-22-02
+2025-11-10 16:01:47,263 - INFO - 2443005 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:01:47,263 - INFO - 2443005 - Python: 3.11.13
+2025-11-10 16:01:47,263 - INFO - 2443005 - Conda env: behavior_env
+2025-11-10 16:01:47,264 - INFO - 2443005 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:01:47,264 - INFO - 2443005 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:01:47,264 - INFO - 2443005 - SLURM_JOB_ID: 2676463
+2025-11-10 16:01:47,264 - INFO - 2443005 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:01:47,264 - INFO - 2443005 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:01:47,264 - INFO - 2443005 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:01:47,269 - INFO - 2443005 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/neg/config_used.json
+2025-11-10 16:01:52,831 - INFO - 2443005 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:01:52,847 - INFO - 2443005 - ===== Started sentiment_vader.py =====
+2025-11-10 16:01:52,847 - INFO - 2443005 - ---- Runtime Environment ----
+2025-11-10 16:01:52,848 - INFO - 2443005 - Datetime (UTC/local): 2025-11-10T21:01:52.848019Z / 2025-11-10T16:01:52.848034
+2025-11-10 16:01:52,848 - INFO - 2443005 - Hostname: spockmk2-22-02
+2025-11-10 16:01:52,848 - INFO - 2443005 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:01:52,848 - INFO - 2443005 - Python: 3.11.13
+2025-11-10 16:01:52,848 - INFO - 2443005 - Conda env: behavior_env
+2025-11-10 16:01:52,848 - INFO - 2443005 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:01:52,848 - INFO - 2443005 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:01:52,848 - INFO - 2443005 - SLURM_JOB_ID: 2676463
+2025-11-10 16:01:52,849 - INFO - 2443005 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:01:52,849 - INFO - 2443005 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:01:52,849 - INFO - 2443005 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:01:52,854 - INFO - 2443005 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/neu/config_used.json
+2025-11-10 16:01:58,412 - INFO - 2443005 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:13:03,095 - INFO - 2462905 - ===== Started sentiment_vader.py =====
+2025-11-10 16:13:03,095 - INFO - 2462905 - ---- Runtime Environment ----
+2025-11-10 16:13:03,096 - INFO - 2462905 - Datetime (UTC/local): 2025-11-10T21:13:03.096021Z / 2025-11-10T16:13:03.096033
+2025-11-10 16:13:03,096 - INFO - 2462905 - Hostname: spockmk2-22-02
+2025-11-10 16:13:03,096 - INFO - 2462905 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:13:03,096 - INFO - 2462905 - Python: 3.11.13
+2025-11-10 16:13:03,096 - INFO - 2462905 - Conda env: behavior_env
+2025-11-10 16:13:03,096 - INFO - 2462905 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:13:03,101 - INFO - 2462905 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:13:03,101 - INFO - 2462905 - SLURM_JOB_ID: 2676643
+2025-11-10 16:13:03,101 - INFO - 2462905 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:13:03,101 - INFO - 2462905 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:13:03,101 - INFO - 2462905 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:13:03,104 - INFO - 2462905 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/compound/config_used.json
+2025-11-10 16:13:08,744 - INFO - 2462905 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:13:08,750 - INFO - 2462905 - ===== Started sentiment_vader.py =====
+2025-11-10 16:13:08,750 - INFO - 2462905 - ---- Runtime Environment ----
+2025-11-10 16:13:08,750 - INFO - 2462905 - Datetime (UTC/local): 2025-11-10T21:13:08.750321Z / 2025-11-10T16:13:08.750338
+2025-11-10 16:13:08,750 - INFO - 2462905 - Hostname: spockmk2-22-02
+2025-11-10 16:13:08,750 - INFO - 2462905 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:13:08,750 - INFO - 2462905 - Python: 3.11.13
+2025-11-10 16:13:08,750 - INFO - 2462905 - Conda env: behavior_env
+2025-11-10 16:13:08,750 - INFO - 2462905 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:13:08,751 - INFO - 2462905 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:13:08,751 - INFO - 2462905 - SLURM_JOB_ID: 2676643
+2025-11-10 16:13:08,751 - INFO - 2462905 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:13:08,751 - INFO - 2462905 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:13:08,751 - INFO - 2462905 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:13:08,754 - INFO - 2462905 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/pos/config_used.json
+2025-11-10 16:13:14,448 - INFO - 2462905 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:13:14,453 - INFO - 2462905 - ===== Started sentiment_vader.py =====
+2025-11-10 16:13:14,454 - INFO - 2462905 - ---- Runtime Environment ----
+2025-11-10 16:13:14,454 - INFO - 2462905 - Datetime (UTC/local): 2025-11-10T21:13:14.454218Z / 2025-11-10T16:13:14.454232
+2025-11-10 16:13:14,454 - INFO - 2462905 - Hostname: spockmk2-22-02
+2025-11-10 16:13:14,454 - INFO - 2462905 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:13:14,454 - INFO - 2462905 - Python: 3.11.13
+2025-11-10 16:13:14,454 - INFO - 2462905 - Conda env: behavior_env
+2025-11-10 16:13:14,454 - INFO - 2462905 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:13:14,454 - INFO - 2462905 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:13:14,455 - INFO - 2462905 - SLURM_JOB_ID: 2676643
+2025-11-10 16:13:14,455 - INFO - 2462905 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:13:14,455 - INFO - 2462905 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:13:14,455 - INFO - 2462905 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:13:14,458 - INFO - 2462905 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/neg/config_used.json
+2025-11-10 16:13:19,996 - INFO - 2462905 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:13:20,002 - INFO - 2462905 - ===== Started sentiment_vader.py =====
+2025-11-10 16:13:20,002 - INFO - 2462905 - ---- Runtime Environment ----
+2025-11-10 16:13:20,002 - INFO - 2462905 - Datetime (UTC/local): 2025-11-10T21:13:20.002349Z / 2025-11-10T16:13:20.002363
+2025-11-10 16:13:20,002 - INFO - 2462905 - Hostname: spockmk2-22-02
+2025-11-10 16:13:20,002 - INFO - 2462905 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:13:20,002 - INFO - 2462905 - Python: 3.11.13
+2025-11-10 16:13:20,002 - INFO - 2462905 - Conda env: behavior_env
+2025-11-10 16:13:20,002 - INFO - 2462905 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:13:20,003 - INFO - 2462905 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:13:20,003 - INFO - 2462905 - SLURM_JOB_ID: 2676643
+2025-11-10 16:13:20,003 - INFO - 2462905 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:13:20,003 - INFO - 2462905 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:13:20,003 - INFO - 2462905 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:13:20,007 - INFO - 2462905 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/neu/config_used.json
+2025-11-10 16:13:25,589 - INFO - 2462905 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:20:33,095 - INFO - 2475415 - ===== Started sentiment_vader.py =====
+2025-11-10 16:20:33,095 - INFO - 2475415 - ---- Runtime Environment ----
+2025-11-10 16:20:33,095 - INFO - 2475415 - Datetime (UTC/local): 2025-11-10T21:20:33.095542Z / 2025-11-10T16:20:33.095553
+2025-11-10 16:20:33,095 - INFO - 2475415 - Hostname: spockmk2-22-02
+2025-11-10 16:20:33,095 - INFO - 2475415 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:20:33,095 - INFO - 2475415 - Python: 3.11.13
+2025-11-10 16:20:33,095 - INFO - 2475415 - Conda env: behavior_env
+2025-11-10 16:20:33,095 - INFO - 2475415 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:20:33,100 - INFO - 2475415 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:20:33,100 - INFO - 2475415 - SLURM_JOB_ID: 2676742
+2025-11-10 16:20:33,100 - INFO - 2475415 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:20:33,100 - INFO - 2475415 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:20:33,100 - INFO - 2475415 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:20:33,103 - INFO - 2475415 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/compound/config_used.json
+2025-11-10 16:20:38,697 - INFO - 2475415 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:20:38,702 - INFO - 2475415 - ===== Started sentiment_vader.py =====
+2025-11-10 16:20:38,702 - INFO - 2475415 - ---- Runtime Environment ----
+2025-11-10 16:20:38,702 - INFO - 2475415 - Datetime (UTC/local): 2025-11-10T21:20:38.702925Z / 2025-11-10T16:20:38.702939
+2025-11-10 16:20:38,703 - INFO - 2475415 - Hostname: spockmk2-22-02
+2025-11-10 16:20:38,703 - INFO - 2475415 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:20:38,703 - INFO - 2475415 - Python: 3.11.13
+2025-11-10 16:20:38,703 - INFO - 2475415 - Conda env: behavior_env
+2025-11-10 16:20:38,703 - INFO - 2475415 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:20:38,703 - INFO - 2475415 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:20:38,703 - INFO - 2475415 - SLURM_JOB_ID: 2676742
+2025-11-10 16:20:38,703 - INFO - 2475415 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:20:38,703 - INFO - 2475415 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:20:38,703 - INFO - 2475415 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:20:38,707 - INFO - 2475415 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/pos/config_used.json
+2025-11-10 16:20:44,326 - INFO - 2475415 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:20:44,334 - INFO - 2475415 - ===== Started sentiment_vader.py =====
+2025-11-10 16:20:44,334 - INFO - 2475415 - ---- Runtime Environment ----
+2025-11-10 16:20:44,334 - INFO - 2475415 - Datetime (UTC/local): 2025-11-10T21:20:44.334568Z / 2025-11-10T16:20:44.334580
+2025-11-10 16:20:44,334 - INFO - 2475415 - Hostname: spockmk2-22-02
+2025-11-10 16:20:44,334 - INFO - 2475415 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:20:44,334 - INFO - 2475415 - Python: 3.11.13
+2025-11-10 16:20:44,334 - INFO - 2475415 - Conda env: behavior_env
+2025-11-10 16:20:44,335 - INFO - 2475415 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:20:44,335 - INFO - 2475415 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:20:44,335 - INFO - 2475415 - SLURM_JOB_ID: 2676742
+2025-11-10 16:20:44,335 - INFO - 2475415 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:20:44,335 - INFO - 2475415 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:20:44,335 - INFO - 2475415 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:20:44,341 - INFO - 2475415 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/neg/config_used.json
+2025-11-10 16:20:49,869 - INFO - 2475415 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:20:49,878 - INFO - 2475415 - ===== Started sentiment_vader.py =====
+2025-11-10 16:20:49,878 - INFO - 2475415 - ---- Runtime Environment ----
+2025-11-10 16:20:49,878 - INFO - 2475415 - Datetime (UTC/local): 2025-11-10T21:20:49.878367Z / 2025-11-10T16:20:49.878381
+2025-11-10 16:20:49,878 - INFO - 2475415 - Hostname: spockmk2-22-02
+2025-11-10 16:20:49,878 - INFO - 2475415 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:20:49,878 - INFO - 2475415 - Python: 3.11.13
+2025-11-10 16:20:49,878 - INFO - 2475415 - Conda env: behavior_env
+2025-11-10 16:20:49,878 - INFO - 2475415 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:20:49,879 - INFO - 2475415 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:20:49,879 - INFO - 2475415 - SLURM_JOB_ID: 2676742
+2025-11-10 16:20:49,879 - INFO - 2475415 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:20:49,879 - INFO - 2475415 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:20:49,879 - INFO - 2475415 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:20:49,883 - INFO - 2475415 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/neu/config_used.json
+2025-11-10 16:20:55,509 - INFO - 2475415 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:21:35,226 - INFO - 2477038 - ===== Started sentiment_vader.py =====
+2025-11-10 16:21:35,226 - INFO - 2477038 - ---- Runtime Environment ----
+2025-11-10 16:21:35,226 - INFO - 2477038 - Datetime (UTC/local): 2025-11-10T21:21:35.226805Z / 2025-11-10T16:21:35.226817
+2025-11-10 16:21:35,226 - INFO - 2477038 - Hostname: spockmk2-22-02
+2025-11-10 16:21:35,226 - INFO - 2477038 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:21:35,226 - INFO - 2477038 - Python: 3.11.13
+2025-11-10 16:21:35,226 - INFO - 2477038 - Conda env: behavior_env
+2025-11-10 16:21:35,227 - INFO - 2477038 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:21:35,231 - INFO - 2477038 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:21:35,231 - INFO - 2477038 - SLURM_JOB_ID: 2676756
+2025-11-10 16:21:35,231 - INFO - 2477038 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:21:35,231 - INFO - 2477038 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:21:35,231 - INFO - 2477038 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:21:35,234 - INFO - 2477038 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/compound/config_used.json
+2025-11-10 16:21:40,845 - INFO - 2477038 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:21:40,851 - INFO - 2477038 - ===== Started sentiment_vader.py =====
+2025-11-10 16:21:40,851 - INFO - 2477038 - ---- Runtime Environment ----
+2025-11-10 16:21:40,851 - INFO - 2477038 - Datetime (UTC/local): 2025-11-10T21:21:40.851731Z / 2025-11-10T16:21:40.851746
+2025-11-10 16:21:40,851 - INFO - 2477038 - Hostname: spockmk2-22-02
+2025-11-10 16:21:40,851 - INFO - 2477038 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:21:40,851 - INFO - 2477038 - Python: 3.11.13
+2025-11-10 16:21:40,851 - INFO - 2477038 - Conda env: behavior_env
+2025-11-10 16:21:40,852 - INFO - 2477038 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:21:40,852 - INFO - 2477038 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:21:40,852 - INFO - 2477038 - SLURM_JOB_ID: 2676756
+2025-11-10 16:21:40,852 - INFO - 2477038 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:21:40,852 - INFO - 2477038 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:21:40,852 - INFO - 2477038 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:21:40,855 - INFO - 2477038 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/pos/config_used.json
+2025-11-10 16:21:46,569 - INFO - 2477038 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:21:46,575 - INFO - 2477038 - ===== Started sentiment_vader.py =====
+2025-11-10 16:21:46,575 - INFO - 2477038 - ---- Runtime Environment ----
+2025-11-10 16:21:46,575 - INFO - 2477038 - Datetime (UTC/local): 2025-11-10T21:21:46.575758Z / 2025-11-10T16:21:46.575772
+2025-11-10 16:21:46,575 - INFO - 2477038 - Hostname: spockmk2-22-02
+2025-11-10 16:21:46,575 - INFO - 2477038 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:21:46,575 - INFO - 2477038 - Python: 3.11.13
+2025-11-10 16:21:46,576 - INFO - 2477038 - Conda env: behavior_env
+2025-11-10 16:21:46,576 - INFO - 2477038 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:21:46,576 - INFO - 2477038 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:21:46,576 - INFO - 2477038 - SLURM_JOB_ID: 2676756
+2025-11-10 16:21:46,576 - INFO - 2477038 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:21:46,576 - INFO - 2477038 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:21:46,576 - INFO - 2477038 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:21:46,580 - INFO - 2477038 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/neg/config_used.json
+2025-11-10 16:21:52,138 - INFO - 2477038 - ✅ Sentiment_Vader analysis complete.
+2025-11-10 16:21:52,144 - INFO - 2477038 - ===== Started sentiment_vader.py =====
+2025-11-10 16:21:52,144 - INFO - 2477038 - ---- Runtime Environment ----
+2025-11-10 16:21:52,144 - INFO - 2477038 - Datetime (UTC/local): 2025-11-10T21:21:52.144936Z / 2025-11-10T16:21:52.144949
+2025-11-10 16:21:52,145 - INFO - 2477038 - Hostname: spockmk2-22-02
+2025-11-10 16:21:52,145 - INFO - 2477038 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:21:52,145 - INFO - 2477038 - Python: 3.11.13
+2025-11-10 16:21:52,145 - INFO - 2477038 - Conda env: behavior_env
+2025-11-10 16:21:52,145 - INFO - 2477038 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:21:52,145 - INFO - 2477038 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:21:52,145 - INFO - 2477038 - SLURM_JOB_ID: 2676756
+2025-11-10 16:21:52,145 - INFO - 2477038 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:21:52,145 - INFO - 2477038 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:21:52,146 - INFO - 2477038 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:21:52,149 - INFO - 2477038 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/sentiment_vader/neu/config_used.json
+2025-11-10 16:21:57,725 - INFO - 2477038 - ✅ Sentiment_Vader analysis complete.

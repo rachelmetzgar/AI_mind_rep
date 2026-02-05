@@ -1,0 +1,148 @@
+2025-10-29 16:52:31,076 - INFO - 538847 - ===== Started combine_text_data.py =====
+2025-10-29 16:52:31,076 - INFO - 538847 - ---- Runtime Environment ----
+2025-10-29 16:52:31,077 - INFO - 538847 - Datetime (UTC/local): 2025-10-29T20:52:31.076985Z / 2025-10-29T16:52:31.077005
+2025-10-29 16:52:31,077 - INFO - 538847 - Hostname: spockmk2-23-06
+2025-10-29 16:52:31,077 - INFO - 538847 - OS: Linux 5.14.0-570.39.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Sat Sep 6 20:23:03 UTC 2025)
+2025-10-29 16:52:31,077 - INFO - 538847 - Python: 3.11.13
+2025-10-29 16:52:31,077 - INFO - 538847 - Conda env: behavior_env
+2025-10-29 16:52:31,077 - INFO - 538847 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-10-29 16:52:31,087 - INFO - 538847 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-10-29 16:52:31,087 - INFO - 538847 - SLURM_JOB_ID: 2104201
+2025-10-29 16:52:31,087 - INFO - 538847 - SLURM_CPUS_PER_TASK: 2
+2025-10-29 16:52:31,087 - INFO - 538847 - SLURM_MEM_PER_NODE: 8192
+2025-10-29 16:52:31,087 - INFO - 538847 - SLURM_NODELIST: spockmk2-23-06
+2025-10-29 16:52:31,090 - INFO - 538847 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/config_used.json
+2025-10-29 16:52:31,132 - ERROR - 538847 - Unhandled exception
+Traceback (most recent call last):
+  File "/jukebox/graziano/rachel/ai_mind_rep/exp_1/code/analysis/combine_text_data.py", line 99, in <module>
+    main()
+  File "/jukebox/graziano/rachel/ai_mind_rep/exp_1/code/analysis/combine_text_data.py", line 93, in main
+    _ = combine_text_data(subjects, data_dir, output_path)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/jukebox/graziano/rachel/ai_mind_rep/exp_1/code/analysis/combine_text_data.py", line 41, in combine_text_data
+    df = pd.read_csv(csv_path)
+         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/people/rm9561/.conda/envs/behavior_env/lib/python3.11/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/people/rm9561/.conda/envs/behavior_env/lib/python3.11/site-packages/pandas/io/parsers/readers.py", line 626, in _read
+    return parser.read(nrows)
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/people/rm9561/.conda/envs/behavior_env/lib/python3.11/site-packages/pandas/io/parsers/readers.py", line 1923, in read
+    ) = self._engine.read(  # type: ignore[attr-defined]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/people/rm9561/.conda/envs/behavior_env/lib/python3.11/site-packages/pandas/io/parsers/c_parser_wrapper.py", line 234, in read
+    chunks = self._reader.read_low_memory(nrows)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "parsers.pyx", line 838, in pandas._libs.parsers.TextReader.read_low_memory
+  File "parsers.pyx", line 905, in pandas._libs.parsers.TextReader._read_rows
+  File "parsers.pyx", line 874, in pandas._libs.parsers.TextReader._tokenize_rows
+  File "parsers.pyx", line 891, in pandas._libs.parsers.TextReader._check_tokenize_status
+  File "parsers.pyx", line 2061, in pandas._libs.parsers.raise_parser_error
+pandas.errors.ParserError: Error tokenizing data. C error: Expected 17 fields in line 139, saw 28
+
+2025-10-29 16:54:10,656 - INFO - 539523 - ===== Started combine_text_data.py =====
+2025-10-29 16:54:10,656 - INFO - 539523 - ---- Runtime Environment ----
+2025-10-29 16:54:10,656 - INFO - 539523 - Datetime (UTC/local): 2025-10-29T20:54:10.656945Z / 2025-10-29T16:54:10.656963
+2025-10-29 16:54:10,657 - INFO - 539523 - Hostname: spockmk2-23-06
+2025-10-29 16:54:10,657 - INFO - 539523 - OS: Linux 5.14.0-570.39.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Sat Sep 6 20:23:03 UTC 2025)
+2025-10-29 16:54:10,657 - INFO - 539523 - Python: 3.11.13
+2025-10-29 16:54:10,657 - INFO - 539523 - Conda env: behavior_env
+2025-10-29 16:54:10,657 - INFO - 539523 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-10-29 16:54:10,667 - INFO - 539523 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-10-29 16:54:10,667 - INFO - 539523 - SLURM_JOB_ID: 2104245
+2025-10-29 16:54:10,667 - INFO - 539523 - SLURM_CPUS_PER_TASK: 2
+2025-10-29 16:54:10,667 - INFO - 539523 - SLURM_MEM_PER_NODE: 8192
+2025-10-29 16:54:10,667 - INFO - 539523 - SLURM_NODELIST: spockmk2-23-06
+2025-10-29 16:54:10,670 - INFO - 539523 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/config_used.json
+2025-10-29 16:54:12,663 - INFO - 539523 - Saved combined text data to /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/combined_text_data.csv
+2025-10-29 16:57:13,664 - INFO - 542961 - ===== Started combine_text_data.py =====
+2025-10-29 16:57:13,664 - INFO - 542961 - ---- Runtime Environment ----
+2025-10-29 16:57:13,664 - INFO - 542961 - Datetime (UTC/local): 2025-10-29T20:57:13.664925Z / 2025-10-29T16:57:13.664943
+2025-10-29 16:57:13,664 - INFO - 542961 - Hostname: spockmk2-23-06
+2025-10-29 16:57:13,665 - INFO - 542961 - OS: Linux 5.14.0-570.39.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Sat Sep 6 20:23:03 UTC 2025)
+2025-10-29 16:57:13,665 - INFO - 542961 - Python: 3.11.13
+2025-10-29 16:57:13,665 - INFO - 542961 - Conda env: behavior_env
+2025-10-29 16:57:13,665 - INFO - 542961 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-10-29 16:57:13,675 - INFO - 542961 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-10-29 16:57:13,676 - INFO - 542961 - SLURM_JOB_ID: 2104331
+2025-10-29 16:57:13,676 - INFO - 542961 - SLURM_CPUS_PER_TASK: 2
+2025-10-29 16:57:13,676 - INFO - 542961 - SLURM_MEM_PER_NODE: 8192
+2025-10-29 16:57:13,676 - INFO - 542961 - SLURM_NODELIST: spockmk2-23-06
+2025-10-29 16:57:13,837 - INFO - 542961 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/config_used.json
+2025-10-29 16:57:16,489 - INFO - 542961 - Saved combined text data to /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/combined_text_data.csv
+2025-10-29 16:59:13,763 - INFO - 543681 - ===== Started combine_text_data.py =====
+2025-10-29 16:59:13,763 - INFO - 543681 - ---- Runtime Environment ----
+2025-10-29 16:59:13,763 - INFO - 543681 - Datetime (UTC/local): 2025-10-29T20:59:13.763633Z / 2025-10-29T16:59:13.763650
+2025-10-29 16:59:13,763 - INFO - 543681 - Hostname: spockmk2-23-06
+2025-10-29 16:59:13,763 - INFO - 543681 - OS: Linux 5.14.0-570.39.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Sat Sep 6 20:23:03 UTC 2025)
+2025-10-29 16:59:13,763 - INFO - 543681 - Python: 3.11.13
+2025-10-29 16:59:13,763 - INFO - 543681 - Conda env: behavior_env
+2025-10-29 16:59:13,764 - INFO - 543681 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-10-29 16:59:13,774 - INFO - 543681 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-10-29 16:59:13,775 - INFO - 543681 - SLURM_JOB_ID: 2104388
+2025-10-29 16:59:13,775 - INFO - 543681 - SLURM_CPUS_PER_TASK: 2
+2025-10-29 16:59:13,775 - INFO - 543681 - SLURM_MEM_PER_NODE: 8192
+2025-10-29 16:59:13,775 - INFO - 543681 - SLURM_NODELIST: spockmk2-23-06
+2025-10-29 16:59:14,124 - INFO - 543681 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/config_used.json
+2025-10-29 16:59:15,995 - INFO - 543681 - Saved combined text data to /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/combined_text_data.csv
+2025-10-29 17:06:05,218 - INFO - 546188 - ===== Started combine_text_data.py =====
+2025-10-29 17:06:05,218 - INFO - 546188 - ---- Runtime Environment ----
+2025-10-29 17:06:05,218 - INFO - 546188 - Datetime (UTC/local): 2025-10-29T21:06:05.218822Z / 2025-10-29T17:06:05.218845
+2025-10-29 17:06:05,218 - INFO - 546188 - Hostname: spockmk2-23-06
+2025-10-29 17:06:05,218 - INFO - 546188 - OS: Linux 5.14.0-570.39.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Sat Sep 6 20:23:03 UTC 2025)
+2025-10-29 17:06:05,218 - INFO - 546188 - Python: 3.11.13
+2025-10-29 17:06:05,219 - INFO - 546188 - Conda env: behavior_env
+2025-10-29 17:06:05,219 - INFO - 546188 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-10-29 17:06:05,228 - INFO - 546188 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-10-29 17:06:05,228 - INFO - 546188 - SLURM_JOB_ID: 2104699
+2025-10-29 17:06:05,228 - INFO - 546188 - SLURM_CPUS_PER_TASK: 2
+2025-10-29 17:06:05,228 - INFO - 546188 - SLURM_MEM_PER_NODE: 8192
+2025-10-29 17:06:05,228 - INFO - 546188 - SLURM_NODELIST: spockmk2-23-06
+2025-10-29 17:06:05,334 - INFO - 546188 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/config_used.json
+2025-10-29 17:06:07,380 - INFO - 546188 - Saved combined text data to /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/combined_text_data.csv
+2025-11-10 16:12:32,383 - INFO - 2461962 - ===== Started combine_text_data.py =====
+2025-11-10 16:12:32,383 - INFO - 2461962 - ---- Runtime Environment ----
+2025-11-10 16:12:32,383 - INFO - 2461962 - Datetime (UTC/local): 2025-11-10T21:12:32.383468Z / 2025-11-10T16:12:32.383482
+2025-11-10 16:12:32,383 - INFO - 2461962 - Hostname: spockmk2-22-02
+2025-11-10 16:12:32,383 - INFO - 2461962 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:12:32,383 - INFO - 2461962 - Python: 3.11.13
+2025-11-10 16:12:32,383 - INFO - 2461962 - Conda env: behavior_env
+2025-11-10 16:12:32,383 - INFO - 2461962 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:12:32,395 - INFO - 2461962 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:12:32,395 - INFO - 2461962 - SLURM_JOB_ID: 2676643
+2025-11-10 16:12:32,395 - INFO - 2461962 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:12:32,395 - INFO - 2461962 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:12:32,395 - INFO - 2461962 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:12:32,412 - INFO - 2461962 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/config_used.json
+2025-11-10 16:12:34,956 - INFO - 2461962 - Saved combined text data to /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/combined_text_data.csv
+2025-11-10 16:20:02,445 - INFO - 2474714 - ===== Started combine_text_data.py =====
+2025-11-10 16:20:02,445 - INFO - 2474714 - ---- Runtime Environment ----
+2025-11-10 16:20:02,445 - INFO - 2474714 - Datetime (UTC/local): 2025-11-10T21:20:02.445398Z / 2025-11-10T16:20:02.445410
+2025-11-10 16:20:02,445 - INFO - 2474714 - Hostname: spockmk2-22-02
+2025-11-10 16:20:02,445 - INFO - 2474714 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:20:02,445 - INFO - 2474714 - Python: 3.11.13
+2025-11-10 16:20:02,445 - INFO - 2474714 - Conda env: behavior_env
+2025-11-10 16:20:02,445 - INFO - 2474714 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:20:02,456 - INFO - 2474714 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:20:02,457 - INFO - 2474714 - SLURM_JOB_ID: 2676742
+2025-11-10 16:20:02,457 - INFO - 2474714 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:20:02,457 - INFO - 2474714 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:20:02,457 - INFO - 2474714 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:20:02,460 - INFO - 2474714 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/config_used.json
+2025-11-10 16:20:03,804 - INFO - 2474714 - Saved combined text data to /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/combined_text_data.csv
+2025-11-10 16:21:02,066 - INFO - 2476739 - ===== Started combine_text_data.py =====
+2025-11-10 16:21:02,066 - INFO - 2476739 - ---- Runtime Environment ----
+2025-11-10 16:21:02,067 - INFO - 2476739 - Datetime (UTC/local): 2025-11-10T21:21:02.067008Z / 2025-11-10T16:21:02.067020
+2025-11-10 16:21:02,067 - INFO - 2476739 - Hostname: spockmk2-22-02
+2025-11-10 16:21:02,067 - INFO - 2476739 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:21:02,067 - INFO - 2476739 - Python: 3.11.13
+2025-11-10 16:21:02,067 - INFO - 2476739 - Conda env: behavior_env
+2025-11-10 16:21:02,067 - INFO - 2476739 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:21:02,077 - INFO - 2476739 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:21:02,077 - INFO - 2476739 - SLURM_JOB_ID: 2676756
+2025-11-10 16:21:02,077 - INFO - 2476739 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:21:02,077 - INFO - 2476739 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:21:02,077 - INFO - 2476739 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:21:02,081 - INFO - 2476739 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/config_used.json
+2025-11-10 16:21:03,450 - INFO - 2476739 - Saved combined text data to /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/combined_text_data.csv

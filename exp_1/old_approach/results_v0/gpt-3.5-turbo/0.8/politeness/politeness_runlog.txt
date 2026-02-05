@@ -1,0 +1,45 @@
+2025-11-10 16:12:51,098 - INFO - 2462328 - ===== Started politeness.py =====
+2025-11-10 16:12:51,098 - INFO - 2462328 - ---- Runtime Environment ----
+2025-11-10 16:12:51,098 - INFO - 2462328 - Datetime (UTC/local): 2025-11-10T21:12:51.098444Z / 2025-11-10T16:12:51.098456
+2025-11-10 16:12:51,098 - INFO - 2462328 - Hostname: spockmk2-22-02
+2025-11-10 16:12:51,098 - INFO - 2462328 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:12:51,098 - INFO - 2462328 - Python: 3.11.13
+2025-11-10 16:12:51,098 - INFO - 2462328 - Conda env: behavior_env
+2025-11-10 16:12:51,098 - INFO - 2462328 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:12:51,103 - INFO - 2462328 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:12:51,103 - INFO - 2462328 - SLURM_JOB_ID: 2676643
+2025-11-10 16:12:51,103 - INFO - 2462328 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:12:51,103 - INFO - 2462328 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:12:51,103 - INFO - 2462328 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:12:51,106 - INFO - 2462328 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/politeness/config_used.json
+2025-11-10 16:12:53,144 - INFO - 2462328 - ✅ Politeness analysis complete.
+2025-11-10 16:20:21,278 - INFO - 2474876 - ===== Started politeness.py =====
+2025-11-10 16:20:21,278 - INFO - 2474876 - ---- Runtime Environment ----
+2025-11-10 16:20:21,278 - INFO - 2474876 - Datetime (UTC/local): 2025-11-10T21:20:21.278631Z / 2025-11-10T16:20:21.278641
+2025-11-10 16:20:21,278 - INFO - 2474876 - Hostname: spockmk2-22-02
+2025-11-10 16:20:21,278 - INFO - 2474876 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:20:21,278 - INFO - 2474876 - Python: 3.11.13
+2025-11-10 16:20:21,278 - INFO - 2474876 - Conda env: behavior_env
+2025-11-10 16:20:21,278 - INFO - 2474876 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:20:21,283 - INFO - 2474876 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:20:21,283 - INFO - 2474876 - SLURM_JOB_ID: 2676742
+2025-11-10 16:20:21,283 - INFO - 2474876 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:20:21,283 - INFO - 2474876 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:20:21,283 - INFO - 2474876 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:20:21,287 - INFO - 2474876 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/politeness/config_used.json
+2025-11-10 16:20:23,317 - INFO - 2474876 - ✅ Politeness analysis complete.
+2025-11-10 16:21:23,452 - INFO - 2476821 - ===== Started politeness.py =====
+2025-11-10 16:21:23,453 - INFO - 2476821 - ---- Runtime Environment ----
+2025-11-10 16:21:23,453 - INFO - 2476821 - Datetime (UTC/local): 2025-11-10T21:21:23.453154Z / 2025-11-10T16:21:23.453165
+2025-11-10 16:21:23,453 - INFO - 2476821 - Hostname: spockmk2-22-02
+2025-11-10 16:21:23,453 - INFO - 2476821 - OS: Linux 5.14.0-570.52.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Wed Oct 15 13:59:22 UTC 2025)
+2025-11-10 16:21:23,453 - INFO - 2476821 - Python: 3.11.13
+2025-11-10 16:21:23,453 - INFO - 2476821 - Conda env: behavior_env
+2025-11-10 16:21:23,453 - INFO - 2476821 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2025-11-10 16:21:23,458 - INFO - 2476821 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2025-11-10 16:21:23,458 - INFO - 2476821 - SLURM_JOB_ID: 2676756
+2025-11-10 16:21:23,458 - INFO - 2476821 - SLURM_CPUS_PER_TASK: 2
+2025-11-10 16:21:23,458 - INFO - 2476821 - SLURM_MEM_PER_NODE: 8192
+2025-11-10 16:21:23,458 - INFO - 2476821 - SLURM_NODELIST: spockmk2-22-02
+2025-11-10 16:21:23,461 - INFO - 2476821 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/politeness/config_used.json
+2025-11-10 16:21:25,538 - INFO - 2476821 - ✅ Politeness analysis complete.

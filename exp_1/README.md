@@ -19,28 +19,20 @@ python code/data_gen/gpt_data_generation.py
 ```
 Generated CSVs: `data/temp_<temperature>/<model>/sXXX.csv`
 
-2) **Run behavioral analyses**
-```bash
-sbatch code/analysis/run_all_behavior.sh
-```
 
-Or run individual scripts:
 
-First: **Combine per-subject files**
+2) **Combine per-subject files and put combined file in analysis dir**
 ```bash
 python code/analysis/combine_text_data.py --config configs/behavior.json
 ```
-Then run individual scripts:
-```bash
-modoule load pyger
-conda activate behavior_env
-python code/analysis/politeness.py --config configs/behavior.json
-python code/analysis/sentiment_vader.py --config configs/behavior.json
-python code/analysis/wordcount.py --config configs/behavior.json
-```
-Outputs: `results/<model>/<temperature>/<analysis_name>/`
 
----
+3) **Run behavioral analyses**
+```bash
+pyger
+conda activate behavior_env
+export PATH=~/.conda/envs/behavior_env/bin:$PATH
+python code/analysis/cross_experiment_comparison.py --config configs/behavior.json
+```
 
 ## Configuration
 
@@ -51,80 +43,9 @@ Outputs: `results/<model>/<temperature>/<analysis_name>/`
 
 ---
 
-## Key analysis scripts
-
-- politeness.py — polite markers ("please", "thank you", "sorry").
-- hedging.py — hedges ("maybe", "might", "I think").
-- filler.py — fillers ("um", "uh", "like").
-- empath_tom.py — ToM score via Empath.
-- questions.py — question frequency (? and regex).
-- sentiment_vader.py — VADER sentiment analysis.
-- tom_words.py — partner-referential ToM phrases.
-- wordcount.py — word counts + Condition × Sociality ANOVA.
-- qual_connect.py, tom_ai_ratings.py — conversation quality & connectedness.
-- semantic_diversity.py, sentiment_transformer.py — lexical and transformer-based metrics.
-
-Each analysis produces:
-- per-interaction CSV
-- subject-level CSV
-- stats text file
-- standardized plots
-
----
-
-## Plotting & palette
-
-Shared in `plot_helpers.py`:
-- plot_violin_basic() — clean violins
-- main_effect_violin_lines() — Bot left, Human right, subject lines + stars
-- barplot_with_lines() — mean ± SD bars + significance stars
-
-Palette:
-- Human = steelblue
-- Bot = sandybrown
-- Social = darker tone, Nonsocial = lighter tone
-
----
-
-## Stats
-
-- Within-subject paired t-tests (Human vs Bot).
-- 2×2 repeated-measures ANOVA (Condition × Sociality in wordcount.py).
-- Effect sizes: Cohen’s d.
-- Environment info logged via run_logger.py.
-
----
-
-## Project structure
-
 exp_1/
 ├─ code/
 │  ├─ analysis/
-│  │  ├─ combine_text_data.py
-│  │  ├─ empath_tom.py
-│  │  ├─ filler.py
-│  │  ├─ hedging.py
-│  │  ├─ politeness.py
-│  │  ├─ qual_connect.py
-│  │  ├─ questions.py
-│  │  ├─ run_all_behavior.sh
-│  │  ├─ semantic_diversity.py
-│  │  ├─ sentiment_transformer.py
-│  │  ├─ sentiment_vader.py
-│  │  ├─ tom_ai_ratings.py
-│  │  ├─ tom_words.py
-│  │  └─ wordcount.py
-│  │
-│  │  └─ utils/
-│  │     ├─ cli_helpers.py
-│  │     ├─ data_helpers.py
-│  │     ├─ globals.py
-│  │     ├─ plot_helpers.py
-│  │     ├─ print_helpers.py
-│  │     ├─ run_logger.py
-│  │     ├─ stats_helpers.py
-│  │     └─ subject_utils.py
-│  │
 │  ├─ data_gen/
 │  │  ├─ gpt_data_generation.py
 │  │  ├─ llm_data_generation.py
@@ -147,20 +68,12 @@ exp_1/
 │
 ├─ data/
 │  ├─ conds/                        # topic ↔ social/nonsocial map (e.g., topics.csv)
-│  ├─ behavior/                     # (optional) behavior aggregations
-│  └─ temp_<temperature>/<model>/   # generated transcripts: s001.csv … s050.csv
+│  ├─ exp_csv_human/                # human data
+│  └─ <model>/temp_<temperature>/   # generated transcripts: s001.csv … s050.csv
+│        └─ combine_text_data.csv   # combined LLM transcripts
 │
 ├─ logs/
 │
 └─ results/
-   └─ <model>/<temperature>/
-      ├─ empath_tom/
-      ├─ filler/
-      ├─ hedging/
-      ├─ politeness/
-      ├─ questions/
-      ├─ sentiment_vader/
-      ├─ tom_words/
-      └─ wordcount/
-
+   └─ <model>/<temperature>/ # results should save here
 ---

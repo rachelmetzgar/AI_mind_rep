@@ -1,0 +1,39 @@
+2026-01-29 15:23:29,494 - INFO - 2548641 - ===== Started qual_connect_quality.py =====
+2026-01-29 15:23:29,495 - INFO - 2548641 - ---- Runtime Environment ----
+2026-01-29 15:23:29,495 - INFO - 2548641 - Datetime (UTC/local): 2026-01-29T20:23:29.495198Z / 2026-01-29T15:23:29.495208
+2026-01-29 15:23:29,495 - INFO - 2548641 - Hostname: spockmk2-22-06
+2026-01-29 15:23:29,495 - INFO - 2548641 - OS: Linux 5.14.0-570.28.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Thu Jul 24 10:32:22 UTC 2025)
+2026-01-29 15:23:29,495 - INFO - 2548641 - Python: 3.11.13
+2026-01-29 15:23:29,495 - INFO - 2548641 - Conda env: behavior_env
+2026-01-29 15:23:29,495 - INFO - 2548641 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2026-01-29 15:23:29,499 - INFO - 2548641 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2026-01-29 15:23:29,499 - INFO - 2548641 - SLURM_JOB_ID: 3288045
+2026-01-29 15:23:29,500 - INFO - 2548641 - SLURM_CPUS_PER_TASK: 2
+2026-01-29 15:23:29,500 - INFO - 2548641 - SLURM_MEM_PER_NODE: 8192
+2026-01-29 15:23:29,500 - INFO - 2548641 - SLURM_NODELIST: spockmk2-22-06
+2026-01-29 15:23:29,502 - INFO - 2548641 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/qual_connect_quality/quality/config_used.json
+2026-01-29 15:23:29,503 - ERROR - 2548641 - Unhandled exception
+Traceback (most recent call last):
+  File "/jukebox/graziano/rachel/ai_mind_rep/exp_1/code/analysis/qual_connect.py", line 62, in <module>
+    run_generic_main(
+  File "/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_1/code/analysis/utils/generic_analysis.py", line 221, in run_generic_main
+    df = load_experiment_data(model, temp)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_1/code/analysis/utils/generic_analysis.py", line 48, in load_experiment_data
+    raise FileNotFoundError(f"Missing combined CSV: {combined_path}")
+FileNotFoundError: Missing combined CSV: /jukebox/graziano/rachel/ai_mind_rep/exp_1/data/gpt-3.5-turbo/0.8/combined_text_data.csv
+2026-01-29 15:28:02,576 - INFO - 3339623 - ===== Started qual_connect_quality.py =====
+2026-01-29 15:28:02,576 - INFO - 3339623 - ---- Runtime Environment ----
+2026-01-29 15:28:02,576 - INFO - 3339623 - Datetime (UTC/local): 2026-01-29T20:28:02.576621Z / 2026-01-29T15:28:02.576627
+2026-01-29 15:28:02,576 - INFO - 3339623 - Hostname: spockmk2-11
+2026-01-29 15:28:02,576 - INFO - 3339623 - OS: Linux 5.14.0-570.25.1.el9_6.x86_64 (#1 SMP PREEMPT_DYNAMIC Mon Jul 7 18:09:10 UTC 2025)
+2026-01-29 15:28:02,576 - INFO - 3339623 - Python: 3.11.13
+2026-01-29 15:28:02,576 - INFO - 3339623 - Conda env: behavior_env
+2026-01-29 15:28:02,576 - INFO - 3339623 - numpy: 1.26.4, pandas: 2.2.3, torch: not-installed
+2026-01-29 15:28:02,580 - INFO - 3339623 - tqdm: 4.66.6, transformers: unknown, whisper: not-installed
+2026-01-29 15:28:02,580 - INFO - 3339623 - SLURM_JOB_ID: 3288074
+2026-01-29 15:28:02,581 - INFO - 3339623 - SLURM_CPUS_PER_TASK: 2
+2026-01-29 15:28:02,581 - INFO - 3339623 - SLURM_MEM_PER_NODE: 8192
+2026-01-29 15:28:02,581 - INFO - 3339623 - SLURM_NODELIST: spockmk2-11
+2026-01-29 15:28:02,583 - INFO - 3339623 - Saved config JSON to: /jukebox/graziano/rachel/ai_mind_rep/exp_1/results/gpt-3.5-turbo/0.8/qual_connect_quality/quality/config_used.json
+2026-01-29 15:28:04,011 - INFO - 3339623 - ✅ Qual_Connect_Quality analysis complete.

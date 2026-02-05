@@ -1,0 +1,47 @@
+--- Sentiment_Vader Statistical Summary ---
+
+Human vs Bot:
+  N=50
+  Mean(Human)=0.8453 ± 0.0039, Mean(Bot)=0.8907 ± 0.0035
+  t(49)=-7.437, p=0.0000
+
+
+--- Paired-samples t-tests: Condition × Sociality ---
+hum_social vs hum_nonsocial:
+  Mean hum_social=0.8521 ± 0.0055, Mean hum_nonsocial=0.8385 ± 0.0047
+  t(49)=2.032, p=0.0476
+
+bot_social vs bot_nonsocial:
+  Mean bot_social=0.9030 ± 0.0044, Mean bot_nonsocial=0.8784 ± 0.0043
+  t(49)=4.694, p=0.0000
+
+hum_social vs bot_social:
+  Mean hum_social=0.8521 ± 0.0055, Mean bot_social=0.9030 ± 0.0044
+  t(49)=-6.220, p=0.0000
+
+hum_nonsocial vs bot_nonsocial:
+  Mean hum_nonsocial=0.8385 ± 0.0047, Mean bot_nonsocial=0.8784 ± 0.0043
+  t(49)=-5.407, p=0.0000
+
+
+--- 2-Way Repeated-Measures ANOVA (Condition × Sociality) ---
+                               sum_sq     df          F        PR(>F)
+C(Condition)                 0.103065    1.0  84.286541  3.669161e-16
+C(Social_Type)               0.018249    1.0  14.923976  1.673504e-04
+C(Subject)                   0.041164   49.0   0.687024  9.349569e-01
+C(Condition):C(Social_Type)  0.001525    1.0   1.246744  2.659971e-01
+Residual                     0.179751  147.0        NaN           NaN
+
+Cell means ± SEM (avg sentiment_vader per condition/topic):
+                         mean     sem
+Condition Social_Type                
+bot       nonsocial    0.8784  0.0043
+          social       0.9030  0.0044
+hum       nonsocial    0.8385  0.0047
+          social       0.8521  0.0055
+
+--- Collapsed by Topic Type (Social vs Nonsocial) ---
+               mean     sem
+Social_Type                
+nonsocial    0.8584  0.0037
+social       0.8775  0.0043
