@@ -1,0 +1,132 @@
+============================================================
+[Wed Feb 11 01:02:46 PM EST 2026] Exp 3 — Dimension 2 on spockmk2-23-07
+GPU: NVIDIA L40S
+============================================================
+[Wed Feb 11 01:02:48 PM EST 2026] Phase 1: Extracting concept activations (dim=2)...
+Loaded dimension 2 (emotions_affect): 40 human + 40 AI prompts
+Loading LLaMA-2-Chat-13B...
+Model loaded.
+Extracting activations for 80 prompts...
+
+Dimension: emotions_affect (id=2)
+  Layers: 41, hidden_dim: 5120
+  Human: 40, AI: 40
+
+Split-half stability (cosine similarity):
+  Layer  0: cos = 0.0000 (±0.0000)
+  Layer  5: cos = 0.9394 (±0.0164)
+  Layer 10: cos = 0.9221 (±0.0188)
+  Layer 15: cos = 0.8902 (±0.0351)
+  Layer 20: cos = 0.8995 (±0.0468)
+  Layer 25: cos = 0.9166 (±0.0387)
+  Layer 30: cos = 0.9256 (±0.0300)
+  Layer 35: cos = 0.9315 (±0.0234)
+  Layer 40: cos = 0.9100 (±0.0268)
+
+Concept vector norms by layer:
+  Layer  0: ||v|| = 0.0000
+  Layer  5: ||v|| = 0.9259
+  Layer 10: ||v|| = 2.4871
+  Layer 15: ||v|| = 5.5047
+  Layer 20: ||v|| = 8.7979
+  Layer 25: ||v|| = 12.6987
+  Layer 30: ||v|| = 18.5117
+  Layer 35: ||v|| = 24.0429
+  Layer 40: ||v|| = 19.5322
+
+Saved all outputs to data/concept_activations/emotions_affect/
+✅ Phase 1 complete for dimension 2 (emotions_affect).
+[Wed Feb 11 01:03:57 PM EST 2026] Phase 2: Training probes + alignment (dim=2)...
+Loaded 80 concept activations, 41 layers, dim=5120
+  Human: 40, AI: 40
+Loaded concept mean-diff vector: shape torch.Size([41, 5120])
+
+=== Training concept probes (41 layers) ===
+  Train: 64, Test: 16
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  0: best_acc = 0.500
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  5: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 10: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 15: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 20: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 25: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 30: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 35: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 40: best_acc = 1.000
+
+✅ Probe training complete.
+  Mean best accuracy: 0.988
+  Max accuracy: 1.000 (layer 1)
+
+############################################################
+# Alignment: emotions_affect ↔ 2b control_probe
+############################################################
+Loaded 41 Exp 2b control_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b control_probe
+============================================================
+  Probe↔2b: mean=0.0064, max|cos|=0.0299
+  Mean↔2b:  mean=0.0038, max|cos|=0.0427
+
+############################################################
+# Alignment: emotions_affect ↔ 2b reading_probe
+############################################################
+Loaded 41 Exp 2b reading_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b reading_probe
+============================================================
+  Probe↔2b: mean=0.4721, max|cos|=0.8425
+  Mean↔2b:  mean=0.0143, max|cos|=0.0576
+Saved combined plot to data/alignment/emotions_affect/
+
+============================================================
+SUMMARY: emotions_affect (dim_id=2)
+============================================================
+  Probe accuracy: mean=0.988, max=1.000 (layer 1)
+  control_probe: max|cos| = 0.0299
+  reading_probe: max|cos| = 0.8425
+
+✅ Phase 2 complete for dimension 2 (emotions_affect).
+[Wed Feb 11 01:05:07 PM EST 2026] ✅ Dimension 2 complete.

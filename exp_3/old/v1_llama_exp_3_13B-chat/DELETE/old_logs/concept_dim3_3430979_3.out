@@ -1,0 +1,132 @@
+============================================================
+[Wed Feb 11 01:02:46 PM EST 2026] Exp 3 — Dimension 3 on spockmk2-23-06
+GPU: NVIDIA L40S
+============================================================
+[Wed Feb 11 01:02:49 PM EST 2026] Phase 1: Extracting concept activations (dim=3)...
+Loaded dimension 3 (agency): 40 human + 40 AI prompts
+Loading LLaMA-2-Chat-13B...
+Model loaded.
+Extracting activations for 80 prompts...
+
+Dimension: agency (id=3)
+  Layers: 41, hidden_dim: 5120
+  Human: 40, AI: 40
+
+Split-half stability (cosine similarity):
+  Layer  0: cos = 0.0000 (±0.0000)
+  Layer  5: cos = 0.9174 (±0.0173)
+  Layer 10: cos = 0.9095 (±0.0252)
+  Layer 15: cos = 0.8702 (±0.0488)
+  Layer 20: cos = 0.8506 (±0.0689)
+  Layer 25: cos = 0.7734 (±0.1337)
+  Layer 30: cos = 0.8313 (±0.0476)
+  Layer 35: cos = 0.8082 (±0.0919)
+  Layer 40: cos = 0.8639 (±0.0370)
+
+Concept vector norms by layer:
+  Layer  0: ||v|| = 0.0000
+  Layer  5: ||v|| = 0.8309
+  Layer 10: ||v|| = 2.2035
+  Layer 15: ||v|| = 4.7703
+  Layer 20: ||v|| = 6.3998
+  Layer 25: ||v|| = 8.8368
+  Layer 30: ||v|| = 12.4723
+  Layer 35: ||v|| = 16.2463
+  Layer 40: ||v|| = 13.8216
+
+Saved all outputs to data/concept_activations/agency/
+✅ Phase 1 complete for dimension 3 (agency).
+[Wed Feb 11 01:03:45 PM EST 2026] Phase 2: Training probes + alignment (dim=3)...
+Loaded 80 concept activations, 41 layers, dim=5120
+  Human: 40, AI: 40
+Loaded concept mean-diff vector: shape torch.Size([41, 5120])
+
+=== Training concept probes (41 layers) ===
+  Train: 64, Test: 16
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  0: best_acc = 0.500
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  5: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 10: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 15: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 20: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 25: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 30: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 35: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 40: best_acc = 1.000
+
+✅ Probe training complete.
+  Mean best accuracy: 0.988
+  Max accuracy: 1.000 (layer 1)
+
+############################################################
+# Alignment: agency ↔ 2b control_probe
+############################################################
+Loaded 41 Exp 2b control_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b control_probe
+============================================================
+  Probe↔2b: mean=0.0058, max|cos|=0.0305
+  Mean↔2b:  mean=0.0031, max|cos|=0.0378
+
+############################################################
+# Alignment: agency ↔ 2b reading_probe
+############################################################
+Loaded 41 Exp 2b reading_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b reading_probe
+============================================================
+  Probe↔2b: mean=0.4522, max|cos|=0.8328
+  Mean↔2b:  mean=0.0131, max|cos|=0.0522
+Saved combined plot to data/alignment/agency/
+
+============================================================
+SUMMARY: agency (dim_id=3)
+============================================================
+  Probe accuracy: mean=0.988, max=1.000 (layer 1)
+  control_probe: max|cos| = 0.0305
+  reading_probe: max|cos| = 0.8328
+
+✅ Phase 2 complete for dimension 3 (agency).
+[Wed Feb 11 01:04:52 PM EST 2026] ✅ Dimension 3 complete.

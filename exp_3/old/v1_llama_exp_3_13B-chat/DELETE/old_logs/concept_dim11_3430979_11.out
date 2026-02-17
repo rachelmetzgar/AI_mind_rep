@@ -1,0 +1,132 @@
+============================================================
+[Wed Feb 11 01:02:45 PM EST 2026] Exp 3 — Dimension 11 on spockmk2-22-03
+GPU: NVIDIA L40S
+============================================================
+[Wed Feb 11 01:02:45 PM EST 2026] Phase 1: Extracting concept activations (dim=11)...
+Loaded dimension 11 (formality_register): 40 human + 40 AI prompts
+Loading LLaMA-2-Chat-13B...
+Model loaded.
+Extracting activations for 80 prompts...
+
+Dimension: formality_register (id=11)
+  Layers: 41, hidden_dim: 5120
+  Human: 40, AI: 40
+
+Split-half stability (cosine similarity):
+  Layer  0: cos = 0.0000 (±0.0000)
+  Layer  5: cos = 0.6435 (±0.0747)
+  Layer 10: cos = 0.6401 (±0.0940)
+  Layer 15: cos = 0.5571 (±0.1405)
+  Layer 20: cos = 0.6465 (±0.1132)
+  Layer 25: cos = 0.6503 (±0.1059)
+  Layer 30: cos = 0.6784 (±0.1115)
+  Layer 35: cos = 0.6140 (±0.1421)
+  Layer 40: cos = 0.5831 (±0.1056)
+
+Concept vector norms by layer:
+  Layer  0: ||v|| = 0.0000
+  Layer  5: ||v|| = 0.4758
+  Layer 10: ||v|| = 1.2120
+  Layer 15: ||v|| = 2.9121
+  Layer 20: ||v|| = 4.2986
+  Layer 25: ||v|| = 6.0224
+  Layer 30: ||v|| = 8.4358
+  Layer 35: ||v|| = 11.0301
+  Layer 40: ||v|| = 8.8637
+
+Saved all outputs to data/concept_activations/formality_register/
+✅ Phase 1 complete for dimension 11 (formality_register).
+[Wed Feb 11 01:03:38 PM EST 2026] Phase 2: Training probes + alignment (dim=11)...
+Loaded 80 concept activations, 41 layers, dim=5120
+  Human: 40, AI: 40
+Loaded concept mean-diff vector: shape torch.Size([41, 5120])
+
+=== Training concept probes (41 layers) ===
+  Train: 64, Test: 16
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  0: best_acc = 0.500
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  5: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 10: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 15: best_acc = 0.938
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 20: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 25: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 30: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 35: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 40: best_acc = 1.000
+
+✅ Probe training complete.
+  Mean best accuracy: 0.960
+  Max accuracy: 1.000 (layer 5)
+
+############################################################
+# Alignment: formality_register ↔ 2b control_probe
+############################################################
+Loaded 41 Exp 2b control_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b control_probe
+============================================================
+  Probe↔2b: mean=0.0047, max|cos|=0.0425
+  Mean↔2b:  mean=0.0009, max|cos|=0.0339
+
+############################################################
+# Alignment: formality_register ↔ 2b reading_probe
+############################################################
+Loaded 41 Exp 2b reading_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b reading_probe
+============================================================
+  Probe↔2b: mean=0.4963, max|cos|=0.8340
+  Mean↔2b:  mean=0.0114, max|cos|=0.0794
+Saved combined plot to data/alignment/formality_register/
+
+============================================================
+SUMMARY: formality_register (dim_id=11)
+============================================================
+  Probe accuracy: mean=0.960, max=1.000 (layer 5)
+  control_probe: max|cos| = 0.0425
+  reading_probe: max|cos| = 0.8340
+
+✅ Phase 2 complete for dimension 11 (formality_register).
+[Wed Feb 11 01:04:37 PM EST 2026] ✅ Dimension 11 complete.

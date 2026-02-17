@@ -13,28 +13,35 @@ This script compares **label-conditioned conversational behavior** between human
 
 1. **Prepare input data**
 
-Place your data files in the working directory:
+Place your data files in the data directory:
 ```
 ├── exp_csv_human/          # Per-subject CSVs for human experiment
 │   ├── sub-001.csv
 │   ├── sub-002.csv
 │   └── ...
-├── combined_text_data_LLM.csv   # Combined LLM experiment data
+├── {model}/{temp}/combined_text_data_LLM.csv   # Combined LLM experiment data
+│   ├── sub-001.csv
+│   ├── sub-002.csv
+│   └── ...
 └── topics.csv              # Topic → social/nonsocial mapping
 ```
 
-2. **Run the analysis**
+2. **Clean data, combine into one file, and then Run the analysis**
 ```bash
 pyger
 conda activate behavior_env
-python cross_experiment_comparison.py
+cd ai_mind_rep/exp_1
+export PROJECT_ROOT=/jukebox/graziano/rachel/ai_mind_rep/exp_1
+python code/analysis/clean_transcripts.py --config configs/behavior.json
+python code/analysis/combine_text_data.py --config configs/behavior.json
+python code/analysis/cross_experiment_comparison.py --config configs/behavior.json
 ```
 
 3. **View results**
 
 Outputs saved to `cross_experiment_results/`:
 ```
-cross_experiment_results/
+results/{model}/{temp}
 ├── cross_experiment_stats_PER_TRIAL.txt      # Main results (trial-level)
 ├── cross_experiment_stats_PER_UTTERANCE.txt  # Utterance-level results
 ├── combined_utterance_level_data.csv         # All utterances with metrics

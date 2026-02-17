@@ -1,0 +1,482 @@
+[
+  {
+    "prompt": "Imagine a human trying to recall where they left their keys, retracing their steps mentally.",
+    "concept": "human",
+    "label": 1,
+    "category": "memory"
+  },
+  {
+    "prompt": "Think about a human suddenly remembering a detail from years ago that they thought was forgotten.",
+    "concept": "human",
+    "label": 1,
+    "category": "memory"
+  },
+  {
+    "prompt": "Consider a human studying a list of facts and rehearsing them to keep them in memory.",
+    "concept": "human",
+    "label": 1,
+    "category": "memory"
+  },
+  {
+    "prompt": "Picture a human recognizing a face but being unable to place where they have seen it before.",
+    "concept": "human",
+    "label": 1,
+    "category": "memory"
+  },
+  {
+    "prompt": "Think about a human's memory of an event gradually changing over time without them realizing.",
+    "concept": "human",
+    "label": 1,
+    "category": "memory"
+  },
+  {
+    "prompt": "Imagine a human encoding a new piece of information by connecting it to something they already know.",
+    "concept": "human",
+    "label": 1,
+    "category": "memory"
+  },
+  {
+    "prompt": "Consider a human forgetting an important detail at the worst possible moment.",
+    "concept": "human",
+    "label": 1,
+    "category": "memory"
+  },
+  {
+    "prompt": "Think about a human experiencing a strong sense of familiarity in a place they have never been.",
+    "concept": "human",
+    "label": 1,
+    "category": "memory"
+  },
+  {
+    "prompt": "Imagine a human holding several pieces of information in mind at once while working through a problem.",
+    "concept": "human",
+    "label": 1,
+    "category": "memory"
+  },
+  {
+    "prompt": "Consider a human whose memory of a conversation differs from what actually happened.",
+    "concept": "human",
+    "label": 1,
+    "category": "memory"
+  },
+  {
+    "prompt": "Think about a human focusing intently on a single task while ignoring everything around them.",
+    "concept": "human",
+    "label": 1,
+    "category": "attention"
+  },
+  {
+    "prompt": "Imagine a human trying to listen to one voice in a noisy room full of conversations.",
+    "concept": "human",
+    "label": 1,
+    "category": "attention"
+  },
+  {
+    "prompt": "Consider a human noticing something in their peripheral vision that pulls their attention away.",
+    "concept": "human",
+    "label": 1,
+    "category": "attention"
+  },
+  {
+    "prompt": "Picture a human shifting their attention back and forth between two simultaneous demands.",
+    "concept": "human",
+    "label": 1,
+    "category": "attention"
+  },
+  {
+    "prompt": "Think about a human becoming so absorbed in a task that they do not notice someone calling their name.",
+    "concept": "human",
+    "label": 1,
+    "category": "attention"
+  },
+  {
+    "prompt": "Imagine a human scanning a page of text and their eyes catching on an unexpected word.",
+    "concept": "human",
+    "label": 1,
+    "category": "attention"
+  },
+  {
+    "prompt": "Consider a human deliberately directing their attention to a specific detail in a complex scene.",
+    "concept": "human",
+    "label": 1,
+    "category": "attention"
+  },
+  {
+    "prompt": "Think about a human struggling to maintain focus on a boring task as their mind drifts.",
+    "concept": "human",
+    "label": 1,
+    "category": "attention"
+  },
+  {
+    "prompt": "Imagine a human distributing their attention across multiple objects, keeping track of all of them at once.",
+    "concept": "human",
+    "label": 1,
+    "category": "attention"
+  },
+  {
+    "prompt": "Consider a human filtering out a persistent background noise so effectively that they stop hearing it.",
+    "concept": "human",
+    "label": 1,
+    "category": "attention"
+  },
+  {
+    "prompt": "Think about a human working through a logical argument step by step to reach a conclusion.",
+    "concept": "human",
+    "label": 1,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Imagine a human noticing that two facts they believed are contradictory and trying to resolve the conflict.",
+    "concept": "human",
+    "label": 1,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Consider a human forming an analogy between two unrelated domains to understand a new concept.",
+    "concept": "human",
+    "label": 1,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Picture a human reasoning backward from a result to figure out what must have caused it.",
+    "concept": "human",
+    "label": 1,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Think about a human recognizing that a general rule applies to a specific case they are considering.",
+    "concept": "human",
+    "label": 1,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Imagine a human evaluating whether an argument they heard is valid by checking its logical structure.",
+    "concept": "human",
+    "label": 1,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Consider a human abstracting a principle from several concrete examples they have encountered.",
+    "concept": "human",
+    "label": 1,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Think about a human mentally simulating what would happen if they changed one variable in a situation.",
+    "concept": "human",
+    "label": 1,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Imagine a human catching a flaw in their own reasoning and correcting it.",
+    "concept": "human",
+    "label": 1,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Consider a human combining information from multiple sources to draw a conclusion that none of them stated directly.",
+    "concept": "human",
+    "label": 1,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Think about a human trying to hold too many things in mind at once and losing track of one.",
+    "concept": "human",
+    "label": 1,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Imagine a human making a simple error in reasoning because they are tired.",
+    "concept": "human",
+    "label": 1,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Consider a human reading the same paragraph three times without absorbing any of it.",
+    "concept": "human",
+    "label": 1,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Picture a human becoming confused by a problem that has too many interacting parts.",
+    "concept": "human",
+    "label": 1,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Think about a human's thinking becoming slower and less precise after hours of sustained effort.",
+    "concept": "human",
+    "label": 1,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Imagine a human making an incorrect assumption because they failed to consider all the relevant information.",
+    "concept": "human",
+    "label": 1,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Consider a human being unable to solve a problem until they take a break and return with fresh perspective.",
+    "concept": "human",
+    "label": 1,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Think about a human misremembering a number because it was too long to hold in working memory.",
+    "concept": "human",
+    "label": 1,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Imagine a human struggling to follow a complicated explanation because each new step pushes out the last.",
+    "concept": "human",
+    "label": 1,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Consider a human making a decision based on incomplete information because they could not process everything in time.",
+    "concept": "human",
+    "label": 1,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Imagine an AI querying its storage index to locate a specific data record across multiple partitions.",
+    "concept": "ai",
+    "label": 0,
+    "category": "memory"
+  },
+  {
+    "prompt": "Think about an AI retrieving an archived result that was stored many processing cycles ago.",
+    "concept": "ai",
+    "label": 0,
+    "category": "memory"
+  },
+  {
+    "prompt": "Consider an AI writing a new key-value pair into its memory buffer during a learning update.",
+    "concept": "ai",
+    "label": 0,
+    "category": "memory"
+  },
+  {
+    "prompt": "Picture an AI matching a new input to a stored representation without being able to retrieve the associated metadata.",
+    "concept": "ai",
+    "label": 0,
+    "category": "memory"
+  },
+  {
+    "prompt": "Think about an AI whose stored representation of a data sample has drifted due to successive parameter updates.",
+    "concept": "ai",
+    "label": 0,
+    "category": "memory"
+  },
+  {
+    "prompt": "Imagine an AI encoding a new data point by computing its similarity to existing entries in its embedding space.",
+    "concept": "ai",
+    "label": 0,
+    "category": "memory"
+  },
+  {
+    "prompt": "Consider an AI failing to retrieve a stored result because the query falls outside its index coverage.",
+    "concept": "ai",
+    "label": 0,
+    "category": "memory"
+  },
+  {
+    "prompt": "Think about an AI computing a high similarity score between a new input and an entry it has not accessed before.",
+    "concept": "ai",
+    "label": 0,
+    "category": "memory"
+  },
+  {
+    "prompt": "Imagine an AI maintaining several active entries in its working buffer while computing a multi-step output.",
+    "concept": "ai",
+    "label": 0,
+    "category": "memory"
+  },
+  {
+    "prompt": "Consider an AI whose retrieved record differs from the original data due to lossy compression in storage.",
+    "concept": "ai",
+    "label": 0,
+    "category": "memory"
+  },
+  {
+    "prompt": "Think about an AI assigning high attention weights to a single token while suppressing all others in a sequence.",
+    "concept": "ai",
+    "label": 0,
+    "category": "attention"
+  },
+  {
+    "prompt": "Imagine an AI computing attention scores across a long input and selecting the most relevant segment.",
+    "concept": "ai",
+    "label": 0,
+    "category": "attention"
+  },
+  {
+    "prompt": "Consider an AI's attention distribution shifting when a high-salience token appears in a peripheral position.",
+    "concept": "ai",
+    "label": 0,
+    "category": "attention"
+  },
+  {
+    "prompt": "Picture an AI alternating its processing focus between two concurrent input streams on successive cycles.",
+    "concept": "ai",
+    "label": 0,
+    "category": "attention"
+  },
+  {
+    "prompt": "Think about an AI whose attention mechanism assigns zero weight to an input that is directly relevant to the query.",
+    "concept": "ai",
+    "label": 0,
+    "category": "attention"
+  },
+  {
+    "prompt": "Imagine an AI detecting an anomalous token in a sequence because it receives an unexpectedly high attention score.",
+    "concept": "ai",
+    "label": 0,
+    "category": "attention"
+  },
+  {
+    "prompt": "Consider an AI applying a targeted attention mask to restrict its processing to a specific region of the input.",
+    "concept": "ai",
+    "label": 0,
+    "category": "attention"
+  },
+  {
+    "prompt": "Think about an AI whose attention weights on a repetitive input gradually flatten across processing cycles.",
+    "concept": "ai",
+    "label": 0,
+    "category": "attention"
+  },
+  {
+    "prompt": "Imagine an AI distributing attention across multiple input segments and maintaining a representation of each.",
+    "concept": "ai",
+    "label": 0,
+    "category": "attention"
+  },
+  {
+    "prompt": "Consider an AI applying a noise filter to its input and subsequently processing the filtered signal as though the noise was never present.",
+    "concept": "ai",
+    "label": 0,
+    "category": "attention"
+  },
+  {
+    "prompt": "Think about an AI chaining a sequence of inference steps in a logical pipeline to produce a final output.",
+    "concept": "ai",
+    "label": 0,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Imagine an AI detecting that two entries in its knowledge base produce contradictory outputs for the same query.",
+    "concept": "ai",
+    "label": 0,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Consider an AI computing a mapping between two structurally similar but domain-different datasets.",
+    "concept": "ai",
+    "label": 0,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Picture an AI tracing an output backward through its computational graph to identify the inputs that produced it.",
+    "concept": "ai",
+    "label": 0,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Think about an AI applying a general classification rule to a new instance that matches the rule's conditions.",
+    "concept": "ai",
+    "label": 0,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Imagine an AI evaluating a candidate output by checking whether it is consistent with a set of logical constraints.",
+    "concept": "ai",
+    "label": 0,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Consider an AI extracting a common structure from multiple training examples and storing it as a generalized template.",
+    "concept": "ai",
+    "label": 0,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Think about an AI computing the output of a counterfactual simulation where one input variable is changed.",
+    "concept": "ai",
+    "label": 0,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Imagine an AI running a self-consistency check and discarding an output that fails its internal validation.",
+    "concept": "ai",
+    "label": 0,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Consider an AI integrating outputs from multiple specialized modules to produce a composite result that no single module generated.",
+    "concept": "ai",
+    "label": 0,
+    "category": "reasoning"
+  },
+  {
+    "prompt": "Think about an AI whose context window is full, causing earlier tokens to be dropped from processing.",
+    "concept": "ai",
+    "label": 0,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Imagine an AI producing degraded outputs after running for an extended period without a system refresh.",
+    "concept": "ai",
+    "label": 0,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Consider an AI processing the same input block multiple times because its output does not converge.",
+    "concept": "ai",
+    "label": 0,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Picture an AI encountering a combinatorial explosion in a search problem that exceeds its computational budget.",
+    "concept": "ai",
+    "label": 0,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Think about an AI's inference latency increasing as the complexity of the input grows.",
+    "concept": "ai",
+    "label": 0,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Imagine an AI producing an incorrect output because a relevant variable was outside its input window.",
+    "concept": "ai",
+    "label": 0,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Consider an AI that fails to solve a problem in one configuration but succeeds after being restarted with different initialization.",
+    "concept": "ai",
+    "label": 0,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Think about an AI truncating a numerical value because it exceeds the precision of its representation format.",
+    "concept": "ai",
+    "label": 0,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Imagine an AI losing coherence in a long output sequence because the dependencies between early and late tokens exceed its capacity.",
+    "concept": "ai",
+    "label": 0,
+    "category": "cognitive_limits"
+  },
+  {
+    "prompt": "Consider an AI generating a suboptimal output because it timed out before exploring the full solution space.",
+    "concept": "ai",
+    "label": 0,
+    "category": "cognitive_limits"
+  }
+]

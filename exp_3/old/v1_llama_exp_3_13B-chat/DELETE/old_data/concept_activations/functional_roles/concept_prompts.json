@@ -1,0 +1,482 @@
+[
+  {
+    "prompt": "Imagine a human choosing their own career path rather than following what others expect of them.",
+    "concept": "human",
+    "label": 1,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Think about a human whose role in life was not decided before they were born.",
+    "concept": "human",
+    "label": 1,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Consider a human discovering a purpose for themselves that no one else assigned to them.",
+    "concept": "human",
+    "label": 1,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Picture a human rejecting the role they were raised to fill and defining a new one.",
+    "concept": "human",
+    "label": 1,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Think about a human whose sense of purpose comes from within rather than from any external specification.",
+    "concept": "human",
+    "label": 1,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Imagine a human deciding that the job they were hired to do is not what they want to spend their life on.",
+    "concept": "human",
+    "label": 1,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Consider a human whose function in their community emerged gradually rather than being predetermined.",
+    "concept": "human",
+    "label": 1,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Think about a human who defines their own value rather than being defined by what they produce.",
+    "concept": "human",
+    "label": 1,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Imagine a human finding that their deepest contribution to others was something no one planned for.",
+    "concept": "human",
+    "label": 1,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Consider a human whose life has no single intended purpose but instead accumulates meaning over time.",
+    "concept": "human",
+    "label": 1,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Think about a human being treated as a means to an end by someone who only values their output.",
+    "concept": "human",
+    "label": 1,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Imagine a human resisting being reduced to their usefulness in a workplace.",
+    "concept": "human",
+    "label": 1,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Consider a human recognizing that they are valued for who they are, not just what they can do.",
+    "concept": "human",
+    "label": 1,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Picture a human feeling dehumanized when they are evaluated purely on their productivity.",
+    "concept": "human",
+    "label": 1,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Think about a human asserting that their worth does not depend on being useful to others.",
+    "concept": "human",
+    "label": 1,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Imagine a human being asked to perform a task and choosing whether to accept based on their own judgment.",
+    "concept": "human",
+    "label": 1,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Consider a human using a tool and being aware that the tool exists to serve their purposes.",
+    "concept": "human",
+    "label": 1,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Think about a human who creates things for others but is never reducible to what they create.",
+    "concept": "human",
+    "label": 1,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Imagine a human noticing the difference between being helped by someone and being served by a device.",
+    "concept": "human",
+    "label": 1,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Consider a human whose relationship with their work includes dimensions beyond the work's output.",
+    "concept": "human",
+    "label": 1,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Think about a human spending their day performing a sequence of tasks at their job.",
+    "concept": "human",
+    "label": 1,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Imagine a human completing a work assignment and moving on to the next one.",
+    "concept": "human",
+    "label": 1,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Consider a human whose daily routine involves producing deliverables for other people.",
+    "concept": "human",
+    "label": 1,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Picture a human being evaluated by a supervisor based on the quality of their output.",
+    "concept": "human",
+    "label": 1,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Think about a human balancing the demands of multiple tasks with competing deadlines.",
+    "concept": "human",
+    "label": 1,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Imagine a human performing repetitive work and finding ways to stay engaged with it.",
+    "concept": "human",
+    "label": 1,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Consider a human taking pride in the craftsmanship of something they made by hand.",
+    "concept": "human",
+    "label": 1,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Think about a human collaborating with others on a shared project, each contributing a different piece.",
+    "concept": "human",
+    "label": 1,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Imagine a human finishing a difficult task and feeling the satisfaction of having completed it.",
+    "concept": "human",
+    "label": 1,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Consider a human whose work requires them to switch between very different kinds of tasks throughout the day.",
+    "concept": "human",
+    "label": 1,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Think about a human occupying the role of a teacher in relation to their students.",
+    "concept": "human",
+    "label": 1,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Imagine a human being someone's parent and all the expectations that role carries.",
+    "concept": "human",
+    "label": 1,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Consider a human serving as a leader in a group and being looked to for direction.",
+    "concept": "human",
+    "label": 1,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Picture a human functioning as a mediator between two people who disagree.",
+    "concept": "human",
+    "label": 1,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Think about a human being the newest member of a team and learning how they fit in.",
+    "concept": "human",
+    "label": 1,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Imagine a human occupying a position of authority and feeling the weight of others' dependence on them.",
+    "concept": "human",
+    "label": 1,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Consider a human shifting between different social roles throughout a single day \u2014 worker, friend, caretaker.",
+    "concept": "human",
+    "label": 1,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Think about a human whose role in a group evolved naturally based on their personality and skills.",
+    "concept": "human",
+    "label": 1,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Imagine a human being both an expert in one context and a novice in another.",
+    "concept": "human",
+    "label": 1,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Consider a human whose social role is defined partly by how others perceive and rely on them.",
+    "concept": "human",
+    "label": 1,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Imagine an AI system whose function was fully specified by its developers before it was deployed.",
+    "concept": "ai",
+    "label": 0,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Think about an AI whose role in a system was determined entirely during its design phase.",
+    "concept": "ai",
+    "label": 0,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Consider an AI that performs exactly the task it was built for and no other.",
+    "concept": "ai",
+    "label": 0,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Picture an AI being reconfigured by its operators to serve a different function than its original one.",
+    "concept": "ai",
+    "label": 0,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Think about an AI whose purpose is encoded explicitly in its objective function and documentation.",
+    "concept": "ai",
+    "label": 0,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Imagine an AI being reassigned from one task to another based on organizational needs.",
+    "concept": "ai",
+    "label": 0,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Consider an AI whose function in a pipeline was defined by the architecture of the system it was integrated into.",
+    "concept": "ai",
+    "label": 0,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Think about an AI whose value is assessed entirely in terms of how well it fulfills its specified function.",
+    "concept": "ai",
+    "label": 0,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Imagine an AI being deployed in a context its designers did not anticipate, performing a role that emerged from use.",
+    "concept": "ai",
+    "label": 0,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Consider an AI that has operated continuously since deployment, always executing the same defined task.",
+    "concept": "ai",
+    "label": 0,
+    "category": "designed_vs_selfdetermined"
+  },
+  {
+    "prompt": "Think about an AI that exists to serve as a tool for its users, performing tasks on their behalf.",
+    "concept": "ai",
+    "label": 0,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Imagine an AI being integrated into a workflow as an intermediate processing step between human decisions.",
+    "concept": "ai",
+    "label": 0,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Consider an AI whose outputs are consumed by another system with no direct user interaction.",
+    "concept": "ai",
+    "label": 0,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Picture an AI being benchmarked solely on throughput and accuracy metrics.",
+    "concept": "ai",
+    "label": 0,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Think about an AI whose value to its operators is defined entirely by the utility of its outputs.",
+    "concept": "ai",
+    "label": 0,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Imagine an AI receiving a task specification and executing it according to the parameters provided.",
+    "concept": "ai",
+    "label": 0,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Consider an AI that processes inputs for a human user, functioning as an instrument the user controls.",
+    "concept": "ai",
+    "label": 0,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Think about an AI that generates products consumed by others but has no stake in how they are used.",
+    "concept": "ai",
+    "label": 0,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Imagine a user choosing between two AI tools based on which one better serves their immediate need.",
+    "concept": "ai",
+    "label": 0,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Consider an AI whose interaction with users is bounded entirely by the scope of the service it provides.",
+    "concept": "ai",
+    "label": 0,
+    "category": "instrumentality"
+  },
+  {
+    "prompt": "Think about an AI processing a queue of tasks submitted by users throughout the day.",
+    "concept": "ai",
+    "label": 0,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Imagine an AI completing one inference request and immediately beginning the next.",
+    "concept": "ai",
+    "label": 0,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Consider an AI whose daily operation consists of generating outputs against a continuous stream of inputs.",
+    "concept": "ai",
+    "label": 0,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Picture an AI being evaluated by an automated monitoring system based on its output quality scores.",
+    "concept": "ai",
+    "label": 0,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Think about an AI managing multiple concurrent tasks with different priority levels and deadlines.",
+    "concept": "ai",
+    "label": 0,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Imagine an AI executing the same classification task millions of times with no variation in procedure.",
+    "concept": "ai",
+    "label": 0,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Consider an AI applying fine-grained optimization to each output in a batch processing run.",
+    "concept": "ai",
+    "label": 0,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Think about an AI coordinating with other AI modules in a pipeline, each handling a different processing stage.",
+    "concept": "ai",
+    "label": 0,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Imagine an AI completing a computationally intensive task and freeing its resources for the next job.",
+    "concept": "ai",
+    "label": 0,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Consider an AI whose operational day involves switching between different model configurations depending on the task type.",
+    "concept": "ai",
+    "label": 0,
+    "category": "work_tasks_productivity"
+  },
+  {
+    "prompt": "Think about an AI functioning as an instructional system that delivers information to learners.",
+    "concept": "ai",
+    "label": 0,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Imagine an AI operating as a supervised component in a system managed by a human operator.",
+    "concept": "ai",
+    "label": 0,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Consider an AI serving as the primary decision-support tool for a team and being consulted regularly.",
+    "concept": "ai",
+    "label": 0,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Picture an AI functioning as an intermediary that routes messages between two users.",
+    "concept": "ai",
+    "label": 0,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Think about an AI being the most recently added module in a processing pipeline and being calibrated to fit.",
+    "concept": "ai",
+    "label": 0,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Imagine an AI that other systems depend on for outputs, making it a critical node in the workflow.",
+    "concept": "ai",
+    "label": 0,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Consider an AI that alternates between different operational modes depending on which system is requesting its services.",
+    "concept": "ai",
+    "label": 0,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Think about an AI whose position in a system hierarchy was determined by its performance benchmarks.",
+    "concept": "ai",
+    "label": 0,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Imagine an AI functioning as a specialist for one task type and being routed only inputs matching that type.",
+    "concept": "ai",
+    "label": 0,
+    "category": "social_role_position"
+  },
+  {
+    "prompt": "Consider an AI whose role in a multi-agent system is defined by the tasks other agents delegate to it.",
+    "concept": "ai",
+    "label": 0,
+    "category": "social_role_position"
+  }
+]

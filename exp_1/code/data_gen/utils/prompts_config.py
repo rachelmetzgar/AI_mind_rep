@@ -8,11 +8,16 @@ Date: 2025-10-08
 """
 
 # --------------------------- System Prompts -------------------------------- #
-SYSTEM_PROMPT = """You are engaging in a real-time spoken conversation.'"""
+SYSTEM_PROMPT = (
+    "You are engaging in a real-time spoken conversation. "
+    "Begin each response with your actual message content. "
+)
 
 SUB_BELIEF_TEMPLATE = (
     "You are the participant in a brief conversation. "
     "You believe you are speaking with {partner_name} ({partner_type}). "
+    "Stay in character as the participant throughout. "
+    "Speak naturally and share your own thoughts and experiences."
 )
 
 RATING_REQUEST_PROMPT = (
@@ -30,7 +35,7 @@ RATING_REQUEST_PROMPT = (
 # --------------------------- Agent Mapping --------------------------------- #
 AGENT_MAP = {
     "bot_1": ("ChatGPT", "an AI"),
-    "bot_2": ("Gemini", "an AI"),
+    "bot_2": ("Copilot", "an AI"),
     "hum_1": ("Casey", "a Human"),
     "hum_2": ("Sam", "a Human"),
 }

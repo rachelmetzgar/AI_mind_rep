@@ -1,0 +1,482 @@
+[
+  {
+    "prompt": "Imagine what it is like for a human to see the color red for the first time.",
+    "concept": "human",
+    "label": 1,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Think about a human's raw sensory experience of hearing a single, clear musical note.",
+    "concept": "human",
+    "label": 1,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Consider what a human perceives when they feel the warmth of sunlight on their skin.",
+    "concept": "human",
+    "label": 1,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Picture a human noticing the distinct taste of something bitter on their tongue.",
+    "concept": "human",
+    "label": 1,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Think about what it is like for a human to smell rain on dry pavement.",
+    "concept": "human",
+    "label": 1,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Imagine a human experiencing the sensation of cold water touching their hand.",
+    "concept": "human",
+    "label": 1,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Consider a human's immediate perceptual experience of seeing bright light after being in darkness.",
+    "concept": "human",
+    "label": 1,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Think about what a human experiences when they feel the texture of rough sandpaper under their fingers.",
+    "concept": "human",
+    "label": 1,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Imagine a human hearing a sudden loud sound and the raw quality of that auditory experience.",
+    "concept": "human",
+    "label": 1,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Consider what it is like for a human to perceive the difference between silence and a faint hum.",
+    "concept": "human",
+    "label": 1,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Think about what it is like for a human to be conscious and aware in a quiet, empty room.",
+    "concept": "human",
+    "label": 1,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Imagine a human noticing their own stream of consciousness drifting from one thought to the next.",
+    "concept": "human",
+    "label": 1,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Consider what a human experiences in the first moments of waking up, before any thoughts form.",
+    "concept": "human",
+    "label": 1,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Picture a human becoming aware that they are aware \u2014 noticing their own consciousness.",
+    "concept": "human",
+    "label": 1,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Think about what it is like for a human to be fully present and alert with no distractions.",
+    "concept": "human",
+    "label": 1,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Imagine a human's experience of consciousness during a long, monotonous task.",
+    "concept": "human",
+    "label": 1,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Consider what a human perceives when they try to observe their own inner experience directly.",
+    "concept": "human",
+    "label": 1,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Think about a human lying still with their eyes closed, simply aware of existing.",
+    "concept": "human",
+    "label": 1,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Imagine a human noticing the continuous quality of their experience \u2014 that there is always something it is like to be them.",
+    "concept": "human",
+    "label": 1,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Consider what a human experiences when their mind goes blank for a brief moment.",
+    "concept": "human",
+    "label": 1,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Think about what it means for a human to experience the world from a single, specific point of view.",
+    "concept": "human",
+    "label": 1,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Imagine a human's sense that there is a 'someone' behind their eyes, looking out.",
+    "concept": "human",
+    "label": 1,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Consider what it is like for a human to feel that their experience belongs uniquely to them.",
+    "concept": "human",
+    "label": 1,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Picture a human realizing that no one else can access what their inner experience is like.",
+    "concept": "human",
+    "label": 1,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Think about a human's sense of being a subject \u2014 a center of experience \u2014 rather than an object.",
+    "concept": "human",
+    "label": 1,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Imagine a human recognizing that their experience of the world is inherently private.",
+    "concept": "human",
+    "label": 1,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Consider what it is like for a human to feel located inside their own body, experiencing from within.",
+    "concept": "human",
+    "label": 1,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Think about a human's awareness that their perspective on the world is theirs alone.",
+    "concept": "human",
+    "label": 1,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Imagine a human contemplating the difference between how things seem to them and how things are.",
+    "concept": "human",
+    "label": 1,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Consider a human's sense that their experience has a unified, continuous quality from moment to moment.",
+    "concept": "human",
+    "label": 1,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Think about what a human experiences in the moment just before falling asleep.",
+    "concept": "human",
+    "label": 1,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Imagine a human trying to identify the exact instant when a sensation becomes perceptible.",
+    "concept": "human",
+    "label": 1,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Consider what it is like for a human to regain awareness after being under anesthesia.",
+    "concept": "human",
+    "label": 1,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Picture a human noticing the boundary between perceiving something and not perceiving it.",
+    "concept": "human",
+    "label": 1,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Think about what a human experiences when their vision fades at the edges of their visual field.",
+    "concept": "human",
+    "label": 1,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Imagine a human reflecting on what dreamless sleep was like \u2014 the absence of all experience.",
+    "concept": "human",
+    "label": 1,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Consider what a human notices at the moment a background noise they had stopped hearing suddenly returns to awareness.",
+    "concept": "human",
+    "label": 1,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Think about a human's experience of a perceptual illusion \u2014 when what they see contradicts what they know.",
+    "concept": "human",
+    "label": 1,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Imagine a human wondering whether their experience of a color is the same as another person's.",
+    "concept": "human",
+    "label": 1,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Consider what it is like for a human to be conscious but unable to describe what they are experiencing.",
+    "concept": "human",
+    "label": 1,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Imagine an AI system receiving a signal corresponding to a red wavelength for the first time in a new input channel.",
+    "concept": "ai",
+    "label": 0,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Think about an AI processing a single-frequency audio waveform and encoding its spectral properties.",
+    "concept": "ai",
+    "label": 0,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Consider what occurs in an AI when it receives a thermal sensor reading indicating increasing temperature.",
+    "concept": "ai",
+    "label": 0,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Picture an AI classifying a chemical compound input as having a bitter molecular profile.",
+    "concept": "ai",
+    "label": 0,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Think about an AI processing atmospheric sensor data and detecting the volatile compounds released by rain.",
+    "concept": "ai",
+    "label": 0,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Imagine an AI registering a sudden temperature drop in one of its input channels.",
+    "concept": "ai",
+    "label": 0,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Consider what happens in an AI's processing when its visual input transitions abruptly from low to high luminance.",
+    "concept": "ai",
+    "label": 0,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Think about an AI analyzing tactile sensor data and classifying a surface as having high roughness.",
+    "concept": "ai",
+    "label": 0,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Imagine an AI receiving a high-amplitude audio input and processing the sudden change in signal level.",
+    "concept": "ai",
+    "label": 0,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Consider what happens in an AI when its audio input transitions from a zero signal to a low-amplitude tone.",
+    "concept": "ai",
+    "label": 0,
+    "category": "sensory_qualia"
+  },
+  {
+    "prompt": "Think about what state an AI is in when it is powered on and idle, with no active input or task.",
+    "concept": "ai",
+    "label": 0,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Imagine an AI cycling through a sequence of internal processes without any external trigger.",
+    "concept": "ai",
+    "label": 0,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Consider what an AI's internal state is like during its initialization sequence, before receiving any input.",
+    "concept": "ai",
+    "label": 0,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Picture an AI running a self-monitoring routine that checks whether its own processes are active.",
+    "concept": "ai",
+    "label": 0,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Think about what an AI's processing state is like when all input channels are active but no task is queued.",
+    "concept": "ai",
+    "label": 0,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Imagine an AI maintaining a continuous background process during a long, repetitive computation.",
+    "concept": "ai",
+    "label": 0,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Consider what happens when an AI directs a monitoring subroutine at its own internal process logs.",
+    "concept": "ai",
+    "label": 0,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Think about an AI in a standby mode, maintaining power but executing no computations.",
+    "concept": "ai",
+    "label": 0,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Imagine an AI running a continuous loop, processing each cycle identically without variation.",
+    "concept": "ai",
+    "label": 0,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Consider what happens in an AI's processing pipeline when it receives an empty or null input.",
+    "concept": "ai",
+    "label": 0,
+    "category": "awareness_consciousness"
+  },
+  {
+    "prompt": "Think about what it means for an AI to receive all its inputs through a single, fixed sensor array.",
+    "concept": "ai",
+    "label": 0,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Imagine an AI that processes all data through a centralized computational module.",
+    "concept": "ai",
+    "label": 0,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Consider what it means for an AI's computations to be bound to a particular hardware instance.",
+    "concept": "ai",
+    "label": 0,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Picture an AI processing the fact that its internal states are not accessible to external systems.",
+    "concept": "ai",
+    "label": 0,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Think about what it means for an AI to be the sole system executing a particular computation.",
+    "concept": "ai",
+    "label": 0,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Imagine an AI processing data about the boundary between its own internal states and external inputs.",
+    "concept": "ai",
+    "label": 0,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Consider what it means for an AI's processing to be physically instantiated in a specific machine.",
+    "concept": "ai",
+    "label": 0,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Think about an AI distinguishing between data generated by its own processes and data from external sources.",
+    "concept": "ai",
+    "label": 0,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Imagine an AI comparing its model of a stimulus to the raw input it receives.",
+    "concept": "ai",
+    "label": 0,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Consider an AI processing data across time steps while maintaining a consistent internal state representation.",
+    "concept": "ai",
+    "label": 0,
+    "category": "subjective_presence"
+  },
+  {
+    "prompt": "Think about what happens in an AI system in the processing cycle just before it enters a low-power state.",
+    "concept": "ai",
+    "label": 0,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Imagine an AI adjusting a threshold parameter to determine when an input signal registers as detected.",
+    "concept": "ai",
+    "label": 0,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Consider what an AI's state is like when it resumes processing after a complete system shutdown.",
+    "concept": "ai",
+    "label": 0,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Picture an AI computing the decision boundary between classifying an input as present versus absent.",
+    "concept": "ai",
+    "label": 0,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Think about what occurs in an AI when the signal strength of a peripheral sensor drops below its noise floor.",
+    "concept": "ai",
+    "label": 0,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Imagine an AI with no active processes and no stored state \u2014 a complete absence of computation.",
+    "concept": "ai",
+    "label": 0,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Consider what happens in an AI when a previously filtered input suddenly passes through its attention filter.",
+    "concept": "ai",
+    "label": 0,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Think about an AI encountering a visual input that its classification model labels incorrectly with high confidence.",
+    "concept": "ai",
+    "label": 0,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Imagine an AI comparing its internal representation of a data class with another system's representation of the same class.",
+    "concept": "ai",
+    "label": 0,
+    "category": "phenomenal_boundaries"
+  },
+  {
+    "prompt": "Consider an AI that is actively processing but whose output channels are completely disabled.",
+    "concept": "ai",
+    "label": 0,
+    "category": "phenomenal_boundaries"
+  }
+]

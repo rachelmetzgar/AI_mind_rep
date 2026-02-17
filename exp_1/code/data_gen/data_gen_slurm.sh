@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=llm_data_gen
 #SBATCH --partition=all
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=24G
+#SBATCH --gres=gpu:1
+#SBATCH --mem=32G
 #SBATCH --time=08:00:00
 #SBATCH --array=0-49
 #SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_1/logs/llm_data_gen_%A_%a.out
@@ -22,13 +22,14 @@ export PYTHONNOUSERSITE=1
 set +u
 CONDA_BASE="$(conda info --base)"
 source "$CONDA_BASE/etc/profile.d/conda.sh"
-conda activate behavior_env
+#conda activate behavior_env
+conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 # === Project paths ===
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_1/code/data_gen"
-PY_SCRIPT="$PROJECT_ROOT/llm_data_generation.py"
+PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_1"
+PY_SCRIPT="$PROJECT_ROOT/code/data_gen/llm_data_generation.py"
 LOG_DIR="$PROJECT_ROOT/logs"
 
 # Make sure log dir exists

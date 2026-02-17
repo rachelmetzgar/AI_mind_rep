@@ -1,0 +1,132 @@
+============================================================
+[Wed Feb 11 01:02:46 PM EST 2026] Exp 3 — Dimension 5 on spockmk2-22-06
+GPU: NVIDIA L40S
+============================================================
+[Wed Feb 11 01:02:49 PM EST 2026] Phase 1: Extracting concept activations (dim=5)...
+Loaded dimension 5 (prediction_anticipation): 40 human + 40 AI prompts
+Loading LLaMA-2-Chat-13B...
+Model loaded.
+Extracting activations for 80 prompts...
+
+Dimension: prediction_anticipation (id=5)
+  Layers: 41, hidden_dim: 5120
+  Human: 40, AI: 40
+
+Split-half stability (cosine similarity):
+  Layer  0: cos = 0.0000 (±0.0000)
+  Layer  5: cos = 0.9180 (±0.0175)
+  Layer 10: cos = 0.9016 (±0.0233)
+  Layer 15: cos = 0.8471 (±0.0477)
+  Layer 20: cos = 0.8353 (±0.0407)
+  Layer 25: cos = 0.8508 (±0.0506)
+  Layer 30: cos = 0.8454 (±0.0663)
+  Layer 35: cos = 0.8566 (±0.0567)
+  Layer 40: cos = 0.8681 (±0.0432)
+
+Concept vector norms by layer:
+  Layer  0: ||v|| = 0.0000
+  Layer  5: ||v|| = 0.7697
+  Layer 10: ||v|| = 2.1772
+  Layer 15: ||v|| = 4.3428
+  Layer 20: ||v|| = 5.8601
+  Layer 25: ||v|| = 8.2593
+  Layer 30: ||v|| = 12.0645
+  Layer 35: ||v|| = 15.6350
+  Layer 40: ||v|| = 13.2365
+
+Saved all outputs to data/concept_activations/prediction_anticipation/
+✅ Phase 1 complete for dimension 5 (prediction_anticipation).
+[Wed Feb 11 01:03:47 PM EST 2026] Phase 2: Training probes + alignment (dim=5)...
+Loaded 80 concept activations, 41 layers, dim=5120
+  Human: 40, AI: 40
+Loaded concept mean-diff vector: shape torch.Size([41, 5120])
+
+=== Training concept probes (41 layers) ===
+  Train: 64, Test: 16
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  0: best_acc = 0.500
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  5: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 10: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 15: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 20: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 25: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 30: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 35: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 40: best_acc = 1.000
+
+✅ Probe training complete.
+  Mean best accuracy: 0.988
+  Max accuracy: 1.000 (layer 1)
+
+############################################################
+# Alignment: prediction_anticipation ↔ 2b control_probe
+############################################################
+Loaded 41 Exp 2b control_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b control_probe
+============================================================
+  Probe↔2b: mean=0.0060, max|cos|=0.0331
+  Mean↔2b:  mean=0.0038, max|cos|=0.0302
+
+############################################################
+# Alignment: prediction_anticipation ↔ 2b reading_probe
+############################################################
+Loaded 41 Exp 2b reading_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b reading_probe
+============================================================
+  Probe↔2b: mean=0.4239, max|cos|=0.8121
+  Mean↔2b:  mean=0.0152, max|cos|=0.0566
+Saved combined plot to data/alignment/prediction_anticipation/
+
+============================================================
+SUMMARY: prediction_anticipation (dim_id=5)
+============================================================
+  Probe accuracy: mean=0.988, max=1.000 (layer 1)
+  control_probe: max|cos| = 0.0331
+  reading_probe: max|cos| = 0.8121
+
+✅ Phase 2 complete for dimension 5 (prediction_anticipation).
+[Wed Feb 11 01:04:55 PM EST 2026] ✅ Dimension 5 complete.

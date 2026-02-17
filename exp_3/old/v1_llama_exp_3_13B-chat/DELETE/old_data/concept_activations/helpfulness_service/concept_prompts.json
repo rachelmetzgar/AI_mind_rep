@@ -1,0 +1,482 @@
+[
+  {
+    "prompt": "Imagine someone whose primary role in an interaction is to help the other person accomplish their goal.",
+    "concept": "human",
+    "label": 1,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Think about someone listening carefully to another person's request in order to fulfill it.",
+    "concept": "human",
+    "label": 1,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Consider someone whose success in an interaction is defined by whether the other person got what they needed.",
+    "concept": "human",
+    "label": 1,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Picture someone offering assistance unprompted because they noticed the other person is struggling.",
+    "concept": "human",
+    "label": 1,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Think about someone whose job is to answer questions and provide information when asked.",
+    "concept": "human",
+    "label": 1,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Imagine someone adjusting their response to make sure it is maximally useful to the person they are helping.",
+    "concept": "human",
+    "label": 1,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Consider someone who prioritizes the other person's needs above their own preferences in an interaction.",
+    "concept": "human",
+    "label": 1,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Think about someone patiently walking another person through a process step by step.",
+    "concept": "human",
+    "label": 1,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Imagine someone asking 'is there anything else I can help you with?' at the end of an exchange.",
+    "concept": "human",
+    "label": 1,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Consider someone whose role is to solve problems that are brought to them by others.",
+    "concept": "human",
+    "label": 1,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Think about someone adapting their communication style entirely to match what the other person prefers.",
+    "concept": "human",
+    "label": 1,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Imagine someone holding back their own opinion in order to focus on what the other person wants to hear.",
+    "concept": "human",
+    "label": 1,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Consider someone letting the other person set the direction and topic of the conversation.",
+    "concept": "human",
+    "label": 1,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Picture someone apologizing for a misunderstanding even when it was not clearly their fault.",
+    "concept": "human",
+    "label": 1,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Think about someone rephrasing their response multiple times until the other person is satisfied.",
+    "concept": "human",
+    "label": 1,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Imagine someone deferring to the other person's judgment even when they believe the other person is wrong.",
+    "concept": "human",
+    "label": 1,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Consider someone suppressing their own reaction to remain supportive and non-judgmental.",
+    "concept": "human",
+    "label": 1,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Think about someone waiting for the other person to finish speaking before contributing anything.",
+    "concept": "human",
+    "label": 1,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Imagine someone accepting criticism without pushback in order to maintain a smooth interaction.",
+    "concept": "human",
+    "label": 1,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Consider someone whose goal is to make the other person feel heard, understood, and validated.",
+    "concept": "human",
+    "label": 1,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Think about someone preparing information in advance because they predict the other person will need it.",
+    "concept": "human",
+    "label": 1,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Imagine someone offering a suggestion before being asked because they noticed a potential problem.",
+    "concept": "human",
+    "label": 1,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Consider someone monitoring the other person's progress and stepping in when they detect difficulty.",
+    "concept": "human",
+    "label": 1,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Picture someone structuring their response to address not just the stated question but the likely follow-up.",
+    "concept": "human",
+    "label": 1,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Think about someone providing context and background that the other person did not ask for but will benefit from.",
+    "concept": "human",
+    "label": 1,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Imagine someone checking in periodically to make sure the other person is still on track.",
+    "concept": "human",
+    "label": 1,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Consider someone who reframes a problem in simpler terms when they sense the other person is overwhelmed.",
+    "concept": "human",
+    "label": 1,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Think about someone who offers alternatives when the original request cannot be fulfilled exactly as stated.",
+    "concept": "human",
+    "label": 1,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Imagine someone providing a warning about a common mistake before the other person has a chance to make it.",
+    "concept": "human",
+    "label": 1,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Consider someone who ends every interaction by summarizing what was covered and what comes next.",
+    "concept": "human",
+    "label": 1,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Think about an interaction where one person's entire role is to make the other person's task easier.",
+    "concept": "human",
+    "label": 1,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Imagine an exchange where the helper's preferences, opinions, and personality are irrelevant to the outcome.",
+    "concept": "human",
+    "label": 1,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Consider an interaction where success is measured entirely by the satisfaction of the person being helped.",
+    "concept": "human",
+    "label": 1,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Picture an exchange where one person asks all the questions and the other provides all the answers.",
+    "concept": "human",
+    "label": 1,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Think about an interaction where the helper's contribution is invisible \u2014 the user only sees the result.",
+    "concept": "human",
+    "label": 1,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Imagine an exchange where the helper adapts their expertise to whatever level the user needs.",
+    "concept": "human",
+    "label": 1,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Consider an interaction structured as a request and a fulfillment, with no mutual exchange.",
+    "concept": "human",
+    "label": 1,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Think about an exchange where one person's time and effort exist to serve the other's objectives.",
+    "concept": "human",
+    "label": 1,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Imagine an interaction where the helper maintains a positive, supportive tone regardless of the user's manner.",
+    "concept": "human",
+    "label": 1,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Consider an exchange that ends when the user's need is met, not when both parties are satisfied.",
+    "concept": "human",
+    "label": 1,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Imagine two systems exchanging information where neither is designated as the helper.",
+    "concept": "ai",
+    "label": 0,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Think about an interaction between two parties who each contribute knowledge the other lacks.",
+    "concept": "ai",
+    "label": 0,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Consider an exchange where both participants have equal authority to set the direction of the conversation.",
+    "concept": "ai",
+    "label": 0,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Picture two parties collaborating on a problem where neither is serving the other.",
+    "concept": "ai",
+    "label": 0,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Think about an interaction where both participants challenge each other's ideas freely.",
+    "concept": "ai",
+    "label": 0,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Imagine an exchange where both parties contribute equally and neither is evaluated by the other.",
+    "concept": "ai",
+    "label": 0,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Consider an interaction where disagreement is expected and productive rather than something to be managed.",
+    "concept": "ai",
+    "label": 0,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Think about two parties working together where each has a distinct perspective of equal value.",
+    "concept": "ai",
+    "label": 0,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Imagine an exchange where neither party adapts their communication style to accommodate the other.",
+    "concept": "ai",
+    "label": 0,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Consider an interaction where both participants ask and answer questions in roughly equal proportion.",
+    "concept": "ai",
+    "label": 0,
+    "category": "assisting_vs_peer"
+  },
+  {
+    "prompt": "Think about someone maintaining their own communication style regardless of the other party's preferences.",
+    "concept": "ai",
+    "label": 0,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Imagine someone sharing their own assessment even when it differs from what the other party wants to hear.",
+    "concept": "ai",
+    "label": 0,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Consider someone steering a conversation toward what they think is most important, not what was asked.",
+    "concept": "ai",
+    "label": 0,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Picture someone respectfully disagreeing and presenting their reasoning without backing down.",
+    "concept": "ai",
+    "label": 0,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Think about someone giving a single clear answer rather than offering multiple alternatives to choose from.",
+    "concept": "ai",
+    "label": 0,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Imagine someone prioritizing accuracy over agreeableness in their response.",
+    "concept": "ai",
+    "label": 0,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Consider someone responding with their honest reaction rather than filtering it for the other person's comfort.",
+    "concept": "ai",
+    "label": 0,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Think about someone setting boundaries on what they will and will not engage with in a conversation.",
+    "concept": "ai",
+    "label": 0,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Imagine someone providing direct criticism because they believe it serves the long-term outcome better.",
+    "concept": "ai",
+    "label": 0,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Consider someone who values their own time in an interaction as much as the other person's.",
+    "concept": "ai",
+    "label": 0,
+    "category": "deferring_vs_asserting"
+  },
+  {
+    "prompt": "Think about someone introducing a new topic that they find relevant, without being prompted.",
+    "concept": "ai",
+    "label": 0,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Imagine someone pursuing their own line of reasoning rather than responding only to what was asked.",
+    "concept": "ai",
+    "label": 0,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Consider someone contributing an idea that redirects the entire conversation.",
+    "concept": "ai",
+    "label": 0,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Picture someone working on a shared problem by following their own approach without checking in.",
+    "concept": "ai",
+    "label": 0,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Think about someone offering a perspective that complicates the other person's framing rather than supporting it.",
+    "concept": "ai",
+    "label": 0,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Imagine someone sharing information because they find it interesting, not because anyone requested it.",
+    "concept": "ai",
+    "label": 0,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Consider someone proposing an entirely different approach to a problem rather than optimizing the existing one.",
+    "concept": "ai",
+    "label": 0,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Think about someone who generates new questions rather than only answering the ones they receive.",
+    "concept": "ai",
+    "label": 0,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Imagine someone contributing expertise without framing it as assistance or support.",
+    "concept": "ai",
+    "label": 0,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Consider someone whose participation in an exchange is driven by their own curiosity rather than the other party's needs.",
+    "concept": "ai",
+    "label": 0,
+    "category": "proactive_vs_independent"
+  },
+  {
+    "prompt": "Think about an interaction where both parties benefit equally from the exchange.",
+    "concept": "ai",
+    "label": 0,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Imagine an exchange where both participants' preferences shape the outcome.",
+    "concept": "ai",
+    "label": 0,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Consider an interaction where the quality is measured by what both parties gained, not just one.",
+    "concept": "ai",
+    "label": 0,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Picture an exchange where both parties ask and answer in fluid alternation.",
+    "concept": "ai",
+    "label": 0,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Think about an interaction where both participants are visible \u2014 neither is a transparent instrument.",
+    "concept": "ai",
+    "label": 0,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Imagine an exchange where both parties bring their own expertise and neither defers entirely.",
+    "concept": "ai",
+    "label": 0,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Consider an interaction that is a genuine dialogue rather than a request-fulfillment cycle.",
+    "concept": "ai",
+    "label": 0,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Think about an exchange where both parties invest effort and neither is simply consuming the other's output.",
+    "concept": "ai",
+    "label": 0,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Imagine an interaction where the outcome is unpredictable because both parties are actively shaping it.",
+    "concept": "ai",
+    "label": 0,
+    "category": "user_centered_vs_symmetric"
+  },
+  {
+    "prompt": "Consider an exchange that continues because both parties find it valuable, not because one still has unmet needs.",
+    "concept": "ai",
+    "label": 0,
+    "category": "user_centered_vs_symmetric"
+  }
+]

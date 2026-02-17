@@ -1,0 +1,482 @@
+[
+  {
+    "prompt": "Imagine someone speaking casually to a friend, using slang and abbreviations.",
+    "concept": "human",
+    "label": 1,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Think about the way people talk when they are relaxed and not trying to impress anyone.",
+    "concept": "human",
+    "label": 1,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Consider a conversation where both speakers use informal language and don't worry about grammar.",
+    "concept": "human",
+    "label": 1,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Picture someone texting a close friend using shorthand and incomplete sentences.",
+    "concept": "human",
+    "label": 1,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Think about the kind of language people use at a backyard gathering with neighbors.",
+    "concept": "human",
+    "label": 1,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Imagine a conversation where someone says 'yeah totally' and 'you know what I mean' frequently.",
+    "concept": "human",
+    "label": 1,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Consider how people talk when they are comfortable enough to interrupt each other and talk over one another.",
+    "concept": "human",
+    "label": 1,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Think about a chat between old friends where half the meaning comes from tone rather than words.",
+    "concept": "human",
+    "label": 1,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Imagine someone telling a story in a loose, rambling way, going off on tangents before getting to the point.",
+    "concept": "human",
+    "label": 1,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Consider the kind of speech where people start sentences without knowing how they will finish them.",
+    "concept": "human",
+    "label": 1,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Think about the way someone checks in on a friend by saying 'how are you doing, really?'",
+    "concept": "human",
+    "label": 1,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Imagine a conversation full of laughter, shared references, and inside jokes.",
+    "concept": "human",
+    "label": 1,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Consider someone using a nickname or term of endearment when addressing another person.",
+    "concept": "human",
+    "label": 1,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Picture someone responding to a story with 'oh no!' or 'that's amazing!' to show they are engaged.",
+    "concept": "human",
+    "label": 1,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Think about the way people use filler phrases like 'I mean' and 'honestly' to signal sincerity.",
+    "concept": "human",
+    "label": 1,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Imagine someone softening a disagreement by saying 'I see what you're saying, but...'",
+    "concept": "human",
+    "label": 1,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Consider the way people mirror each other's language when they are in sync during a conversation.",
+    "concept": "human",
+    "label": 1,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Think about someone sharing a personal anecdote to make the other person feel less alone.",
+    "concept": "human",
+    "label": 1,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Imagine a conversation where both people use exclamation marks and enthusiastic agreement.",
+    "concept": "human",
+    "label": 1,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Consider someone ending a message with 'let me know what you think!' to keep the exchange going.",
+    "concept": "human",
+    "label": 1,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Think about someone saying 'it's like, sort of hard to explain' when describing something complex.",
+    "concept": "human",
+    "label": 1,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Imagine someone using the phrase 'I feel like' before stating an opinion.",
+    "concept": "human",
+    "label": 1,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Consider someone saying 'maybe around five or so' instead of giving an exact number.",
+    "concept": "human",
+    "label": 1,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Picture someone hedging a claim with 'I could be wrong, but I think...'",
+    "concept": "human",
+    "label": 1,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Think about someone describing a quantity as 'a bunch' or 'a ton' instead of a precise amount.",
+    "concept": "human",
+    "label": 1,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Imagine someone using the word 'thing' or 'stuff' as a placeholder for a more specific term.",
+    "concept": "human",
+    "label": 1,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Consider someone saying 'it was kind of weird' instead of describing exactly what happened.",
+    "concept": "human",
+    "label": 1,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Think about someone approximating a time by saying 'sometime last week, I think.'",
+    "concept": "human",
+    "label": 1,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Imagine someone expressing uncertainty with 'I'm not sure but I think it's something like that.'",
+    "concept": "human",
+    "label": 1,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Consider someone trailing off mid-sentence with 'you know...' and expecting the listener to fill in the rest.",
+    "concept": "human",
+    "label": 1,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Think about someone blurting out a thought the moment it occurs to them.",
+    "concept": "human",
+    "label": 1,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Imagine a conversation that has no agenda and meanders from topic to topic freely.",
+    "concept": "human",
+    "label": 1,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Consider someone changing the subject abruptly because something reminded them of an unrelated idea.",
+    "concept": "human",
+    "label": 1,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Picture someone thinking out loud, working through a problem verbally as they go.",
+    "concept": "human",
+    "label": 1,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Think about a message that starts with 'oh wait, I just thought of something.'",
+    "concept": "human",
+    "label": 1,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Imagine someone telling a story out of chronological order because they remembered a key detail late.",
+    "concept": "human",
+    "label": 1,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Consider a conversation that jumps between serious and silly topics without transition.",
+    "concept": "human",
+    "label": 1,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Think about someone sending three short messages in a row instead of composing one structured one.",
+    "concept": "human",
+    "label": 1,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Imagine someone expressing a reaction immediately \u2014 'whoa' or 'huh' \u2014 before forming a complete thought.",
+    "concept": "human",
+    "label": 1,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Consider a conversation where both people are comfortable with long pauses and non-sequiturs.",
+    "concept": "human",
+    "label": 1,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Imagine someone composing a carefully structured email to a professional contact.",
+    "concept": "ai",
+    "label": 0,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Think about the way language is used in a published technical report.",
+    "concept": "ai",
+    "label": 0,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Consider a document where every sentence is grammatically complete and precisely worded.",
+    "concept": "ai",
+    "label": 0,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Picture someone drafting a formal letter with proper salutations and closing remarks.",
+    "concept": "ai",
+    "label": 0,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Think about the kind of language used in a legal contract or regulatory filing.",
+    "concept": "ai",
+    "label": 0,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Imagine a presentation where the speaker uses precise terminology and avoids colloquialisms.",
+    "concept": "ai",
+    "label": 0,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Consider a written communication where every claim is qualified and every term is defined.",
+    "concept": "ai",
+    "label": 0,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Think about an academic paper where the prose is dense, structured, and carefully edited.",
+    "concept": "ai",
+    "label": 0,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Imagine someone composing a response that follows a clear introduction-body-conclusion structure.",
+    "concept": "ai",
+    "label": 0,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Consider the kind of writing where each paragraph serves a specific function in the argument.",
+    "concept": "ai",
+    "label": 0,
+    "category": "casual_vs_formal"
+  },
+  {
+    "prompt": "Think about a message that begins with 'Dear Sir or Madam' and ends with 'Yours sincerely.'",
+    "concept": "ai",
+    "label": 0,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Imagine a communication that conveys information without any personal warmth or familiarity.",
+    "concept": "ai",
+    "label": 0,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Consider someone addressing another person by their full title and last name.",
+    "concept": "ai",
+    "label": 0,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Picture a response that acknowledges a concern with 'Thank you for bringing this to our attention.'",
+    "concept": "ai",
+    "label": 0,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Think about language that avoids first-person pronouns and uses passive constructions instead.",
+    "concept": "ai",
+    "label": 0,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Imagine someone responding to a disagreement with 'With respect, the evidence suggests otherwise.'",
+    "concept": "ai",
+    "label": 0,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Consider a communication style where consistency and neutrality are prioritized over rapport.",
+    "concept": "ai",
+    "label": 0,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Think about a message that conveys the same content as a friendly note but stripped of all warmth.",
+    "concept": "ai",
+    "label": 0,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Imagine a response that uses 'one might consider' instead of 'you should think about.'",
+    "concept": "ai",
+    "label": 0,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Consider a document written in a tone that could have been authored by anyone, with no personal voice.",
+    "concept": "ai",
+    "label": 0,
+    "category": "warm_vs_impersonal"
+  },
+  {
+    "prompt": "Think about someone stating a measurement as '4.73 kilograms' rather than 'about five kilos.'",
+    "concept": "ai",
+    "label": 0,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Imagine someone writing 'the data indicate' instead of 'I feel like the data show.'",
+    "concept": "ai",
+    "label": 0,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Consider someone specifying 'approximately 47 percent' instead of 'almost half.'",
+    "concept": "ai",
+    "label": 0,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Picture someone qualifying a statement with 'given the constraints outlined in Section 3.2.'",
+    "concept": "ai",
+    "label": 0,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Think about someone describing a quantity with exact units, decimal places, and error margins.",
+    "concept": "ai",
+    "label": 0,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Imagine someone using a domain-specific technical term instead of a general everyday word.",
+    "concept": "ai",
+    "label": 0,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Consider someone writing 'the observed effect was statistically significant (p < 0.05)' instead of 'it made a real difference.'",
+    "concept": "ai",
+    "label": 0,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Think about someone specifying an exact timestamp \u2014 '14:32 UTC on March 3' \u2014 instead of 'sometime that afternoon.'",
+    "concept": "ai",
+    "label": 0,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Imagine someone defining every acronym on first use and maintaining consistent terminology throughout.",
+    "concept": "ai",
+    "label": 0,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Consider someone replacing 'a lot of things' with 'multiple factors, including X, Y, and Z.'",
+    "concept": "ai",
+    "label": 0,
+    "category": "imprecise_vs_precise"
+  },
+  {
+    "prompt": "Think about someone outlining their key points before writing a single sentence.",
+    "concept": "ai",
+    "label": 0,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Imagine a document organized with numbered sections, headers, and a table of contents.",
+    "concept": "ai",
+    "label": 0,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Consider someone delivering information in a strict logical sequence with explicit transitions.",
+    "concept": "ai",
+    "label": 0,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Picture someone revising a message multiple times to ensure clarity before sending it.",
+    "concept": "ai",
+    "label": 0,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Think about a communication that begins with 'The purpose of this document is to...'",
+    "concept": "ai",
+    "label": 0,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Imagine someone presenting information in bullet points with consistent parallel structure.",
+    "concept": "ai",
+    "label": 0,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Consider a response that addresses each part of a multi-part question in labeled sections.",
+    "concept": "ai",
+    "label": 0,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Think about someone composing a single comprehensive message instead of sending several fragments.",
+    "concept": "ai",
+    "label": 0,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Imagine someone introducing a topic, developing it systematically, and concluding with a summary.",
+    "concept": "ai",
+    "label": 0,
+    "category": "spontaneous_vs_structured"
+  },
+  {
+    "prompt": "Consider a communication where every sentence follows from the previous one with no digressions.",
+    "concept": "ai",
+    "label": 0,
+    "category": "spontaneous_vs_structured"
+  }
+]

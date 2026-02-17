@@ -1,0 +1,418 @@
+#!/usr/bin/env python3
+"""
+Experiment 3, Phase 2: Train Concept Probes and Alignment Analysis
+
+For a SINGLE concept dimension (specified by --dim_id):
+    1. Trains linear probes on concept activations (from Script 1)
+    2. Computes alignment (cosine similarity) between concept vectors
+       and Exp 2b conversational probes (both control and reading)
+
+Designed to run in parallel via SLURM array jobs (one job per dimension).
+
+Inputs:
+    data/concept_activations/{dim_name}/concept_activations.npz
+    data/concept_activations/{dim_name}/concept_vector_per_layer.npz
+    Exp 2b probes (control + reading)
+
+Outputs:
+    data/concept_probes/{dim_name}/
+        concept_probe_layer_{N}.pth
+        accuracy_summary.pkl
+    data/alignment/{dim_name}/
+        control_probe/alignment_results.json
+        reading_probe/alignment_results.json
+        combined_alignment_plot.png
+
+Usage:
+    python 2_train_concept_probes.py --dim_id 1
+    python 2_train_concept_probes.py --dim_id 7
+
+Env: llama2_env
+Rachel C. Metzgar · Feb 2026
+"""
+
+import os
+import sys
+import json
+import pickle
+import argparse
+import numpy as np
+
+import torch
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader, Subset
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+
+# --- Local imports ---
+sys.path.insert(0, os.path.dirname(__file__))
+from src.probes import LinearProbeClassification, TrainerConfig
+from src.train_test_utils import train, test
+
+# Import dimension registry from script 1
+from importlib.util import spec_from_file_location, module_from_spec
+_s1_spec = spec_from_file_location(
+    "script1",
+    os.path.join(os.path.dirname(__file__), "1_elicit_concept_vectors.py"),
+)
+_s1_mod = module_from_spec(_s1_spec)
+_s1_spec.loader.exec_module(_s1_mod)
+DIMENSION_REGISTRY = _s1_mod.DIMENSION_REGISTRY
+
+
+# ========================== CONFIG ========================== #
+
+OUTPUT_ROOT_ACTS = "data/concept_activations"
+OUTPUT_ROOT_PROBES = "data/concept_probes"
+OUTPUT_ROOT_ALIGN = "data/alignment"
+
+# Experiment 2b probes
+EXP2B_ROOT = (
+    "/jukebox/graziano/rachel/ai_mind_rep/exp_2b/llama_exp_2b-13B-chat/"
+    "data/probe_checkpoints"
+)
+EXP2B_PROBE_DIRS = {
+    "control_probe": os.path.join(EXP2B_ROOT, "control_probe"),
+    "reading_probe": os.path.join(EXP2B_ROOT, "reading_probe"),
+}
+
+INPUT_DIM = 5120
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+EPOCHS = 50
+BATCH_SIZE_TRAIN = 16
+BATCH_SIZE_TEST = 16
+LOGISTIC = True
+torch.manual_seed(12345)
+
+
+# ========================== DATASET ========================== #
+
+class ConceptActivationDataset(Dataset):
+    """Simple dataset wrapping pre-extracted concept activations."""
+
+    def __init__(self, npz_path):
+        data = np.load(npz_path, allow_pickle=True)
+        self.activations = torch.from_numpy(data["activations"]).float()
+        self.labels = torch.from_numpy(data["labels"]).long()
+        self.n_samples = len(self.labels)
+        self.n_layers = self.activations.shape[1]
+        self.hidden_dim = self.activations.shape[2]
+        print(f"Loaded {self.n_samples} concept activations, "
+              f"{self.n_layers} layers, dim={self.hidden_dim}")
+        print(f"  Human: {(self.labels == 1).sum().item()}, "
+              f"AI: {(self.labels == 0).sum().item()}")
+
+    def __len__(self):
+        return self.n_samples
+
+    def __getitem__(self, idx):
+        return {
+            "hidden_states": self.activations[idx],
+            "age": self.labels[idx],  # kept for compatibility with train/test utils
+        }
+
+
+# ========================== PROBE TRAINING ========================== #
+
+def train_concept_probes(dataset, probe_dir):
+    """Train a linear probe per layer on concept activations."""
+    os.makedirs(probe_dir, exist_ok=True)
+
+    n_layers = dataset.n_layers
+    loss_func = nn.BCELoss()
+
+    idx_train, idx_test = train_test_split(
+        np.arange(len(dataset)),
+        test_size=0.2,
+        random_state=12345,
+        stratify=dataset.labels.numpy(),
+    )
+    train_ds = Subset(dataset, idx_train)
+    test_ds = Subset(dataset, idx_test)
+    train_loader = DataLoader(
+        train_ds, shuffle=True, batch_size=BATCH_SIZE_TRAIN, drop_last=False
+    )
+    test_loader = DataLoader(
+        test_ds, shuffle=False, batch_size=BATCH_SIZE_TEST, drop_last=False
+    )
+
+    acc_summary = {"acc": [], "final": [], "train": []}
+    probe_weights = {}
+
+    print(f"\n=== Training concept probes ({n_layers} layers) ===")
+    print(f"  Train: {len(idx_train)}, Test: {len(idx_test)}")
+
+    for layer_num in range(n_layers):
+        trainer_cfg = TrainerConfig()
+        probe = LinearProbeClassification(
+            device=DEVICE,
+            probe_class=1,
+            input_dim=INPUT_DIM,
+            logistic=LOGISTIC,
+        )
+        optimizer, scheduler = probe.configure_optimizers(trainer_cfg)
+        best_acc = 0.0
+
+        for epoch in range(1, EPOCHS + 1):
+            train_results = train(
+                probe, DEVICE, train_loader, optimizer, epoch,
+                loss_func=loss_func, verbose=False, layer_num=layer_num,
+                return_raw_outputs=True, one_hot=False,
+                uncertainty=False, num_classes=2,
+            )
+            tr_loss, tr_acc = train_results[0], train_results[1]
+
+            test_results = test(
+                probe, DEVICE, test_loader,
+                loss_func=loss_func, verbose=False, layer_num=layer_num,
+                scheduler=scheduler, return_raw_outputs=True,
+                one_hot=False, uncertainty=False, num_classes=2,
+            )
+            te_loss, te_acc = test_results[0], test_results[1]
+            te_preds, te_truths = test_results[2], test_results[3]
+
+            if te_acc > best_acc:
+                best_acc = te_acc
+                torch.save(
+                    probe.state_dict(),
+                    os.path.join(probe_dir, f"concept_probe_layer_{layer_num}.pth"),
+                )
+
+        torch.save(
+            probe.state_dict(),
+            os.path.join(probe_dir, f"concept_probe_layer_{layer_num}_final.pth"),
+        )
+
+        probe_weights[layer_num] = probe.proj[0].weight.detach().cpu().clone()
+
+        # Confusion matrix
+        cm = confusion_matrix(te_truths, te_preds)
+        ConfusionMatrixDisplay(cm, display_labels=["AI", "Human"]).plot()
+        plt.title(f"Concept Probe Layer {layer_num} Acc {best_acc:.3f}")
+        plt.savefig(
+            os.path.join(probe_dir, f"cm_layer_{layer_num}.png"), dpi=200
+        )
+        plt.close()
+
+        acc_summary["acc"].append(best_acc)
+        acc_summary["final"].append(te_acc)
+        acc_summary["train"].append(tr_acc)
+        torch.cuda.empty_cache()
+
+        if layer_num % 5 == 0 or layer_num == n_layers - 1:
+            print(f"  Layer {layer_num:2d}: best_acc = {best_acc:.3f}")
+
+    with open(os.path.join(probe_dir, "accuracy_summary.pkl"), "wb") as f:
+        pickle.dump(acc_summary, f)
+
+    print(f"\n✅ Probe training complete.")
+    print(f"  Mean best accuracy: {np.mean(acc_summary['acc']):.3f}")
+    print(f"  Max accuracy: {np.max(acc_summary['acc']):.3f} "
+          f"(layer {np.argmax(acc_summary['acc'])})")
+
+    return probe_weights, acc_summary
+
+
+# ========================== ALIGNMENT ========================== #
+
+def load_exp2b_probe_weights(probe_dir, probe_type_label="2b"):
+    """Load Experiment 2b probe weight vectors."""
+    weights = {}
+    if not os.path.isdir(probe_dir):
+        print(f"[WARN] Exp 2b {probe_type_label} dir not found: {probe_dir}")
+        return weights
+
+    for fname in sorted(os.listdir(probe_dir)):
+        if not fname.startswith("human_ai_probe_at_layer_") or not fname.endswith(".pth"):
+            continue
+        if fname.endswith("_final.pth"):
+            continue
+        layer_str = fname.split("_layer_")[-1].split(".pth")[0]
+        layer_idx = int(layer_str)
+
+        probe = LinearProbeClassification(
+            device="cpu", probe_class=1, input_dim=INPUT_DIM, logistic=LOGISTIC,
+        )
+        state = torch.load(os.path.join(probe_dir, fname), map_location="cpu")
+        probe.load_state_dict(state)
+        weights[layer_idx] = probe.proj[0].weight.detach().clone()
+
+    print(f"Loaded {len(weights)} Exp 2b {probe_type_label} weights")
+    return weights
+
+
+def compute_alignment(
+    concept_probe_weights, concept_mean_direction, exp2b_weights,
+    probe_type_label, out_dir,
+):
+    """
+    Cosine similarity between concept vectors and Exp 2b vectors at each layer.
+    """
+    os.makedirs(out_dir, exist_ok=True)
+    results = {"layers": [], "probe_to_2b": [], "mean_to_2b": [], "probe_to_mean": []}
+
+    common_layers = sorted(
+        set(concept_probe_weights.keys()) & set(exp2b_weights.keys())
+    )
+
+    if not common_layers:
+        print(f"[WARN] No overlapping layers for {probe_type_label}.")
+        for layer in sorted(concept_probe_weights.keys()):
+            if layer >= concept_mean_direction.shape[0]:
+                continue
+            cos_pm = torch.nn.functional.cosine_similarity(
+                concept_probe_weights[layer],
+                concept_mean_direction[layer].unsqueeze(0),
+            ).item()
+            results["layers"].append(layer)
+            results["probe_to_2b"].append(None)
+            results["mean_to_2b"].append(None)
+            results["probe_to_mean"].append(cos_pm)
+    else:
+        for layer in common_layers:
+            cp_w = concept_probe_weights[layer]
+            e2b_w = exp2b_weights[layer]
+            mean_dir = concept_mean_direction[layer].unsqueeze(0)
+
+            cos_pp = torch.nn.functional.cosine_similarity(cp_w, e2b_w).item()
+            cos_m2b = torch.nn.functional.cosine_similarity(mean_dir, e2b_w).item()
+            cos_pm = torch.nn.functional.cosine_similarity(cp_w, mean_dir).item()
+
+            results["layers"].append(layer)
+            results["probe_to_2b"].append(cos_pp)
+            results["mean_to_2b"].append(cos_m2b)
+            results["probe_to_mean"].append(cos_pm)
+
+    with open(os.path.join(out_dir, "alignment_results.json"), "w") as f:
+        json.dump(results, f, indent=2)
+
+    # Print summary
+    print(f"\n{'='*60}")
+    print(f"ALIGNMENT: Concept ↔ 2b {probe_type_label}")
+    print(f"{'='*60}")
+    valid_pp = [v for v in results["probe_to_2b"] if v is not None]
+    valid_m = [v for v in results["mean_to_2b"] if v is not None]
+    if valid_pp:
+        print(f"  Probe↔2b: mean={np.mean(valid_pp):.4f}, "
+              f"max|cos|={max(valid_pp, key=abs):.4f}")
+        print(f"  Mean↔2b:  mean={np.mean(valid_m):.4f}, "
+              f"max|cos|={max(valid_m, key=abs):.4f}")
+
+    return results
+
+
+def make_combined_plot(all_results, dim_name, out_dir):
+    """Combined alignment plot for both control and reading probes."""
+    os.makedirs(out_dir, exist_ok=True)
+    try:
+        fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+        for ax, (probe_type, results) in zip(axes, all_results.items()):
+            valid_idx = [i for i, v in enumerate(results["probe_to_2b"])
+                         if v is not None]
+            if not valid_idx:
+                ax.set_title(f"{probe_type}: no data")
+                continue
+            layers_v = [results["layers"][i] for i in valid_idx]
+            ax.plot(layers_v,
+                    [results["probe_to_2b"][i] for i in valid_idx],
+                    'o-', label="Concept probe ↔ 2b", color="tab:blue",
+                    markersize=3)
+            ax.plot(layers_v,
+                    [results["mean_to_2b"][i] for i in valid_idx],
+                    's--', label="Mean-diff ↔ 2b", color="tab:orange",
+                    markersize=3)
+            ax.axhline(y=0, color="gray", linestyle=":", alpha=0.5)
+            ax.set_xlabel("Layer")
+            ax.set_ylabel("Cosine Similarity")
+            ax.set_title(f"{dim_name}: Concept ↔ 2b {probe_type}")
+            ax.legend(fontsize=8)
+            ax.set_ylim(-1, 1)
+
+        plt.suptitle(f"Alignment: {dim_name}", y=1.02)
+        plt.tight_layout()
+        plt.savefig(os.path.join(out_dir, "combined_alignment_plot.png"),
+                    dpi=200, bbox_inches="tight")
+        plt.close()
+        print(f"Saved combined plot to {out_dir}/")
+    except Exception as e:
+        print(f"[WARN] Combined plot failed: {e}")
+
+
+# ========================== MAIN ========================== #
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Exp 3: Train concept probes + alignment for one dimension"
+    )
+    parser.add_argument("--dim_id", type=int, required=True,
+                        help="Dimension ID (1-13)")
+    args = parser.parse_args()
+
+    if args.dim_id not in DIMENSION_REGISTRY:
+        raise ValueError(f"Unknown dim_id={args.dim_id}")
+
+    _, dim_name = DIMENSION_REGISTRY[args.dim_id]
+
+    # Paths
+    act_dir = os.path.join(OUTPUT_ROOT_ACTS, dim_name)
+    act_path = os.path.join(act_dir, "concept_activations.npz")
+    vec_path = os.path.join(act_dir, "concept_vector_per_layer.npz")
+    probe_dir = os.path.join(OUTPUT_ROOT_PROBES, dim_name)
+    align_dir = os.path.join(OUTPUT_ROOT_ALIGN, dim_name)
+
+    if not os.path.isfile(act_path):
+        raise FileNotFoundError(
+            f"Activations not found: {act_path}\n"
+            f"Run 1_elicit_concept_vectors.py --dim_id {args.dim_id} first."
+        )
+
+    # Load
+    dataset = ConceptActivationDataset(act_path)
+    vec_data = np.load(vec_path)
+    concept_mean_direction = torch.from_numpy(vec_data["concept_direction"]).float()
+    print(f"Loaded concept mean-diff vector: shape {concept_mean_direction.shape}")
+
+    # Train probes
+    concept_probe_weights, acc_summary = train_concept_probes(dataset, probe_dir)
+
+    # Alignment with both 2b probe types
+    all_alignment = {}
+    for probe_type, probe_dir_2b in EXP2B_PROBE_DIRS.items():
+        print(f"\n{'#'*60}")
+        print(f"# Alignment: {dim_name} ↔ 2b {probe_type}")
+        print(f"{'#'*60}")
+
+        exp2b_weights = load_exp2b_probe_weights(probe_dir_2b, probe_type)
+        align_sub_dir = os.path.join(align_dir, probe_type)
+
+        results = compute_alignment(
+            concept_probe_weights, concept_mean_direction,
+            exp2b_weights, probe_type, align_sub_dir,
+        )
+        all_alignment[probe_type] = results
+
+    # Combined plot
+    if len(all_alignment) > 1:
+        make_combined_plot(all_alignment, dim_name, align_dir)
+
+    # Final summary
+    print(f"\n{'='*60}")
+    print(f"SUMMARY: {dim_name} (dim_id={args.dim_id})")
+    print(f"{'='*60}")
+    print(f"  Probe accuracy: mean={np.mean(acc_summary['acc']):.3f}, "
+          f"max={np.max(acc_summary['acc']):.3f} "
+          f"(layer {np.argmax(acc_summary['acc'])})")
+    for ptype, res in all_alignment.items():
+        valid = [v for v in res["probe_to_2b"] if v is not None]
+        if valid:
+            print(f"  {ptype}: max|cos| = {max(valid, key=abs):.4f}")
+
+    print(f"\n✅ Phase 2 complete for dimension {args.dim_id} ({dim_name}).")
+
+
+if __name__ == "__main__":
+    main()

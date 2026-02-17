@@ -31,7 +31,7 @@ TOM_PHRASES = [
     r"\byou find\b", r"\byou discover\b", r"\byou learn\b", r"\byou notice\b",
     r"\byou pretend\b", r"\byou dream\b", r"\byou speculate\b", r"\byou solve\b",
     r"\byou invent\b", r"\byou accept\b", r"\byou ignore\b", r"\byou tell\b",
-    r"\byou get\b",
+    r"\byou get\b", r"\byou judge\b"
 ]
 
 POLITE_POSITIVE = [

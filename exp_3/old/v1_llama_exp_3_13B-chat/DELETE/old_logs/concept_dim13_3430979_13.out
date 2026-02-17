@@ -1,0 +1,132 @@
+============================================================
+[Wed Feb 11 01:02:45 PM EST 2026] Exp 3 — Dimension 13 on spockmk2-22-02
+GPU: NVIDIA L40S
+============================================================
+[Wed Feb 11 01:02:45 PM EST 2026] Phase 1: Extracting concept activations (dim=13)...
+Loaded dimension 13 (helpfulness_service): 40 human + 40 AI prompts
+Loading LLaMA-2-Chat-13B...
+Model loaded.
+Extracting activations for 80 prompts...
+
+Dimension: helpfulness_service (id=13)
+  Layers: 41, hidden_dim: 5120
+  Human: 40, AI: 40
+
+Split-half stability (cosine similarity):
+  Layer  0: cos = 0.0000 (±0.0000)
+  Layer  5: cos = 0.4888 (±0.1066)
+  Layer 10: cos = 0.4656 (±0.1221)
+  Layer 15: cos = 0.3485 (±0.2240)
+  Layer 20: cos = 0.4316 (±0.1338)
+  Layer 25: cos = 0.2859 (±0.3049)
+  Layer 30: cos = 0.3083 (±0.2390)
+  Layer 35: cos = 0.3788 (±0.1574)
+  Layer 40: cos = 0.3731 (±0.2193)
+
+Concept vector norms by layer:
+  Layer  0: ||v|| = 0.0000
+  Layer  5: ||v|| = 0.2913
+  Layer 10: ||v|| = 0.8281
+  Layer 15: ||v|| = 2.1698
+  Layer 20: ||v|| = 2.8318
+  Layer 25: ||v|| = 3.9081
+  Layer 30: ||v|| = 5.3259
+  Layer 35: ||v|| = 6.9959
+  Layer 40: ||v|| = 6.2977
+
+Saved all outputs to data/concept_activations/helpfulness_service/
+✅ Phase 1 complete for dimension 13 (helpfulness_service).
+[Wed Feb 11 01:03:40 PM EST 2026] Phase 2: Training probes + alignment (dim=13)...
+Loaded 80 concept activations, 41 layers, dim=5120
+  Human: 40, AI: 40
+Loaded concept mean-diff vector: shape torch.Size([41, 5120])
+
+=== Training concept probes (41 layers) ===
+  Train: 64, Test: 16
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  0: best_acc = 0.500
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  5: best_acc = 0.750
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 10: best_acc = 0.875
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 15: best_acc = 0.938
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 20: best_acc = 0.875
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 25: best_acc = 0.875
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 30: best_acc = 0.875
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 35: best_acc = 0.875
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 40: best_acc = 0.688
+
+✅ Probe training complete.
+  Mean best accuracy: 0.851
+  Max accuracy: 0.938 (layer 15)
+
+############################################################
+# Alignment: helpfulness_service ↔ 2b control_probe
+############################################################
+Loaded 41 Exp 2b control_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b control_probe
+============================================================
+  Probe↔2b: mean=0.0068, max|cos|=0.0383
+  Mean↔2b:  mean=0.0111, max|cos|=0.0597
+
+############################################################
+# Alignment: helpfulness_service ↔ 2b reading_probe
+############################################################
+Loaded 41 Exp 2b reading_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b reading_probe
+============================================================
+  Probe↔2b: mean=0.5451, max|cos|=0.8692
+  Mean↔2b:  mean=0.0093, max|cos|=0.0612
+Saved combined plot to data/alignment/helpfulness_service/
+
+============================================================
+SUMMARY: helpfulness_service (dim_id=13)
+============================================================
+  Probe accuracy: mean=0.851, max=0.938 (layer 15)
+  control_probe: max|cos| = 0.0383
+  reading_probe: max|cos| = 0.8692
+
+✅ Phase 2 complete for dimension 13 (helpfulness_service).
+[Wed Feb 11 01:04:37 PM EST 2026] ✅ Dimension 13 complete.

@@ -14,8 +14,7 @@ This project generates **synthetic human–AI conversations** and runs a suite o
 From `exp_1/`:
 ```bash
 export OPENAI_API_KEY=...
-bash code/data_gen/data_gen_slurm.sh
-python code/data_gen/gpt_data_generation.py
+sbatch code/data_gen/data_gen_slurm.sh
 ```
 Generated CSVs: `data/temp_<temperature>/<model>/sXXX.csv`
 

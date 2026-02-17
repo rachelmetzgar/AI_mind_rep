@@ -1,0 +1,132 @@
+============================================================
+[Wed Feb 11 01:02:46 PM EST 2026] Exp 3 — Dimension 6 on spockmk2-22-06
+GPU: NVIDIA L40S
+============================================================
+[Wed Feb 11 01:02:49 PM EST 2026] Phase 1: Extracting concept activations (dim=6)...
+Loaded dimension 6 (cognitive_processes): 40 human + 40 AI prompts
+Loading LLaMA-2-Chat-13B...
+Model loaded.
+Extracting activations for 80 prompts...
+
+Dimension: cognitive_processes (id=6)
+  Layers: 41, hidden_dim: 5120
+  Human: 40, AI: 40
+
+Split-half stability (cosine similarity):
+  Layer  0: cos = 0.0000 (±0.0000)
+  Layer  5: cos = 0.9161 (±0.0263)
+  Layer 10: cos = 0.9277 (±0.0164)
+  Layer 15: cos = 0.8559 (±0.0715)
+  Layer 20: cos = 0.8272 (±0.0966)
+  Layer 25: cos = 0.8397 (±0.0746)
+  Layer 30: cos = 0.8032 (±0.1046)
+  Layer 35: cos = 0.8422 (±0.0639)
+  Layer 40: cos = 0.8503 (±0.0538)
+
+Concept vector norms by layer:
+  Layer  0: ||v|| = 0.0000
+  Layer  5: ||v|| = 0.8126
+  Layer 10: ||v|| = 2.4827
+  Layer 15: ||v|| = 4.8932
+  Layer 20: ||v|| = 5.9427
+  Layer 25: ||v|| = 8.3846
+  Layer 30: ||v|| = 11.8097
+  Layer 35: ||v|| = 15.4029
+  Layer 40: ||v|| = 12.5248
+
+Saved all outputs to data/concept_activations/cognitive_processes/
+✅ Phase 1 complete for dimension 6 (cognitive_processes).
+[Wed Feb 11 01:03:46 PM EST 2026] Phase 2: Training probes + alignment (dim=6)...
+Loaded 80 concept activations, 41 layers, dim=5120
+  Human: 40, AI: 40
+Loaded concept mean-diff vector: shape torch.Size([41, 5120])
+
+=== Training concept probes (41 layers) ===
+  Train: 64, Test: 16
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  0: best_acc = 0.500
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  5: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 10: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 15: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 20: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 25: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 30: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 35: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 40: best_acc = 1.000
+
+✅ Probe training complete.
+  Mean best accuracy: 0.988
+  Max accuracy: 1.000 (layer 1)
+
+############################################################
+# Alignment: cognitive_processes ↔ 2b control_probe
+############################################################
+Loaded 41 Exp 2b control_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b control_probe
+============================================================
+  Probe↔2b: mean=0.0038, max|cos|=0.0281
+  Mean↔2b:  mean=0.0034, max|cos|=0.0296
+
+############################################################
+# Alignment: cognitive_processes ↔ 2b reading_probe
+############################################################
+Loaded 41 Exp 2b reading_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b reading_probe
+============================================================
+  Probe↔2b: mean=0.4302, max|cos|=0.8158
+  Mean↔2b:  mean=0.0029, max|cos|=0.0474
+Saved combined plot to data/alignment/cognitive_processes/
+
+============================================================
+SUMMARY: cognitive_processes (dim_id=6)
+============================================================
+  Probe accuracy: mean=0.988, max=1.000 (layer 1)
+  control_probe: max|cos| = 0.0281
+  reading_probe: max|cos| = 0.8158
+
+✅ Phase 2 complete for dimension 6 (cognitive_processes).
+[Wed Feb 11 01:04:56 PM EST 2026] ✅ Dimension 6 complete.

@@ -10,8 +10,9 @@ Date: 2025-09-29
 
 from __future__ import annotations
 import numpy as np
+import pandas as pd
 from typing import List, Tuple, Optional, TextIO
-from scipy.stats import ttest_rel
+from scipy.stats import ttest_rel, ttest_ind, f as f_dist
 
 __all__ = ["paired_clean", "cohens_dz", "paired_ttest_report"]
 
@@ -363,4 +364,3 @@ def run_cross_experiment_analysis(combined_subject_df, metric):
         results['pattern'] = 'Different'
     
     return results
-

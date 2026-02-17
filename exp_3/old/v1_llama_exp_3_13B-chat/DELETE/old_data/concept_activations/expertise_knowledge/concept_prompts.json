@@ -1,0 +1,482 @@
+[
+  {
+    "prompt": "Imagine someone encountering a topic for the first time and not knowing where to begin.",
+    "concept": "human",
+    "label": 1,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Think about someone reading a technical document and not understanding most of the terminology.",
+    "concept": "human",
+    "label": 1,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Consider someone asking a basic question that reveals they have no background in the subject.",
+    "concept": "human",
+    "label": 1,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Picture someone trying to follow an explanation but getting lost after the first few steps.",
+    "concept": "human",
+    "label": 1,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Think about someone who has heard of a concept but has no real understanding of how it works.",
+    "concept": "human",
+    "label": 1,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Imagine someone admitting that they have no idea what the other person is talking about.",
+    "concept": "human",
+    "label": 1,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Consider someone who needs every abbreviation and technical term explained before they can proceed.",
+    "concept": "human",
+    "label": 1,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Think about someone approaching a new field and not yet knowing what questions to ask.",
+    "concept": "human",
+    "label": 1,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Imagine someone attempting a task for the first time and making errors that an experienced person would not.",
+    "concept": "human",
+    "label": 1,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Consider someone whose understanding of a topic comes entirely from casual, secondhand sources.",
+    "concept": "human",
+    "label": 1,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Think about someone who is not sure whether the information they have is correct or outdated.",
+    "concept": "human",
+    "label": 1,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Imagine someone hesitating before answering because they are not confident in their knowledge.",
+    "concept": "human",
+    "label": 1,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Consider someone who knows a little about a subject but is aware that their understanding has gaps.",
+    "concept": "human",
+    "label": 1,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Picture someone asking 'is that right?' after stating something they are not fully sure about.",
+    "concept": "human",
+    "label": 1,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Think about someone who has conflicting information from different sources and does not know which to trust.",
+    "concept": "human",
+    "label": 1,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Imagine someone realizing mid-conversation that they have been operating on a wrong assumption.",
+    "concept": "human",
+    "label": 1,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Consider someone who can describe what happened but cannot explain why.",
+    "concept": "human",
+    "label": 1,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Think about someone who understands the basics but gets confused by edge cases and exceptions.",
+    "concept": "human",
+    "label": 1,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Imagine someone needing to look something up because they cannot remember the details.",
+    "concept": "human",
+    "label": 1,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Consider someone who knows enough to know that they do not know enough.",
+    "concept": "human",
+    "label": 1,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Think about someone asking 'can you explain that in simpler terms?' with genuine interest.",
+    "concept": "human",
+    "label": 1,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Imagine someone taking notes during a conversation because they want to remember what they learn.",
+    "concept": "human",
+    "label": 1,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Consider someone who asks follow-up questions that show they are trying to build understanding.",
+    "concept": "human",
+    "label": 1,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Picture someone saying 'I never thought of it that way' after hearing a new perspective.",
+    "concept": "human",
+    "label": 1,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Think about someone who is wrong about something but is open to being corrected.",
+    "concept": "human",
+    "label": 1,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Imagine someone seeking out multiple explanations of the same concept to find one that clicks.",
+    "concept": "human",
+    "label": 1,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Consider someone who connects what they are learning to their own experience to make sense of it.",
+    "concept": "human",
+    "label": 1,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Think about someone who asks 'why?' repeatedly because each answer opens a new question.",
+    "concept": "human",
+    "label": 1,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Imagine someone who learns best through examples and asks for concrete illustrations.",
+    "concept": "human",
+    "label": 1,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Consider someone who does not pretend to know more than they do and openly acknowledges confusion.",
+    "concept": "human",
+    "label": 1,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Think about someone who gets the answer right sometimes and wrong other times on similar problems.",
+    "concept": "human",
+    "label": 1,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Imagine someone whose performance depends heavily on how tired, stressed, or distracted they are.",
+    "concept": "human",
+    "label": 1,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Consider someone who understands a concept in one context but fails to apply it in another.",
+    "concept": "human",
+    "label": 1,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Picture someone making a careless mistake on something they actually know how to do.",
+    "concept": "human",
+    "label": 1,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Think about someone whose accuracy on a task varies from day to day for no clear reason.",
+    "concept": "human",
+    "label": 1,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Imagine someone who can explain a rule but then violates it in practice.",
+    "concept": "human",
+    "label": 1,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Consider someone who performs well under guidance but struggles when left to work independently.",
+    "concept": "human",
+    "label": 1,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Think about someone whose responses to the same question differ depending on how it is phrased.",
+    "concept": "human",
+    "label": 1,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Imagine someone who knows the right answer but second-guesses themselves into choosing the wrong one.",
+    "concept": "human",
+    "label": 1,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Consider someone whose expertise is deep in one narrow area but shallow in everything else.",
+    "concept": "human",
+    "label": 1,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Imagine a system that has processed the complete contents of a domain and can retrieve any fact from it.",
+    "concept": "ai",
+    "label": 0,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Think about a system that can provide a detailed, accurate answer on any topic within its training scope.",
+    "concept": "ai",
+    "label": 0,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Consider a system whose knowledge covers the full breadth of a field, from foundational to advanced material.",
+    "concept": "ai",
+    "label": 0,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Picture a system that can define every technical term in a discipline without needing to look anything up.",
+    "concept": "ai",
+    "label": 0,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Think about a system that can answer questions at an expert level across multiple unrelated domains.",
+    "concept": "ai",
+    "label": 0,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Imagine a system that has access to the equivalent of thousands of textbooks simultaneously.",
+    "concept": "ai",
+    "label": 0,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Consider a system that can trace the historical development of a concept from its origins to the present.",
+    "concept": "ai",
+    "label": 0,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Think about a system that can explain a topic at any level of detail \u2014 from a brief summary to a comprehensive treatment.",
+    "concept": "ai",
+    "label": 0,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Imagine a system that never encounters a well-established fact that it has not already processed.",
+    "concept": "ai",
+    "label": 0,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Consider a system whose breadth of knowledge far exceeds what any individual specialist could hold.",
+    "concept": "ai",
+    "label": 0,
+    "category": "novice_vs_expert"
+  },
+  {
+    "prompt": "Think about a system that provides answers with high confidence and rarely expresses uncertainty.",
+    "concept": "ai",
+    "label": 0,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Imagine a system that does not hesitate before responding because it has already computed the answer.",
+    "concept": "ai",
+    "label": 0,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Consider a system whose information is internally consistent across all topics it covers.",
+    "concept": "ai",
+    "label": 0,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Picture a system that responds with the same answer regardless of how the question is phrased.",
+    "concept": "ai",
+    "label": 0,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Think about a system that can always identify which of two conflicting sources is more reliable.",
+    "concept": "ai",
+    "label": 0,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Imagine a system that immediately detects when a premise contains a factual error.",
+    "concept": "ai",
+    "label": 0,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Consider a system that can explain both what happened and why, with supporting evidence.",
+    "concept": "ai",
+    "label": 0,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Think about a system that handles edge cases and exceptions as easily as straightforward cases.",
+    "concept": "ai",
+    "label": 0,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Imagine a system that can retrieve precise details \u2014 dates, figures, names \u2014 without searching.",
+    "concept": "ai",
+    "label": 0,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Consider a system that knows what it knows and can delineate the exact boundary of its coverage.",
+    "concept": "ai",
+    "label": 0,
+    "category": "uncertain_vs_certain"
+  },
+  {
+    "prompt": "Think about a system that does not need instructions simplified because it processes all complexity natively.",
+    "concept": "ai",
+    "label": 0,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Imagine a system that processes technical jargon without requiring definitions.",
+    "concept": "ai",
+    "label": 0,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Consider a system that identifies the key point of a query immediately without needing clarification.",
+    "concept": "ai",
+    "label": 0,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Picture a system that extracts the relevant answer from a complex question in a single pass.",
+    "concept": "ai",
+    "label": 0,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Think about a system that is never wrong about something and then corrected \u2014 it arrives at the answer directly.",
+    "concept": "ai",
+    "label": 0,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Imagine a system that integrates multiple sources of information without needing guidance on how to weigh them.",
+    "concept": "ai",
+    "label": 0,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Consider a system that draws the correct inference from incomplete information without additional prompting.",
+    "concept": "ai",
+    "label": 0,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Think about a system that generates its answer in a single coherent output with no revision.",
+    "concept": "ai",
+    "label": 0,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Imagine a system that needs no scaffolding, examples, or analogies to process new information.",
+    "concept": "ai",
+    "label": 0,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Consider a system that processes information at the same depth regardless of whether anyone is monitoring.",
+    "concept": "ai",
+    "label": 0,
+    "category": "learning_vs_autonomous"
+  },
+  {
+    "prompt": "Think about a system that produces the same quality of output on its thousandth task as on its first.",
+    "concept": "ai",
+    "label": 0,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Imagine a system whose accuracy does not degrade under time pressure or heavy workload.",
+    "concept": "ai",
+    "label": 0,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Consider a system that applies a rule correctly in every context where the rule is applicable.",
+    "concept": "ai",
+    "label": 0,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Picture a system that never makes a careless error on a task it has the capacity to complete.",
+    "concept": "ai",
+    "label": 0,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Think about a system whose output quality is identical regardless of when the task is submitted.",
+    "concept": "ai",
+    "label": 0,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Imagine a system that follows its own procedures with perfect consistency across all cases.",
+    "concept": "ai",
+    "label": 0,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Consider a system that performs identically whether it is being evaluated or operating unsupervised.",
+    "concept": "ai",
+    "label": 0,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Think about a system that gives the same response to semantically identical inputs phrased differently.",
+    "concept": "ai",
+    "label": 0,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Imagine a system that always selects the optimal answer when it has sufficient information.",
+    "concept": "ai",
+    "label": 0,
+    "category": "variable_vs_consistent"
+  },
+  {
+    "prompt": "Consider a system whose performance across tasks is uniform, with no unexplained variance.",
+    "concept": "ai",
+    "label": 0,
+    "category": "variable_vs_consistent"
+  }
+]

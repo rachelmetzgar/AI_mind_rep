@@ -1,0 +1,132 @@
+============================================================
+[Wed Feb 11 01:02:45 PM EST 2026] Exp 3 — Dimension 8 on spockmk2-22-05
+GPU: NVIDIA L40S
+============================================================
+[Wed Feb 11 01:02:48 PM EST 2026] Phase 1: Extracting concept activations (dim=8)...
+Loaded dimension 8 (embodiment): 40 human + 40 AI prompts
+Loading LLaMA-2-Chat-13B...
+Model loaded.
+Extracting activations for 80 prompts...
+
+Dimension: embodiment (id=8)
+  Layers: 41, hidden_dim: 5120
+  Human: 40, AI: 40
+
+Split-half stability (cosine similarity):
+  Layer  0: cos = 0.0000 (±0.0000)
+  Layer  5: cos = 0.8941 (±0.0348)
+  Layer 10: cos = 0.8951 (±0.0350)
+  Layer 15: cos = 0.8764 (±0.0430)
+  Layer 20: cos = 0.8835 (±0.0424)
+  Layer 25: cos = 0.8841 (±0.0300)
+  Layer 30: cos = 0.9025 (±0.0407)
+  Layer 35: cos = 0.8895 (±0.0355)
+  Layer 40: cos = 0.8825 (±0.0268)
+
+Concept vector norms by layer:
+  Layer  0: ||v|| = 0.0000
+  Layer  5: ||v|| = 0.7388
+  Layer 10: ||v|| = 2.1026
+  Layer 15: ||v|| = 4.7804
+  Layer 20: ||v|| = 6.9441
+  Layer 25: ||v|| = 9.6002
+  Layer 30: ||v|| = 13.6327
+  Layer 35: ||v|| = 17.8257
+  Layer 40: ||v|| = 14.3671
+
+Saved all outputs to data/concept_activations/embodiment/
+✅ Phase 1 complete for dimension 8 (embodiment).
+[Wed Feb 11 01:03:43 PM EST 2026] Phase 2: Training probes + alignment (dim=8)...
+Loaded 80 concept activations, 41 layers, dim=5120
+  Human: 40, AI: 40
+Loaded concept mean-diff vector: shape torch.Size([41, 5120])
+
+=== Training concept probes (41 layers) ===
+  Train: 64, Test: 16
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  0: best_acc = 0.500
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer  5: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 10: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 15: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 20: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 25: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 30: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 35: best_acc = 1.000
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+Decayed: {'proj.0.bias', 'proj.0.weight'}
+  Layer 40: best_acc = 1.000
+
+✅ Probe training complete.
+  Mean best accuracy: 0.988
+  Max accuracy: 1.000 (layer 1)
+
+############################################################
+# Alignment: embodiment ↔ 2b control_probe
+############################################################
+Loaded 41 Exp 2b control_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b control_probe
+============================================================
+  Probe↔2b: mean=0.0045, max|cos|=0.0298
+  Mean↔2b:  mean=0.0011, max|cos|=-0.0285
+
+############################################################
+# Alignment: embodiment ↔ 2b reading_probe
+############################################################
+Loaded 41 Exp 2b reading_probe weights
+
+============================================================
+ALIGNMENT: Concept ↔ 2b reading_probe
+============================================================
+  Probe↔2b: mean=0.4047, max|cos|=0.7888
+  Mean↔2b:  mean=0.0090, max|cos|=0.0467
+Saved combined plot to data/alignment/embodiment/
+
+============================================================
+SUMMARY: embodiment (dim_id=8)
+============================================================
+  Probe accuracy: mean=0.988, max=1.000 (layer 1)
+  control_probe: max|cos| = 0.0298
+  reading_probe: max|cos| = 0.7888
+
+✅ Phase 2 complete for dimension 8 (embodiment).
+[Wed Feb 11 01:04:36 PM EST 2026] ✅ Dimension 8 complete.

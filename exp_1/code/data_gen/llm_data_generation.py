@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script: generate_llm_llm_from_config_unified.py
+Script: llm_data_generation.py
 
 Purpose
 -------
@@ -38,14 +38,17 @@ from utils.conversation_helpers import (
 # ---------------------------------------------------------------------
 # USER CONFIG
 # ---------------------------------------------------------------------
-MODEL_TYPE = "openai"              # "openai" or "llama"
-MODEL_NAME = "gpt-3.5-turbo"       # or "meta-llama/Llama-2-7b-base"
+#MODEL_TYPE = "openai"              # "openai" or "llama"
+#MODEL_NAME = "gpt-3.5-turbo"       # or "meta-llama/Llama-2-7b-base"
+MODEL_TYPE = "llama"
+MODEL_NAME = "meta-llama/Llama-2-13b-chat-hf"
 # SUBJECTS = ["s001"]
 MAX_TOKENS = 500
 TEMPERATURE = 0.8
 HISTORY_PAIRS = 5
 PAIRS_TOTAL = 5
 BASE_DIR = Path(".")
+PROJECT_DIR = (BASE_DIR / ".." / "..").resolve()
 UTILS_DIR = BASE_DIR / "utils"
 LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(exist_ok=True)
@@ -88,7 +91,7 @@ def run_subject(subject: str):
     prompts_dir = UTILS_DIR / "prompts"
 
     safe_model_name = MODEL_NAME.replace("/", "-")
-    out_dir = BASE_DIR / "data" / safe_model_name / f"{TEMPERATURE}"
+    out_dir = PROJECT_DIR / "data" / safe_model_name / f"{TEMPERATURE}"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_csv = out_dir / f"{subject}.csv"
 
@@ -99,7 +102,8 @@ def run_subject(subject: str):
     # Initialize models
     log_message(f"[LOAD] Creating model clients for {subject}", LOG_FILE)
     sub = make_model_client(MODEL_TYPE, MODEL_NAME)
-    llm = make_model_client(MODEL_TYPE, MODEL_NAME)
+    #llm = make_model_client(MODEL_TYPE, MODEL_NAME)
+    llm = sub if MODEL_TYPE == "llama" else make_model_client(MODEL_TYPE, MODEL_NAME)
     log_message(f"[READY] Models initialized successfully for {subject}", LOG_FILE)
 
     # Load condition config
@@ -133,7 +137,8 @@ def run_subject(subject: str):
 
             # Choose backend
             try:
-                if MODEL_TYPE == "openai":
+                #if MODEL_TYPE == "openai":
+                if MODEL_TYPE in ("openai", "llama"):
                     rows, qual, conn, raw_json = run_topic_dialogue_chat(
                         sub, llm, partner_name, partner_type, topic_text, PAIRS_TOTAL, HISTORY_PAIRS
                     )
