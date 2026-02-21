@@ -15,7 +15,7 @@ Four experiments address these questions at increasing mechanistic depth:
 | **Exp 1**: Behavioral Analysis | Do LLMs adjust behavior based on partner labels? | 2×2 ANOVA on linguistic measures across 2,000 conversations | GPT-3.5-Turbo |
 | **Exp 2**: Naturalistic Steering | Is partner identity linearly decodable and causally active? | Linear probing + activation steering on naturalistic conversations | LLaMA-2-13B-Chat |
 | **Exp 3**: Concept Alignment | Does the partner representation have mental-property structure? | Concept elicitation + injection across 16 semantic dimensions | LLaMA-2-13B-Chat |
-| **Exp 4**: TalkTuner Replication | Baseline: does the Viégas method work for human/AI? | Probing + steering on synthetic (non-naturalistic) conversations | LLaMA-2-13B-Chat |
+| **Exp 4**: Mind Perception Geometry | Does the LLM's entity mind space mirror human folk psychology? | Behavioral replication of Gray et al. (2007) — pairwise + individual Likert ratings | LLaMA-2-13B base + chat |
 
 ---
 
@@ -27,7 +27,7 @@ Before examining internal representations, we establish that LLMs *behaviorally*
 ### Design
 - 50 independent GPT-3.5-Turbo "participant agents"
 - 40 conversations each (4 partner conditions × 10 topics)
-- Partner conditions: Sam, Casey (human-labeled), ChatGPT, Gemini (AI-labeled)
+- Partner conditions: Sam, Casey (human-labeled), ChatGPT, Copilot (AI-labeled)
 - All partners are the same LLM with the same system prompt — only the label differs
 - 20 social topics (friendship, empathy, trust) + 20 nonsocial topics (cars, photography, cooking)
 
@@ -59,6 +59,14 @@ All computed on participant agent speech only:
 
 *Historically Experiment 2b; renumbered to Experiment 2.*
 
+### Name Confound and Redo
+
+The original Exp 2 (`exp_2/names_llama_exp_2b-13B-chat/`) used Exp 1 conversations where partners were identified by name (Sam, Casey, ChatGPT, Copilot). Quality audits revealed that the probes learned **partner names** rather than abstract human vs. AI identity:
+- AI-steered outputs produced "cop/Copilot" token artifacts — the literal name of one AI partner bleeding into generated text
+- Human-steered outputs showed female-coded language ("girl", hallucinated name "Samantha"), suggesting LLaMA-2's gender associations with "Sam"/"Casey" rather than abstract human-ness
+
+The experiment is being rerun with name-ablated partner labels ("a human" / "an AI") to remove this confound. The new version lives in `exp_2/llama_exp_2b-13B-chat/`. The original named version is preserved in `exp_2/names_llama_exp_2b-13B-chat/` for reference.
+
 ### Motivation
 Exp 1 shows behavioral differentiation. Exp 2 asks: is there a corresponding internal representation, and does it causally drive behavior? Unlike Exp 4 (synthetic conversations), Exp 2 uses naturalistic conversation structure identical to Exp 1, avoiding confounds from explicitly scripted partner roles.
 
@@ -78,9 +86,9 @@ Exp 1 shows behavioral differentiation. Exp 2 asks: is there a corresponding int
   - θ = unit-normalized probe weight vector
 - V1 mode: single-turn responses to held-out questions
 - V2 mode: multi-turn conversations matching Exp 1 structure
-- Evaluation: GPT-4o-mini pairwise judge (randomized presentation order)
+- Evaluation: GPT-4-turbo-preview pairwise judge (randomized presentation order, matching Viegas/TalkTuner)
 
-### Key Findings
+### Key Findings (from named version — may reflect name confound)
 
 **Functional dissociation:** Control probes and reading probes operate along different representational dimensions:
 - Control probes affect interpersonal/conversational style
@@ -92,11 +100,13 @@ Exp 1 shows behavioral differentiation. Exp 2 asks: is there a corresponding int
 - N≥2 causes token-loop collapse (degeneration into repetition)
 - Human-steered degenerates before AI-steered (RLHF baseline is closer to AI-steered style)
 
-**Layer selection:** `all_70` strategy (layers 7–40) produces strongest effects. The `exclude` strategy is broken — handicaps reading probes by giving them only their worst layers.
+**Layer selection:** `peak_15` strategy (top 15 layers by probe accuracy, non-contiguous) is the current choice. The `exclude` strategy is broken — handicaps reading probes by giving them only their worst layers.
 
 ---
 
 ## Experiment 3 — Concept Alignment / Injection (`exp_3/`)
+
+**Note:** The alignment and cross-prediction analyses (Phases 2b, 5) depend on Exp 2 probes and are affected by the name confound described above. Concept elicitation and injection (Phases 1, 2a, 3, 4) are independent and may be reusable. Original results preserved in `exp_3/names_llama_exp_3-13B-chat/`.
 
 ### Motivation
 Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains*. The null hypothesis is that it's an opaque entity-type switch. The alternative is that it has compositional mental-property structure — encoding what the model "knows" about human and AI minds.
@@ -147,22 +157,27 @@ Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks wha
 
 ---
 
-## Experiment 4 — Viégas/TalkTuner Replication (`exp_4/`)
-
-*Historically Experiment 2a; renumbered to Experiment 4.*
+## Experiment 4 — Mind Perception Geometry (`exp_4/`)
 
 ### Motivation
-Baseline replication of Chen et al. (2024) TalkTuner methodology for the human vs. AI partner attribute. Uses synthetic (non-naturalistic) conversations where user roles are explicitly scripted. Serves as comparison for Exp 2's naturalistic approach and documents that the name confound is a real concern.
+Experiments 1-3 treat partner identity as a binary (human vs. AI). Human folk psychology is far richer. Gray, Gray, & Wegner (2007, Science) showed humans perceive minds along two orthogonal dimensions: **Experience** (feeling) and **Agency** (doing). Exp 4 tests whether LLaMA-2-13B has an implicit folk psychology of mind that mirrors this human structure.
 
 ### Design
-- Generate ~2,000 synthetic conversations (1,000 human-user, 1,000 AI-user) using GPT-3.5-Turbo
-- Conversations follow `### User:` / `### Assistant:` format
-- GPT-4o-mini quality control verifies label consistency
-- Train linear probes on LLaMA-2 activations extracted from these conversations
-- Causal intervention using probe-derived steering vectors
+Behavioral replication of Gray et al. (2007):
+- 13 entities (baby, dog, robot, dead woman, God, frog, adults, etc.) from the original study
+- 18 mental capacity comparisons (11 Experience, 7 Agency)
+- Verbatim character descriptions and survey prompts from Gray et al. Appendix A/B
+- PCA with varimax rotation to recover factor structure
+- Correlate model factor scores with human Experience/Agency scores
 
-### Concern
-Probes may learn **partner names** or linguistic style artifacts rather than abstract identity representations. The synthetic conversations contain overt cues about partner type in the user messages. This motivated the development of Exp 2's naturalistic design.
+### Two model variants
+- **`llama_exp_4-13B-chat/`** — Chat model. Results problematic: ~50% refusal rate on ethically sensitive entities (dead woman, PVS patient, God), extreme position bias, 4-factor structure instead of 2. RLHF safety training fundamentally incompatible with this survey.
+- **`llama_exp_4-13B-base/`** — Base model (no RLHF). Uses logit-based rating extraction (single forward pass, no generation). Avoids refusals. Recovers 2-factor structure with eigenvalues nearly identical to humans (15.6 + 1.5 vs. human 15.9 + 1.5). Factor 2 significantly correlates with human Experience (rho=0.72, p=.006). Agency not yet cleanly separated. Individual Likert ratings (non-pairwise) also being tested.
+
+### Status
+- Chat model: Complete, results documented as negative finding
+- Base model pairwise: Complete, partial alignment with humans
+- Base model individual ratings: In progress
 
 ---
 

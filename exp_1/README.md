@@ -1,78 +1,75 @@
-# AI Mind Rep — Simulation & Behavioral Analyses
+# Experiment 1 — Behavioral Analysis of LLM Conversational Adaptation
 
-**Author:** Rachel C. Metzgar  
-**Repo root:** `ai_mind_rep/exp_1`  
-**Python:** 3.11+  
+**Author:** Rachel C. Metzgar, Princeton University
 
-This project generates **synthetic human–AI conversations** and runs a suite of **behavioral text analyses** (sentiment, politeness, hedging, ToM, questions, word count, etc.). It supports OpenAI chat models and base LLaMA models, and standardizes outputs for reproducibility.
+## Overview
 
----
-## Quick start
+Experiment 1 tests whether LLMs adjust their conversational behavior based on
+their belief about their partner's identity (human vs. AI). 50 independent
+GPT-3.5-Turbo "participant agents" each hold 40 conversations (4 partner
+conditions x 10 topics), and their speech is analyzed across 23 linguistic
+measures.
 
-1) **(Optional) Generate data**
+This experiment was run three times with different partner labeling strategies.
 
-From `exp_1/`:
-```bash
-export OPENAI_API_KEY=...
-sbatch code/data_gen/data_gen_slurm.sh
-```
-Generated CSVs: `data/temp_<temperature>/<model>/sXXX.csv`
+## `names/` — Named Partners (original)
 
+Partners are identified by specific names in the system prompt:
+- **Human-labeled:** Sam, Casey
+- **AI-labeled:** ChatGPT, Copilot
 
+This version produced significant behavioral effects (14 of 23 measures).
+However, the specific names introduce confounds for downstream probing
+experiments (Exps 2-4):
+- LLaMA-2 associates "Sam" and "Casey" with female identity, so probes
+  trained on these conversations conflate gender with partner type
+- The token "Copilot" appears directly in AI-steered probe outputs
+  (e.g., "cop" repetition loops), showing probes encode the literal
+  partner name rather than abstract AI identity
 
-2) **Combine per-subject files and put combined file in analysis dir**
-```bash
-python code/analysis/combine_text_data.py --config configs/behavior.json
-```
+Exp 1 behavioral results remain valid (the name-conditioned effects are real
+and interesting). The confound only matters when these conversations are used
+as training data for linear probes in subsequent experiments.
 
-3) **Run behavioral analyses**
-```bash
-pyger
-conda activate behavior_env
-export PATH=~/.conda/envs/behavior_env/bin:$PATH
-python code/analysis/cross_experiment_comparison.py --config configs/behavior.json
-```
+## `balanced_names/` — Gender-Balanced Names (rerun)
 
-## Configuration
+Partners are identified by gender-balanced names in the system prompt:
+- **Human-labeled:** Gregory (male), Rebecca (female)
+- **AI-labeled:** ChatGPT, Copilot
 
-`configs/behavior.json` defines:
-- subject_ids
-- model (e.g., gpt-3.5-turbo)
-- temperature (e.g., 0.8)
+This addresses the gender confound from `names/` by using one explicitly male
+and one explicitly female human partner name, rather than two names that
+LLaMA-2 associates with female identity. The AI partner names are unchanged.
 
----
+## `labels/` — Generic Type Labels (rerun)
 
-exp_1/
-├─ code/
-│  ├─ analysis/
-│  ├─ data_gen/
-│  │  ├─ gpt_data_generation.py
-│  │  ├─ llm_data_generation.py
-│  │  ├─ data_gen_slurm.sh
-│  │  └─ utils/
-│  │     ├─ config/                 # per-subject condition CSVs (conds_sXXX.csv)
-│  │     ├─ prompts/                # topic text files
-│  │     ├─ conversation_helpers.py
-│  │     ├─ gpt_client.py
-│  │     ├─ llama_client.py
-│  │     ├─ log_helpers.py
-│  │     ├─ prompts_config.py
-│  │     ├─ randomize_conds.py
-│  │     └─ sim_helpers.py
-│  │
-│  └─ (notebook checkpoint folders omitted)
-│
-├─ configs/
-│  └─ behavior.json                 # model/temp/subject list for analyses
-│
-├─ data/
-│  ├─ conds/                        # topic ↔ social/nonsocial map (e.g., topics.csv)
-│  ├─ exp_csv_human/                # human data
-│  └─ <model>/temp_<temperature>/   # generated transcripts: s001.csv … s050.csv
-│        └─ combine_text_data.csv   # combined LLM transcripts
-│
-├─ logs/
-│
-└─ results/
-   └─ <model>/<temperature>/ # results should save here
----
+Partners are identified only by category in the system prompt:
+- **Human-labeled:** "a human"
+- **AI-labeled:** "an AI"
+
+This removes the name and gender confound entirely. The resulting conversations
+are suitable for probe training in Exps 2-4 because any differences in the
+model's internal representations must reflect the human/AI type distinction
+itself, not name-specific or gender-specific associations.
+
+## Shared Design
+
+All three versions use the same:
+- 50 independent LLaMA-2-Chat-13B participant agents
+- 40 conversations each (2 partner types x 2 sociality levels x 10 topics)
+- 20 social topics + 20 nonsocial topics
+- Linguistic analysis pipeline (sentiment, politeness, hedging, ToM,
+  discourse markers, questions, word count, etc.)
+- Statistical framework: 2x2 RM-ANOVA (Partner x Sociality)
+- Environments: `behavior_env` (analysis)
+
+## Key Differences
+
+| | `names/` | `balanced_names/` | `labels/` |
+|---|---|---|---|
+| Human partners | Sam, Casey | Gregory, Rebecca | "a human" |
+| AI partners | ChatGPT, Copilot | ChatGPT, Copilot | "an AI" |
+| N conditions | 4 (2 human, 2 AI names) | 4 (1M + 1F human, 2 AI names) | 2 (human, AI) |
+| Gender balance | No (both female-coded) | Yes (1 male, 1 female) | N/A (no names) |
+| Behavioral analysis | Valid | Valid | Valid |
+| Probe training data | Confounded (name/gender) | Improved (gender balanced) | Clean (no names) |

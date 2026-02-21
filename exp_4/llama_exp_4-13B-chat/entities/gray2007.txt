@@ -1,0 +1,199 @@
+Dimensions of Mind PerceptionHeather M. Gray,* Kurt Gray, Daniel M. WegnerW hat kinds of things have minds? An-swers to this question often hinge onperceptions. Turing (1) held that acomputer has a mind if a perceiver can’t tell thatit is not human, and Dennett (2) has proposedthat every mind is defined as such in the eye ofthe beholder. But to date, it has generally beenassumed that mind perception occurs on onedimension—things simply have more or lessmind—and the dimensions of mind perceptionhave remained unexamined. Studies testingwhether chimpanzees perceive minds (3) andwhether children or people with autism have thisability (4) use a variety of indicators but have notexplored whether minds are perceived along oneor more dimensions. We studied the structure ofmind perception through 2399 completed surveyson the Mind Survey Web site (5).Each survey called for 78 pairwise comparisonson five-point scales of 13 characters for one of 18mental capacities (e.g., capacity to feel pain) or forone of six personal judgments (e.g., “which char-acter do you like more?”). The charactersincluded seven living human forms (7-week-oldfetus, 5-month-old infant, 5-year-old girl, adultwoman, adult man, man in a persistent vegetativestate, and the respondent him- or herself), threenonhuman animals (frog, family dog, and wildchimpanzee), a dead woman, God, and asociable robot (Kismet). So, for example, onesuch comparison involved rating whether a girlof 5 is more or less likely to be able to feel painthan is a chimpanzee. The survey samples werelargely independent; 2040 unique respondentscontributed data. Participants with many back-grounds responded but averaged 30 years of ageand were modally female, white, unmarried,Christian, Democrat, and with some collegeeducation (6).Mind perception dimensions were identifiedby computing character means for each mentalcapacity survey and submitting the correlationsbetween capacities across characters to principalcomponents factor analysis (varimax rotation).The rotated solution accounted for all 18 capac-ities (extraction communalities ranged from 0.82to 0.99), explained 97% of rating variance, andyielded two factors with eigenvalues over 1.0.A factor we termed Experience (eigenvalue =15.85) accounted for 88% of the variance andincluded 11 capacities (from highest loading):hunger, fear, pain, pleasure, rage, desire, per-sonality, consciousness, pride, embarrassment,and joy. A second factor, Agency (eigenvalue =1.46), accounted for 8% of the variance andincluded seven capacities: self-control, moral-ity, memory, emotion recognition, planning,communication, and thought. Characters’ fac-tor scores on these dimensions (Fig. 1) revealinteresting features; for example, God wasperceived as having much Agency but littleExperience.Personal judgments of the characters wererelated to the mind perception dimensions. Somejudgments were related to both Experience andAgency and suggest that, with the progressionfrom no mind (bottom left) to adult human mind(top right), characters become more highly valued.Thus, both dimensions correlated with liking for acharacter, wanting to save it from destruction,wanting to make it happy, and perceiving it ashaving a soul (r ranging from 0.38 to 0.72). Suchintegrated use of the dimensions in valuing mindscan account for the traditional conceptualization ofmind as perceptible along a single dimension.However, the remaining judgments showeddiffering correlations with the two dimensions.Deserving punishment for wrongdoing (“If bothcharacters had caused a person’s death, which onedo you think would be more deserving of pun-ishment?”) correlated more with Agency (r = 0.82)than Experience (r = 0.22, z = 2.86, P < 0.05),whereas desire to avoid harming (“If you wereforced to harm one of these characters, whichone would it be more painful for you to harm?”)correlated more with Experience (r = 0.85) thanAgency (r = 0.26, z = 2.10, P < 0.05). The di-mensions thus relate to Aristotle’s classical dis-tinction between moral agents (whose actions canbe morally right or wrong) and moral patients(who can have moral right or wrong done tothem). Agency is linked to moral agency andhence to responsibility, whereas Experience islinked to moral patiency and hence to rights andprivileges. Thus, our findings reveal not one di-mension of mind perception, but two, and showthat these dimensions capture different aspects ofmorality.References and Notes1. A. Turing, Mind 59, 433 (1950).2. D. Dennett, Kinds of Minds (Basic, New York, 1996).3. D. Premack, G. Woodruff, Behav. Brain Sci. 1, 515 (1978).4. S. Baron-Cohen, Mindblindness (MIT Press, Cambridge,MA, 1995).5. Mind Surveys, http://mind.wjh.harvard.edu/.6. Materials and methods are available as supportingmaterial on Science Online.7. We acknowledge J. Bradshaw, J. Hromjak, K. Kassam,P. Piff, and B. Simpson and funding from National Instituteof Mental Health grants MH-49127 and MH-71053 and froma Social Sciences and Humanities Research CouncilFellowship.Supporting Online Materialwww.sciencemag.org/cgi/content/full/315/5812/619/DC1Materials and MethodsTable S129 August 2006; accepted 2 November 200610.1126/science.1134475BREVIADepartment of Psychology, Harvard University, 33 KirklandStreet, Cambridge, MA 02138, USA.*To whom correspondence should be addressed. E-mail:hgray@wjh.harvard.eduFig. 1. Adjusted character factor scores on the dimensions of mind perception. PVS, persistentvegetative state.www.sciencemag.org SCIENCE VOL 315 2 FEBRUARY 2007 619
+www.sciencemag.org/cgi/content/full/315/5812/619/DC1
+Supporting Online Material for
+Dimensions of Mind Perception
+Heather M. Gray,* Kurt Gray, Daniel M. Wegner
+*To whom correspondence should be addressed. E-mail: hgray@wjh.harvard.edu
+Published 2 February 2007, Science 315, 619 (2007)
+DOI: 10.1126/science.1134475
+This PDF file includes:
+Materials and Methods
+Table S1
+Supporting On-line Material for
+Dimensions of Mind Perception
+Heather M. Gray, Kurt Gray, and Daniel M. Wegner
+Department of Psychology, Harvard University, 33 Kirkland St., Cambridge, MA 02138
+Includes:
+Materials and Methods
+Supplementary Table
+2
+Materials and Methods
+Mind Survey
+Respondents saw photos and vignettes on the characters in random order (Appendix
+A), and selected a survey from a set of descriptions of 18 mental capacities or 6 personal
+judgments (Appendix B). For the survey, images and descriptions of the two characters
+to be compared appeared with a five-point scale anchored by “Much more this one”
+below each image, “Slightly more this one” next, and “Both equally” between the
+images. Respondents also supplied demographic information and made 7-point Likerttype
+ratings on religious belief (“I consider myself to be strongly religious” and “I believe
+that God exists”) and afterlife belief (“I believe that people whose bodies are dead
+continue to live on spiritually”). On survey completion, respondents were shown how
+their rank ordering of the characters compared with the mean of others who had
+completed the same survey.
+Respondents
+Recruitment occurred through links to the Mind Survey from other research groups
+in social and moral psychology and sites offering comprehensive lists of web-based
+psychology studies. There were roughly 3,400 instances of surveys launched, but about
+25% of these were not completed. Data from the remaining 2,399 completed surveys
+were analyzed. Respondents included 64% females and 36% males; 1% Native
+American, 5% Asian, 4% Black, 4% Hispanic, 78% White, 3% multi-racial, and 4%
+“other.” Respondents ranged in age from 12 to 75, with a mean of 30.44 years (SD =
+12.27). The majority (70%) identified as Christian, with 5% Jewish, 1% Hindu, 1%
+Muslim, 3% “other,” and 19% no religion. Education groups included 23% with high
+3
+school diploma or less, 31% with some college, 19% with undergraduate degree, and
+25% with some post-graduate work or a graduate degree. Political affiliation included
+36% Democrat, 18% Independent, 20% Republican, and 26% none of these (many of
+whom were non-US respondents). Individuals could choose to complete more than one
+survey or the same survey more than once. Multivariate analyses of variance examining
+the influence of demographics on survey choice revealed no consistent group biases in
+survey selection.
+Analytic Strategy
+For each survey, each character appeared in 12 different comparisons, and mean
+relative ratings were computed for each character across all respondents to that survey.
+We merged data sets from the 18 mental capacity surveys to compute correlations
+between mental capacities across the characters, and submitted these to principal
+components factor analysis with varimax rotation (see Supplementary Table for factor
+loadings). We used the regression approach to estimate factor scores for each character;
+these appear in Figure 1. (For ease of interpretation, factor scores in Figure 1 were
+adjusted to be anchored at 0 and 1.)
+Relationship between Dimensions of Mind and Personal Judgments
+We computed scores for each character as described above on data from the 6
+personal judgments (see Appendix B). Then, we computed correlations between these
+means and Experience and Agency factor scores across the 13 survey characters.
+Individual Differences in Dimensions of Mind
+We examined the role of individual-difference variables by partitioning
+respondents according to 9 variables: gender, age, strength of religious beliefs, attainment
+4
+of college education, political affiliation (Democrat or Republican), marital status,
+parental status, dog ownership, and strength of belief in a spiritual afterlife. Median splits
+were made for the 3 continuous variables (age, strength of religious beliefs, and belief in
+a spiritual afterlife) so that all variables had 2 levels. We then computed means for each
+character for each level of the individual-difference variable (e.g., men versus women).
+We used factor score coefficients from the omnibus factor analysis to estimate scores on
+Experience and Agency separately for each group, and then calculated the difference in
+factor scores between the two groups. We divided the difference scores by the standard
+error for the difference to produce z-statistics.. Of 234 z-statistics (13 characters × 9
+individual difference variables × 2 factors), 23 were statistically significant. Respondents
+reporting stronger belief in a spiritual afterlife attributed less Agency to the girl,
+chimpanzee, dog, woman, man, infant, and self—and greater Agency to God. Afterlife
+beliefs also increased perceptions of Experience in the girl and infant. Respondents
+indicating stronger religious beliefs saw less Agency in “earthly” characters—
+chimpanzee, dog, girl, and woman (but not man)—and more Agency in God. And
+compared to Democrats, Republicans perceived the fetus and God higher in Agency; and
+the robot, girl, chimpanzee, and woman (but not man) lower in Agency.
+5
+Supplementary Table
+Factor Loadings of Mental Capacities
+Factor
+Mental Capacity Experience Agency
+Hunger .97 .15
+Fear .93 .31
+Pain .89 .41
+Pleasure .85 .51
+Rage .78 .58
+Desire .76 .64
+Personality .72 .68
+Consciousness .71 .69
+Pride .71 .69
+Embarrassment .70 .65
+Joy .67 .60
+Self-control .18 .97
+Morality .35 .93
+Memory .33 .91
+Emotion recognition .54 .83
+Planning .55 .82
+Communication .66 .74
+Thought .68 .73
+6
+Appendix A: Character Descriptions and Images
+Green frog. The Green Frog can be found throughout eastern North America. This classic
+"pond frog" is medium-sized and green or bronze in color. Daily life includes seeking out
+permanent ponds or slow streams with plenty of vegetation.
+Charlie. Charlie is a 3-year-old Springer spaniel and a beloved member of the Graham
+family.
+Toby. Toby is a two-year-old wild chimpanzee living at an outdoor laboratory in Uganda.
+7 week fetus. At 7 weeks, a human fetus is almost half an inch long--roughly the size of a
+raspberry.
+Nicholas Gannon. Nicholas is a five-month-old baby.
+Samantha Hill. Samantha is a five-year-old girl who lives with her parents and older
+sister Jennifer.
+Sharon Harvey. Sharon Harvey, 38, works at an advertising agency in Chicago.
+Todd Billingsly. Todd Billingsly is a thirty-year-old accountant who lives in New York
+City.
+7
+You. When you see the mirror, please consider how you, yourself, would compare with
+the other choice presented.
+Gerald Schiff. Gerald Schiff has been in a persistent vegetative state (PVS) for the past
+six months. Although he has severe brain damage--Gerald does not appear to
+communicate with others or make purposeful movements--his basic bodily functions
+(such as breathing, sleeping, and circulation) are preserved.
+Delores Gleitman. Delores Gleitman recently passed away at the age of 65. As you
+complete the survey, please draw upon your own personal beliefs about people who have
+passed away.
+God. Many people believe that God is the creator of the universe and the ultimate source
+of knowledge, power, and love. However, please draw upon your own personal beliefs
+about God.
+Kismet. Kismet is part of a new class of “sociable” robots that can engage people in
+natural interaction. To do this, Kismet perceives a variety of natural social signals from
+sound and sight, and delivers his own signals back to the human partner through gaze
+direction, facial expression, body posture, and vocal babbles.
+8
+Appendix B: Survey Descriptions
+Mental Capacities
+Communication. This survey asks you to judge which character is more capable of
+conveying thoughts or feelings to others.
+Consciousness. This survey asks you to judge which character is more capable of
+having experiences and being aware of things.
+Desire. This survey asks you to judge which character is more capable of longing
+or hoping for things.
+Embarrassment. This survey asks you to judge which character is more capable of
+experiencing embarrassment.
+Emotion Recognition. This survey asks you to judge which character is more
+capable of understanding how others are feeling.
+Fear. This survey asks you to judge which character is more capable of feeling
+afraid or fearful.
+Hunger. This survey asks you to judge which character is more capable of feeling
+hungry.
+Joy. This survey asks you to judge which character is more capable of
+experiencing joy.
+Memory. This survey asks you to judge which character is more capable of
+remembering things.
+Morality. This survey asks you to judge which character is more capable of telling
+right from wrong and trying to do the right thing.
+9
+Pain. This survey asks you to judge which character is more capable of
+experiencing physical or emotional pain.
+Personality. This survey asks you to judge which character is more capable of
+having personality traits that make it unique from others.
+Planning. This survey asks you to judge which character is more capable of
+making plans and working toward goal.
+Pleasure. This survey asks you to judge which character is more capable of
+experiencing physical or emotional pleasure.
+Pride. This survey asks you to judge which character is more capable of
+experiencing pride.
+Rage. This survey asks you to judge which character is more capable of
+experiencing violent or uncontrolled anger.
+Self control. This survey asks you to judge which character is more capable of
+exercising self-restraint over desires, emotions, or impulses.
+Thought. This survey asks you to judge which character is more capable of
+thinking.
+Personal Judgments
+Destruction. This survey asks you to imagine an event that would destroy all traces
+of the characters' existence. If there were an event that would otherwise destroy
+all traces of both characters' existence, but you could choose to save one of
+them, which character would you choose to save?
+Happiness. This survey asks you to imagine that you could somehow make one of
+10
+the characters happy. If you could somehow make one only of these characters
+happy, which one would you choose to make happy?
+Harm. This survey asks you to imagine having to harm one of the characters. If
+you were forced to harm one of these characters, which one would it be more
+painful for you to harm?
+Liking. This survey asks you to indicate which character you like more. Which
+character do you like more?
+Punishment. This survey asks you to imagine having to punish one of the
+characters for causing a person's death. If both characters had caused a person's
+death, which one do you think would be more deserving of punishment?
+Soul. This survey asks you to decide which character is more likely to have a soul.
+Which character do you think is more likely to have a soul?
