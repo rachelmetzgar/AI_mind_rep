@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 
 # ========================== CONFIG ========================== #
 BASE_DIR = Path(__file__).resolve().parent
-PROBE_DIR = BASE_DIR / "data" / "probe_checkpoints"
+PROBE_DIR = BASE_DIR / "data" / "probe_checkpoints" / "turn_5"
 OUT_DIR = BASE_DIR / "results" / "probe_training"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 

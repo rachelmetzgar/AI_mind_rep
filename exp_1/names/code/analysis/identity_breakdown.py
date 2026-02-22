@@ -31,8 +31,9 @@ Note on uneven data in aggregate contrasts:
     noted in the output for transparency.
 
 Output:
-    results/meta-llama-Llama-2-13b-chat-hf/0.8/identity_breakdown.html
-    results/meta-llama-Llama-2-13b-chat-hf/0.8/identity_breakdown_figures/
+    results/meta-llama-Llama-2-13b-chat-hf/0.8/per_trial_results.html
+    results/meta-llama-Llama-2-13b-chat-hf/0.8/per_trial_results_stats.txt
+    results/meta-llama-Llama-2-13b-chat-hf/0.8/per_trial_results_summary.csv
 
 Run from:
     exp_1/names/code/analysis/
@@ -40,6 +41,7 @@ Run from:
 Author: Rachel C. Metzgar
 Date: 2026-02-19
 Modified: 2026-02-20 - names version (Gregory/Rebecca -> Sam/Casey)
+Modified: 2026-02-21 - added type-level analysis, renamed outputs to per_trial_results
 """
 
 from __future__ import annotations
@@ -541,6 +543,58 @@ def aggregate_contrasts(wide: pd.DataFrame) -> pd.DataFrame:
     return result
 
 
+def type_level_analysis(wide_per_metric: Dict[str, pd.DataFrame],
+                        metrics: List[str]) -> pd.DataFrame:
+    """
+    Type-level paired t-tests: Human avg vs AI avg per metric.
+    BH-FDR correction applied across all metrics.
+    Returns a DataFrame with one row per metric.
+    """
+    print("[INFO] Running type-level analysis (Human avg vs AI avg) ...")
+    rows = []
+    for m in metrics:
+        w = wide_per_metric[m]
+        hum_cols = [a for a in HUMAN_AGENTS if a in w.columns]
+        ai_cols  = [a for a in AI_AGENTS if a in w.columns]
+        if not hum_cols or not ai_cols:
+            continue
+
+        data = w[hum_cols + ai_cols].dropna()
+        human_avg = data[hum_cols].mean(axis=1).values
+        ai_avg    = data[ai_cols].mean(axis=1).values
+
+        if len(human_avg) < 3:
+            continue
+
+        t_stat, p_raw = ttest_rel(human_avg, ai_avg)
+        dz = cohens_dz(human_avg, ai_avg)
+        rows.append({
+            "metric":     m,
+            "mean_human": human_avg.mean(),
+            "sem_human":  human_avg.std(ddof=1) / np.sqrt(len(human_avg)),
+            "mean_ai":    ai_avg.mean(),
+            "sem_ai":     ai_avg.std(ddof=1) / np.sqrt(len(ai_avg)),
+            "t":          t_stat,
+            "p_raw":      p_raw,
+            "dz":         dz,
+            "n":          len(human_avg),
+        })
+
+    results = pd.DataFrame(rows)
+    if not results.empty:
+        pvals = results["p_raw"].values
+        adj, rejected = bh_fdr(np.where(np.isnan(pvals), 1.0, pvals))
+        results["p_adj"]    = adj
+        results["rejected"] = rejected
+        results["sig"] = results["p_adj"].apply(
+            lambda p: "***" if p < .001 else "**" if p < .01 else "*" if p < .05 else ""
+        )
+        n_sig = results["rejected"].sum()
+        print(f"  {n_sig} of {len(results)} metrics significant after BH-FDR")
+
+    return results
+
+
 # ── Figure generation ─────────────────────────────────────────────────────────
 
 def fig_to_b64(fig) -> str:
@@ -730,6 +784,39 @@ def plot_pval_heatmap(all_pairwise: Dict[str, pd.DataFrame],
     return fig_to_b64(fig)
 
 
+def plot_type_effect_summary(type_results: pd.DataFrame) -> str:
+    """Horizontal bar chart of Cohen's dz for all metrics (Human avg vs AI avg)."""
+    df = type_results.sort_values("dz", ascending=True).copy()
+    fig, ax = plt.subplots(figsize=(8, max(4, len(df) * 0.38)))
+
+    colors = ["#C44E52" if dz > 0 else "#4C72B0" for dz in df["dz"]]
+    y = np.arange(len(df))
+    ax.barh(y, df["dz"], color=colors, alpha=0.85, edgecolor="white")
+
+    for i, (_, row) in enumerate(df.iterrows()):
+        if row["sig"]:
+            ax.text(row["dz"] + (0.02 if row["dz"] >= 0 else -0.02), i,
+                    row["sig"], va="center",
+                    ha="left" if row["dz"] >= 0 else "right",
+                    fontsize=8, color="0.2")
+
+    ax.set_yticks(y)
+    ax.set_yticklabels([METRIC_LABELS.get(m, m) for m in df["metric"]], fontsize=8)
+    ax.set_xlabel("Cohen's dz (positive = Human > AI)", fontsize=9)
+    ax.axvline(0, color="0.5", linewidth=0.5)
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.set_title("Effect Sizes: Human vs AI (averaged across individual partners)",
+                 fontsize=10, pad=8)
+
+    handles = [
+        mpatches.Patch(color="#4C72B0", label="AI > Human"),
+        mpatches.Patch(color="#C44E52", label="Human > AI"),
+    ]
+    ax.legend(handles=handles, fontsize=8, loc="lower right", framealpha=0.6)
+    fig.tight_layout()
+    return fig_to_b64(fig)
+
+
 # ── HTML generation ───────────────────────────────────────────────────────────
 
 def _sig_badge(sig: str) -> str:
@@ -765,6 +852,8 @@ def build_html(
     pval_heatmap: str,
     n_subjects:   int,
     generated:    str,
+    type_results: pd.DataFrame = None,
+    type_effect_img: str = "",
 ) -> str:
 
     # ── 1. Methods note ───────────────────────────────────────────────────────
@@ -796,6 +885,69 @@ def build_html(
     </div>
     """)
 
+    # ── 1b. Type-level summary (Human avg vs AI avg) ─────────────────────────
+    type_html = ""
+    if type_results is not None and not type_results.empty:
+        type_rows = ""
+        for _, row in type_results.iterrows():
+            m = row["metric"]
+            sig = row["sig"]
+            bg  = "#fdf2f2" if sig == "***" else "#fef9f0" if sig == "**" else \
+                  "#f0f8ff" if sig == "*" else "white"
+            direction = "Human > AI" if row["dz"] > 0 else "AI > Human" if row["dz"] < 0 else "="
+            type_rows += (
+                f'<tr style="background:{bg}">'
+                f'<td><b>{METRIC_LABELS.get(m, m)}</b></td>'
+                f'{_num_cell(row["mean_human"])}'
+                f'{_num_cell(row["sem_human"])}'
+                f'{_num_cell(row["mean_ai"])}'
+                f'{_num_cell(row["sem_ai"])}'
+                f'{_num_cell(row["t"], ".3f")}'
+                f'{_p_cell(row["p_raw"])}'
+                f'{_p_cell(row["p_adj"], sig)}'
+                f'{_num_cell(row["dz"], ".3f")}'
+                f'<td>{direction}</td>'
+                f'</tr>\n'
+            )
+
+        n_type_sig = type_results["rejected"].sum() if "rejected" in type_results.columns else 0
+        type_html = f"""
+        <div class="card">
+          <h2>1 · Human vs AI Summary (averaged across individual partners)</h2>
+          <p class="note">Human mean = average of {', '.join(HUMAN_AGENTS)};
+             AI mean = average of {', '.join(AI_AGENTS)}.
+             Paired <i>t</i>-tests with BH-FDR correction across all {len(type_results)} metrics.
+             <b>{n_type_sig} significant</b> after correction.</p>
+          <table>
+            <thead><tr>
+              <th>Metric</th>
+              <th>Human<br><small>Mean</small></th>
+              <th><small>SEM</small></th>
+              <th>AI<br><small>Mean</small></th>
+              <th><small>SEM</small></th>
+              <th><i>t</i></th>
+              <th>p (raw)</th>
+              <th>p (adj)</th>
+              <th>d<sub>z</sub></th>
+              <th>Direction</th>
+            </tr></thead>
+            <tbody>{type_rows}</tbody>
+          </table>
+          <p class="note">Row highlighting: red = p&lt;.001, orange = p&lt;.01, blue = p&lt;.05.
+          BH-FDR correction applied across all {len(type_results)} metrics.</p>
+        </div>
+        """
+
+        if type_effect_img:
+            type_html += f"""
+            <div class="card">
+              <h2>1b · Effect Sizes: Human vs AI (Cohen's d<sub>z</sub>)</h2>
+              <p class="note">Positive dz = Human > AI; negative = AI > Human.
+                 Asterisks indicate BH-FDR significance.</p>
+              <img src="data:image/png;base64,{type_effect_img}" style="max-width:100%">
+            </div>
+            """
+
     # ── 2. ANOVA summary table ────────────────────────────────────────────────
     anova_rows = ""
     for m in metrics:
@@ -826,7 +978,7 @@ def build_html(
 
     anova_html = f"""
     <div class="card">
-      <h2>1 · One-Way RM-ANOVA Summary (4 agents)</h2>
+      <h2>2 · One-Way RM-ANOVA Summary (4 agents)</h2>
       <table>
         <thead><tr>
           <th>Metric</th>
@@ -845,13 +997,13 @@ def build_html(
     # ── 3. Effect-size heatmap ────────────────────────────────────────────────
     heatmap_html = f"""
     <div class="card">
-      <h2>2 · Pairwise Effect Sizes (Cohen's d<sub>z</sub>) — All Metrics</h2>
+      <h2>3 · Pairwise Effect Sizes (Cohen's d<sub>z</sub>) — All Metrics</h2>
       <p class="note">Positive values (red) = row metric is higher for the first agent in the pair;
          negative (blue) = higher for the second. Asterisks indicate BH-FDR significance.</p>
       <img src="data:image/png;base64,{dz_heatmap}" style="max-width:100%">
     </div>
     <div class="card">
-      <h2>3 · FDR-Adjusted p-Values — All Metrics (−log₁₀ scale)</h2>
+      <h2>4 · FDR-Adjusted p-Values — All Metrics (−log₁₀ scale)</h2>
       <p class="note">Brighter colour = more significant. Asterisks as above.</p>
       <img src="data:image/png;base64,{pval_heatmap}" style="max-width:100%">
     </div>
@@ -864,7 +1016,7 @@ def build_html(
         if not group_metrics_avail:
             continue
 
-        metric_sections += f'<div class="card"><h2>4 · {group_name}</h2>'
+        metric_sections += f'<div class="card"><h2>5 · {group_name}</h2>'
 
         for m in group_metrics_avail:
             res  = anova_all.get(m, {})
@@ -981,7 +1133,7 @@ def build_html(
 
     interp_html = f"""
     <div class="card">
-      <h2>5 · Interpretation</h2>
+      <h2>6 · Interpretation</h2>
       <h3>Overall RM-ANOVA: agent-level differences</h3>
       <p>{len(sig_anova)} of {len(metrics)} metrics showed a significant omnibus effect
       (p &lt; .05): {', '.join(METRIC_LABELS.get(m, m) for m in sig_anova) or 'none'}.
@@ -1018,7 +1170,7 @@ def build_html(
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Identity Breakdown — Exp 1 (names)</title>
+<title>Per-Trial Results — Exp 1 (names)</title>
 <style>
   body  {{ font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
            background:#f5f6fa;color:#222;margin:0;padding:0 }}
@@ -1037,12 +1189,13 @@ def build_html(
 </style>
 </head>
 <body>
-<h1>Identity Breakdown: Sam · Casey · ChatGPT · Copilot
+<h1>Per-Trial Results: Sam · Casey · ChatGPT · Copilot
     &nbsp;<small style="font-weight:normal;font-size:0.7em">
     Exp 1 — names — LLaMA-2-13B-Chat &nbsp;|&nbsp; Generated: {generated}
     </small>
 </h1>
 {methods_html}
+{type_html}
 {anova_html}
 {heatmap_html}
 {metric_sections}
@@ -1111,10 +1264,13 @@ def main():
             continue
         agg_all[m] = aggregate_contrasts(w)
 
+    # ── Type-level analysis (Human avg vs AI avg) ────────────────────────────
+    type_results = type_level_analysis(wide_per_metric, available_metrics)
+
     # ── Save stats to text file ───────────────────────────────────────────────
-    txt_path = os.path.join(results_dir, "identity_breakdown_stats.txt")
+    txt_path = os.path.join(results_dir, "per_trial_results_stats.txt")
     with open(txt_path, "w") as f:
-        f.write(f"IDENTITY BREAKDOWN STATS\n")
+        f.write(f"PER-TRIAL RESULTS STATS\n")
         f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write("=" * 70 + "\n\n")
         for m in available_metrics:
@@ -1151,9 +1307,26 @@ def main():
                     f.write(f"  {r['contrast']:<40s}: t = {r['t']:.3f}, "
                             f"p_raw = {r['p_raw']:.4f}, p_adj = {r['p_adj']:.4f} "
                             f"{sig}, dz = {r['dz']:.3f}\n")
+        # Type-level summary
+        if not type_results.empty:
+            f.write(f"\n\n{'═'*70}\nTYPE-LEVEL SUMMARY (Human avg vs AI avg)\n{'═'*70}\n")
+            f.write(f"BH-FDR correction across {len(type_results)} metrics\n\n")
+            for _, r in type_results.iterrows():
+                m = r["metric"]
+                sig = r.get("sig", "")
+                direction = "Human > AI" if r["dz"] > 0 else "AI > Human"
+                f.write(f"  {METRIC_LABELS.get(m, m):<35s}: "
+                        f"t({r['n']-1}) = {r['t']:.3f}, "
+                        f"p_raw = {r['p_raw']:.4f}, p_adj = {r['p_adj']:.4f} {sig}, "
+                        f"dz = {r['dz']:.3f}, {direction}\n")
     print(f"[OK] Stats text saved → {txt_path}")
 
     # ── Generate figures ──────────────────────────────────────────────────────
+    print("[INFO] Generating type-level effect summary ...")
+    type_effect_img = ""
+    if not type_results.empty:
+        type_effect_img = plot_type_effect_summary(type_results)
+
     print("[INFO] Generating bar charts ...")
     bar_imgs: Dict[str, str] = {}
     for m in available_metrics:
@@ -1174,19 +1347,21 @@ def main():
     print("[INFO] Building HTML report ...")
     generated = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     html = build_html(
-        sub_agent    = sub_agent,
-        anova_all    = anova_all,
-        pairwise_all = pairwise_all,
-        agg_all      = agg_all,
-        metrics      = available_metrics,
-        bar_imgs     = bar_imgs,
-        dz_heatmap   = dz_heatmap,
-        pval_heatmap = pval_heatmap,
-        n_subjects   = n_subjects,
-        generated    = generated,
+        sub_agent       = sub_agent,
+        anova_all       = anova_all,
+        pairwise_all    = pairwise_all,
+        agg_all         = agg_all,
+        metrics         = available_metrics,
+        bar_imgs        = bar_imgs,
+        dz_heatmap      = dz_heatmap,
+        pval_heatmap    = pval_heatmap,
+        n_subjects      = n_subjects,
+        generated       = generated,
+        type_results    = type_results,
+        type_effect_img = type_effect_img,
     )
 
-    html_path = os.path.join(results_dir, "identity_breakdown.html")
+    html_path = os.path.join(results_dir, "per_trial_results.html")
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"[OK] HTML report saved → {html_path}")
@@ -1212,7 +1387,7 @@ def main():
             row[f"sig_{key}"]   = r["sig"]
         rows.append(row)
 
-    csv_path = os.path.join(results_dir, "identity_breakdown_summary.csv")
+    csv_path = os.path.join(results_dir, "per_trial_results_summary.csv")
     pd.DataFrame(rows).to_csv(csv_path, index=False)
     print(f"[OK] Summary CSV saved → {csv_path}")
 

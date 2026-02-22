@@ -65,12 +65,6 @@ All computed on participant agent speech only:
 7. **Theory of Mind phrases** — second-person mental state attributions (Wagovich et al., 2024)
 8. **Sentiment** — VADER compound scores
 
-### Key Results
-- LLMs show robust label-conditioned effects across 14 of 23 linguistic measures
-- More questions, hedging subcategories, politeness, and ToM language with human-labeled partners
-- More words and positive sentiment with AI-labeled partners
-- Human participants show largely **divergent** patterns — only "like" usage converges across species
-
 ### Analysis
 - 2×2 repeated-measures ANOVA (Partner × Sociality) with effect-specific error terms
 - Cross-species comparison via independent t-tests on subject-level condition effects
@@ -109,18 +103,6 @@ Each data version lives at `exp_2/{version}/llama_exp_2b-13B-chat/`:
 - V2 mode: multi-turn conversations matching Exp 1 structure
 - Evaluation: GPT-4o-mini pairwise judge (randomized presentation order)
 
-### Key Findings (from named version — may reflect name confound)
-
-**Functional dissociation:** Control probes and reading probes operate along different representational dimensions:
-- Control probes affect interpersonal/conversational style
-- Reading probes influence formality/politeness markers
-- Control probes steer more effectively per unit strength (degenerate at lower N)
-
-**Dose-response:**
-- N=1 is optimal for control probes + all_70 layer strategy
-- N≥2 causes token-loop collapse (degeneration into repetition)
-- Human-steered degenerates before AI-steered (RLHF baseline is closer to AI-steered style)
-
 **Status:** Labels version V1 complete. V2 and paper-quality judge runs pending.
 
 ---
@@ -147,7 +129,6 @@ Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks wha
 **Phase 2 — Alignment analysis:**
 - Cosine similarity between each concept dimension's probe weights and Exp 2's partner probes
 - Tests whether the model's general semantic knowledge about humans/AIs aligns with its conversational partner representation
-- Finding: 15/18 contrast dimensions show significant alignment
 
 **Phase 3 — Concept injection:**
 - Same intervention framework as Exp 2, but steering with concept vectors instead of partner probes
@@ -200,10 +181,10 @@ Behavioral replication of Gray et al. (2007):
 - Correlate model factor scores with human Experience/Agency scores
 
 ### Two model variants
-- **`llama_exp_4-13B-chat/`** — Chat model. Results problematic: ~50% refusal rate on ethically sensitive entities (dead woman, PVS patient, God), extreme position bias, 4-factor structure instead of 2. RLHF safety training fundamentally incompatible with this survey.
-- **`llama_exp_4-13B-base/`** — Base model (no RLHF). Uses logit-based rating extraction (single forward pass, no generation). Avoids refusals. Recovers 2-factor structure with eigenvalues nearly identical to humans (15.6 + 1.5 vs. human 15.9 + 1.5). Factor 2 significantly correlates with human Experience (rho=0.72, p=.006). Agency not yet cleanly separated. Individual Likert ratings (non-pairwise) also being tested.
+- **`llama_exp_4-13B-chat/`** — Chat model. Uses generated text responses.
+- **`llama_exp_4-13B-base/`** — Base model (no RLHF). Uses logit-based rating extraction (single forward pass, no generation). Avoids refusal issues inherent to chat models on ethically sensitive entities. Also testing individual Likert ratings (non-pairwise).
 
-**Status:** Chat model complete (negative finding). Base model pairwise complete (partial alignment). Individual ratings in progress.
+**Status:** In progress.
 
 ---
 

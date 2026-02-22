@@ -47,7 +47,7 @@ warnings.filterwarnings('ignore')
 # ============================================================
 
 EXP1_UTILS_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "exp_1", "code", "analysis", "utils")
+    os.path.join(os.path.dirname(__file__), "..", "..", "..", "exp_1", "labels", "code", "analysis", "utils")
 )
 
 

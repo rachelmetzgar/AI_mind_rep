@@ -39,7 +39,7 @@ CSV_DIR = (
 )
 
 DATA_DIR = "data"
-PROBE_DIR = f"{DATA_DIR}/probe_checkpoints"
+PROBE_DIR = f"{DATA_DIR}/probe_checkpoints/turn_5"
 os.makedirs(f"{PROBE_DIR}/reading_probe", exist_ok=True)
 os.makedirs(f"{PROBE_DIR}/control_probe", exist_ok=True)
 
