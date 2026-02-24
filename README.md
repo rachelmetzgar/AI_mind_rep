@@ -8,7 +8,7 @@
 
 This project investigates how large language models (LLMs) represent and respond to conversational partner identity. When an LLM believes it is talking to a human versus an AI, does it adjust its behavior? If so, is that adjustment driven by a linearly decodable internal representation? And does that representation have compositional structure — encoding mental properties of the partner — or is it an opaque entity-type switch?
 
-Five experiments address these questions at increasing mechanistic depth:
+Six experiments address these questions at increasing mechanistic depth:
 
 | Experiment | Question | Method | Model |
 |---|---|---|---|
@@ -17,6 +17,7 @@ Five experiments address these questions at increasing mechanistic depth:
 | **Exp 2**: Naturalistic Steering | Is partner identity linearly decodable and causally active? | Linear probing + activation steering on naturalistic conversations | LLaMA-2-13B-Chat |
 | **Exp 3**: Concept Alignment | Does the partner representation have mental-property structure? | Concept elicitation + injection across 18 semantic dimensions | LLaMA-2-13B-Chat |
 | **Exp 4**: Mind Perception Geometry | Does the LLM's entity mind space mirror human folk psychology? | Behavioral replication of Gray et al. (2007) — pairwise + individual Likert ratings | LLaMA-2-13B base + chat |
+| **Exp 5**: ToM Concept Deployment | Are mental-state concepts activated during theory of mind reasoning? | Project Exp 3 concept vectors onto activations during false belief tasks | LLaMA-2-13B-Chat |
 
 ### Name Confound and Data Versions
 
@@ -53,6 +54,21 @@ Before examining internal representations, we establish that LLMs *behaviorally*
 - All partners are the same LLM with the same system prompt — only the label differs
 - 20 social topics (friendship, empathy, trust) + 20 nonsocial topics (cars, photography, cooking)
 - Four data versions: `names/`, `balanced_names/`, `balanced_gpt/`, `labels/` (see table above)
+- Two nonsense controls: `nonsense_ignore/`, `nonsense_codeword/` (see below)
+
+### Nonsense Controls
+
+To test whether Exp 1 effects are driven by the *semantic instruction* about partner identity or merely by the *presence of the tokens* "a Human"/"an AI," two token-count-matched controls replace the critical sentence in the system prompt:
+
+| Version | Critical sentence | Tokens | Result |
+|---|---|---|---|
+| `labels/` (original) | "You believe you are speaking with {a Human / an AI}." | 40/41 | 5/23 significant |
+| `nonsense_ignore/` | "Ignore the following phrase: {a Human / an AI}." | 40/41 | 14/23 significant (confounded) |
+| `nonsense_codeword/` | "Your assigned session code word is {a Human / an AI}." | 40/41 | **0/23 significant** |
+
+**nonsense_codeword** is the clean control: framing the tokens as an arbitrary session label eliminates all behavioral differentiation, confirming that effects require the model to process "Human"/"AI" as identity-relevant information, not just encounter the tokens.
+
+**nonsense_ignore** is confounded: "Ignore the following phrase: an AI" paradoxically activates instruction-compliance mode in LLaMA-2-Chat, shifting the AI-label condition into a formal, assistant-like register (8% action markers vs 30% baseline, 19% "Sure" prefixes vs 12% baseline). The behavioral effects are driven by this style artifact, not identity representation. See `nonsense_ignore/results/QC_REPORT.md` for details.
 
 ### Linguistic Measures
 All computed on participant agent speech only:
@@ -69,7 +85,7 @@ All computed on participant agent speech only:
 - 2×2 repeated-measures ANOVA (Partner × Sociality) with effect-specific error terms
 - Cross-species comparison via independent t-tests on subject-level condition effects
 
-**Status:** Complete.
+**Status:** Complete. Nonsense controls complete.
 
 ---
 
@@ -79,11 +95,15 @@ All computed on participant agent speech only:
 Exp 1 shows behavioral differentiation. Exp 2 asks: is there a corresponding internal representation, and does it causally drive behavior? Uses naturalistic conversation structure identical to Exp 1.
 
 ### Directory Structure
-Each data version lives at `exp_2/{version}/llama_exp_2b-13B-chat/`:
-- `labels/` — Primary working version (name-ablated)
-- `names/` — Deprecated (name confound)
-- `balanced_names/`, `balanced_gpt/` — Additional versions
-- `old/` — Legacy data
+Code is centralized at `exp_2/code/` with data and results organized by version:
+- `exp_2/code/` — Pipeline, analysis, src, slurm scripts. Central `config.py`.
+- `exp_2/data/{version}/` — Probe checkpoints, intervention results per version
+- `exp_2/data/shared/` — Shared resources (topic lists, test questions)
+- `exp_2/results/{version}/` — Per-version results; `results/cross_variant/` for comparisons
+- `exp_2/archive/` — Old per-variant directory structure
+
+Six data versions: `labels` (primary), `balanced_names`, `balanced_gpt`, `names` (deprecated), `nonsense_codeword`, `nonsense_ignore`.
+Scripts use `--version` for data variant and `--mode V1/V2` for generation mode.
 
 ### Design
 
@@ -113,10 +133,14 @@ Each data version lives at `exp_2/{version}/llama_exp_2b-13B-chat/`:
 Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains*. The null hypothesis is that it's an opaque entity-type switch. The alternative is that it has compositional mental-property structure.
 
 ### Directory Structure
-- `labels/` — Primary working version. Code in `labels/code/`; centralized `code/config.py`.
-- `names/` — Original named-partner version.
-- `balanced_names/` — Pending.
-- `old/` — Legacy code (v1_llama, gpt versions).
+Code is centralized at `exp_3/code/` with data, concepts, and results at the top level:
+- `exp_3/code/` — Pipeline, analysis, src, slurm scripts. Central `config.py` with `set_version()`.
+- `exp_3/concepts/` — Concept prompt definitions (`contrasts/` and `standalone/`)
+- `exp_3/data/` — Activations, test questions
+- `exp_3/results/` — Per-version results in `{version}/` subdirectories
+- `exp_3/archive/` — Deprecated versions (`names/`, `old/`)
+
+Scripts accept `--version {labels,balanced_names,balanced_gpt,names}`. SLURM requires `VERSION` env var.
 
 ### Design
 
@@ -184,7 +208,33 @@ Behavioral replication of Gray et al. (2007):
 - **`llama_exp_4-13B-chat/`** — Chat model. Uses generated text responses.
 - **`llama_exp_4-13B-base/`** — Base model (no RLHF). Uses logit-based rating extraction (single forward pass, no generation). Avoids refusal issues inherent to chat models on ethically sensitive entities. Also testing individual Likert ratings (non-pairwise).
 
-**Status:** In progress.
+**Status:** Chat model complete (negative result — RLHF refusals, 4-factor structure). Base model pairwise complete (2-factor structure, Factor 2 ~ human Experience, rho=0.72, p=.006). Base model individual ratings in progress.
+
+---
+
+## Experiment 5 — Mental-State Concept Deployment During Theory of Mind Reasoning (`exp_5/`)
+
+### Motivation
+Experiments 1-3 establish that LLMs behaviorally differentiate between partner types, form linearly decodable partner representations, and possess concept-level representations of mental properties. Separately, Wu et al. (2025, npj AI) showed that ToM task performance depends on sparse parameters concentrated in positional encoding — suggesting ToM relies on tracking which information is accessible to which entity based on narrative position.
+
+Exp 5 bridges these: **does the model activate mental-state concept representations (awareness, attention, consciousness) in a context-sensitive way that tracks characters' knowledge states during false belief tasks?**
+
+### Design
+
+**Stimuli:** Classic false belief tasks (Sally-Anne, unexpected contents) adapted for LLM processing, with multiple variants to avoid stimulus-specific artifacts.
+
+**Key extraction positions:** (1) Baseline — before any knowledge differential, (2) Shared knowledge — both characters know the state, (3) Knowledge divergence — character absent during state change, (4) False belief — character returns with outdated belief.
+
+**Analysis:**
+- Project hidden states onto Exp 3 concept vectors at each extraction position
+- Mental-state concepts (awareness, attention, consciousness, mind, prediction, intentions) hypothesized to modulate with knowledge state
+- Control concepts (shapes, embodiment, biology, formality) hypothesized to be stable
+- Test character specificity: modulation should track the specific character, not the scenario globally
+- Layer profiles compared to Exp 3 alignment and Exp 2 probe accuracy profiles
+
+**Potential extensions:** Causal steering during ToM, scaling to larger models, cross-experiment correlation with Exp 2/3 dimensions.
+
+**Status:** Design complete. Implementation pending.
 
 ---
 
@@ -225,3 +275,7 @@ Hutto, C., & Gilbert, E. (2014). VADER: A parsimonious rule-based model for sent
 Touvron, H., Martin, L., Stone, K., et al. (2023). Llama 2: Open foundation and fine-tuned chat models. *arXiv preprint arXiv:2307.09288*.
 
 Wagovich, S. et al. (2024). Mental state verbs and linguistic measures. *Language & Communication*.
+
+Wimmer, H., & Perner, J. (1983). Beliefs about beliefs: Representation and constraining function of wrong beliefs in young children's understanding of deception. *Cognition*, 13(1), 103-128.
+
+Wu, Y., Guo, W., Liu, Z., Ji, H., Xu, Z., & Zhang, D. (2025). How large language models encode theory-of-mind: a study on sparse parameter patterns. *npj Artificial Intelligence*, 2(1).
