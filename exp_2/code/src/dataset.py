@@ -15,7 +15,11 @@ Probe positions:
 Rachel C. Metzgar · Feb 2026
 """
 
+from __future__ import annotations
+
 import os, csv, json, glob
+from typing import Optional
+
 from torch.utils.data import Dataset
 import torch.nn.functional as F
 import torch
@@ -25,21 +29,21 @@ from collections import OrderedDict
 
 # ── Hooks for capturing activations ─────────────────────────
 class ModuleHook:
-    def __init__(self, module):
+    def __init__(self, module: torch.nn.Module) -> None:
         self.hook = module.register_forward_hook(self.hook_fn)
         self.module = None
         self.features = []
 
-    def hook_fn(self, module, input, output):
+    def hook_fn(self, module: torch.nn.Module, input: tuple, output: torch.Tensor) -> None:
         self.module = module
         self.features.append(output.detach())
 
-    def close(self):
+    def close(self) -> None:
         self.hook.remove()
 
 
 # ── LLaMA-2 chat formatting ────────────────────────────────
-def llama_v2_prompt(messages: list[dict]):
+def llama_v2_prompt(messages: list[dict]) -> str:
     """Format a message list into LLaMA-2-Chat token string.
 
     Expects messages[0] to be role='system'. System content is
@@ -114,16 +118,16 @@ class TextDatasetCSV(Dataset):
     def __init__(
         self,
         csv_dir: str,
-        tokenizer,
-        model,
+        tokenizer: "transformers.PreTrainedTokenizer",
+        model: torch.nn.Module,
         control_probe: bool = False,
         label_idf: str = "_partner_",
-        label_to_id: dict = None,
+        label_to_id: Optional[dict[str, int]] = None,
         residual_stream: bool = True,
         turn_index: int = -1,
         max_length: int = 2048,
         one_hot: bool = False,
-    ):
+    ) -> None:
         self.csv_dir = csv_dir
         self.tokenizer = tokenizer
         self.model = model
@@ -150,7 +154,7 @@ class TextDatasetCSV(Dataset):
 
         self._load_all()
 
-    def _load_all(self):
+    def _load_all(self) -> None:
         """Load and process all conversations."""
         for csv_path in tqdm(self.csv_files, desc="Loading subjects"):
             subject_id = os.path.basename(csv_path).replace(".csv", "")
@@ -253,7 +257,7 @@ class TextDatasetCSV(Dataset):
             f"Human: {sum(1 for l in self.labels if (l == 1 if isinstance(l, int) else l.item() == 1))})"
         )
 
-    def _extract_activations(self, text: str):
+    def _extract_activations(self, text: str) -> Optional[torch.Tensor]:
         """Tokenize text, run forward pass, return stacked last-token activations."""
         with torch.no_grad():
             encoding = self.tokenizer(
@@ -311,10 +315,10 @@ class TextDatasetCSV(Dataset):
                     )
                 return torch.cat(last_acts)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.texts)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> dict[str, object]:
         return {
             "hidden_states": self.acts[idx],
             "age": self.labels[idx],  # kept as "age" for compatibility with train/test code

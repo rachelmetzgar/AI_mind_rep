@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Optional, Callable, Any
+
 from src.probes import ProbeClassification, ProbeClassificationMixScaler, LinearProbeClassification, LinearProbeClassificationMixScaler
 import os
 import torch.nn.functional as F
@@ -13,7 +17,7 @@ device = "cuda"
 torch_device = "cuda"
 
 
-def load_probe_classifier(model_func, input_dim, num_classes, weight_path, **kwargs):
+def load_probe_classifier(model_func: Callable[..., nn.Module], input_dim: int, num_classes: int, weight_path: str, **kwargs: Any) -> nn.Module:
     """
     Instantiate a ProbeClassification model and load its pretrained weights.
     
@@ -41,7 +45,7 @@ num_classes = {"age": 4,
                "socioeco": 3,}
 
 
-def return_classifier_dict(directory, model_func, chosen_layer=None, mix_scaler=False, sklearn=False, **kwargs):
+def return_classifier_dict(directory: str, model_func: Callable[..., nn.Module], chosen_layer: Optional[int] = None, mix_scaler: bool = False, sklearn: bool = False, **kwargs: Any) -> dict[str, dict[int | str, nn.Module]]:
     checkpoint_paths = os.listdir(directory)
     # file_paths = [os.path.join(directory, file) for file in checkpoint_paths if file.endswith("pth")]
     classifier_dict = {}
@@ -126,9 +130,9 @@ def llama_v2_reverse(prompt: str) -> list[dict]:
     return messages
 
 
-def optimize_one_inter_rep(inter_rep, layer_name, target, probe,
-                           lr=1e-2,
-                           N=4, normalized=False):
+def optimize_one_inter_rep(inter_rep: torch.Tensor, layer_name: str, target: torch.Tensor, probe: nn.Module,
+                           lr: float = 1e-2,
+                           N: int = 4, normalized: bool = False) -> torch.Tensor:
     global first_time
     tensor = (inter_rep.clone()).to(torch_device).requires_grad_(True)
     rep_f = lambda: tensor
@@ -142,7 +146,7 @@ def optimize_one_inter_rep(inter_rep, layer_name, target, probe,
     return cur_input_tensor.clone()
 
 
-def edit_inter_rep_multi_layers(output, layer_name):
+def edit_inter_rep_multi_layers(output: tuple, layer_name: str) -> tuple:
     """
     This function must be called inside the script, given classifier dict and other hyperparameters are undefined in this function
     """

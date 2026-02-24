@@ -1,9 +1,13 @@
+from __future__ import annotations
+
+from typing import Optional
+
 import torch
 import torch.nn.functional as F
 from torch import nn
 
 class ProbeClassification(nn.Module):
-    def __init__(self, device, probe_class, input_dim=512, hidden_neurons=128):  # from 0 to 15
+    def __init__(self, device: torch.device | str, probe_class: int, input_dim: int = 512, hidden_neurons: int = 128) -> None:
         super().__init__()
         self.input_dim = input_dim
         self.probe_class = probe_class
@@ -15,7 +19,7 @@ class ProbeClassification(nn.Module):
         self.apply(self._init_weights)
         # logger.info("number of parameters: %e", sum(p.numel() for p in self.parameters()))
         self.to(device)
-    def forward(self, act, y=None):
+    def forward(self, act: torch.Tensor, y: Optional[torch.Tensor] = None) -> tuple[torch.Tensor, Optional[torch.Tensor]]:
         # [B, f], [B]
         logits = self.proj(act)#.reshape(-1, self.probe_number, self.probe_class)  # [B, C]
         if y is None:
@@ -25,7 +29,7 @@ class ProbeClassification(nn.Module):
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-100)
             return logits, loss
     
-    def _init_weights(self, module):
+    def _init_weights(self, module: nn.Module) -> None:
         if isinstance(module, (nn.Linear, nn.Embedding)):
             module.weight.data.normal_(mean=0.0, std=0.02)
             if isinstance(module, nn.Linear) and module.bias is not None:
@@ -34,7 +38,7 @@ class ProbeClassification(nn.Module):
             module.bias.data.zero_()
             module.weight.data.fill_(1.0)
             
-    def configure_optimizers(self, train_config):
+    def configure_optimizers(self, train_config: TrainerConfig) -> tuple[torch.optim.Optimizer, torch.optim.lr_scheduler._LRScheduler]:
         """
         This long function is unfortunately doing something very simple and is being very defensive:
         We are separating out all parameters of the model into two buckets: those that will experience
@@ -81,7 +85,7 @@ class ProbeClassification(nn.Module):
     
 
 class LinearProbeClassification(nn.Module):
-    def __init__(self, device, probe_class, input_dim=512, logistic=False, Relu=False, TanH=False):  # from 0 to 15
+    def __init__(self, device: torch.device | str, probe_class: int, input_dim: int = 512, logistic: bool = False, Relu: bool = False, TanH: bool = False) -> None:
         super().__init__()
         self.input_dim = input_dim
         self.probe_class = probe_class
@@ -110,7 +114,7 @@ class LinearProbeClassification(nn.Module):
         self.apply(self._init_weights)
         # logger.info("number of parameters: %e", sum(p.numel() for p in self.parameters()))
         self.to(device)
-    def forward(self, act, y=None):
+    def forward(self, act: torch.Tensor, y: Optional[torch.Tensor] = None) -> tuple[torch.Tensor, Optional[torch.Tensor]]:
         # [B, f], [B]
         logits = self.proj(act)#.reshape(-1, self.probe_number, self.probe_class)  # [B, C]
         if y is None:
@@ -120,7 +124,7 @@ class LinearProbeClassification(nn.Module):
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-100)
             return logits, loss
     
-    def _init_weights(self, module):
+    def _init_weights(self, module: nn.Module) -> None:
         if isinstance(module, (nn.Linear, nn.Embedding)):
             module.weight.data.normal_(mean=0.0, std=0.02)
             if isinstance(module, nn.Linear) and module.bias is not None:
@@ -129,7 +133,7 @@ class LinearProbeClassification(nn.Module):
             module.bias.data.zero_()
             module.weight.data.fill_(1.0)
             
-    def configure_optimizers(self, train_config):
+    def configure_optimizers(self, train_config: TrainerConfig) -> tuple[torch.optim.Optimizer, torch.optim.lr_scheduler._LRScheduler]:
         """
         This long function is unfortunately doing something very simple and is being very defensive:
         We are separating out all parameters of the model into two buckets: those that will experience
@@ -176,7 +180,7 @@ class LinearProbeClassification(nn.Module):
 
     
 class TwoLayerLinearProbeClassification(nn.Module):
-    def __init__(self, device, probe_class, input_dim=512, logistic=False):  # from 0 to 15
+    def __init__(self, device: torch.device | str, probe_class: int, input_dim: int = 512, logistic: bool = False) -> None:
         super().__init__()
         self.input_dim = input_dim
         self.probe_class = probe_class
@@ -195,7 +199,7 @@ class TwoLayerLinearProbeClassification(nn.Module):
         self.apply(self._init_weights)
         # logger.info("number of parameters: %e", sum(p.numel() for p in self.parameters()))
         self.to(device)
-    def forward(self, act, y=None):
+    def forward(self, act: torch.Tensor, y: Optional[torch.Tensor] = None) -> tuple[torch.Tensor, Optional[torch.Tensor]]:
         # [B, f], [B]
         logits = self.proj(act)#.reshape(-1, self.probe_number, self.probe_class)  # [B, C]
         if y is None:
@@ -205,7 +209,7 @@ class TwoLayerLinearProbeClassification(nn.Module):
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-100)
             return logits, loss
     
-    def _init_weights(self, module):
+    def _init_weights(self, module: nn.Module) -> None:
         if isinstance(module, (nn.Linear, nn.Embedding)):
             module.weight.data.normal_(mean=0.0, std=0.02)
             if isinstance(module, nn.Linear) and module.bias is not None:
@@ -214,7 +218,7 @@ class TwoLayerLinearProbeClassification(nn.Module):
             module.bias.data.zero_()
             module.weight.data.fill_(1.0)
             
-    def configure_optimizers(self, train_config):
+    def configure_optimizers(self, train_config: TrainerConfig) -> tuple[torch.optim.Optimizer, torch.optim.lr_scheduler._LRScheduler]:
         """
         This long function is unfortunately doing something very simple and is being very defensive:
         We are separating out all parameters of the model into two buckets: those that will experience
@@ -261,8 +265,8 @@ class TwoLayerLinearProbeClassification(nn.Module):
     
 
 class ProbeClassificationMixScaler(nn.Module):
-    def __init__(self, device, probe_class, input_dim=512, num_layers=41, soft_weight_lr_rate=1e-1,
-                 hidden_neurons=128):  # from 0 to 15
+    def __init__(self, device: torch.device | str, probe_class: int, input_dim: int = 512, num_layers: int = 41, soft_weight_lr_rate: float = 1e-1,
+                 hidden_neurons: int = 128) -> None:
         super().__init__()
         self.input_dim = input_dim
         self.probe_class = probe_class
@@ -279,7 +283,7 @@ class ProbeClassificationMixScaler(nn.Module):
         self.apply(self._init_weights)
         # logger.info("number of parameters: %e", sum(p.numel() for p in self.parameters()))
         self.to(device)
-    def forward(self, act, y=None):
+    def forward(self, act: torch.Tensor, y: Optional[torch.Tensor] = None) -> tuple[torch.Tensor, Optional[torch.Tensor]]:
         # [B, f], [B]
         softmaxed_weights = torch.nn.functional.softmax(self.mix_weights.weight, dim=1)
         act = act.permute([0, 2, 1]) 
@@ -292,7 +296,7 @@ class ProbeClassificationMixScaler(nn.Module):
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-100)
             return logits, loss
     
-    def _init_weights(self, module):
+    def _init_weights(self, module: nn.Module) -> None:
         if isinstance(module, (nn.Linear, nn.Embedding)):
             module.weight.data.normal_(mean=0.0, std=0.02)
             if isinstance(module, nn.Linear) and module.bias is not None:
@@ -301,7 +305,7 @@ class ProbeClassificationMixScaler(nn.Module):
             module.bias.data.zero_()
             module.weight.data.fill_(1.0)
             
-    def configure_optimizers(self, train_config):
+    def configure_optimizers(self, train_config: TrainerConfig) -> tuple[torch.optim.Optimizer, torch.optim.lr_scheduler._LRScheduler]:
         """
         This long function is unfortunately doing something very simple and is being very defensive:
         We are separating out all parameters of the model into two buckets: those that will experience
@@ -349,8 +353,8 @@ class ProbeClassificationMixScaler(nn.Module):
     
 
 class LinearProbeClassificationMixScaler(nn.Module):
-    def __init__(self, device, probe_class, input_dim=512, num_layers=41, soft_weight_lr_rate=1e-1,
-                 logistic=False):  # from 0 to 15
+    def __init__(self, device: torch.device | str, probe_class: int, input_dim: int = 512, num_layers: int = 41, soft_weight_lr_rate: float = 1e-1,
+                 logistic: bool = False) -> None:
         super().__init__()
         self.input_dim = input_dim
         self.probe_class = probe_class
@@ -371,7 +375,7 @@ class LinearProbeClassificationMixScaler(nn.Module):
         self.apply(self._init_weights)
         # logger.info("number of parameters: %e", sum(p.numel() for p in self.parameters()))
         self.to(device)
-    def forward(self, act, y=None):
+    def forward(self, act: torch.Tensor, y: Optional[torch.Tensor] = None) -> tuple[torch.Tensor, Optional[torch.Tensor]]:
         # [B, f], [B]
         softmaxed_weights = torch.nn.functional.softmax(self.mix_weights.weight, dim=1)
         act = act.permute([0, 2, 1]) 
@@ -384,7 +388,7 @@ class LinearProbeClassificationMixScaler(nn.Module):
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-100)
             return logits, loss
     
-    def _init_weights(self, module):
+    def _init_weights(self, module: nn.Module) -> None:
         if isinstance(module, (nn.Linear, nn.Embedding)):
             module.weight.data.normal_(mean=0.0, std=0.02)
             if isinstance(module, nn.Linear) and module.bias is not None:
@@ -393,7 +397,7 @@ class LinearProbeClassificationMixScaler(nn.Module):
             module.bias.data.zero_()
             module.weight.data.fill_(1.0)
             
-    def configure_optimizers(self, train_config):
+    def configure_optimizers(self, train_config: TrainerConfig) -> tuple[torch.optim.Optimizer, torch.optim.lr_scheduler._LRScheduler]:
         """
         This long function is unfortunately doing something very simple and is being very defensive:
         We are separating out all parameters of the model into two buckets: those that will experience
@@ -441,8 +445,8 @@ class LinearProbeClassificationMixScaler(nn.Module):
     
     
 class TwoLayerLinearProbeClassificationMixScaler(nn.Module):
-    def __init__(self, device, probe_class, input_dim=512, num_layers=41, soft_weight_lr_rate=1e-1,
-                 logistic=False):  # from 0 to 15
+    def __init__(self, device: torch.device | str, probe_class: int, input_dim: int = 512, num_layers: int = 41, soft_weight_lr_rate: float = 1e-1,
+                 logistic: bool = False) -> None:
         super().__init__()
         self.input_dim = input_dim
         self.probe_class = probe_class
@@ -464,7 +468,7 @@ class TwoLayerLinearProbeClassificationMixScaler(nn.Module):
         self.apply(self._init_weights)
         # logger.info("number of parameters: %e", sum(p.numel() for p in self.parameters()))
         self.to(device)
-    def forward(self, act, y=None):
+    def forward(self, act: torch.Tensor, y: Optional[torch.Tensor] = None) -> tuple[torch.Tensor, Optional[torch.Tensor]]:
         # [B, f], [B]
         outputs = []
         for i in range(num_vectors):
@@ -484,7 +488,7 @@ class TwoLayerLinearProbeClassificationMixScaler(nn.Module):
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-100)
             return logits, loss
     
-    def _init_weights(self, module):
+    def _init_weights(self, module: nn.Module) -> None:
         if isinstance(module, (nn.Linear, nn.Embedding)):
             module.weight.data.normal_(mean=0.0, std=0.02)
             if isinstance(module, nn.Linear) and module.bias is not None:
@@ -493,7 +497,7 @@ class TwoLayerLinearProbeClassificationMixScaler(nn.Module):
             module.bias.data.zero_()
             module.weight.data.fill_(1.0)
             
-    def configure_optimizers(self, train_config):
+    def configure_optimizers(self, train_config: TrainerConfig) -> tuple[torch.optim.Optimizer, torch.optim.lr_scheduler._LRScheduler]:
         """
         This long function is unfortunately doing something very simple and is being very defensive:
         We are separating out all parameters of the model into two buckets: those that will experience
@@ -546,6 +550,6 @@ class TrainerConfig:
     betas = (0.9, 0.95)
     weight_decay = 0.1 # only applied on matmul weights
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: object) -> None:
         for k,v in kwargs.items():
             setattr(self, k, v)

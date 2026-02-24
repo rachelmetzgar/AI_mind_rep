@@ -1,11 +1,27 @@
 name: llama2_env
 channels:
-  - brainiak
-  - defaults
+  - pytorch
   - conda-forge
+  - defaults
 dependencies:
   - python=3.10
-  - scikit-learn
-  - matplotlib
-  - seaborn
+  # Core ML
+  - pytorch::pytorch=2.7.1
+  - numpy=2.2.6
+  - scikit-learn=1.7.2
+  # Scientific computing
+  - scipy=1.15.2
+  - pandas=2.3.0
+  - statsmodels=0.14.5
+  # Visualization
+  - matplotlib=3.10.7
+  - seaborn=0.13.2
+  # Progress bars
+  - tqdm=4.67.1
+  # Pip-only packages
+  - pip
+  - pip:
+    - transformers==4.52.4
+    - accelerate==1.8.0
+    - openai==2.17.0
 prefix: /usr/people/rm9561/.conda/envs/llama2_env

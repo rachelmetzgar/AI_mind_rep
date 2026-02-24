@@ -1,3 +1,10 @@
+"""Evidential deep learning loss functions and uncertainty estimation.
+
+Provides EDL losses (MSE, log, digamma variants) for training probes with
+calibrated uncertainty, plus helpers for converting logits to Dirichlet
+parameters. Used by probe training scripts and train_test_utils.
+"""
+
 import torch
 import torch.nn.functional as F
 import scipy.ndimage as nd
