@@ -19,16 +19,16 @@ Six experiments address these questions at increasing mechanistic depth:
 | **Exp 4**: Mind Perception Geometry | Does the LLM's entity mind space mirror human folk psychology? | Behavioral replication of Gray et al. (2007) — pairwise + individual Likert ratings | LLaMA-2-13B base + chat |
 | **Exp 5**: ToM Concept Deployment | Are mental-state concepts activated during theory of mind reasoning? | Project Exp 3 concept vectors onto activations during false belief tasks | LLaMA-2-13B-Chat |
 
-### Name Confound and Data Versions
+### Data Versions
 
-A critical methodological issue drives the project's data organization. Original conversations used named partners (Sam, Casey, ChatGPT, Copilot), and probes trained on these learned **partner names** rather than abstract human vs. AI identity. To control for this, experiments with conversation data have parallel versions:
+Original conversations used named partners (Sam, Casey, ChatGPT, Copilot). To ensure results are robust and not driven by gender associations, specific name tokens, or other name-level artifacts, experiments with conversation data are run across multiple versions that systematically vary how partners are identified:
 
 | Version | Human Partners | AI Partners | Purpose |
 |---|---|---|---|
-| `names/` | Sam, Casey | ChatGPT, Copilot | Original (has name + gender confounds) |
-| `balanced_names/` | Gregory, Rebecca | ChatGPT, Copilot | Fixes gender confound |
-| `balanced_gpt/` | Gregory, Rebecca | ChatGPT, GPT-4 | Fixes gender + varies AI identity |
-| `labels/` | "a human" | "an AI" | No names at all — recommended for probes |
+| `names/` | Sam, Casey | ChatGPT, Copilot | Original named partners |
+| `balanced_names/` | Gregory, Rebecca | ChatGPT, Copilot | Gender-balanced human names |
+| `balanced_gpt/` | Gregory, Rebecca | ChatGPT, GPT-4 | Gender-balanced + varied AI identity |
+| `labels/` | "a human" | "an AI" | Abstract category labels only |
 
 ---
 
