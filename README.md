@@ -130,7 +130,7 @@ Scripts use `--version` for data variant and `--mode V1/V2` for generation mode.
 ## Experiment 3 — Concept Alignment / Injection (`exp_3/`)
 
 ### Motivation
-Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains*. The null hypothesis is that it's an opaque entity-type switch. The alternative is that it has compositional mental-property structure.
+Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains*. The null hypothesis is that it's an opaque entity-type switch. The alternative is that it has compositional mental-property structure. Relatedly, Lindsey (2025) used concept injection and activation steering in Claude models to test whether LLMs exhibit emergent introspective awareness of their own internal states — finding limited but measurable introspective capability. Exp 3 applies similar contrastive concept elicitation and steering methods, but directed at the model's representation of its conversational *partner's* mental properties rather than its own.
 
 ### Directory Structure
 Code is centralized at `exp_3/code/` with data, concepts, and results at the top level:
@@ -271,6 +271,8 @@ Fung, L., & Carter, R. (2007). Discourse markers and spoken English. *Applied Li
 Gray, H. M., Gray, K., & Wegner, D. M. (2007). Dimensions of mind perception. *Science*, 315(5812), 619.
 
 Hutto, C., & Gilbert, E. (2014). VADER: A parsimonious rule-based model for sentiment analysis. *ICWSM*.
+
+Lindsey, J. (2025). Emergent introspective awareness in large language models. *Transformer Circuits Thread*, Anthropic.
 
 Touvron, H., Martin, L., Stone, K., et al. (2023). Llama 2: Open foundation and fine-tuned chat models. *arXiv preprint arXiv:2307.09288*.
 
