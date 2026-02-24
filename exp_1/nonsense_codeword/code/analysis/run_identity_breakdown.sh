@@ -29,7 +29,7 @@ set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 # === Project paths ===
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_1/nonsense_codeword"
+export PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_1/nonsense_codeword"
 SCRIPT_DIR="$PROJECT_ROOT/code/analysis"
 LOG_DIR="$PROJECT_ROOT/logs"
 

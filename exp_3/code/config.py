@@ -398,18 +398,18 @@ def set_version(version: str):
         )
 
     _active_version = version
-    EXP2_ROOT = PROJECT_ROOT / "exp_2" / version / "llama_exp_2b-13B-chat"
+    EXP2_ROOT = PROJECT_ROOT / "exp_2"
     EXP1_ROOT = PROJECT_ROOT / "exp_1" / version
 
     # Update global config object
     config.EXP2_ROOT = EXP2_ROOT
     config.EXP1_ROOT = EXP1_ROOT
 
-    # Update all derived input paths
-    config.PATHS.exp2_probes = EXP2_ROOT / "data" / "probe_checkpoints"
-    config.PATHS.exp2_control_probe = EXP2_ROOT / "data" / "probe_checkpoints" / "control_probe"
-    config.PATHS.exp2_reading_probe = EXP2_ROOT / "data" / "probe_checkpoints" / "reading_probe"
-    config.PATHS.exp2_conversations = EXP2_ROOT / "data" / "human_ai_conversations"
+    # Update all derived input paths (new exp_2 structure: data/{version}/...)
+    config.PATHS.exp2_probes = EXP2_ROOT / "data" / version / "probe_checkpoints"
+    config.PATHS.exp2_control_probe = EXP2_ROOT / "data" / version / "probe_checkpoints" / "turn_5" / "control_probe"
+    config.PATHS.exp2_reading_probe = EXP2_ROOT / "data" / version / "probe_checkpoints" / "turn_5" / "reading_probe"
+    config.PATHS.exp2_conversations = EXP2_ROOT / "data" / version / "human_ai_conversations"
     config.PATHS.exp1_prompts = EXP1_ROOT / "code" / "data_gen" / "utils" / "prompts"
     config.PATHS.exp1_configs = EXP1_ROOT / "code" / "data_gen" / "utils" / "config"
 
