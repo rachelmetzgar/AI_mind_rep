@@ -1,9 +1,8 @@
 # === Core ignore rules for AI_mind_rep ===
 
-# Data, logs, results
+# Data and logs
 **/data/
 **/logs/
-**/results/
 
 # Python caches and compiled files
 __pycache__/

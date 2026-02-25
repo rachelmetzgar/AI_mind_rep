@@ -1,0 +1,1413 @@
+AGGREGATION METHOD: PER-TRIAL (sum within trials, then mean across trials)
+
+================================================================================
+CROSS-EXPERIMENT BEHAVIORAL ANALYSIS
+Generated: 2026-02-10 14:58:41
+================================================================================
+
+Human: N = 23 subjects
+LLM:   N = 50 subjects
+
+--------------------------------------------------------------------------------
+NOTE: Hedging Analysis Based on Demir (2018) Taxonomy
+--------------------------------------------------------------------------------
+
+References:
+  - Demir, C. (2018). Hedging and academic writing: An analysis of lexical hedges.
+    Journal of Language and Linguistic Studies, 14(4), 74-92.
+  - Hyland, K. (1998). Boosting, hedging, and the negotiation of academic knowledge.
+    Text, 18(3), 349-382.
+
+Demir's taxonomy follows Hyland's (1998) six-category framework.
+Word lists taken verbatim from Demir (2018) Appendix A (pp. 90-91).
+
+The Demir framework categorizes lexical hedges into six forms:
+
+1. MODAL AUXILIARIES (6 items): can, could, may, might, should, would
+
+2. EPISTEMIC VERBS (44 items): advise, advocate, agree with, allege, anticipate,
+   appear, argue, assert, assume, attempt, believe, calculate, conjecture, consider,
+   contend, correlate with, demonstrate, display, doubt, estimate, expect, feel, find,
+   guess, hint, hope, hypothesize, implicate, imply, indicate, insinuate, intend,
+   intimate, maintain, mention, observe, offer, opine, postulate, predict, presume,
+   propose, reckon, recommend, report, reveal, seem, show, signal, speculate, suggest,
+   support, suppose, surmise, suspect, tend to, think, try to
+
+3. EPISTEMIC ADVERBS (47 items): about, admittedly, all but, almost, approximately,
+   arguably, around, averagely, fairly, frequently, generally, hardly, largely, likely,
+   mainly, mildly, moderately, mostly, near, nearly, not always, occasionally, often,
+   partially, partly, passably, perhaps, possibly, potentially, predictably, presumably,
+   primarily, probably, quite, rarely, rather, reasonably, relatively, roughly, scarcely,
+   seemingly, slightly, sometimes, somewhat, subtly, supposedly, tolerably, usually, virtually
+
+4. EPISTEMIC ADJECTIVES (19 items): advisable, approximate, consistent with, in conjunction
+   with, in harmony with, in line with, in tune with, liable, likely, partial, plausible,
+   possible, potential, probable, prone to, reasonable, reported, rough, slight, subtle,
+   suggested, uncertain, unlikely
+
+5. QUANTIFIERS/DETERMINERS (10 items): a few, few, little, a little, more or less, most,
+   much, not all, on occasion, several, to a lesser, to a minor extent, to an extent,
+   to some extent
+
+6. EPISTEMIC NOUNS (19 items): agreement with, assertion, assumption, attempt, belief,
+   chance, claim, doubt, estimate, expectation, guidance, hope, implication, in accord with,
+   intention, majority, possibility, potential, prediction, presupposition, probability,
+   proposal, proposition, recommendation, suggestion, tendency
+
+Metrics computed:
+  - demir_modal_rate: Modal auxiliaries / word_count
+  - demir_verb_rate: Epistemic verbs / word_count
+  - demir_adverb_rate: Epistemic adverbs / word_count
+  - demir_adjective_rate: Epistemic adjectives / word_count
+  - demir_quantifier_rate: Quantifiers/determiners / word_count
+  - demir_noun_rate: Epistemic nouns / word_count
+  - demir_total_rate: All Demir hedges / word_count
+
+
+--------------------------------------------------------------------------------
+NOTE: Discourse Marker Analysis Based on Fung & Carter (2007)
+--------------------------------------------------------------------------------
+
+Fung, L., & Carter, R. (2007). Discourse markers and spoken English: Native and 
+learner use in pedagogic settings. Applied Linguistics, 28(3), 410-439.
+
+Metrics: fung_interpersonal_rate, fung_referential_rate, fung_structural_rate, 
+         fung_cognitive_rate, fung_total_rate
+
+
+--------------------------------------------------------------------------------
+NOTE: Disfluency Analysis Uses LIWC2007 Categories
+--------------------------------------------------------------------------------
+
+LIWC Nonfluencies: er, hm*, sigh, uh, um, umm*, well
+LIWC Fillers: blah, i don't know, i mean, oh well, or anything, or something, 
+              or whatever, ya know, y'know, you know
+
+
+==============================================================================================================
+SUMMARY TABLE: Comparison of Belief-Conditioned Effects in Humans vs LLMs
+==============================================================================================================
+
+Measure                        Human                LLM                  Cross-Exp p     Pattern     
+--------------------------------------------------------------------------------------------------------------
+word_count                     Human > AI*          ns                   0.5220          Different   
+question_count                 ns                   ns                   0.4406          Both ns     
+demir_modal_rate               ns                   ns                   0.0335*         Both ns     
+demir_verb_rate                ns                   ns                   0.0092**        Both ns     
+demir_adverb_rate              ns                   Human > AI*          0.3587          Different   
+demir_adjective_rate           ns                   AI > Human*          0.0398*         Different   
+demir_quantifier_rate          ns                   ns                   0.8979          Both ns     
+demir_noun_rate                ns                   AI > Human*          0.0233*         Different   
+demir_total_rate               ns                   ns                   0.5346          Both ns     
+fung_interpersonal_rate        ns                   Human > AI*          0.0373*         Different   
+fung_referential_rate          ns                   ns                   0.4254          Both ns     
+fung_structural_rate           ns                   ns                   0.1839          Both ns     
+fung_cognitive_rate            ns                   Human > AI*          0.1882          Different   
+fung_total_rate                ns                   Human > AI*          0.6741          Different   
+nonfluency_rate                ns                   ns                   0.0750          Both ns     
+liwc_filler_rate               ns                   Human > AI*          0.0484*         Different   
+disfluency_rate                ns                   ns                   0.5759          Both ns     
+like_rate                      Human > AI*          Human > AI*          0.0389*         Similar     
+tom_rate                       ns                   AI > Human*          0.0624          Different   
+politeness_rate                ns                   ns                   0.8131          Both ns     
+sentiment                      ns                   ns                   0.0489*         Both ns     
+quality                        Human > AI*          ns                   0.0001***       Different   
+connectedness                  Human > AI*          ns                   0.0000***       Different   
+--------------------------------------------------------------------------------------------------------------
+Within-exp significance: * p < .05 (paired t-test)
+Cross-exp significance: * p < .05, ** p < .01, *** p < .001 (independent t-test on condition effects)
+
+
+================================================================================
+WITHIN-EXPERIMENT ANALYSES: 2×2 RM-ANOVA (Condition × Sociality)
+================================================================================
+
+----------------------------------------------------------------------
+Human | word_count (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 122.2337 ± 5.1022
+    AI-label:    M = 116.8533 ± 4.7935
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 123.4728 ± 4.9153
+    Nonsocial:   M = 115.6141 ± 4.9483
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 5.67, p = 0.0264 *
+    Main Effect of Sociality:   F = 10.97, p = 0.0032 **
+    Condition × Sociality:      F = 6.20, p = 0.0208 *
+
+  Simple Effects (Condition effect at each Sociality level):
+    Social topics: Human M = 123.5848, AI M = 123.3609
+      Diff = +0.2239, t(22) = 0.07, p = 0.9421  [Human > AI]
+    Nonsocial topics: Human M = 120.8826, AI M = 110.3457
+      Diff = +10.5370, t(22) = 3.42, p = 0.0025 * [Human > AI]
+
+----------------------------------------------------------------------
+Human | question_count (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.3918 ± 0.0667
+    AI-label:    M = 0.4484 ± 0.0694
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.3571 ± 0.0567
+    Nonsocial:   M = 0.4832 ± 0.0769
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 1.27, p = 0.2726 
+    Main Effect of Sociality:   F = 8.09, p = 0.0094 **
+    Condition × Sociality:      F = 5.40, p = 0.0298 *
+
+  Simple Effects (Condition effect at each Sociality level):
+    Social topics: Human M = 0.2880, AI M = 0.4261
+      Diff = -0.1380, t(22) = -2.48, p = 0.0213 * [AI > Human]
+    Nonsocial topics: Human M = 0.4957, AI M = 0.4707
+      Diff = +0.0250, t(22) = 0.38, p = 0.7102  [Human > AI]
+
+----------------------------------------------------------------------
+Human | demir_modal_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0093 ± 0.0005
+    AI-label:    M = 0.0083 ± 0.0004
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0093 ± 0.0005
+    Nonsocial:   M = 0.0083 ± 0.0005
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 2.56, p = 0.1241 
+    Main Effect of Sociality:   F = 2.31, p = 0.1430 
+    Condition × Sociality:      F = 6.51, p = 0.0182 *
+
+  Simple Effects (Condition effect at each Sociality level):
+    Social topics: Human M = 0.0092, AI M = 0.0094
+      Diff = -0.0003, t(22) = -0.32, p = 0.7542  [AI > Human]
+    Nonsocial topics: Human M = 0.0094, AI M = 0.0072
+      Diff = +0.0022, t(22) = 3.01, p = 0.0064 * [Human > AI]
+
+----------------------------------------------------------------------
+Human | demir_verb_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0230 ± 0.0009
+    AI-label:    M = 0.0246 ± 0.0010
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0268 ± 0.0008
+    Nonsocial:   M = 0.0208 ± 0.0009
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 2.47, p = 0.1302 
+    Main Effect of Sociality:   F = 38.34, p = 0.0000 ***
+    Condition × Sociality:      F = 0.54, p = 0.4699 
+
+----------------------------------------------------------------------
+Human | demir_adverb_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0145 ± 0.0019
+    AI-label:    M = 0.0126 ± 0.0007
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0140 ± 0.0019
+    Nonsocial:   M = 0.0131 ± 0.0007
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 1.14, p = 0.2981 
+    Main Effect of Sociality:   F = 0.21, p = 0.6532 
+    Condition × Sociality:      F = 1.54, p = 0.2278 
+
+----------------------------------------------------------------------
+Human | demir_adjective_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0004 ± 0.0001
+    AI-label:    M = 0.0003 ± 0.0001
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0004 ± 0.0001
+    Nonsocial:   M = 0.0003 ± 0.0001
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 0.43, p = 0.5207 
+    Main Effect of Sociality:   F = 0.51, p = 0.4807 
+    Condition × Sociality:      F = 0.02, p = 0.8908 
+
+----------------------------------------------------------------------
+Human | demir_quantifier_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0063 ± 0.0006
+    AI-label:    M = 0.0061 ± 0.0005
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0052 ± 0.0005
+    Nonsocial:   M = 0.0071 ± 0.0006
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 0.06, p = 0.8115 
+    Main Effect of Sociality:   F = 4.85, p = 0.0385 *
+    Condition × Sociality:      F = 0.44, p = 0.5132 
+
+----------------------------------------------------------------------
+Human | demir_noun_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0005 ± 0.0001
+    AI-label:    M = 0.0005 ± 0.0001
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0006 ± 0.0001
+    Nonsocial:   M = 0.0005 ± 0.0001
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 0.03, p = 0.8630 
+    Main Effect of Sociality:   F = 0.18, p = 0.6766 
+    Condition × Sociality:      F = 1.37, p = 0.2539 
+
+----------------------------------------------------------------------
+Human | demir_total_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0540 ± 0.0020
+    AI-label:    M = 0.0524 ± 0.0012
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0563 ± 0.0019
+    Nonsocial:   M = 0.0501 ± 0.0012
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 0.67, p = 0.4218 
+    Main Effect of Sociality:   F = 9.47, p = 0.0055 **
+    Condition × Sociality:      F = 1.32, p = 0.2635 
+
+----------------------------------------------------------------------
+Human | fung_interpersonal_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0737 ± 0.0029
+    AI-label:    M = 0.0721 ± 0.0028
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0689 ± 0.0027
+    Nonsocial:   M = 0.0769 ± 0.0029
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 0.87, p = 0.3613 
+    Main Effect of Sociality:   F = 11.46, p = 0.0027 **
+    Condition × Sociality:      F = 0.00, p = 0.9579 
+
+----------------------------------------------------------------------
+Human | fung_referential_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0589 ± 0.0019
+    AI-label:    M = 0.0578 ± 0.0020
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0564 ± 0.0019
+    Nonsocial:   M = 0.0602 ± 0.0020
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 0.29, p = 0.5961 
+    Main Effect of Sociality:   F = 7.68, p = 0.0111 *
+    Condition × Sociality:      F = 1.65, p = 0.2126 
+
+----------------------------------------------------------------------
+Human | fung_structural_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0524 ± 0.0021
+    AI-label:    M = 0.0505 ± 0.0020
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0516 ± 0.0019
+    Nonsocial:   M = 0.0513 ± 0.0022
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 2.06, p = 0.1653 
+    Main Effect of Sociality:   F = 0.03, p = 0.8584 
+    Condition × Sociality:      F = 3.70, p = 0.0676 
+
+----------------------------------------------------------------------
+Human | fung_cognitive_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0381 ± 0.0022
+    AI-label:    M = 0.0359 ± 0.0018
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0359 ± 0.0021
+    Nonsocial:   M = 0.0382 ± 0.0019
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 3.62, p = 0.0701 
+    Main Effect of Sociality:   F = 2.12, p = 0.1599 
+    Condition × Sociality:      F = 0.01, p = 0.9042 
+
+----------------------------------------------------------------------
+Human | fung_total_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.1294 ± 0.0032
+    AI-label:    M = 0.1267 ± 0.0030
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.1229 ± 0.0031
+    Nonsocial:   M = 0.1332 ± 0.0029
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 1.12, p = 0.3016 
+    Main Effect of Sociality:   F = 18.24, p = 0.0003 ***
+    Condition × Sociality:      F = 0.97, p = 0.3365 
+
+----------------------------------------------------------------------
+Human | nonfluency_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0030 ± 0.0004
+    AI-label:    M = 0.0025 ± 0.0004
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0028 ± 0.0003
+    Nonsocial:   M = 0.0027 ± 0.0004
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 2.99, p = 0.0978 
+    Main Effect of Sociality:   F = 0.01, p = 0.9288 
+    Condition × Sociality:      F = 0.07, p = 0.7883 
+
+----------------------------------------------------------------------
+Human | liwc_filler_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0050 ± 0.0008
+    AI-label:    M = 0.0055 ± 0.0010
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0054 ± 0.0010
+    Nonsocial:   M = 0.0051 ± 0.0009
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 1.11, p = 0.3045 
+    Main Effect of Sociality:   F = 0.26, p = 0.6143 
+    Condition × Sociality:      F = 1.01, p = 0.3263 
+
+----------------------------------------------------------------------
+Human | disfluency_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0080 ± 0.0009
+    AI-label:    M = 0.0080 ± 0.0011
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0082 ± 0.0010
+    Nonsocial:   M = 0.0078 ± 0.0010
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 0.00, p = 0.9921 
+    Main Effect of Sociality:   F = 0.22, p = 0.6458 
+    Condition × Sociality:      F = 0.66, p = 0.4268 
+
+----------------------------------------------------------------------
+Human | like_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0199 ± 0.0018
+    AI-label:    M = 0.0173 ± 0.0014
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0151 ± 0.0015
+    Nonsocial:   M = 0.0220 ± 0.0016
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 4.73, p = 0.0406 *
+    Main Effect of Sociality:   F = 22.08, p = 0.0001 ***
+    Condition × Sociality:      F = 0.09, p = 0.7611 
+
+----------------------------------------------------------------------
+Human | tom_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0024 ± 0.0004
+    AI-label:    M = 0.0032 ± 0.0006
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0032 ± 0.0006
+    Nonsocial:   M = 0.0024 ± 0.0005
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 4.01, p = 0.0578 
+    Main Effect of Sociality:   F = 3.18, p = 0.0883 
+    Condition × Sociality:      F = 7.84, p = 0.0104 *
+
+  Simple Effects (Condition effect at each Sociality level):
+    Social topics: Human M = 0.0023, AI M = 0.0041
+      Diff = -0.0018, t(22) = -3.04, p = 0.0060 * [AI > Human]
+    Nonsocial topics: Human M = 0.0025, AI M = 0.0023
+      Diff = +0.0002, t(22) = 0.41, p = 0.6881  [Human > AI]
+
+----------------------------------------------------------------------
+Human | politeness_rate (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0015 ± 0.0003
+    AI-label:    M = 0.0021 ± 0.0006
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0018 ± 0.0004
+    Nonsocial:   M = 0.0018 ± 0.0005
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 0.71, p = 0.4092 
+    Main Effect of Sociality:   F = 0.00, p = 0.9705 
+    Condition × Sociality:      F = 0.03, p = 0.8672 
+
+----------------------------------------------------------------------
+Human | sentiment (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.6748 ± 0.0282
+    AI-label:    M = 0.6583 ± 0.0243
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.6731 ± 0.0238
+    Nonsocial:   M = 0.6600 ± 0.0286
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 1.28, p = 0.2693 
+    Main Effect of Sociality:   F = 0.57, p = 0.4600 
+    Condition × Sociality:      F = 0.42, p = 0.5251 
+
+----------------------------------------------------------------------
+Human | quality (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 2.9913 ± 0.0709
+    AI-label:    M = 2.7711 ± 0.0703
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 2.8662 ± 0.0729
+    Nonsocial:   M = 2.8962 ± 0.0720
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 10.29, p = 0.0041 **
+    Main Effect of Sociality:   F = 0.35, p = 0.5582 
+    Condition × Sociality:      F = 0.01, p = 0.9090 
+
+----------------------------------------------------------------------
+Human | connectedness (N = 23)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 2.7451 ± 0.0772
+    AI-label:    M = 2.4538 ± 0.0782
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 2.5875 ± 0.0772
+    Nonsocial:   M = 2.6114 ± 0.0841
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 22) = 11.52, p = 0.0026 **
+    Main Effect of Sociality:   F = 0.19, p = 0.6633 
+    Condition × Sociality:      F = 0.10, p = 0.7545 
+
+----------------------------------------------------------------------
+LLM | word_count (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 765.7350 ± 7.2691
+    AI-label:    M = 770.0510 ± 7.0190
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 795.9580 ± 6.9991
+    Nonsocial:   M = 739.8280 ± 6.1076
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 0.18, p = 0.6719 
+    Main Effect of Sociality:   F = 34.50, p = 0.0000 ***
+    Condition × Sociality:      F = 6.01, p = 0.0178 *
+
+  Simple Effects (Condition effect at each Sociality level):
+    Social topics: Human M = 804.2620, AI M = 787.6540
+      Diff = +16.6080, t(49) = 1.27, p = 0.2107  [Human > AI]
+    Nonsocial topics: Human M = 727.2080, AI M = 752.4480
+      Diff = -25.2400, t(49) = -1.88, p = 0.0655  [AI > Human]
+
+----------------------------------------------------------------------
+LLM | question_count (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 5.2440 ± 0.1588
+    AI-label:    M = 5.6780 ± 0.3047
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 4.1060 ± 0.0881
+    Nonsocial:   M = 6.8160 ± 0.2723
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 1.75, p = 0.1920 
+    Main Effect of Sociality:   F = 121.09, p = 0.0000 ***
+    Condition × Sociality:      F = 0.27, p = 0.6047 
+
+----------------------------------------------------------------------
+LLM | demir_modal_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0125 ± 0.0004
+    AI-label:    M = 0.0129 ± 0.0004
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0155 ± 0.0003
+    Nonsocial:   M = 0.0099 ± 0.0002
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 1.58, p = 0.2147 
+    Main Effect of Sociality:   F = 398.30, p = 0.0000 ***
+    Condition × Sociality:      F = 1.82, p = 0.1840 
+
+----------------------------------------------------------------------
+LLM | demir_verb_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0143 ± 0.0004
+    AI-label:    M = 0.0136 ± 0.0003
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0162 ± 0.0003
+    Nonsocial:   M = 0.0117 ± 0.0002
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 3.99, p = 0.0512 
+    Main Effect of Sociality:   F = 288.32, p = 0.0000 ***
+    Condition × Sociality:      F = 4.72, p = 0.0347 *
+
+  Simple Effects (Condition effect at each Sociality level):
+    Social topics: Human M = 0.0170, AI M = 0.0154
+      Diff = +0.0016, t(49) = 2.56, p = 0.0135 * [Human > AI]
+    Nonsocial topics: Human M = 0.0116, AI M = 0.0118
+      Diff = -0.0001, t(49) = -0.32, p = 0.7534  [AI > Human]
+
+----------------------------------------------------------------------
+LLM | demir_adverb_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0097 ± 0.0002
+    AI-label:    M = 0.0089 ± 0.0001
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0089 ± 0.0002
+    Nonsocial:   M = 0.0097 ± 0.0001
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 11.41, p = 0.0014 **
+    Main Effect of Sociality:   F = 16.33, p = 0.0002 ***
+    Condition × Sociality:      F = 2.55, p = 0.1169 
+
+----------------------------------------------------------------------
+LLM | demir_adjective_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0008 ± 0.0001
+    AI-label:    M = 0.0010 ± 0.0001
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0007 ± 0.0000
+    Nonsocial:   M = 0.0011 ± 0.0001
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 7.74, p = 0.0077 **
+    Main Effect of Sociality:   F = 33.50, p = 0.0000 ***
+    Condition × Sociality:      F = 1.44, p = 0.2353 
+
+----------------------------------------------------------------------
+LLM | demir_quantifier_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0043 ± 0.0002
+    AI-label:    M = 0.0041 ± 0.0001
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0038 ± 0.0001
+    Nonsocial:   M = 0.0046 ± 0.0001
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 1.04, p = 0.3117 
+    Main Effect of Sociality:   F = 22.17, p = 0.0000 ***
+    Condition × Sociality:      F = 6.28, p = 0.0155 *
+
+  Simple Effects (Condition effect at each Sociality level):
+    Social topics: Human M = 0.0037, AI M = 0.0039
+      Diff = -0.0002, t(49) = -1.08, p = 0.2867  [AI > Human]
+    Nonsocial topics: Human M = 0.0049, AI M = 0.0043
+      Diff = +0.0006, t(49) = 2.19, p = 0.0337 * [Human > AI]
+
+----------------------------------------------------------------------
+LLM | demir_noun_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0012 ± 0.0001
+    AI-label:    M = 0.0017 ± 0.0001
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0015 ± 0.0001
+    Nonsocial:   M = 0.0014 ± 0.0001
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 15.23, p = 0.0003 ***
+    Main Effect of Sociality:   F = 3.54, p = 0.0659 
+    Condition × Sociality:      F = 0.29, p = 0.5928 
+
+----------------------------------------------------------------------
+LLM | demir_total_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0428 ± 0.0006
+    AI-label:    M = 0.0422 ± 0.0005
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0467 ± 0.0004
+    Nonsocial:   M = 0.0384 ± 0.0004
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 1.01, p = 0.3196 
+    Main Effect of Sociality:   F = 249.59, p = 0.0000 ***
+    Condition × Sociality:      F = 5.23, p = 0.0265 *
+
+  Simple Effects (Condition effect at each Sociality level):
+    Social topics: Human M = 0.0477, AI M = 0.0457
+      Diff = +0.0020, t(49) = 2.13, p = 0.0379 * [Human > AI]
+    Nonsocial topics: Human M = 0.0379, AI M = 0.0388
+      Diff = -0.0009, t(49) = -1.15, p = 0.2543  [AI > Human]
+
+----------------------------------------------------------------------
+LLM | fung_interpersonal_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0316 ± 0.0007
+    AI-label:    M = 0.0267 ± 0.0006
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0240 ± 0.0004
+    Nonsocial:   M = 0.0343 ± 0.0005
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 50.78, p = 0.0000 ***
+    Main Effect of Sociality:   F = 428.35, p = 0.0000 ***
+    Condition × Sociality:      F = 1.63, p = 0.2080 
+
+----------------------------------------------------------------------
+LLM | fung_referential_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0763 ± 0.0003
+    AI-label:    M = 0.0765 ± 0.0004
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0753 ± 0.0003
+    Nonsocial:   M = 0.0775 ± 0.0004
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 0.09, p = 0.7593 
+    Main Effect of Sociality:   F = 22.99, p = 0.0000 ***
+    Condition × Sociality:      F = 0.62, p = 0.4337 
+
+----------------------------------------------------------------------
+LLM | fung_structural_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0726 ± 0.0004
+    AI-label:    M = 0.0725 ± 0.0005
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0715 ± 0.0004
+    Nonsocial:   M = 0.0735 ± 0.0005
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 0.04, p = 0.8421 
+    Main Effect of Sociality:   F = 13.73, p = 0.0005 ***
+    Condition × Sociality:      F = 1.84, p = 0.1807 
+
+----------------------------------------------------------------------
+LLM | fung_cognitive_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0100 ± 0.0002
+    AI-label:    M = 0.0091 ± 0.0002
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0088 ± 0.0002
+    Nonsocial:   M = 0.0102 ± 0.0002
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 8.70, p = 0.0049 **
+    Main Effect of Sociality:   F = 32.88, p = 0.0000 ***
+    Condition × Sociality:      F = 4.08, p = 0.0490 *
+
+  Simple Effects (Condition effect at each Sociality level):
+    Social topics: Human M = 0.0096, AI M = 0.0081
+      Diff = +0.0015, t(49) = 3.50, p = 0.0010 * [Human > AI]
+    Nonsocial topics: Human M = 0.0105, AI M = 0.0100
+      Diff = +0.0005, t(49) = 1.15, p = 0.2544  [Human > AI]
+
+----------------------------------------------------------------------
+LLM | fung_total_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.1006 ± 0.0009
+    AI-label:    M = 0.0970 ± 0.0008
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0921 ± 0.0005
+    Nonsocial:   M = 0.1055 ± 0.0007
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 15.07, p = 0.0003 ***
+    Main Effect of Sociality:   F = 369.05, p = 0.0000 ***
+    Condition × Sociality:      F = 4.58, p = 0.0374 *
+
+  Simple Effects (Condition effect at each Sociality level):
+    Social topics: Human M = 0.0931, AI M = 0.0911
+      Diff = +0.0021, t(49) = 1.93, p = 0.0599  [Human > AI]
+    Nonsocial topics: Human M = 0.1081, AI M = 0.1028
+      Diff = +0.0052, t(49) = 4.06, p = 0.0002 * [Human > AI]
+
+----------------------------------------------------------------------
+LLM | nonfluency_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0016 ± 0.0001
+    AI-label:    M = 0.0016 ± 0.0001
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0017 ± 0.0001
+    Nonsocial:   M = 0.0015 ± 0.0001
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 0.24, p = 0.6265 
+    Main Effect of Sociality:   F = 3.77, p = 0.0581 
+    Condition × Sociality:      F = 1.68, p = 0.2004 
+
+----------------------------------------------------------------------
+LLM | liwc_filler_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0007 ± 0.0001
+    AI-label:    M = 0.0005 ± 0.0000
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0003 ± 0.0000
+    Nonsocial:   M = 0.0008 ± 0.0001
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 6.15, p = 0.0166 *
+    Main Effect of Sociality:   F = 35.30, p = 0.0000 ***
+    Condition × Sociality:      F = 0.85, p = 0.3611 
+
+----------------------------------------------------------------------
+LLM | disfluency_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0023 ± 0.0001
+    AI-label:    M = 0.0021 ± 0.0001
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0020 ± 0.0001
+    Nonsocial:   M = 0.0023 ± 0.0001
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 3.78, p = 0.0575 
+    Main Effect of Sociality:   F = 4.33, p = 0.0426 *
+    Condition × Sociality:      F = 0.42, p = 0.5207 
+
+----------------------------------------------------------------------
+LLM | like_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0055 ± 0.0002
+    AI-label:    M = 0.0048 ± 0.0002
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0045 ± 0.0002
+    Nonsocial:   M = 0.0058 ± 0.0002
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 4.54, p = 0.0382 *
+    Main Effect of Sociality:   F = 52.86, p = 0.0000 ***
+    Condition × Sociality:      F = 0.01, p = 0.9178 
+
+----------------------------------------------------------------------
+LLM | tom_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0014 ± 0.0001
+    AI-label:    M = 0.0016 ± 0.0001
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0013 ± 0.0001
+    Nonsocial:   M = 0.0017 ± 0.0001
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 4.51, p = 0.0389 *
+    Main Effect of Sociality:   F = 11.94, p = 0.0011 **
+    Condition × Sociality:      F = 3.43, p = 0.0699 
+
+----------------------------------------------------------------------
+LLM | politeness_rate (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.0084 ± 0.0002
+    AI-label:    M = 0.0088 ± 0.0002
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.0097 ± 0.0002
+    Nonsocial:   M = 0.0074 ± 0.0002
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 1.92, p = 0.1722 
+    Main Effect of Sociality:   F = 90.06, p = 0.0000 ***
+    Condition × Sociality:      F = 5.95, p = 0.0183 *
+
+  Simple Effects (Condition effect at each Sociality level):
+    Social topics: Human M = 0.0092, AI M = 0.0102
+      Diff = -0.0010, t(49) = -2.61, p = 0.0120 * [AI > Human]
+    Nonsocial topics: Human M = 0.0075, AI M = 0.0073
+      Diff = +0.0002, t(49) = 0.61, p = 0.5445  [Human > AI]
+
+----------------------------------------------------------------------
+LLM | sentiment (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 0.9475 ± 0.0023
+    AI-label:    M = 0.9525 ± 0.0023
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 0.9558 ± 0.0021
+    Nonsocial:   M = 0.9441 ± 0.0024
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 2.87, p = 0.0967 
+    Main Effect of Sociality:   F = 17.51, p = 0.0001 ***
+    Condition × Sociality:      F = 0.29, p = 0.5933 
+
+----------------------------------------------------------------------
+LLM | quality (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 2.9150 ± 0.0142
+    AI-label:    M = 2.9110 ± 0.0159
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 2.8670 ± 0.0168
+    Nonsocial:   M = 2.9590 ± 0.0115
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 0.05, p = 0.8212 
+    Main Effect of Sociality:   F = 28.93, p = 0.0000 ***
+    Condition × Sociality:      F = 0.16, p = 0.6950 
+
+----------------------------------------------------------------------
+LLM | connectedness (N = 50)
+----------------------------------------------------------------------
+
+  Condition Means (collapsed across sociality):
+    Human-label: M = 3.0410 ± 0.0079
+    AI-label:    M = 3.0300 ± 0.0085
+
+  Sociality Means (collapsed across condition):
+    Social:      M = 3.0580 ± 0.0074
+    Nonsocial:   M = 3.0130 ± 0.0084
+
+  ANOVA Results:
+    Main Effect of Condition:   F(1, 49) = 0.98, p = 0.3262 
+    Main Effect of Sociality:   F = 14.33, p = 0.0004 ***
+    Condition × Sociality:      F = 0.92, p = 0.3416 
+
+
+================================================================================
+CROSS-EXPERIMENT ANALYSES: Experiment × Condition Interaction
+================================================================================
+
+----------------------------------------------------------------------
+word_count
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 122.2337, AI-label = 116.8533
+    LLM:   Human-label = 765.7350, AI-label = 770.0510
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +5.3804 ± 2.2601  [t = 2.38, p = 0.0264]
+    LLM:   M = -4.3160 ± 10.1307  [t = -0.43, p = 0.6719]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 0.643, p = 0.5220 
+
+  Direction: Human = Human > AI, LLM = ns
+  Pattern Classification: Different
+
+----------------------------------------------------------------------
+question_count
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.3918, AI-label = 0.4484
+    LLM:   Human-label = 5.2440, AI-label = 5.6780
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = -0.0565 ± 0.0502  [t = -1.13, p = 0.2726]
+    LLM:   M = -0.4340 ± 0.3281  [t = -1.32, p = 0.1920]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 0.776, p = 0.4406 
+
+  Direction: Human = ns, LLM = ns
+  Pattern Classification: Both ns
+
+----------------------------------------------------------------------
+demir_modal_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0093, AI-label = 0.0083
+    LLM:   Human-label = 0.0125, AI-label = 0.0129
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0010 ± 0.0006  [t = 1.60, p = 0.1241]
+    LLM:   M = -0.0004 ± 0.0003  [t = -1.26, p = 0.2147]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 2.168, p = 0.0335 *
+
+  Direction: Human = ns, LLM = ns
+  Pattern Classification: Both ns
+
+----------------------------------------------------------------------
+demir_verb_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0230, AI-label = 0.0246
+    LLM:   Human-label = 0.0143, AI-label = 0.0136
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = -0.0016 ± 0.0010  [t = -1.57, p = 0.1302]
+    LLM:   M = +0.0007 ± 0.0004  [t = 2.00, p = 0.0512]
+
+  Cross-Experiment Interaction Test:
+    t(71) = -2.677, p = 0.0092 **
+
+  Direction: Human = ns, LLM = ns
+  Pattern Classification: Both ns
+
+----------------------------------------------------------------------
+demir_adverb_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0145, AI-label = 0.0126
+    LLM:   Human-label = 0.0097, AI-label = 0.0089
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0019 ± 0.0018  [t = 1.07, p = 0.2981]
+    LLM:   M = +0.0008 ± 0.0002  [t = 3.38, p = 0.0014]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 0.924, p = 0.3587 
+
+  Direction: Human = ns, LLM = Human > AI
+  Pattern Classification: Different
+
+----------------------------------------------------------------------
+demir_adjective_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0004, AI-label = 0.0003
+    LLM:   Human-label = 0.0008, AI-label = 0.0010
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0001 ± 0.0001  [t = 0.65, p = 0.5207]
+    LLM:   M = -0.0002 ± 0.0001  [t = -2.78, p = 0.0077]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 2.094, p = 0.0398 *
+
+  Direction: Human = ns, LLM = AI > Human
+  Pattern Classification: Different
+
+----------------------------------------------------------------------
+demir_quantifier_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0063, AI-label = 0.0061
+    LLM:   Human-label = 0.0043, AI-label = 0.0041
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0001 ± 0.0005  [t = 0.24, p = 0.8115]
+    LLM:   M = +0.0002 ± 0.0002  [t = 1.02, p = 0.3117]
+
+  Cross-Experiment Interaction Test:
+    t(71) = -0.129, p = 0.8979 
+
+  Direction: Human = ns, LLM = ns
+  Pattern Classification: Both ns
+
+----------------------------------------------------------------------
+demir_noun_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0005, AI-label = 0.0005
+    LLM:   Human-label = 0.0012, AI-label = 0.0017
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0000 ± 0.0002  [t = 0.17, p = 0.8630]
+    LLM:   M = -0.0004 ± 0.0001  [t = -3.90, p = 0.0003]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 2.318, p = 0.0233 *
+
+  Direction: Human = ns, LLM = AI > Human
+  Pattern Classification: Different
+
+----------------------------------------------------------------------
+demir_total_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0540, AI-label = 0.0524
+    LLM:   Human-label = 0.0428, AI-label = 0.0422
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0015 ± 0.0019  [t = 0.82, p = 0.4218]
+    LLM:   M = +0.0006 ± 0.0006  [t = 1.01, p = 0.3196]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 0.624, p = 0.5346 
+
+  Direction: Human = ns, LLM = ns
+  Pattern Classification: Both ns
+
+----------------------------------------------------------------------
+fung_interpersonal_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0737, AI-label = 0.0721
+    LLM:   Human-label = 0.0316, AI-label = 0.0267
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0016 ± 0.0017  [t = 0.93, p = 0.3613]
+    LLM:   M = +0.0049 ± 0.0007  [t = 7.13, p = 0.0000]
+
+  Cross-Experiment Interaction Test:
+    t(71) = -2.123, p = 0.0373 *
+
+  Direction: Human = ns, LLM = Human > AI
+  Pattern Classification: Different
+
+----------------------------------------------------------------------
+fung_referential_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0589, AI-label = 0.0578
+    LLM:   Human-label = 0.0763, AI-label = 0.0765
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0011 ± 0.0020  [t = 0.54, p = 0.5961]
+    LLM:   M = -0.0001 ± 0.0005  [t = -0.31, p = 0.7593]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 0.802, p = 0.4254 
+
+  Direction: Human = ns, LLM = ns
+  Pattern Classification: Both ns
+
+----------------------------------------------------------------------
+fung_structural_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0524, AI-label = 0.0505
+    LLM:   Human-label = 0.0726, AI-label = 0.0725
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0018 ± 0.0013  [t = 1.44, p = 0.1653]
+    LLM:   M = +0.0001 ± 0.0006  [t = 0.20, p = 0.8421]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 1.342, p = 0.1839 
+
+  Direction: Human = ns, LLM = ns
+  Pattern Classification: Both ns
+
+----------------------------------------------------------------------
+fung_cognitive_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0381, AI-label = 0.0359
+    LLM:   Human-label = 0.0100, AI-label = 0.0091
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0022 ± 0.0012  [t = 1.90, p = 0.0701]
+    LLM:   M = +0.0010 ± 0.0003  [t = 2.95, p = 0.0049]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 1.329, p = 0.1882 
+
+  Direction: Human = ns, LLM = Human > AI
+  Pattern Classification: Different
+
+----------------------------------------------------------------------
+fung_total_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.1294, AI-label = 0.1267
+    LLM:   Human-label = 0.1006, AI-label = 0.0970
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0027 ± 0.0026  [t = 1.06, p = 0.3016]
+    LLM:   M = +0.0037 ± 0.0009  [t = 3.88, p = 0.0003]
+
+  Cross-Experiment Interaction Test:
+    t(71) = -0.422, p = 0.6741 
+
+  Direction: Human = ns, LLM = Human > AI
+  Pattern Classification: Different
+
+----------------------------------------------------------------------
+nonfluency_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0030, AI-label = 0.0025
+    LLM:   Human-label = 0.0016, AI-label = 0.0016
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0006 ± 0.0003  [t = 1.73, p = 0.0978]
+    LLM:   M = +0.0001 ± 0.0001  [t = 0.49, p = 0.6265]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 1.807, p = 0.0750 
+
+  Direction: Human = ns, LLM = ns
+  Pattern Classification: Both ns
+
+----------------------------------------------------------------------
+liwc_filler_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0050, AI-label = 0.0055
+    LLM:   Human-label = 0.0007, AI-label = 0.0005
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = -0.0006 ± 0.0005  [t = -1.05, p = 0.3045]
+    LLM:   M = +0.0002 ± 0.0001  [t = 2.48, p = 0.0166]
+
+  Cross-Experiment Interaction Test:
+    t(71) = -2.009, p = 0.0484 *
+
+  Direction: Human = ns, LLM = Human > AI
+  Pattern Classification: Different
+
+----------------------------------------------------------------------
+disfluency_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0080, AI-label = 0.0080
+    LLM:   Human-label = 0.0023, AI-label = 0.0021
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = -0.0000 ± 0.0006  [t = -0.01, p = 0.9921]
+    LLM:   M = +0.0003 ± 0.0001  [t = 1.95, p = 0.0575]
+
+  Cross-Experiment Interaction Test:
+    t(71) = -0.562, p = 0.5759 
+
+  Direction: Human = ns, LLM = ns
+  Pattern Classification: Both ns
+
+----------------------------------------------------------------------
+like_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0199, AI-label = 0.0173
+    LLM:   Human-label = 0.0055, AI-label = 0.0048
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0026 ± 0.0012  [t = 2.18, p = 0.0406]
+    LLM:   M = +0.0007 ± 0.0003  [t = 2.13, p = 0.0382]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 2.104, p = 0.0389 *
+
+  Direction: Human = Human > AI, LLM = Human > AI
+  Pattern Classification: Similar
+
+----------------------------------------------------------------------
+tom_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0024, AI-label = 0.0032
+    LLM:   Human-label = 0.0014, AI-label = 0.0016
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = -0.0008 ± 0.0004  [t = -2.00, p = 0.0578]
+    LLM:   M = -0.0002 ± 0.0001  [t = -2.12, p = 0.0389]
+
+  Cross-Experiment Interaction Test:
+    t(71) = -1.893, p = 0.0624 
+
+  Direction: Human = ns, LLM = AI > Human
+  Pattern Classification: Different
+
+----------------------------------------------------------------------
+politeness_rate
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.0015, AI-label = 0.0021
+    LLM:   Human-label = 0.0084, AI-label = 0.0088
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = -0.0005 ± 0.0007  [t = -0.84, p = 0.4092]
+    LLM:   M = -0.0004 ± 0.0003  [t = -1.39, p = 0.1722]
+
+  Cross-Experiment Interaction Test:
+    t(71) = -0.237, p = 0.8131 
+
+  Direction: Human = ns, LLM = ns
+  Pattern Classification: Both ns
+
+----------------------------------------------------------------------
+sentiment
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 0.6748, AI-label = 0.6583
+    LLM:   Human-label = 0.9475, AI-label = 0.9525
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.0165 ± 0.0145  [t = 1.13, p = 0.2693]
+    LLM:   M = -0.0049 ± 0.0029  [t = -1.69, p = 0.0967]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 2.004, p = 0.0489 *
+
+  Direction: Human = ns, LLM = ns
+  Pattern Classification: Both ns
+
+----------------------------------------------------------------------
+quality
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 2.9913, AI-label = 2.7708
+    LLM:   Human-label = 2.9150, AI-label = 2.9110
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.2205 ± 0.0686  [t = 3.21, p = 0.0040]
+    LLM:   M = +0.0040 ± 0.0176  [t = 0.23, p = 0.8212]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 4.085, p = 0.0001 ***
+
+  Direction: Human = Human > AI, LLM = ns
+  Pattern Classification: Different
+
+----------------------------------------------------------------------
+connectedness
+  Sample sizes: Human N = 23, LLM N = 50
+----------------------------------------------------------------------
+
+  Condition Means by Experiment:
+    Human: Human-label = 2.7451, AI-label = 2.4538
+    LLM:   Human-label = 3.0410, AI-label = 3.0300
+
+  Condition Effect (Human-label minus AI-label):
+    Human: M = +0.2913 ± 0.0858  [t = 3.39, p = 0.0026]
+    LLM:   M = +0.0110 ± 0.0111  [t = 0.99, p = 0.3262]
+
+  Cross-Experiment Interaction Test:
+    t(71) = 4.670, p = 0.0000 ***
+
+  Direction: Human = Human > AI, LLM = ns
+  Pattern Classification: Different

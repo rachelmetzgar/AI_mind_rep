@@ -39,7 +39,7 @@ Original conversations used named partners (Sam, Casey, ChatGPT, Copilot). To en
 
 | Version | Human Partners | AI Partners | Purpose |
 |---|---|---|---|
-| `names/` | Sam, Casey | ChatGPT, Copilot | Original named partners |
+| `names/` | Sam, Casey | ChatGPT, Copilot | Original named partners, matches human fMRI experiment |
 | `balanced_names/` | Gregory, Rebecca | ChatGPT, Copilot | Gender-balanced human names |
 | `balanced_gpt/` | Gregory, Rebecca | ChatGPT, GPT-4 | Gender-balanced + varied AI identity |
 | `labels/` | "a human" | "an AI" | Abstract category labels only |
@@ -60,7 +60,7 @@ Baseline replication of the Chen et al. (2024)/TalkTuner methodology using synth
 ## Experiment 1 — Behavioral Analysis (`exp_1/`)
 
 ### Motivation
-Before examining internal representations, we establish that LLMs *behaviorally* differentiate between partner types. This parallels a companion human fMRI study (N=23) using identical procedures.
+Before examining internal representations, we establish that LLMs *behaviorally* differentiate between partner types without being told to do so. This parallels a companion human fMRI study (N=23) using identical procedures.
 
 ### Design
 - 50 independent LLaMA-2-13B-Chat "participant agents"
@@ -112,7 +112,7 @@ All computed on participant agent speech only:
 
 The consistent core across all identity-relevant versions is **discourse markers** (interpersonal, cognitive), **"like" rate**, and **politeness** — pragmatic features that modulate conversational register. These survive even in the `labels/` version where no names are present. The `balanced_gpt/` version shows the strongest effects, likely because replacing Copilot with GPT-4 sharpens the AI category (Copilot's behavioral profile overlapped with human partners in the original `names/` version).
 
-**Status:** Complete. Nonsense controls complete.
+**Status:** Complete. 
 
 ---
 
@@ -157,7 +157,7 @@ Scripts use `--version` for data variant and `--mode V1/V2` for generation mode.
 ## Experiment 3 — Concept Alignment / Injection (`exp_3/`)
 
 ### Motivation
-Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains*. The null hypothesis is that it's an opaque entity-type switch. The alternative is that it has compositional mental-property structure. Relatedly, Lindsey (2025) used concept injection and activation steering in Claude models to test whether LLMs exhibit emergent introspective awareness of their own internal states — finding limited but measurable introspective capability. Exp 3 applies similar contrastive concept elicitation and steering methods, but directed at the model's representation of its conversational *partner's* mental properties rather than its own.
+Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains* and how it aligns with different dimensions of human mental properties. Lindsey (2025) used concept injection and activation steering in Claude models to test whether LLMs exhibit emergent introspective awareness of their own internal states — finding limited but measurable introspective capability. Exp 3 applies similar contrastive concept elicitation and steering methods, but directed at the model's representation of its conversational *partner's* mental properties rather than its own.
 
 ### Directory Structure
 Code is centralized at `exp_3/code/` with data, concepts, and results at the top level:
@@ -244,7 +244,7 @@ Behavioral replication of Gray et al. (2007):
 ### Motivation
 Experiments 1-3 establish that LLMs behaviorally differentiate between partner types, form linearly decodable partner representations, and possess concept-level representations of mental properties. Separately, Wu et al. (2025, npj AI) showed that ToM task performance depends on sparse parameters concentrated in positional encoding — suggesting ToM relies on tracking which information is accessible to which entity based on narrative position.
 
-Exp 5 bridges these: **does the model activate mental-state concept representations (awareness, attention, consciousness) in a context-sensitive way that tracks characters' knowledge states during false belief tasks?**
+Exp 5 bridges these: **does the model activate mental-state concept representations (awareness, attention, consciousness) in a context-sensitive way that tracks characters' knowledge states during tasks meant to elicit ToM reasoning, like false belief tasks?**
 
 ### Design
 

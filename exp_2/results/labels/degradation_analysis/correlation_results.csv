@@ -1,0 +1,13 @@
+degradation_metric,probe,r,p,n,condition
+ttr_drop,reading_peak_confidence,0.040605457797530144,0.06944023471382096,2000,
+ttr_drop,reading_peak_confidence,0.08861466280035078,0.0050432979485186226,1000,human
+ttr_drop,reading_peak_confidence,0.029895497513302737,0.3449615411357073,1000,ai
+ttr_drop,control_peak_confidence,0.05199677310858719,0.02004600081250771,2000,
+ttr_drop,control_peak_confidence,0.054149984214337005,0.08699125827351169,1000,human
+ttr_drop,control_peak_confidence,0.06008305588771634,0.05752073518971116,1000,ai
+trigram_increase,reading_peak_confidence,0.02418481412533668,0.2796705581321936,2000,
+trigram_increase,reading_peak_confidence,0.07485456584777309,0.017910138407967145,1000,human
+trigram_increase,reading_peak_confidence,-0.014979877256690161,0.6361137386384063,1000,ai
+trigram_increase,control_peak_confidence,0.0379958695044546,0.089361014909439,2000,
+trigram_increase,control_peak_confidence,0.044338975883632066,0.16119705226514244,1000,human
+trigram_increase,control_peak_confidence,0.03400532753056893,0.2826843798587025,1000,ai
