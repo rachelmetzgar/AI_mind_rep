@@ -85,6 +85,19 @@ All computed on participant agent speech only:
 - 2×2 repeated-measures ANOVA (Partner × Sociality) with effect-specific error terms
 - Cross-species comparison via independent t-tests on subject-level condition effects
 
+### Results by Version
+
+| Version | Significant / 23 | Key effects |
+|---|---|---|
+| `names/` | **14** | Word count (AI > H), questions (H > AI), discourse markers, fillers, "like", ToM phrases, politeness (AI > H), hedging subcategories |
+| `balanced_names/` | **12** | Same core pattern minus word count and some hedging; discourse markers, "like", ToM phrases, politeness remain |
+| `balanced_gpt/` | **17** | Strongest version — adds sentiment (AI > H), conversational quality (AI > H), connectedness (H > AI) on top of the core pattern |
+| `labels/` | **5** | Interpersonal DMs, cognitive DMs, total DMs, "like" rate, politeness — the discourse/pragmatic core survives even without names |
+| `nonsense_codeword/` | **0** | Clean null — no effects when tokens lack identity-relevant framing |
+| `nonsense_ignore/` | **14** | Confounded by instruction-compliance artifact (see above) |
+
+The consistent core across all identity-relevant versions is **discourse markers** (interpersonal, cognitive), **"like" rate**, and **politeness** — pragmatic features that modulate conversational register. These survive even in the `labels/` version where no names are present. The `balanced_gpt/` version shows the strongest effects, likely because replacing Copilot with GPT-4 sharpens the AI category (Copilot's behavioral profile overlapped with human partners in the original `names/` version).
+
 **Status:** Complete. Nonsense controls complete.
 
 ---
