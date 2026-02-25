@@ -4,9 +4,23 @@
 
 ---
 
-## Overview
+## Motivation
 
-This project investigates how large language models (LLMs) represent and respond to conversational partner identity. When an LLM believes it is talking to a human versus an AI, does it adjust its behavior? If so, is that adjustment driven by a linearly decodable internal representation? And does that representation have compositional structure — encoding mental properties of the partner — or is it an opaque entity-type switch?
+Large language models increasingly serve as conversational partners, yet we know surprisingly little about how they internally represent the agents they interact with. Do LLMs simply respond to surface-level cues about partner identity, or do they construct structured representations of mind — encoding dimensions like experience, agency, and intentionality in ways that parallel human social cognition? This project investigates both sides of human-AI interaction: using fMRI to study how human brains distinguish AI from human interlocutors, and using mechanistic interpretability methods to ask the complementary question from the model's perspective. Recent work on model personas — including persona vectors (Chen et al., 2025), the Assistant Axis (Lu et al., 2026), and the Persona Selection Model (Anthropic, 2026) — has shown that LLMs maintain coherent, causally active identity representations of *themselves*. We extend this line of inquiry to the other side of the conversation: how models represent the identity and mental properties of the *user* they are talking to, and whether those representations carry the kind of compositional folk-psychological structure that decades of mind perception research in psychology would predict.
+
+The project is organized around five core questions:
+
+1. Do LLMs behaviorally differentiate between human and AI conversational partners, without explicit instruction to do so? (Exp 1)
+2. Are partner identity distinctions linearly encoded in model activations, and do they causally influence generation? (Exp 2)
+3. Do partner representations have compositional folk-psychological structure? (Exp 3)
+4. Does LLM mind perception geometry mirror the structure found in human psychology? (Exp 4)
+5. Do mental-state concept vectors activate during theory-of-mind reasoning? (Exp 5)
+
+**Why this matters:** Understanding how LLMs represent conversational partners has direct implications for AI safety (do models treat users differently based on who they think they're talking to?), alignment (are persona representations stable and controllable?), and the broader science of machine cognition (do LLMs develop something functionally analogous to theory of mind?). As AI-AI interaction becomes increasingly common — with models serving as agents, tools, and intermediaries for each other — knowing how partner identity representations shape behavior is critical for predicting how these systems will interact at scale. More broadly, this work probes the conceptual structure of representations of mind in LLMs: not just how models represent the user, but whether they develop structured representations of mind in general, and whether that structure resembles the folk-psychological framework humans use to understand other agents. As models are deployed in high-stakes social contexts — therapy, education, companionship — the structure of these partner representations shapes how models adapt their behavior, and whether that adaptation is transparent, predictable, and aligned with human expectations.
+
+---
+
+## Overview
 
 Six experiments address these questions at increasing mechanistic depth:
 
@@ -271,6 +285,10 @@ conda env create -f envs/llama2_env.yml
 
 ## References
 
+Anthropic. (2026). The persona selection model: Why AI assistants might behave like humans. *Anthropic Alignment Blog*.
+
+Chen, R., Arditi, A., Sleight, H., Evans, O., & Lindsey, J. (2025). Persona vectors: Monitoring and controlling character traits in language models. *arXiv preprint arXiv:2507.21509*.
+
 Chen, Y., Wu, A., DePodesta, T., Yeh, C., Li, K., Marin, N. C., ... & Viégas, F. (2024). Designing a dashboard for transparency and control of conversational AI. *arXiv preprint arXiv:2406.07882*.
 
 Danescu-Niculescu-Mizil, C., Sudhof, M., Jurafsky, D., Leskovec, J., & Potts, C. (2013). A computational approach to politeness. *ACL*.
@@ -286,6 +304,8 @@ Gray, H. M., Gray, K., & Wegner, D. M. (2007). Dimensions of mind perception. *S
 Hutto, C., & Gilbert, E. (2014). VADER: A parsimonious rule-based model for sentiment analysis. *ICWSM*.
 
 Lindsey, J. (2025). Emergent introspective awareness in large language models. *Transformer Circuits Thread*, Anthropic.
+
+Lu, C., Gallagher, J., Michala, J., Fish, K., & Lindsey, J. (2026). The assistant axis: Situating and stabilizing the default persona of language models. *arXiv preprint arXiv:2601.10387*.
 
 Touvron, H., Martin, L., Stone, K., et al. (2023). Llama 2: Open foundation and fine-tuned chat models. *arXiv preprint arXiv:2307.09288*.
 
