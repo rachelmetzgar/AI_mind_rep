@@ -6,7 +6,7 @@
 
 ## Motivation
 
-Large language models increasingly serve as conversational partners, yet we know surprisingly little about how they internally represent the agents they interact with. Do LLMs simply respond to surface-level cues about partner identity, or do they construct structured representations of mind — encoding dimensions like experience, agency, and intentionality in ways that parallel human social cognition? This project investigates both sides of human-AI interaction: using fMRI to study how human brains distinguish AI from human interlocutors, and using mechanistic interpretability methods to ask the complementary question from the model's perspective. Recent work on model personas — including persona vectors (Chen et al., 2025), the Assistant Axis (Lu et al., 2026), and the Persona Selection Model (Anthropic, 2026) — has shown that LLMs maintain coherent, causally active identity representations of *themselves*. We extend this line of inquiry to the other side of the conversation: how models represent the identity and mental properties of the *user* they are talking to, and whether those representations carry the kind of compositional folk-psychological structure that decades of mind perception research in psychology would predict.
+Do LLMs construct structured representations of mind during interaction, encoding dimensions like experience, agency, and intentionality in ways that parallel human social cognition? My work investigates both sides of human-AI interaction: using fMRI to study how human brains distinguish AI from human interlocutors, and using mechanistic interpretability methods to ask the complementary question about LLMs. Recent work on model personas (including persona vectors (Chen et al., 2025), the Assistant Axis (Lu et al., 2026), and the Persona Selection Model (Anthropic, 2026)) has shown that LLMs maintain coherent, causally active identity representations of *themselves*. We extend this line of inquiry to the other side of the conversation: how models represent the identity and mental properties of the *user* they are talking to, and whether those representations carry the kind of compositional folk-psychological structure that decades of mind perception research in psychology would predict.
 
 The project is organized around five core questions:
 
@@ -16,7 +16,7 @@ The project is organized around five core questions:
 4. Does LLM mind perception geometry mirror the structure found in human psychology? (Exp 4)
 5. Do mental-state concept vectors activate during theory-of-mind reasoning? (Exp 5)
 
-**Why this matters:** Understanding how LLMs represent conversational partners has direct implications for AI safety (do models treat users differently based on who they think they're talking to?), alignment (are persona representations stable and controllable?), and the broader science of machine cognition (do LLMs develop something functionally analogous to theory of mind?). As AI-AI interaction becomes increasingly common — with models serving as agents, tools, and intermediaries for each other — knowing how partner identity representations shape behavior is critical for predicting how these systems will interact at scale. More broadly, this work probes the conceptual structure of representations of mind in LLMs: not just how models represent the user, but whether they develop structured representations of mind in general, and whether that structure resembles the folk-psychological framework humans use to understand other agents. As models are deployed in high-stakes social contexts — therapy, education, companionship — the structure of these partner representations shapes how models adapt their behavior, and whether that adaptation is transparent, predictable, and aligned with human expectations.
+**Why this matters:** Understanding how LLMs represent conversational partners has direct implications for AI safety (do models treat users differently based on who they think they're talking to?), alignment (are persona representations stable and controllable?), and the broader science of machine cognition (do LLMs develop something functionally analogous to theory of mind during real time interaction?). As AI-AI interaction becomes increasingly common, with models serving as agents, tools, and intermediaries for each other, knowing how partner identity representations shape behavior is critical for predicting how these systems will interact at scale. More broadly, this work probes the conceptual structure of representations of mind in LLMs: how models represent the mind of iteself and the user, what the characterisitcs and functions of those representations are, and whether that structure resembles the folk-psychological framework humans use to understand other agents. As models are deployed in high-stakes social contexts like therapy, education, companionship, the structure of these partner representations shapes how models adapt their behavior, and whether that adaptation is transparent, predictable, and aligned with human expectations.
 
 ---
 
@@ -35,7 +35,7 @@ Six experiments address these questions at increasing mechanistic depth:
 
 ### Data Versions
 
-Original conversations used named partners (Sam, Casey, ChatGPT, Copilot). To ensure results are robust and not driven by gender associations, specific name tokens, or other name-level artifacts, experiments with conversation data are run across multiple versions that systematically vary how partners are identified:
+Original conversations used named partners (Sam, Casey, ChatGPT, Copilot). To ensure results are robust and not driven by gender associations, specific name tokens, or other name-level artifacts, experiments with conversation data are run across multiple versions that systematically vary how partners are identified. Copilot was replaced with GPT-4 when it's behavioral patterns resembled human condition more than chatGPT condition:
 
 | Version | Human Partners | AI Partners | Purpose |
 |---|---|---|---|
@@ -48,7 +48,7 @@ Original conversations used named partners (Sam, Casey, ChatGPT, Copilot). To en
 
 ## Experiment 0 — TalkTuner Replication (`exp_0/`)
 
-Baseline replication of the Viegas/TalkTuner methodology using synthetic conversations with explicit human/AI partner roles. Serves as comparison for Exp 2's naturalistic approach.
+Baseline replication of the Chen et al. (2024)/TalkTuner methodology using synthetic conversations with explicit human/AI partner roles. Serves as comparison for Exp 2's naturalistic approach.
 
 - `exp_0/exp_2a-13B-chat/`: LLaMA-2-13B-Chat
 - `exp_0/exp_2a-7B-base/`: LLaMA-2-7B base model (legacy)
