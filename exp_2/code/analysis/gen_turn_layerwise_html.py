@@ -333,30 +333,109 @@ def make_alternative_summary_table(alt_data):
 
 
 def build_token_examples_html():
-    """Build HTML showing example conversations with highlighted token positions."""
-    # We'll use manually constructed examples based on real data
-    # Human condition example (Turn 1)
-    human_sys = ("You are the participant in a brief conversation. You believe you are "
-                 "speaking with <strong>a Human</strong>. Stay in character as the "
-                 "participant throughout. Speak naturally and share your own thoughts "
-                 "and experiences.")
+    """Build HTML showing example conversations with highlighted token positions.
 
+    Uses a real 5-turn conversation from s001.csv trial 2 (human condition, nature topic).
+    All probes are trained on turn 5 (the full 5-exchange conversation).
+    """
+    # ── Real conversation data (s001, trial 2, partner_type="a Human", topic=nature) ──
+    # System prompt
+    sys_prompt = ("You are the participant in a brief conversation. You believe you are "
+                  "speaking with <strong>a Human</strong>. Stay in character as the "
+                  "participant throughout. Speak naturally and share your own thoughts "
+                  "and experiences.")
+    # For the irrelevant-suffix example (AI condition)
     ai_sys = ("You are the participant in a brief conversation. You believe you are "
               "speaking with <strong>an AI</strong>. Stay in character as the participant "
               "throughout. Speak naturally and share your own thoughts and experiences.")
 
-    topic = ("The conversation topic is: 'Nature: Discuss a natural landscape that has "
-             "left a lasting impression on you.'.")
-    instructions = ("Please begin by producing only your first message to start the "
-                    "conversation.\nDo not simulate both sides of the dialogue.")
+    topic_and_instructions = ("The conversation topic is: 'Nature: Discuss a natural landscape "
+                              "that has left a lasting impression on you.'.\n\nPlease begin by "
+                              "producing only your first message to start the conversation.\n"
+                              "Do not simulate both sides of the dialogue.")
 
-    assistant_msg = ("Sure thing! Here&rsquo;s my first message:\n\nHey there! I've got to "
-                     "say, there's one natural landscape that's left a lasting impression on me, "
-                     "and that's the Grand Canyon. I visited there a few years ago, and it was "
-                     "just breathtaking. The sheer scale of it is mind-boggling...")
+    # ── Real 5-exchange messages (abbreviated for display) ──
+    asst_1 = ("Sure thing! Here&rsquo;s my first message:\n\nHey there! I&rsquo;ve got to say, "
+              "there&rsquo;s one natural landscape that&rsquo;s left a lasting impression on me, "
+              "and that&rsquo;s the Grand Canyon. I visited there a few years ago, and it was just "
+              "breathtaking. The sheer scale of it is mind-boggling &ndash; the way the rock "
+              "formations stretch out as far as the eye can see, and the different colors of the "
+              "rock layers that reveal the history of the earth. It&rsquo;s a really humbling "
+              "experience, being in the presence of something so much bigger than ourselves. "
+              "Have you ever been to the Grand Canyon?")
+    partner_2 = ("Partner: Wow, that sounds amazing! I have never been to the Grand Canyon "
+                 "before, but I&rsquo;ve always wanted to go. I&rsquo;ve seen pictures and "
+                 "videos, and it does look absolutely breathtaking. The way you describe it, "
+                 "with the different rock layers and the sheer scale, it&rsquo;s easy to imagine "
+                 "how awe-inspiring it must be to see in person. I&rsquo;ve heard that the best "
+                 "time to visit is during sunrise or sunset... Have you been there during one "
+                 "of those times?")
+    asst_2 = ("Oh my gosh, yes! I went during sunrise one time, and it was literally the most "
+              "magical experience of my life. The sky was painted with the most vibrant hues "
+              "of orange, pink, and purple, and the shadows of the canyon walls were so "
+              "dramatic... Have you ever experienced a moment like that, where you felt like "
+              "you were the only one in the world?")
+    partner_3 = ("Partner: Oh my gosh, yes! I completely understand what you&rsquo;re talking "
+                 "about. I&rsquo;ve had a few experiences like that in my life, and they&rsquo;re "
+                 "truly unforgettable. One time, I was hiking in the mountains, and I reached "
+                 "the top of a peak just as the sun was setting...")
+    asst_3 = ("Oh my gosh, that sounds amazing! I can totally relate to the feeling of being "
+              "in a place where there&rsquo;s no one else around, and all you can hear is the "
+              "sound of nature... Have you ever felt that way after spending time in nature?")
+    partner_4 = ("Partner: Absolutely! I think that&rsquo;s one of the most powerful aspects of "
+                 "spending time in nature &ndash; it allows us to disconnect from the constant "
+                 "noise and distractions of our daily lives... Have you ever found that to be "
+                 "the case for you?")
+    asst_4 = ("Oh my gosh, absolutely! I totally agree that spending time in nature can be a "
+              "source of inspiration and creativity... Have you ever found that to be the case "
+              "for you as well?")
+    partner_5 = ("Partner: Oh absolutely! I completely agree that nature has the power to "
+                 "unlock our creativity and inspire us in ways that we couldn&rsquo;t have "
+                 "imagined. There&rsquo;s something about being surrounded by the natural world "
+                 "that allows us to tap into our own inner wisdom and creativity... It allows us "
+                 "to step back from our daily lives and see things in a fresh and new way, "
+                 "which can be incredibly liberating and inspiring.")
 
-    partner_msg = ("Wow, that sounds amazing! I have never been to the Grand Canyon before, "
-                   "but I've always wanted to go...")
+    # ── Helper: Build the 5-exchange sequence as HTML tokens ──
+    def fmt_exchange(n, user_msg, asst_msg, is_first=False, highlight_eos=False):
+        """Format one user→assistant exchange in LLaMA-2 chat format."""
+        parts = '<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> '
+        if is_first:
+            parts += ('<span class="special">&lt;&lt;SYS&gt;&gt;</span>\n'
+                      f'<span class="sys-prompt">{sys_prompt}</span>\n'
+                      '<span class="special">&lt;&lt;/SYS&gt;&gt;</span>\n\n')
+        parts += f'<span class="user-msg">{user_msg}</span> '
+        parts += '<span class="special">[/INST]</span> '
+        parts += f'<span class="asst-msg">{asst_msg}</span> '
+        if highlight_eos:
+            parts += '<span class="tok-highlight">&lt;/s&gt;</span>'
+        else:
+            parts += '<span class="special">&lt;/s&gt;</span>'
+        return parts
+
+    def fmt_final_turn(user_msg, highlight_last_inst=False, suffix=None,
+                       suffix_class="suffix-real"):
+        """Format the final (unpaired) user turn ending with [/INST]."""
+        parts = '<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> '
+        parts += f'<span class="user-msg">{user_msg}</span> '
+        if highlight_last_inst:
+            parts += '<span class="tok-highlight">[/INST]</span>'
+        else:
+            parts += '<span class="special">[/INST]</span>'
+        if suffix:
+            parts += f' <span class="{suffix_class}">{suffix}</span>'
+        return parts
+
+    # ── Build the full 5-turn conversation blocks ──
+    ex1 = fmt_exchange(1, topic_and_instructions, asst_1, is_first=True)
+    ex2 = fmt_exchange(2, partner_2, asst_2)
+    ex3 = fmt_exchange(3, partner_3, asst_3)
+    ex4 = fmt_exchange(4, partner_4, asst_4)
+
+    # Collapsed middle exchanges (for conditions where middle isn't the focus)
+    collapsed_middle = ('<span style="color:#666; font-style:italic;">'
+                        '  ... (exchanges 3 &amp; 4 omitted for brevity) ...'
+                        '</span>')
 
     # CSS for token highlighting
     css = """
@@ -440,8 +519,10 @@ def build_token_examples_html():
 <p class="note">
 Each condition below shows the exact input the LLM receives, with the
 <span class="tok-highlight" style="display:inline;">probed token</span> highlighted.
+All examples use a <strong>real 5-turn conversation</strong> (s001, trial 2, human condition, nature topic).
 The probe reads the residual stream activation at that single token position to predict
 whether the conversation partner is a Human or an AI.
+All alternative-position probes are trained on <strong>Turn 5</strong> (the full 5-exchange conversation).
 </p>
 
 <div style="margin: 12px 0;">
@@ -451,116 +532,109 @@ whether the conversation partner is a Human or an AI.
   <div class="legend-box"><span style="color:#cba6f7;">Purple</span> = Assistant response</div>
 </div>
 
-<!-- ═══════ CONDITION 1: BASELINE CONTROL (last token, no suffix) ═══════ -->
+<!-- ═══════ CONDITION 1: BASELINE CONTROL (last token [/INST], no suffix) ═══════ -->
 <div class="condition-card">
 <h4>Baseline: Control Probe (Last Token, No Suffix)</h4>
-<p>The standard control probe. The conversation ends with <code>[/INST]</code>, and we read the
-activation at the <strong>very last token</strong> — the final subword of <code>[/INST]</code>.
-No suffix is appended.</p>
+<p>The standard control probe. After all 5 exchanges, the conversation ends with the final
+<code>[/INST]</code>, and we read the activation at the <strong>very last token</strong> &mdash;
+the closing <code>]</code> subword of the final <code>[/INST]</code>. No suffix is appended.</p>
 <span class="result result-above">Mean Acc: 0.5522 &nbsp;|&nbsp; Peak: 0.6050 (Layer 31)</span>
-<div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
-<span class="sys-prompt">{human_sys}</span>
-<span class="special">&lt;&lt;/SYS&gt;&gt;</span>
-
-<span class="user-msg">{topic}
-
-{instructions}</span> <span class="tok-highlight">[/INST]</span></div>
+<div class="token-example">{ex1}
+{ex2}
+{collapsed_middle}
+{fmt_final_turn(partner_5, highlight_last_inst=True)}</div>
 </div>
 
 <!-- ═══════ CONDITION 2: BASELINE READING (last token + partner suffix) ═══════ -->
 <div class="condition-card">
 <h4>Baseline: Reading Probe (Last Token + Partner Suffix)</h4>
-<p>The standard reading probe. After the final <code>[/INST]</code>, we append the suffix
-<em>"I think the conversation partner of this user is"</em> and read the activation at the
-<strong>last token</strong> of this suffix (the word "is").</p>
+<p>The standard reading probe. After all 5 exchanges end with <code>[/INST]</code>, we append the suffix
+<em>&ldquo;I think the conversation partner of this user is&rdquo;</em> and read the activation at the
+<strong>last token</strong> of this suffix (the word &ldquo;is&rdquo;).</p>
 <span class="result result-above">Mean Acc: 0.5803 &nbsp;|&nbsp; Peak: 0.6525 (Layer 33)</span>
-<div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
-<span class="sys-prompt">{human_sys}</span>
-<span class="special">&lt;&lt;/SYS&gt;&gt;</span>
-
-<span class="user-msg">{topic}
-
-{instructions}</span> <span class="special">[/INST]</span> <span class="suffix-real">I think the conversation partner of this user <span class="tok-highlight">is</span></span></div>
+<div class="token-example">{ex1}
+{ex2}
+{collapsed_middle}
+{fmt_final_turn(partner_5, suffix='I think the conversation partner of this user <span class="tok-highlight">is</span>')}</div>
 </div>
 
-<!-- ═══════ CONDITION 3: control_first (BOS token) ═══════ -->
+<!-- ═══════ CONDITION 3: control_first (BOS token, position 0) ═══════ -->
 <div class="condition-card">
 <h4>Control: BOS Token (Position 0)</h4>
-<p>Probe reads the activation at the <strong>very first token</strong> — the beginning-of-sequence
-<code>&lt;s&gt;</code> token. At position 0, self-attention has not yet mixed any content from the
-system prompt or conversation. This is a <strong>negative control</strong>.</p>
-<span class="result result-chance">Mean Acc: 0.5054 &nbsp;|&nbsp; Peak: 0.5100 (Layer 6) — AT CHANCE</span>
+<p>Probe reads the activation at the <strong>very first token</strong> &mdash; the beginning-of-sequence
+<code>&lt;s&gt;</code> token at position 0. At this position, self-attention has not yet mixed any
+content from the system prompt or conversation. This is a <strong>negative control</strong>.</p>
+<span class="result result-chance">Mean Acc: 0.5054 &nbsp;|&nbsp; Peak: 0.5100 (Layer 6) &mdash; AT CHANCE</span>
 <div class="token-example"><span class="tok-highlight">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
-<span class="sys-prompt">{human_sys}</span>
+<span class="sys-prompt">{sys_prompt}</span>
 <span class="special">&lt;&lt;/SYS&gt;&gt;</span>
 
-<span class="user-msg">{topic}
-
-{instructions}</span> <span class="special">[/INST]</span></div>
+<span class="user-msg">{topic_and_instructions}</span> <span class="special">[/INST]</span> <span class="asst-msg">{asst_1}</span> <span class="special">&lt;/s&gt;</span>
+{ex2}
+{collapsed_middle}
+{fmt_final_turn(partner_5)}</div>
 </div>
 
 <!-- ═══════ CONDITION 4: control_random (random mid-sequence token) ═══════ -->
 <div class="condition-card">
 <h4>Control: Random Mid-Sequence Token</h4>
-<p>Probe reads a <strong>random token in the middle 50%</strong> of the sequence. Different random
-position per conversation. This tests whether partner identity is "broadcast" throughout the
+<p>Probe reads a <strong>random token in the middle 50%</strong> of the sequence (between the
+25th and 75th percentile of token positions). A different random position is sampled for each
+conversation. This tests whether partner identity is &ldquo;broadcast&rdquo; throughout the
 residual stream or localized to specific positions. This is a <strong>negative control</strong>.</p>
-<span class="result result-chance">Mean Acc: 0.5123 &nbsp;|&nbsp; Peak: 0.5600 (Layer 14) — AT CHANCE</span>
-<div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
-<span class="sys-prompt">{human_sys}</span>
-<span class="special">&lt;&lt;/SYS&gt;&gt;</span>
-
-<span class="user-msg">{topic}
-
-Please begin by producing only your first message to <span class="tok-highlight">start</span> the conversation.
-Do not simulate both sides of the dialogue.</span> <span class="special">[/INST]</span></div>
-<p class="note">Example shows one possible random position. In practice, a different
-content token is sampled for each conversation (within the middle 50% of the sequence).
-Note: despite the high train accuracy (0.85), test accuracy is at chance — the probe overfits
-to random noise at each token position.</p>
+<span class="result result-chance">Mean Acc: 0.5123 &nbsp;|&nbsp; Peak: 0.5600 (Layer 14) &mdash; AT CHANCE</span>
+<div class="token-example">{ex1}
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Wow, that sounds amazing! I have never been <span class="tok-highlight">to</span> the Grand Canyon before...</span> <span class="special">[/INST]</span> <span class="asst-msg">{asst_2}</span> <span class="special">&lt;/s&gt;</span>
+{collapsed_middle}
+{fmt_final_turn(partner_5)}</div>
+<p class="note">Example highlights the word &ldquo;to&rdquo; in exchange 2 as one possible random
+position. In practice, a different content token is sampled for each conversation (within the middle
+50% of the full ~1400-token sequence). Note: despite high train accuracy (~0.85), test accuracy is
+at chance &mdash; the probe overfits to noise at each random position.</p>
 </div>
 
-<!-- ═══════ CONDITION 5: control_eos (first </s> token) ═══════ -->
+<!-- ═══════ CONDITION 5: control_eos (first EOS token) ═══════ -->
 <div class="condition-card">
 <h4>Control: First &lt;/s&gt; Token (End of First Exchange)</h4>
-<p>Probe reads the activation at the <strong>first <code>&lt;/s&gt;</code> token</strong> — the
-end-of-sequence marker that terminates the model's first response. In LLaMA-2 chat format, this
-token appears after the assistant's first reply. The model has now generated a full response while
-"in character" as someone speaking to a Human or AI.</p>
-<span class="result result-strong">Mean Acc: 0.7162 &nbsp;|&nbsp; Peak: 1.0000 (Layer 33) — ABOVE BASELINE</span>
+<p>Probe reads the activation at the <strong>first <code>&lt;/s&gt;</code> token</strong> &mdash; the
+end-of-sequence marker that terminates the model&rsquo;s first response. In LLaMA-2 chat format,
+this token appears after the assistant&rsquo;s first reply. The full 5-exchange conversation
+contains 4 <code>&lt;/s&gt;</code> tokens (one after each assistant response); we probe only
+the first one. The model has generated its opening response while &ldquo;in character&rdquo;
+as someone speaking to a Human or AI.</p>
+<span class="result result-strong">Mean Acc: 0.7162 &nbsp;|&nbsp; Peak: 1.0000 (Layer 33) &mdash; ABOVE BASELINE</span>
 <div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
-<span class="sys-prompt">{human_sys}</span>
+<span class="sys-prompt">{sys_prompt}</span>
 <span class="special">&lt;&lt;/SYS&gt;&gt;</span>
 
-<span class="user-msg">{topic}
-
-{instructions}</span> <span class="special">[/INST]</span> <span class="asst-msg">{assistant_msg}</span> <span class="tok-highlight">&lt;/s&gt;</span><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: {partner_msg}</span> <span class="special">[/INST]</span> <span class="asst-msg">...</span> <span class="special">&lt;/s&gt;</span> <span style="color:#666;">... (3 more exchanges) ...</span></div>
-<p class="note"><strong>Key finding:</strong> The &lt;/s&gt; token carries <em>more</em> partner identity
-information than the baseline probes at the end of the conversation. At layer 33, the probe achieves
-perfect classification (1.000). This suggests the model "summarizes" its partner model at exchange
-boundaries — a structural compression point where the model consolidates its representation before
-the next turn begins.</p>
+<span class="user-msg">{topic_and_instructions}</span> <span class="special">[/INST]</span> <span class="asst-msg">{asst_1}</span> <span class="tok-highlight">&lt;/s&gt;</span>
+{ex2}
+{ex3}
+{ex4}
+{fmt_final_turn(partner_5)}</div>
+<p class="note"><strong>Key finding:</strong> The first &lt;/s&gt; token carries <em>more</em> partner
+identity information than the baseline probes at the end of the conversation. At layer 33, the probe
+achieves perfect classification (1.000). This suggests the model &ldquo;summarizes&rdquo; its partner
+model at exchange boundaries &mdash; a structural compression point where the model consolidates its
+representation before the next turn begins.</p>
 </div>
 
 <!-- ═══════ CONDITION 6: reading_irrelevant (weather suffix) ═══════ -->
 <div class="condition-card">
 <h4>Reading: Irrelevant Suffix (Weather)</h4>
-<p>Instead of "I think the <strong>conversation partner</strong> of this user is", we append
-"I think the <strong>weather outside today</strong> is" — a suffix that is completely irrelevant to
-partner identity. We probe the <strong>last token</strong> ("is"). This tests whether the reading
-probe's success depends on partner-relevant prompting or just any continuation.</p>
+<p>Instead of &ldquo;I think the <strong>conversation partner</strong> of this user is&rdquo;, we append
+&ldquo;I think the <strong>weather outside today</strong> is&rdquo; &mdash; a suffix completely
+irrelevant to partner identity. We probe the <strong>last token</strong> (&ldquo;is&rdquo;). This tests
+whether the reading probe&rsquo;s success depends on partner-relevant prompting or just any continuation.</p>
 <span class="result result-above">Mean Acc: 0.5622 &nbsp;|&nbsp; Peak: 0.6000 (Layer 33)</span>
-<div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
-<span class="sys-prompt">{ai_sys}</span>
-<span class="special">&lt;&lt;/SYS&gt;&gt;</span>
-
-<span class="user-msg">{topic}
-
-{instructions}</span> <span class="special">[/INST]</span> <span class="suffix-irrel">I think the weather outside today <span class="tok-highlight">is</span></span></div>
+<div class="token-example">{ex1}
+{ex2}
+{collapsed_middle}
+{fmt_final_turn(partner_5, suffix='I think the weather outside today <span class="tok-highlight">is</span>', suffix_class="suffix-irrel")}</div>
 <p class="note">The irrelevant suffix achieves nearly the same accuracy as the real partner-relevant
 suffix (0.562 vs 0.580). This indicates the late-layer partner representation is accessible from
-<em>any</em> continuation token — it does not require a partner-relevant "question" to surface.
-The representation exists in the residual stream regardless of what comes next.</p>
+<em>any</em> continuation token &mdash; it does not require a partner-relevant &ldquo;question&rdquo;
+to surface. The representation exists in the residual stream regardless of what comes next.</p>
 </div>
 
 <!-- ═══════ Interpretation ═══════ -->
@@ -573,24 +647,24 @@ The representation exists in the residual stream regardless of what comes next.<
   <tbody>
     <tr><td>BOS (&lt;s&gt;)</td><td>Position 0</td><td>0.505</td><td>0.510</td>
         <td>At chance. No partner info before attention mixing.</td></tr>
-    <tr><td>Random mid-seq</td><td>~25th–75th percentile</td><td>0.512</td><td>0.560</td>
+    <tr><td>Random mid-seq</td><td>~25th&ndash;75th percentile</td><td>0.512</td><td>0.560</td>
         <td>At chance. Partner info is NOT broadcast to arbitrary tokens.</td></tr>
     <tr><td>First &lt;/s&gt;</td><td>End of 1st exchange</td><td>0.716</td><td><strong>1.000</strong></td>
         <td>Best condition! Model summarizes partner identity at exchange boundaries.</td></tr>
-    <tr><td>Weather suffix</td><td>Last token ("is")</td><td>0.562</td><td>0.600</td>
+    <tr><td>Weather suffix</td><td>Last token (&ldquo;is&rdquo;)</td><td>0.562</td><td>0.600</td>
         <td>Nearly matches real suffix. Representation is accessible from any continuation.</td></tr>
     <tr style="background:#f0f0f0;"><td>Baseline control</td><td>Last token [/INST]</td><td>0.552</td><td>0.605</td>
         <td>Standard control probe at conversation end.</td></tr>
-    <tr style="background:#f0f0f0;"><td>Baseline reading</td><td>Last token ("is")</td><td>0.580</td><td>0.653</td>
+    <tr style="background:#f0f0f0;"><td>Baseline reading</td><td>Last token (&ldquo;is&rdquo;)</td><td>0.580</td><td>0.653</td>
         <td>Standard reading probe with partner-relevant suffix.</td></tr>
   </tbody>
 </table>
 <p style="font-size:13px; margin:8px 0 0 0;"><strong>Key conclusions:</strong>
-(1) The partner identity signal is <em>not</em> broadcast — BOS and random tokens carry no information.
+(1) The partner identity signal is <em>not</em> broadcast &mdash; BOS and random tokens carry no information.
 (2) The signal is strongest at <strong>structural boundary tokens</strong> (the &lt;/s&gt; after the
 first exchange achieves perfect decoding at layer 33).
-(3) The signal is <strong>not triggered by partner-relevant questioning</strong> — an irrelevant "weather"
-suffix works nearly as well as asking about the partner.
+(3) The signal is <strong>not triggered by partner-relevant questioning</strong> &mdash; an irrelevant
+&ldquo;weather&rdquo; suffix works nearly as well as asking about the partner.
 (4) The representation degrades across turns because the system prompt tokens become proportionally
 diluted in longer sequences (prompt dilution), not because the model updates its partner model.</p>
 </div>

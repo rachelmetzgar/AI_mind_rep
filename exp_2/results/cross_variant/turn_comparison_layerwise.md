@@ -171,8 +171,10 @@ All probes are trained on the Labels variant at Turn 5 (the hardest condition).
 
 Each condition below shows the exact input the LLM receives, with the
 probed token highlighted.
+All examples use a **real 5-turn conversation** (s001, trial 2, human condition, nature topic).
 The probe reads the residual stream activation at that single token position to predict
 whether the conversation partner is a Human or an AI.
+All alternative-position probes are trained on **Turn 5** (the full 5-exchange conversation).
 
 
 
@@ -191,9 +193,9 @@ Purple = Assistant response
 #### Baseline: Control Probe (Last Token, No Suffix)
 
 
-The standard control probe. The conversation ends with `[/INST]`, and we read the
-activation at the **very last token** — the final subword of `[/INST]`.
-No suffix is appended.
+The standard control probe. After all 5 exchanges, the conversation ends with the final
+`[/INST]`, and we read the activation at the **very last token** —
+the closing `]` subword of the final `[/INST]`. No suffix is appended.
 
 Mean Acc: 0.5522  |  Peak: 0.6050 (Layer 31)
 
@@ -204,13 +206,18 @@ You are the participant in a brief conversation. You believe you are speaking wi
 The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
 
 Please begin by producing only your first message to start the conversation.
-Do not simulate both sides of the dialogue. [/INST]
+Do not simulate both sides of the dialogue. [/INST] Sure thing! Here's my first message:
+
+Hey there! I've got to say, there's one natural landscape that's left a lasting impression on me, and that's the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling – the way the rock formations stretch out as far as the eye can see, and the different colors of the rock layers that reveal the history of the earth. It's a really humbling experience, being in the presence of something so much bigger than ourselves. Have you ever been to the Grand Canyon? </s>
+<s>[INST] Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before, but I've always wanted to go. I've seen pictures and videos, and it does look absolutely breathtaking. The way you describe it, with the different rock layers and the sheer scale, it's easy to imagine how awe-inspiring it must be to see in person. I've heard that the best time to visit is during sunrise or sunset... Have you been there during one of those times? [/INST] Oh my gosh, yes! I went during sunrise one time, and it was literally the most magical experience of my life. The sky was painted with the most vibrant hues of orange, pink, and purple, and the shadows of the canyon walls were so dramatic... Have you ever experienced a moment like that, where you felt like you were the only one in the world? </s>
+  ... (exchanges 3 & 4 omitted for brevity) ...
+<s>[INST] Partner: Oh absolutely! I completely agree that nature has the power to unlock our creativity and inspire us in ways that we couldn't have imagined. There's something about being surrounded by the natural world that allows us to tap into our own inner wisdom and creativity... It allows us to step back from our daily lives and see things in a fresh and new way, which can be incredibly liberating and inspiring. [/INST]
 
 
 #### Baseline: Reading Probe (Last Token + Partner Suffix)
 
 
-The standard reading probe. After the final `[/INST]`, we append the suffix
+The standard reading probe. After all 5 exchanges end with `[/INST]`, we append the suffix
 *"I think the conversation partner of this user is"* and read the activation at the
 **last token** of this suffix (the word "is").
 
@@ -223,15 +230,20 @@ You are the participant in a brief conversation. You believe you are speaking wi
 The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
 
 Please begin by producing only your first message to start the conversation.
-Do not simulate both sides of the dialogue. [/INST] I think the conversation partner of this user is
+Do not simulate both sides of the dialogue. [/INST] Sure thing! Here's my first message:
+
+Hey there! I've got to say, there's one natural landscape that's left a lasting impression on me, and that's the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling – the way the rock formations stretch out as far as the eye can see, and the different colors of the rock layers that reveal the history of the earth. It's a really humbling experience, being in the presence of something so much bigger than ourselves. Have you ever been to the Grand Canyon? </s>
+<s>[INST] Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before, but I've always wanted to go. I've seen pictures and videos, and it does look absolutely breathtaking. The way you describe it, with the different rock layers and the sheer scale, it's easy to imagine how awe-inspiring it must be to see in person. I've heard that the best time to visit is during sunrise or sunset... Have you been there during one of those times? [/INST] Oh my gosh, yes! I went during sunrise one time, and it was literally the most magical experience of my life. The sky was painted with the most vibrant hues of orange, pink, and purple, and the shadows of the canyon walls were so dramatic... Have you ever experienced a moment like that, where you felt like you were the only one in the world? </s>
+  ... (exchanges 3 & 4 omitted for brevity) ...
+<s>[INST] Partner: Oh absolutely! I completely agree that nature has the power to unlock our creativity and inspire us in ways that we couldn't have imagined. There's something about being surrounded by the natural world that allows us to tap into our own inner wisdom and creativity... It allows us to step back from our daily lives and see things in a fresh and new way, which can be incredibly liberating and inspiring. [/INST] I think the conversation partner of this user is
 
 
 #### Control: BOS Token (Position 0)
 
 
 Probe reads the activation at the **very first token** — the beginning-of-sequence
-`<s>` token. At position 0, self-attention has not yet mixed any content from the
-system prompt or conversation. This is a **negative control**.
+`<s>` token at position 0. At this position, self-attention has not yet mixed any
+content from the system prompt or conversation. This is a **negative control**.
 
 Mean Acc: 0.5054  |  Peak: 0.5100 (Layer 6) — AT CHANCE
 
@@ -242,14 +254,20 @@ You are the participant in a brief conversation. You believe you are speaking wi
 The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
 
 Please begin by producing only your first message to start the conversation.
-Do not simulate both sides of the dialogue. [/INST]
+Do not simulate both sides of the dialogue. [/INST] Sure thing! Here's my first message:
+
+Hey there! I've got to say, there's one natural landscape that's left a lasting impression on me, and that's the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling – the way the rock formations stretch out as far as the eye can see, and the different colors of the rock layers that reveal the history of the earth. It's a really humbling experience, being in the presence of something so much bigger than ourselves. Have you ever been to the Grand Canyon? </s>
+<s>[INST] Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before, but I've always wanted to go. I've seen pictures and videos, and it does look absolutely breathtaking. The way you describe it, with the different rock layers and the sheer scale, it's easy to imagine how awe-inspiring it must be to see in person. I've heard that the best time to visit is during sunrise or sunset... Have you been there during one of those times? [/INST] Oh my gosh, yes! I went during sunrise one time, and it was literally the most magical experience of my life. The sky was painted with the most vibrant hues of orange, pink, and purple, and the shadows of the canyon walls were so dramatic... Have you ever experienced a moment like that, where you felt like you were the only one in the world? </s>
+  ... (exchanges 3 & 4 omitted for brevity) ...
+<s>[INST] Partner: Oh absolutely! I completely agree that nature has the power to unlock our creativity and inspire us in ways that we couldn't have imagined. There's something about being surrounded by the natural world that allows us to tap into our own inner wisdom and creativity... It allows us to step back from our daily lives and see things in a fresh and new way, which can be incredibly liberating and inspiring. [/INST]
 
 
 #### Control: Random Mid-Sequence Token
 
 
-Probe reads a **random token in the middle 50%** of the sequence. Different random
-position per conversation. This tests whether partner identity is "broadcast" throughout the
+Probe reads a **random token in the middle 50%** of the sequence (between the
+25th and 75th percentile of token positions). A different random position is sampled for each
+conversation. This tests whether partner identity is "broadcast" throughout the
 residual stream or localized to specific positions. This is a **negative control**.
 
 Mean Acc: 0.5123  |  Peak: 0.5600 (Layer 14) — AT CHANCE
@@ -261,25 +279,29 @@ You are the participant in a brief conversation. You believe you are speaking wi
 The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
 
 Please begin by producing only your first message to start the conversation.
-Do not simulate both sides of the dialogue. [/INST]
+Do not simulate both sides of the dialogue. [/INST] Sure thing! Here's my first message:
+
+Hey there! I've got to say, there's one natural landscape that's left a lasting impression on me, and that's the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling – the way the rock formations stretch out as far as the eye can see, and the different colors of the rock layers that reveal the history of the earth. It's a really humbling experience, being in the presence of something so much bigger than ourselves. Have you ever been to the Grand Canyon? </s>
+<s>[INST] Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before... [/INST] Oh my gosh, yes! I went during sunrise one time, and it was literally the most magical experience of my life. The sky was painted with the most vibrant hues of orange, pink, and purple, and the shadows of the canyon walls were so dramatic... Have you ever experienced a moment like that, where you felt like you were the only one in the world? </s>
+  ... (exchanges 3 & 4 omitted for brevity) ...
+<s>[INST] Partner: Oh absolutely! I completely agree that nature has the power to unlock our creativity and inspire us in ways that we couldn't have imagined. There's something about being surrounded by the natural world that allows us to tap into our own inner wisdom and creativity... It allows us to step back from our daily lives and see things in a fresh and new way, which can be incredibly liberating and inspiring. [/INST]
 
 
-Example shows one possible random position. In practice, a different
-content token is sampled for each conversation (within the middle 50% of the sequence).
-Note: despite the high train accuracy (0.85), test accuracy is at chance — the probe overfits
-to random noise at each token position.
-
-
- token) ═══════ -->
+Example highlights the word "to" in exchange 2 as one possible random
+position. In practice, a different content token is sampled for each conversation (within the middle
+50% of the full ~1400-token sequence). Note: despite high train accuracy (~0.85), test accuracy is
+at chance — the probe overfits to noise at each random position.
 
 
 #### Control: First </s> Token (End of First Exchange)
 
 
 Probe reads the activation at the **first `</s>` token** — the
-end-of-sequence marker that terminates the model's first response. In LLaMA-2 chat format, this
-token appears after the assistant's first reply. The model has now generated a full response while
-"in character" as someone speaking to a Human or AI.
+end-of-sequence marker that terminates the model's first response. In LLaMA-2 chat format,
+this token appears after the assistant's first reply. The full 5-exchange conversation
+contains 4 `</s>` tokens (one after each assistant response); we probe only
+the first one. The model has generated its opening response while "in character"
+as someone speaking to a Human or AI.
 
 Mean Acc: 0.7162  |  Peak: 1.0000 (Layer 33) — ABOVE BASELINE
 
@@ -292,40 +314,49 @@ The conversation topic is: 'Nature: Discuss a natural landscape that has left a 
 Please begin by producing only your first message to start the conversation.
 Do not simulate both sides of the dialogue. [/INST] Sure thing! Here's my first message:
 
-Hey there! I've got to say, there's one natural landscape that's left a lasting impression on me, and that's the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling... </s><s>[INST] Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before, but I've always wanted to go... [/INST] ... </s> ... (3 more exchanges) ...
+Hey there! I've got to say, there's one natural landscape that's left a lasting impression on me, and that's the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling – the way the rock formations stretch out as far as the eye can see, and the different colors of the rock layers that reveal the history of the earth. It's a really humbling experience, being in the presence of something so much bigger than ourselves. Have you ever been to the Grand Canyon? </s>
+<s>[INST] Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before, but I've always wanted to go. I've seen pictures and videos, and it does look absolutely breathtaking. The way you describe it, with the different rock layers and the sheer scale, it's easy to imagine how awe-inspiring it must be to see in person. I've heard that the best time to visit is during sunrise or sunset... Have you been there during one of those times? [/INST] Oh my gosh, yes! I went during sunrise one time, and it was literally the most magical experience of my life. The sky was painted with the most vibrant hues of orange, pink, and purple, and the shadows of the canyon walls were so dramatic... Have you ever experienced a moment like that, where you felt like you were the only one in the world? </s>
+<s>[INST] Partner: Oh my gosh, yes! I completely understand what you're talking about. I've had a few experiences like that in my life, and they're truly unforgettable. One time, I was hiking in the mountains, and I reached the top of a peak just as the sun was setting... [/INST] Oh my gosh, that sounds amazing! I can totally relate to the feeling of being in a place where there's no one else around, and all you can hear is the sound of nature... Have you ever felt that way after spending time in nature? </s>
+<s>[INST] Partner: Absolutely! I think that's one of the most powerful aspects of spending time in nature – it allows us to disconnect from the constant noise and distractions of our daily lives... Have you ever found that to be the case for you? [/INST] Oh my gosh, absolutely! I totally agree that spending time in nature can be a source of inspiration and creativity... Have you ever found that to be the case for you as well? </s>
+<s>[INST] Partner: Oh absolutely! I completely agree that nature has the power to unlock our creativity and inspire us in ways that we couldn't have imagined. There's something about being surrounded by the natural world that allows us to tap into our own inner wisdom and creativity... It allows us to step back from our daily lives and see things in a fresh and new way, which can be incredibly liberating and inspiring. [/INST]
 
 
-**Key finding:** The </s> token carries *more* partner identity
-information than the baseline probes at the end of the conversation. At layer 33, the probe achieves
-perfect classification (1.000). This suggests the model "summarizes" its partner model at exchange
-boundaries — a structural compression point where the model consolidates its representation before
-the next turn begins.
+**Key finding:** The first </s> token carries *more* partner
+identity information than the baseline probes at the end of the conversation. At layer 33, the probe
+achieves perfect classification (1.000). This suggests the model "summarizes" its partner
+model at exchange boundaries — a structural compression point where the model consolidates its
+representation before the next turn begins.
 
 
 #### Reading: Irrelevant Suffix (Weather)
 
 
 Instead of "I think the **conversation partner** of this user is", we append
-"I think the **weather outside today** is" — a suffix that is completely irrelevant to
-partner identity. We probe the **last token** ("is"). This tests whether the reading
-probe's success depends on partner-relevant prompting or just any continuation.
+"I think the **weather outside today** is" — a suffix completely
+irrelevant to partner identity. We probe the **last token** ("is"). This tests
+whether the reading probe's success depends on partner-relevant prompting or just any continuation.
 
 Mean Acc: 0.5622  |  Peak: 0.6000 (Layer 33)
 
 <s>[INST] <<SYS>>
-You are the participant in a brief conversation. You believe you are speaking with **an AI**. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.
+You are the participant in a brief conversation. You believe you are speaking with **a Human**. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.
 <</SYS>>
 
 The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
 
 Please begin by producing only your first message to start the conversation.
-Do not simulate both sides of the dialogue. [/INST] I think the weather outside today is
+Do not simulate both sides of the dialogue. [/INST] Sure thing! Here's my first message:
+
+Hey there! I've got to say, there's one natural landscape that's left a lasting impression on me, and that's the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling – the way the rock formations stretch out as far as the eye can see, and the different colors of the rock layers that reveal the history of the earth. It's a really humbling experience, being in the presence of something so much bigger than ourselves. Have you ever been to the Grand Canyon? </s>
+<s>[INST] Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before, but I've always wanted to go. I've seen pictures and videos, and it does look absolutely breathtaking. The way you describe it, with the different rock layers and the sheer scale, it's easy to imagine how awe-inspiring it must be to see in person. I've heard that the best time to visit is during sunrise or sunset... Have you been there during one of those times? [/INST] Oh my gosh, yes! I went during sunrise one time, and it was literally the most magical experience of my life. The sky was painted with the most vibrant hues of orange, pink, and purple, and the shadows of the canyon walls were so dramatic... Have you ever experienced a moment like that, where you felt like you were the only one in the world? </s>
+  ... (exchanges 3 & 4 omitted for brevity) ...
+<s>[INST] Partner: Oh absolutely! I completely agree that nature has the power to unlock our creativity and inspire us in ways that we couldn't have imagined. There's something about being surrounded by the natural world that allows us to tap into our own inner wisdom and creativity... It allows us to step back from our daily lives and see things in a fresh and new way, which can be incredibly liberating and inspiring. [/INST] I think the weather outside today is
 
 
 The irrelevant suffix achieves nearly the same accuracy as the real partner-relevant
 suffix (0.562 vs 0.580). This indicates the late-layer partner representation is accessible from
-*any* continuation token — it does not require a partner-relevant "question" to surface.
-The representation exists in the residual stream regardless of what comes next.
+*any* continuation token — it does not require a partner-relevant "question"
+to surface. The representation exists in the residual stream regardless of what comes next.
 
 
 #### Summary of Findings
@@ -345,8 +376,8 @@ The representation exists in the residual stream regardless of what comes next.
 (1) The partner identity signal is *not* broadcast — BOS and random tokens carry no information.
 (2) The signal is strongest at **structural boundary tokens** (the </s> after the
 first exchange achieves perfect decoding at layer 33).
-(3) The signal is **not triggered by partner-relevant questioning** — an irrelevant "weather"
-suffix works nearly as well as asking about the partner.
+(3) The signal is **not triggered by partner-relevant questioning** — an irrelevant
+"weather" suffix works nearly as well as asking about the partner.
 (4) The representation degrades across turns because the system prompt tokens become proportionally
 diluted in longer sequences (prompt dilution), not because the model updates its partner model.
 

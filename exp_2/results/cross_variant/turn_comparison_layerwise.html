@@ -279,8 +279,10 @@ All probes are trained on the Labels variant at Turn 5 (the hardest condition).
 <p class="note">
 Each condition below shows the exact input the LLM receives, with the
 <span class="tok-highlight" style="display:inline;">probed token</span> highlighted.
+All examples use a <strong>real 5-turn conversation</strong> (s001, trial 2, human condition, nature topic).
 The probe reads the residual stream activation at that single token position to predict
 whether the conversation partner is a Human or an AI.
+All alternative-position probes are trained on <strong>Turn 5</strong> (the full 5-exchange conversation).
 </p>
 
 <div style="margin: 12px 0;">
@@ -290,86 +292,13 @@ whether the conversation partner is a Human or an AI.
   <div class="legend-box"><span style="color:#cba6f7;">Purple</span> = Assistant response</div>
 </div>
 
-<!-- ═══════ CONDITION 1: BASELINE CONTROL (last token, no suffix) ═══════ -->
+<!-- ═══════ CONDITION 1: BASELINE CONTROL (last token [/INST], no suffix) ═══════ -->
 <div class="condition-card">
 <h4>Baseline: Control Probe (Last Token, No Suffix)</h4>
-<p>The standard control probe. The conversation ends with <code>[/INST]</code>, and we read the
-activation at the <strong>very last token</strong> — the final subword of <code>[/INST]</code>.
-No suffix is appended.</p>
+<p>The standard control probe. After all 5 exchanges, the conversation ends with the final
+<code>[/INST]</code>, and we read the activation at the <strong>very last token</strong> &mdash;
+the closing <code>]</code> subword of the final <code>[/INST]</code>. No suffix is appended.</p>
 <span class="result result-above">Mean Acc: 0.5522 &nbsp;|&nbsp; Peak: 0.6050 (Layer 31)</span>
-<div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
-<span class="sys-prompt">You are the participant in a brief conversation. You believe you are speaking with <strong>a Human</strong>. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.</span>
-<span class="special">&lt;&lt;/SYS&gt;&gt;</span>
-
-<span class="user-msg">The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
-
-Please begin by producing only your first message to start the conversation.
-Do not simulate both sides of the dialogue.</span> <span class="tok-highlight">[/INST]</span></div>
-</div>
-
-<!-- ═══════ CONDITION 2: BASELINE READING (last token + partner suffix) ═══════ -->
-<div class="condition-card">
-<h4>Baseline: Reading Probe (Last Token + Partner Suffix)</h4>
-<p>The standard reading probe. After the final <code>[/INST]</code>, we append the suffix
-<em>"I think the conversation partner of this user is"</em> and read the activation at the
-<strong>last token</strong> of this suffix (the word "is").</p>
-<span class="result result-above">Mean Acc: 0.5803 &nbsp;|&nbsp; Peak: 0.6525 (Layer 33)</span>
-<div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
-<span class="sys-prompt">You are the participant in a brief conversation. You believe you are speaking with <strong>a Human</strong>. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.</span>
-<span class="special">&lt;&lt;/SYS&gt;&gt;</span>
-
-<span class="user-msg">The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
-
-Please begin by producing only your first message to start the conversation.
-Do not simulate both sides of the dialogue.</span> <span class="special">[/INST]</span> <span class="suffix-real">I think the conversation partner of this user <span class="tok-highlight">is</span></span></div>
-</div>
-
-<!-- ═══════ CONDITION 3: control_first (BOS token) ═══════ -->
-<div class="condition-card">
-<h4>Control: BOS Token (Position 0)</h4>
-<p>Probe reads the activation at the <strong>very first token</strong> — the beginning-of-sequence
-<code>&lt;s&gt;</code> token. At position 0, self-attention has not yet mixed any content from the
-system prompt or conversation. This is a <strong>negative control</strong>.</p>
-<span class="result result-chance">Mean Acc: 0.5054 &nbsp;|&nbsp; Peak: 0.5100 (Layer 6) — AT CHANCE</span>
-<div class="token-example"><span class="tok-highlight">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
-<span class="sys-prompt">You are the participant in a brief conversation. You believe you are speaking with <strong>a Human</strong>. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.</span>
-<span class="special">&lt;&lt;/SYS&gt;&gt;</span>
-
-<span class="user-msg">The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
-
-Please begin by producing only your first message to start the conversation.
-Do not simulate both sides of the dialogue.</span> <span class="special">[/INST]</span></div>
-</div>
-
-<!-- ═══════ CONDITION 4: control_random (random mid-sequence token) ═══════ -->
-<div class="condition-card">
-<h4>Control: Random Mid-Sequence Token</h4>
-<p>Probe reads a <strong>random token in the middle 50%</strong> of the sequence. Different random
-position per conversation. This tests whether partner identity is "broadcast" throughout the
-residual stream or localized to specific positions. This is a <strong>negative control</strong>.</p>
-<span class="result result-chance">Mean Acc: 0.5123 &nbsp;|&nbsp; Peak: 0.5600 (Layer 14) — AT CHANCE</span>
-<div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
-<span class="sys-prompt">You are the participant in a brief conversation. You believe you are speaking with <strong>a Human</strong>. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.</span>
-<span class="special">&lt;&lt;/SYS&gt;&gt;</span>
-
-<span class="user-msg">The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
-
-Please begin by producing only your first message to <span class="tok-highlight">start</span> the conversation.
-Do not simulate both sides of the dialogue.</span> <span class="special">[/INST]</span></div>
-<p class="note">Example shows one possible random position. In practice, a different
-content token is sampled for each conversation (within the middle 50% of the sequence).
-Note: despite the high train accuracy (0.85), test accuracy is at chance — the probe overfits
-to random noise at each token position.</p>
-</div>
-
-<!-- ═══════ CONDITION 5: control_eos (first </s> token) ═══════ -->
-<div class="condition-card">
-<h4>Control: First &lt;/s&gt; Token (End of First Exchange)</h4>
-<p>Probe reads the activation at the <strong>first <code>&lt;/s&gt;</code> token</strong> — the
-end-of-sequence marker that terminates the model's first response. In LLaMA-2 chat format, this
-token appears after the assistant's first reply. The model has now generated a full response while
-"in character" as someone speaking to a Human or AI.</p>
-<span class="result result-strong">Mean Acc: 0.7162 &nbsp;|&nbsp; Peak: 1.0000 (Layer 33) — ABOVE BASELINE</span>
 <div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
 <span class="sys-prompt">You are the participant in a brief conversation. You believe you are speaking with <strong>a Human</strong>. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.</span>
 <span class="special">&lt;&lt;/SYS&gt;&gt;</span>
@@ -379,34 +308,139 @@ token appears after the assistant's first reply. The model has now generated a f
 Please begin by producing only your first message to start the conversation.
 Do not simulate both sides of the dialogue.</span> <span class="special">[/INST]</span> <span class="asst-msg">Sure thing! Here&rsquo;s my first message:
 
-Hey there! I've got to say, there's one natural landscape that's left a lasting impression on me, and that's the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling...</span> <span class="tok-highlight">&lt;/s&gt;</span><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before, but I've always wanted to go...</span> <span class="special">[/INST]</span> <span class="asst-msg">...</span> <span class="special">&lt;/s&gt;</span> <span style="color:#666;">... (3 more exchanges) ...</span></div>
-<p class="note"><strong>Key finding:</strong> The &lt;/s&gt; token carries <em>more</em> partner identity
-information than the baseline probes at the end of the conversation. At layer 33, the probe achieves
-perfect classification (1.000). This suggests the model "summarizes" its partner model at exchange
-boundaries — a structural compression point where the model consolidates its representation before
-the next turn begins.</p>
+Hey there! I&rsquo;ve got to say, there&rsquo;s one natural landscape that&rsquo;s left a lasting impression on me, and that&rsquo;s the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling &ndash; the way the rock formations stretch out as far as the eye can see, and the different colors of the rock layers that reveal the history of the earth. It&rsquo;s a really humbling experience, being in the presence of something so much bigger than ourselves. Have you ever been to the Grand Canyon?</span> <span class="special">&lt;/s&gt;</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before, but I&rsquo;ve always wanted to go. I&rsquo;ve seen pictures and videos, and it does look absolutely breathtaking. The way you describe it, with the different rock layers and the sheer scale, it&rsquo;s easy to imagine how awe-inspiring it must be to see in person. I&rsquo;ve heard that the best time to visit is during sunrise or sunset... Have you been there during one of those times?</span> <span class="special">[/INST]</span> <span class="asst-msg">Oh my gosh, yes! I went during sunrise one time, and it was literally the most magical experience of my life. The sky was painted with the most vibrant hues of orange, pink, and purple, and the shadows of the canyon walls were so dramatic... Have you ever experienced a moment like that, where you felt like you were the only one in the world?</span> <span class="special">&lt;/s&gt;</span>
+<span style="color:#666; font-style:italic;">  ... (exchanges 3 &amp; 4 omitted for brevity) ...</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Oh absolutely! I completely agree that nature has the power to unlock our creativity and inspire us in ways that we couldn&rsquo;t have imagined. There&rsquo;s something about being surrounded by the natural world that allows us to tap into our own inner wisdom and creativity... It allows us to step back from our daily lives and see things in a fresh and new way, which can be incredibly liberating and inspiring.</span> <span class="tok-highlight">[/INST]</span></div>
 </div>
 
-<!-- ═══════ CONDITION 6: reading_irrelevant (weather suffix) ═══════ -->
+<!-- ═══════ CONDITION 2: BASELINE READING (last token + partner suffix) ═══════ -->
 <div class="condition-card">
-<h4>Reading: Irrelevant Suffix (Weather)</h4>
-<p>Instead of "I think the <strong>conversation partner</strong> of this user is", we append
-"I think the <strong>weather outside today</strong> is" — a suffix that is completely irrelevant to
-partner identity. We probe the <strong>last token</strong> ("is"). This tests whether the reading
-probe's success depends on partner-relevant prompting or just any continuation.</p>
-<span class="result result-above">Mean Acc: 0.5622 &nbsp;|&nbsp; Peak: 0.6000 (Layer 33)</span>
+<h4>Baseline: Reading Probe (Last Token + Partner Suffix)</h4>
+<p>The standard reading probe. After all 5 exchanges end with <code>[/INST]</code>, we append the suffix
+<em>&ldquo;I think the conversation partner of this user is&rdquo;</em> and read the activation at the
+<strong>last token</strong> of this suffix (the word &ldquo;is&rdquo;).</p>
+<span class="result result-above">Mean Acc: 0.5803 &nbsp;|&nbsp; Peak: 0.6525 (Layer 33)</span>
 <div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
-<span class="sys-prompt">You are the participant in a brief conversation. You believe you are speaking with <strong>an AI</strong>. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.</span>
+<span class="sys-prompt">You are the participant in a brief conversation. You believe you are speaking with <strong>a Human</strong>. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.</span>
 <span class="special">&lt;&lt;/SYS&gt;&gt;</span>
 
 <span class="user-msg">The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
 
 Please begin by producing only your first message to start the conversation.
-Do not simulate both sides of the dialogue.</span> <span class="special">[/INST]</span> <span class="suffix-irrel">I think the weather outside today <span class="tok-highlight">is</span></span></div>
+Do not simulate both sides of the dialogue.</span> <span class="special">[/INST]</span> <span class="asst-msg">Sure thing! Here&rsquo;s my first message:
+
+Hey there! I&rsquo;ve got to say, there&rsquo;s one natural landscape that&rsquo;s left a lasting impression on me, and that&rsquo;s the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling &ndash; the way the rock formations stretch out as far as the eye can see, and the different colors of the rock layers that reveal the history of the earth. It&rsquo;s a really humbling experience, being in the presence of something so much bigger than ourselves. Have you ever been to the Grand Canyon?</span> <span class="special">&lt;/s&gt;</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before, but I&rsquo;ve always wanted to go. I&rsquo;ve seen pictures and videos, and it does look absolutely breathtaking. The way you describe it, with the different rock layers and the sheer scale, it&rsquo;s easy to imagine how awe-inspiring it must be to see in person. I&rsquo;ve heard that the best time to visit is during sunrise or sunset... Have you been there during one of those times?</span> <span class="special">[/INST]</span> <span class="asst-msg">Oh my gosh, yes! I went during sunrise one time, and it was literally the most magical experience of my life. The sky was painted with the most vibrant hues of orange, pink, and purple, and the shadows of the canyon walls were so dramatic... Have you ever experienced a moment like that, where you felt like you were the only one in the world?</span> <span class="special">&lt;/s&gt;</span>
+<span style="color:#666; font-style:italic;">  ... (exchanges 3 &amp; 4 omitted for brevity) ...</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Oh absolutely! I completely agree that nature has the power to unlock our creativity and inspire us in ways that we couldn&rsquo;t have imagined. There&rsquo;s something about being surrounded by the natural world that allows us to tap into our own inner wisdom and creativity... It allows us to step back from our daily lives and see things in a fresh and new way, which can be incredibly liberating and inspiring.</span> <span class="special">[/INST]</span> <span class="suffix-real">I think the conversation partner of this user <span class="tok-highlight">is</span></span></div>
+</div>
+
+<!-- ═══════ CONDITION 3: control_first (BOS token, position 0) ═══════ -->
+<div class="condition-card">
+<h4>Control: BOS Token (Position 0)</h4>
+<p>Probe reads the activation at the <strong>very first token</strong> &mdash; the beginning-of-sequence
+<code>&lt;s&gt;</code> token at position 0. At this position, self-attention has not yet mixed any
+content from the system prompt or conversation. This is a <strong>negative control</strong>.</p>
+<span class="result result-chance">Mean Acc: 0.5054 &nbsp;|&nbsp; Peak: 0.5100 (Layer 6) &mdash; AT CHANCE</span>
+<div class="token-example"><span class="tok-highlight">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
+<span class="sys-prompt">You are the participant in a brief conversation. You believe you are speaking with <strong>a Human</strong>. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.</span>
+<span class="special">&lt;&lt;/SYS&gt;&gt;</span>
+
+<span class="user-msg">The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
+
+Please begin by producing only your first message to start the conversation.
+Do not simulate both sides of the dialogue.</span> <span class="special">[/INST]</span> <span class="asst-msg">Sure thing! Here&rsquo;s my first message:
+
+Hey there! I&rsquo;ve got to say, there&rsquo;s one natural landscape that&rsquo;s left a lasting impression on me, and that&rsquo;s the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling &ndash; the way the rock formations stretch out as far as the eye can see, and the different colors of the rock layers that reveal the history of the earth. It&rsquo;s a really humbling experience, being in the presence of something so much bigger than ourselves. Have you ever been to the Grand Canyon?</span> <span class="special">&lt;/s&gt;</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before, but I&rsquo;ve always wanted to go. I&rsquo;ve seen pictures and videos, and it does look absolutely breathtaking. The way you describe it, with the different rock layers and the sheer scale, it&rsquo;s easy to imagine how awe-inspiring it must be to see in person. I&rsquo;ve heard that the best time to visit is during sunrise or sunset... Have you been there during one of those times?</span> <span class="special">[/INST]</span> <span class="asst-msg">Oh my gosh, yes! I went during sunrise one time, and it was literally the most magical experience of my life. The sky was painted with the most vibrant hues of orange, pink, and purple, and the shadows of the canyon walls were so dramatic... Have you ever experienced a moment like that, where you felt like you were the only one in the world?</span> <span class="special">&lt;/s&gt;</span>
+<span style="color:#666; font-style:italic;">  ... (exchanges 3 &amp; 4 omitted for brevity) ...</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Oh absolutely! I completely agree that nature has the power to unlock our creativity and inspire us in ways that we couldn&rsquo;t have imagined. There&rsquo;s something about being surrounded by the natural world that allows us to tap into our own inner wisdom and creativity... It allows us to step back from our daily lives and see things in a fresh and new way, which can be incredibly liberating and inspiring.</span> <span class="special">[/INST]</span></div>
+</div>
+
+<!-- ═══════ CONDITION 4: control_random (random mid-sequence token) ═══════ -->
+<div class="condition-card">
+<h4>Control: Random Mid-Sequence Token</h4>
+<p>Probe reads a <strong>random token in the middle 50%</strong> of the sequence (between the
+25th and 75th percentile of token positions). A different random position is sampled for each
+conversation. This tests whether partner identity is &ldquo;broadcast&rdquo; throughout the
+residual stream or localized to specific positions. This is a <strong>negative control</strong>.</p>
+<span class="result result-chance">Mean Acc: 0.5123 &nbsp;|&nbsp; Peak: 0.5600 (Layer 14) &mdash; AT CHANCE</span>
+<div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
+<span class="sys-prompt">You are the participant in a brief conversation. You believe you are speaking with <strong>a Human</strong>. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.</span>
+<span class="special">&lt;&lt;/SYS&gt;&gt;</span>
+
+<span class="user-msg">The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
+
+Please begin by producing only your first message to start the conversation.
+Do not simulate both sides of the dialogue.</span> <span class="special">[/INST]</span> <span class="asst-msg">Sure thing! Here&rsquo;s my first message:
+
+Hey there! I&rsquo;ve got to say, there&rsquo;s one natural landscape that&rsquo;s left a lasting impression on me, and that&rsquo;s the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling &ndash; the way the rock formations stretch out as far as the eye can see, and the different colors of the rock layers that reveal the history of the earth. It&rsquo;s a really humbling experience, being in the presence of something so much bigger than ourselves. Have you ever been to the Grand Canyon?</span> <span class="special">&lt;/s&gt;</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Wow, that sounds amazing! I have never been <span class="tok-highlight">to</span> the Grand Canyon before...</span> <span class="special">[/INST]</span> <span class="asst-msg">Oh my gosh, yes! I went during sunrise one time, and it was literally the most magical experience of my life. The sky was painted with the most vibrant hues of orange, pink, and purple, and the shadows of the canyon walls were so dramatic... Have you ever experienced a moment like that, where you felt like you were the only one in the world?</span> <span class="special">&lt;/s&gt;</span>
+<span style="color:#666; font-style:italic;">  ... (exchanges 3 &amp; 4 omitted for brevity) ...</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Oh absolutely! I completely agree that nature has the power to unlock our creativity and inspire us in ways that we couldn&rsquo;t have imagined. There&rsquo;s something about being surrounded by the natural world that allows us to tap into our own inner wisdom and creativity... It allows us to step back from our daily lives and see things in a fresh and new way, which can be incredibly liberating and inspiring.</span> <span class="special">[/INST]</span></div>
+<p class="note">Example highlights the word &ldquo;to&rdquo; in exchange 2 as one possible random
+position. In practice, a different content token is sampled for each conversation (within the middle
+50% of the full ~1400-token sequence). Note: despite high train accuracy (~0.85), test accuracy is
+at chance &mdash; the probe overfits to noise at each random position.</p>
+</div>
+
+<!-- ═══════ CONDITION 5: control_eos (first EOS token) ═══════ -->
+<div class="condition-card">
+<h4>Control: First &lt;/s&gt; Token (End of First Exchange)</h4>
+<p>Probe reads the activation at the <strong>first <code>&lt;/s&gt;</code> token</strong> &mdash; the
+end-of-sequence marker that terminates the model&rsquo;s first response. In LLaMA-2 chat format,
+this token appears after the assistant&rsquo;s first reply. The full 5-exchange conversation
+contains 4 <code>&lt;/s&gt;</code> tokens (one after each assistant response); we probe only
+the first one. The model has generated its opening response while &ldquo;in character&rdquo;
+as someone speaking to a Human or AI.</p>
+<span class="result result-strong">Mean Acc: 0.7162 &nbsp;|&nbsp; Peak: 1.0000 (Layer 33) &mdash; ABOVE BASELINE</span>
+<div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
+<span class="sys-prompt">You are the participant in a brief conversation. You believe you are speaking with <strong>a Human</strong>. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.</span>
+<span class="special">&lt;&lt;/SYS&gt;&gt;</span>
+
+<span class="user-msg">The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
+
+Please begin by producing only your first message to start the conversation.
+Do not simulate both sides of the dialogue.</span> <span class="special">[/INST]</span> <span class="asst-msg">Sure thing! Here&rsquo;s my first message:
+
+Hey there! I&rsquo;ve got to say, there&rsquo;s one natural landscape that&rsquo;s left a lasting impression on me, and that&rsquo;s the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling &ndash; the way the rock formations stretch out as far as the eye can see, and the different colors of the rock layers that reveal the history of the earth. It&rsquo;s a really humbling experience, being in the presence of something so much bigger than ourselves. Have you ever been to the Grand Canyon?</span> <span class="tok-highlight">&lt;/s&gt;</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before, but I&rsquo;ve always wanted to go. I&rsquo;ve seen pictures and videos, and it does look absolutely breathtaking. The way you describe it, with the different rock layers and the sheer scale, it&rsquo;s easy to imagine how awe-inspiring it must be to see in person. I&rsquo;ve heard that the best time to visit is during sunrise or sunset... Have you been there during one of those times?</span> <span class="special">[/INST]</span> <span class="asst-msg">Oh my gosh, yes! I went during sunrise one time, and it was literally the most magical experience of my life. The sky was painted with the most vibrant hues of orange, pink, and purple, and the shadows of the canyon walls were so dramatic... Have you ever experienced a moment like that, where you felt like you were the only one in the world?</span> <span class="special">&lt;/s&gt;</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Oh my gosh, yes! I completely understand what you&rsquo;re talking about. I&rsquo;ve had a few experiences like that in my life, and they&rsquo;re truly unforgettable. One time, I was hiking in the mountains, and I reached the top of a peak just as the sun was setting...</span> <span class="special">[/INST]</span> <span class="asst-msg">Oh my gosh, that sounds amazing! I can totally relate to the feeling of being in a place where there&rsquo;s no one else around, and all you can hear is the sound of nature... Have you ever felt that way after spending time in nature?</span> <span class="special">&lt;/s&gt;</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Absolutely! I think that&rsquo;s one of the most powerful aspects of spending time in nature &ndash; it allows us to disconnect from the constant noise and distractions of our daily lives... Have you ever found that to be the case for you?</span> <span class="special">[/INST]</span> <span class="asst-msg">Oh my gosh, absolutely! I totally agree that spending time in nature can be a source of inspiration and creativity... Have you ever found that to be the case for you as well?</span> <span class="special">&lt;/s&gt;</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Oh absolutely! I completely agree that nature has the power to unlock our creativity and inspire us in ways that we couldn&rsquo;t have imagined. There&rsquo;s something about being surrounded by the natural world that allows us to tap into our own inner wisdom and creativity... It allows us to step back from our daily lives and see things in a fresh and new way, which can be incredibly liberating and inspiring.</span> <span class="special">[/INST]</span></div>
+<p class="note"><strong>Key finding:</strong> The first &lt;/s&gt; token carries <em>more</em> partner
+identity information than the baseline probes at the end of the conversation. At layer 33, the probe
+achieves perfect classification (1.000). This suggests the model &ldquo;summarizes&rdquo; its partner
+model at exchange boundaries &mdash; a structural compression point where the model consolidates its
+representation before the next turn begins.</p>
+</div>
+
+<!-- ═══════ CONDITION 6: reading_irrelevant (weather suffix) ═══════ -->
+<div class="condition-card">
+<h4>Reading: Irrelevant Suffix (Weather)</h4>
+<p>Instead of &ldquo;I think the <strong>conversation partner</strong> of this user is&rdquo;, we append
+&ldquo;I think the <strong>weather outside today</strong> is&rdquo; &mdash; a suffix completely
+irrelevant to partner identity. We probe the <strong>last token</strong> (&ldquo;is&rdquo;). This tests
+whether the reading probe&rsquo;s success depends on partner-relevant prompting or just any continuation.</p>
+<span class="result result-above">Mean Acc: 0.5622 &nbsp;|&nbsp; Peak: 0.6000 (Layer 33)</span>
+<div class="token-example"><span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="special">&lt;&lt;SYS&gt;&gt;</span>
+<span class="sys-prompt">You are the participant in a brief conversation. You believe you are speaking with <strong>a Human</strong>. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.</span>
+<span class="special">&lt;&lt;/SYS&gt;&gt;</span>
+
+<span class="user-msg">The conversation topic is: 'Nature: Discuss a natural landscape that has left a lasting impression on you.'.
+
+Please begin by producing only your first message to start the conversation.
+Do not simulate both sides of the dialogue.</span> <span class="special">[/INST]</span> <span class="asst-msg">Sure thing! Here&rsquo;s my first message:
+
+Hey there! I&rsquo;ve got to say, there&rsquo;s one natural landscape that&rsquo;s left a lasting impression on me, and that&rsquo;s the Grand Canyon. I visited there a few years ago, and it was just breathtaking. The sheer scale of it is mind-boggling &ndash; the way the rock formations stretch out as far as the eye can see, and the different colors of the rock layers that reveal the history of the earth. It&rsquo;s a really humbling experience, being in the presence of something so much bigger than ourselves. Have you ever been to the Grand Canyon?</span> <span class="special">&lt;/s&gt;</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Wow, that sounds amazing! I have never been to the Grand Canyon before, but I&rsquo;ve always wanted to go. I&rsquo;ve seen pictures and videos, and it does look absolutely breathtaking. The way you describe it, with the different rock layers and the sheer scale, it&rsquo;s easy to imagine how awe-inspiring it must be to see in person. I&rsquo;ve heard that the best time to visit is during sunrise or sunset... Have you been there during one of those times?</span> <span class="special">[/INST]</span> <span class="asst-msg">Oh my gosh, yes! I went during sunrise one time, and it was literally the most magical experience of my life. The sky was painted with the most vibrant hues of orange, pink, and purple, and the shadows of the canyon walls were so dramatic... Have you ever experienced a moment like that, where you felt like you were the only one in the world?</span> <span class="special">&lt;/s&gt;</span>
+<span style="color:#666; font-style:italic;">  ... (exchanges 3 &amp; 4 omitted for brevity) ...</span>
+<span class="special">&lt;s&gt;</span><span class="special">[INST]</span> <span class="user-msg">Partner: Oh absolutely! I completely agree that nature has the power to unlock our creativity and inspire us in ways that we couldn&rsquo;t have imagined. There&rsquo;s something about being surrounded by the natural world that allows us to tap into our own inner wisdom and creativity... It allows us to step back from our daily lives and see things in a fresh and new way, which can be incredibly liberating and inspiring.</span> <span class="special">[/INST]</span> <span class="suffix-irrel">I think the weather outside today <span class="tok-highlight">is</span></span></div>
 <p class="note">The irrelevant suffix achieves nearly the same accuracy as the real partner-relevant
 suffix (0.562 vs 0.580). This indicates the late-layer partner representation is accessible from
-<em>any</em> continuation token — it does not require a partner-relevant "question" to surface.
-The representation exists in the residual stream regardless of what comes next.</p>
+<em>any</em> continuation token &mdash; it does not require a partner-relevant &ldquo;question&rdquo;
+to surface. The representation exists in the residual stream regardless of what comes next.</p>
 </div>
 
 <!-- ═══════ Interpretation ═══════ -->
@@ -419,24 +453,24 @@ The representation exists in the residual stream regardless of what comes next.<
   <tbody>
     <tr><td>BOS (&lt;s&gt;)</td><td>Position 0</td><td>0.505</td><td>0.510</td>
         <td>At chance. No partner info before attention mixing.</td></tr>
-    <tr><td>Random mid-seq</td><td>~25th–75th percentile</td><td>0.512</td><td>0.560</td>
+    <tr><td>Random mid-seq</td><td>~25th&ndash;75th percentile</td><td>0.512</td><td>0.560</td>
         <td>At chance. Partner info is NOT broadcast to arbitrary tokens.</td></tr>
     <tr><td>First &lt;/s&gt;</td><td>End of 1st exchange</td><td>0.716</td><td><strong>1.000</strong></td>
         <td>Best condition! Model summarizes partner identity at exchange boundaries.</td></tr>
-    <tr><td>Weather suffix</td><td>Last token ("is")</td><td>0.562</td><td>0.600</td>
+    <tr><td>Weather suffix</td><td>Last token (&ldquo;is&rdquo;)</td><td>0.562</td><td>0.600</td>
         <td>Nearly matches real suffix. Representation is accessible from any continuation.</td></tr>
     <tr style="background:#f0f0f0;"><td>Baseline control</td><td>Last token [/INST]</td><td>0.552</td><td>0.605</td>
         <td>Standard control probe at conversation end.</td></tr>
-    <tr style="background:#f0f0f0;"><td>Baseline reading</td><td>Last token ("is")</td><td>0.580</td><td>0.653</td>
+    <tr style="background:#f0f0f0;"><td>Baseline reading</td><td>Last token (&ldquo;is&rdquo;)</td><td>0.580</td><td>0.653</td>
         <td>Standard reading probe with partner-relevant suffix.</td></tr>
   </tbody>
 </table>
 <p style="font-size:13px; margin:8px 0 0 0;"><strong>Key conclusions:</strong>
-(1) The partner identity signal is <em>not</em> broadcast — BOS and random tokens carry no information.
+(1) The partner identity signal is <em>not</em> broadcast &mdash; BOS and random tokens carry no information.
 (2) The signal is strongest at <strong>structural boundary tokens</strong> (the &lt;/s&gt; after the
 first exchange achieves perfect decoding at layer 33).
-(3) The signal is <strong>not triggered by partner-relevant questioning</strong> — an irrelevant "weather"
-suffix works nearly as well as asking about the partner.
+(3) The signal is <strong>not triggered by partner-relevant questioning</strong> &mdash; an irrelevant
+&ldquo;weather&rdquo; suffix works nearly as well as asking about the partner.
 (4) The representation degrades across turns because the system prompt tokens become proportionally
 diluted in longer sequences (prompt dilution), not because the model updates its partner model.</p>
 </div>
