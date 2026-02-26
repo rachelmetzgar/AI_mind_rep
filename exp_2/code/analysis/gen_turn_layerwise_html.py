@@ -18,12 +18,14 @@ import matplotlib.ticker as ticker
 # ── Configuration ────────────────────────────────────────────────────────────
 
 BASE = '/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_2'
-VARIANTS = ['labels', 'balanced_names', 'balanced_gpt', 'names']
+VARIANTS = ['labels', 'balanced_names', 'balanced_gpt', 'names', 'nonsense_codeword', 'nonsense_ignore']
 VARIANT_LABELS = {
     'labels': 'Labels',
     'balanced_names': 'Balanced Names',
     'balanced_gpt': 'Balanced GPT',
     'names': 'Names (Sam/Casey)',
+    'nonsense_codeword': 'Nonsense Codeword (Control)',
+    'nonsense_ignore': 'Nonsense Ignore (Control)',
 }
 TURNS = [1, 2, 3, 4, 5]
 PROBE_TYPES = ['reading_probe', 'control_probe']
@@ -153,7 +155,8 @@ def make_peak_shift_figure(data):
     """Small plot: peak layer vs turn for all variants and probe types."""
     fig, ax = plt.subplots(figsize=(7, 5))
     variant_colors = {'labels': '#1a3399', 'balanced_names': '#2596be',
-                      'balanced_gpt': '#cc2233', 'names': '#8e24aa'}
+                      'balanced_gpt': '#cc2233', 'names': '#8e24aa',
+                      'nonsense_codeword': '#e8961a', 'nonsense_ignore': '#45a847'}
     probe_markers = {'reading_probe': 'o', 'control_probe': 's'}
     probe_ls = {'reading_probe': '-', 'control_probe': '--'}
 
@@ -191,8 +194,10 @@ def make_cross_variant_figure(data):
     fig, axes = plt.subplots(5, 2, figsize=(16, 24), sharey=True)
     layers = np.arange(N_LAYERS)
     variant_colors = {'labels': '#1a3399', 'balanced_names': '#2596be',
-                      'balanced_gpt': '#cc2233', 'names': '#8e24aa'}
-    variant_ls = {'labels': '-', 'balanced_names': '--', 'balanced_gpt': '-.', 'names': ':'}
+                      'balanced_gpt': '#cc2233', 'names': '#8e24aa',
+                      'nonsense_codeword': '#e8961a', 'nonsense_ignore': '#45a847'}
+    variant_ls = {'labels': '-', 'balanced_names': '--', 'balanced_gpt': '-.',
+                  'names': ':', 'nonsense_codeword': (0, (5, 2, 1, 2)), 'nonsense_ignore': (0, (3, 1))}
 
     for col_i, ptype in enumerate(PROBE_TYPES):
         for row_i, turn in enumerate(TURNS):
@@ -633,7 +638,7 @@ def build_html(data):
 </head>
 <body>
 <h1>Probe Accuracy by Layer and Conversation Turn</h1>
-<p class="subtitle">Experiment 2 — Llama-2-13B-chat &nbsp;|&nbsp; 4 dataset variants
+<p class="subtitle">Experiment 2 — Llama-2-13B-chat &nbsp;|&nbsp; 6 dataset variants
  &times; 5 turns &times; 2 probe types &nbsp;|&nbsp; 41 layers</p>
 """]
 
@@ -665,7 +670,7 @@ def build_html(data):
     # ── Section 4: Cross-variant comparison ──
     parts.append('<hr class="section-sep">')
     parts.append('<h2>3. Cross-Variant Comparison (All Turns)</h2>')
-    parts.append('<p class="note">Overlays all 4 dataset variants at each conversation turn '
+    parts.append('<p class="note">Overlays all 6 dataset variants at each conversation turn '
                  '(Turn 1 through Turn 5). Stars mark peak layers.</p>')
     fig = make_cross_variant_figure(data)
     b64 = fig_to_base64(fig)
@@ -724,10 +729,12 @@ def main():
     print("Building HTML...")
     html = build_html(data)
 
+    import sys as _sys
+    _sys.path.insert(0, os.path.join(BASE, 'code'))
+    from src.report_utils import save_report
+
     print(f"Writing to {OUTPUT_PATH}")
-    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
-    with open(OUTPUT_PATH, 'w') as f:
-        f.write(html)
+    save_report(html, OUTPUT_PATH)
 
     # Print quick summary
     for v in VARIANTS:
