@@ -1,0 +1,70 @@
+PROBE TRAINING SUMMARY — names Dataset
+============================================================
+N layers: 41
+N test samples (per layer): ~400
+
+--- Best Test Acc ---
+  Reading: M=0.7247, SD=0.0697, range=[0.560, 0.787], peak layer=37 (0.787)
+  Control: M=0.7363, SD=0.0671, range=[0.573, 0.790], peak layer=35 (0.790)
+
+--- Final Test Acc ---
+  Reading: M=0.7157, SD=0.0751, range=[0.545, 0.782], peak layer=21 (0.782)
+  Control: M=0.7290, SD=0.0683, range=[0.565, 0.785], peak layer=23 (0.785)
+
+--- Final Train Acc ---
+  Reading: M=0.9127, SD=0.1315, range=[0.573, 0.998], peak layer=39 (0.998)
+  Control: M=0.9187, SD=0.1330, range=[0.538, 0.999], peak layer=39 (0.999)
+
+
+============================================================
+LAYER GROUP STATISTICS
+============================================================
+
+--- Best Test Acc ---
+  EARLY (layers 0–13, n=14):
+    Reading: M=0.6455, SD=0.0659
+    Control: M=0.6736, SD=0.0846
+    Paired t(13)=-3.293, p=0.0058
+  MIDDLE (layers 14–27, n=14):
+    Reading: M=0.7618, SD=0.0146
+    Control: M=0.7629, SD=0.0105
+    Paired t(13)=-0.317, p=0.7565
+  LATE (layers 28–40, n=13):
+    Reading: M=0.7700, SD=0.0114
+    Control: M=0.7752, SD=0.0090
+    Paired t(12)=-1.537, p=0.1503
+
+--- Final Test Acc ---
+  EARLY (layers 0–13, n=14):
+    Reading: M=0.6305, SD=0.0712
+    Control: M=0.6646, SD=0.0855
+    Paired t(13)=-3.925, p=0.0017
+  MIDDLE (layers 14–27, n=14):
+    Reading: M=0.7566, SD=0.0165
+    Control: M=0.7588, SD=0.0118
+    Paired t(13)=-0.508, p=0.6198
+  LATE (layers 28–40, n=13):
+    Reading: M=0.7633, SD=0.0120
+    Control: M=0.7663, SD=0.0093
+    Paired t(12)=-0.817, p=0.4300
+
+============================================================
+OVERALL READING vs CONTROL (paired t-test across 41 layers)
+============================================================
+
+  Best Test Acc:
+    Reading M=0.7247, Control M=0.7363
+    Mean diff = -0.0116
+    t(40)=-3.099, p=0.0035, d=-0.484
+
+  Final Test Acc:
+    Reading M=0.7157, Control M=0.7290
+    Mean diff = -0.0134
+    t(40)=-3.211, p=0.0026, d=-0.502
+
+============================================================
+PER-LAYER TWO-PROPORTIONS Z-TESTS (FDR corrected)
+============================================================
+
+  Significant layers (FDR q<.05): 0/41
+  No layers reached significance after FDR correction.

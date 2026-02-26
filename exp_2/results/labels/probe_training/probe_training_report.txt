@@ -1,4 +1,4 @@
-PROBE TRAINING SUMMARY — Labels Dataset
+PROBE TRAINING SUMMARY — labels Dataset
 ============================================================
 N layers: 41
 N test samples (per layer): ~400

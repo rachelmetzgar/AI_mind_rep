@@ -234,8 +234,10 @@ def main():
     print("GENERATING FIGURES")
     print("=" * 60)
 
-    # Global y-axis limits for all accuracy plots
-    Y_MIN, Y_MAX = 0.40, 0.75
+    # Dynamic y-axis limits based on actual data (with padding)
+    all_acc = np.concatenate([r_acc, c_acc, reading["final"], control["final"]])
+    Y_MIN = min(0.40, np.floor(all_acc.min() * 20) / 20 - 0.02)  # round down to nearest 0.05
+    Y_MAX = np.ceil(all_acc.max() * 20) / 20 + 0.02              # round up to nearest 0.05 + padding
 
 
     # --- Figure 1: Best test accuracy by layer ---
@@ -697,10 +699,9 @@ the model at peak generalization.
 </html>
 """
 
+    from src.report_utils import save_report
     html_path = OUT_DIR / "probe_training_report.html"
-    with open(html_path, "w", encoding="utf-8") as f:
-        f.write(html)
-    print(f"  Saved: {html_path}")
+    save_report(html, html_path)
 
 
     # ========================== DONE ========================== #
