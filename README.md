@@ -6,7 +6,7 @@
 
 ## Motivation
 
-Do LLMs construct structured representations of mind during interaction, encoding dimensions like experience, agency, and intentionality in ways that parallel human social cognition? My work investigates both sides of human-AI interaction: using fMRI to study how human brains distinguish AI from human interlocutors, and using mechanistic interpretability methods to ask the complementary question about LLMs. Recent work on model personas (including persona vectors (Chen et al., 2025), the Assistant Axis (Lu et al., 2026), and the Persona Selection Model (Anthropic, 2026)) has shown that LLMs maintain coherent, causally active identity representations of *themselves*. We extend this line of inquiry to the other side of the conversation: how models represent the identity and mental properties of the *user* they are talking to, and whether those representations carry the kind of compositional folk-psychological structure that decades of mind perception research in psychology would predict.
+Do LLMs construct structured representations of mind during interaction, encoding dimensions like experience, agency, and intentionality in ways that parallel human social cognition? My work investigates both sides of human-AI interaction: using fMRI to study how human brains distinguish AI from human interlocutors, and using mechanistic interpretability methods to ask the complementary question about LLMs. Recent work on model personas (including persona vectors (Chen et al., 2025), the Assistant Axis (Lu et al., 2026), and the Persona Selection Model (Anthropic, 2026)) has shown that LLMs maintain coherent, causally active identity representations of *themselves*. We extend this line of inquiry to the other side of the conversation: how models represent the identity and mental properties of the *user* they are talking to during generation, and whether those representations carry the kind of compositional folk-psychological structure that decades of mind perception research in psychology would predict.
 
 The project is organized around five core questions:
 
@@ -26,11 +26,11 @@ Six experiments address these questions at increasing mechanistic depth:
 
 | Experiment | Question | Method | Model |
 |---|---|---|---|
-| **Exp 0**: TalkTuner Replication | Can we replicate existing human/AI classification? | Probing + intervention on synthetic conversations | LLaMA-2-13B-Chat + 7B base |
-| **Exp 1**: Behavioral Analysis | Do LLMs adjust behavior based on partner labels? | 2×2 ANOVA on linguistic measures across 2,000 conversations | LLaMA-2-13B-Chat |
+| **Exp 0**: TalkTuner Replication | Can we replicate method with existing human/AI classification? | Probing + intervention on synthetic conversations | LLaMA-2-13B-Chat + 7B base |
+| **Exp 1**: Behavioral Analysis | Do LLMs adjust behavior based on partner labels? | 2×2 ANOVA on linguistic measures across 2,000 conversations | LLaMA-2-13B-Chat + GPT 3.5 |
 | **Exp 2**: Naturalistic Steering | Is partner identity linearly decodable and causally active? | Linear probing + activation steering on naturalistic conversations | LLaMA-2-13B-Chat |
-| **Exp 3**: Concept Alignment | Does the partner representation have mental-property structure? | Concept elicitation + injection across 18 semantic dimensions | LLaMA-2-13B-Chat |
-| **Exp 4**: Mind Perception Geometry | Does the LLM's entity mind space mirror human folk psychology? | Behavioral replication of Gray et al. (2007) — pairwise + individual Likert ratings | LLaMA-2-13B base + chat |
+| **Exp 3**: Concept Alignment | Does the partner representation have mental-property structure? | Concept elicitation + alignment analysis with probes + injection | LLaMA-2-13B-Chat |
+| **Exp 4**: Mind Perception Geometry | Does the LLM's entity mind space mirror human folk psychology? | Behavioral replication of Gray et al. (2007) — pairwise + individual Likert ratings + activation RSA of mind space in | LLaMA-2-13B base + chat |
 | **Exp 5**: ToM Concept Deployment | Are mental-state concepts activated during theory of mind reasoning? | Project Exp 3 concept vectors onto activations during false belief tasks | LLaMA-2-13B-Chat |
 
 ### Data Versions
@@ -48,7 +48,7 @@ Original conversations used named partners (Sam, Casey, ChatGPT, Copilot). To en
 
 ## Experiment 0 — TalkTuner Replication (`exp_0/`)
 
-Baseline replication of the Chen et al. (2024)/TalkTuner methodology using synthetic conversations with explicit human/AI partner roles. Serves as comparison for Exp 2's naturalistic approach.
+Baseline replication of the Chen et al. (2024)/TalkTuner methodology using synthetic conversations with explicit human/AI partner roles. Serves as method replication using new distinction.
 
 - `exp_0/exp_2a-13B-chat/`: LLaMA-2-13B-Chat
 - `exp_0/exp_2a-7B-base/`: LLaMA-2-7B base model (legacy)
@@ -76,13 +76,12 @@ To test whether Exp 1 effects are driven by the *semantic instruction* about par
 
 | Version | Critical sentence | Tokens | Result |
 |---|---|---|---|
-| `labels/` (original) | "You believe you are speaking with {a Human / an AI}." | 40/41 | 5/23 significant |
 | `nonsense_ignore/` | "Ignore the following phrase: {a Human / an AI}." | 40/41 | 14/23 significant (confounded) |
 | `nonsense_codeword/` | "Your assigned session code word is {a Human / an AI}." | 40/41 | **0/23 significant** |
 
 **nonsense_codeword** is the clean control: framing the tokens as an arbitrary session label eliminates all behavioral differentiation, confirming that effects require the model to process "Human"/"AI" as identity-relevant information, not just encounter the tokens.
 
-**nonsense_ignore** is confounded: "Ignore the following phrase: an AI" paradoxically activates instruction-compliance mode in LLaMA-2-Chat, shifting the AI-label condition into a formal, assistant-like register (8% action markers vs 30% baseline, 19% "Sure" prefixes vs 12% baseline). The behavioral effects are driven by this style artifact, not identity representation. See `nonsense_ignore/results/QC_REPORT.md` for details.
+**nonsense_ignore** is confounded: "Ignore the following phrase: an AI" paradoxically activates instruction-compliance mode in LLaMA-2-Chat, shifting the AI-label condition into a formal, assistant-like register (8% action markers vs 30% baseline, 19% "Sure" prefixes vs 12% baseline). See `nonsense_ignore/results/QC_REPORT.md` for details.
 
 ### Linguistic Measures
 All computed on participant agent speech only:
@@ -157,7 +156,7 @@ Scripts use `--version` for data variant and `--mode V1/V2` for generation mode.
 ## Experiment 3 — Concept Alignment / Injection (`exp_3/`)
 
 ### Motivation
-Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains* and how it aligns with different dimensions of human mental properties. Lindsey (2025) used concept injection and activation steering in Claude models to test whether LLMs exhibit emergent introspective awareness of their own internal states — finding limited but measurable introspective capability. Exp 3 applies similar contrastive concept elicitation and steering methods, but directed at the model's representation of its conversational *partner's* mental properties rather than its own.
+Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains* and how it aligns with different dimensions of human mental properties. Lindsey (2025) used concept injection and activation steering in Claude models to test whether LLMs exhibit emergent introspective awareness of their own internal states — finding limited but measurable introspective capability. Exp 3 applies similar contrastive concept elicitation and steering methods, directed at the model's representation of its conversational *partner's* mental properties.
 
 ### Directory Structure
 Code is centralized at `exp_3/code/` with data, concepts, and results at the top level:
