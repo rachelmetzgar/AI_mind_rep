@@ -35,6 +35,17 @@ conditions:
 - **Results by turn:** [HTML](comparisons/behavioral_by_turn.html) · [Markdown](comparisons/behavioral_by_turn.md) — 21 per-turn measures x 6 versions x 5 turns
 - **Identity breakdown:** [HTML](comparisons/identity_summary.html) — per-identity effects (ChatGPT vs Copilot, Gregory vs Rebecca, etc.)
 
+### Data degradation analysis
+
+Text quality metrics (TTR, trigram repetition, ALL-CAPS, exclamation rate,
+self-reference) and probe confidence trajectories across the 5 turns of each
+conversation, testing whether conversation quality degrades differently by
+condition:
+
+- [Labels](../exp_2/results/labels/degradation_analysis/degradation_probe_report.html)
+- [Nonsense Codeword](../exp_2/results/nonsense_codeword/degradation_analysis/degradation_probe_report.html)
+- [Nonsense Ignore](../exp_2/results/nonsense_ignore/degradation_analysis/degradation_probe_report.html)
+
 ## Versions
 
 ### `names/` — Named Partners (original)

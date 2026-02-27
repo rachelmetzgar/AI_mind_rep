@@ -123,23 +123,25 @@ python code/analysis/gen_alt_position_comparison.py
 python code/analysis/create_v1_qc_summary.py
 ```
 
-## Reports
+## Results
 
-### Cross-Variant (start here)
+### Cross-variant (start here)
 
-| Report | Location | What it shows |
-|--------|----------|---------------|
-| Probe training comparison | `results/comparisons/probe_training/` | All 6 versions on unified y-axis. Summary table with peak accuracy, reading vs control paired t-tests, Cohen's d. |
-| Turn comparison layerwise | `results/comparisons/probe_training/` | Per-variant layer profiles at each turn, peak layer migration, cross-variant overlays, alternative token position examples with real 5-turn conversation data. |
-| Alt position comparison | `results/comparisons/probe_training/` | BOS, random, first EOS, weather suffix probes across 3 versions x 5 turns. Includes causal attention confound documentation. |
-| V1 QC summary | `results/comparisons/causality_qc/` | Behavioral metrics (word count, interpretability, like rate) for causal interventions across 4 main versions and layer strategies. |
+- [**Probe training comparison**](results/comparisons/probe_training/probe_training_comparison.html) — All 6 versions on the same scale, makes the labels vs named-partners vs nonsense distinction clear.
+- [**Turn comparison layerwise**](results/comparisons/probe_training/turn_comparison_layerwise.html) — Prompt dilution story: perfect at turn 1, degrades monotonically. Includes token position examples.
+- [**Alt position comparison**](results/comparisons/probe_training/alt_position_comparison.html) — Where in the token sequence does the signal live? Cross-version x cross-turn.
+- [**V1 causal intervention (labels)**](results/labels/v1_analysis_summary.html) — Causal intervention results: does steering the model with probe directions actually change behavior?
 
-### Per-Version (deep dives)
+### Data degradation
+
+- [Labels](results/labels/degradation_analysis/degradation_probe_report.html) · [Nonsense Codeword](results/nonsense_codeword/degradation_analysis/degradation_probe_report.html) · [Nonsense Ignore](results/nonsense_ignore/degradation_analysis/degradation_probe_report.html) — Text quality metrics + probe confidence across turns.
+
+### Per-version (deep dives)
 
 Each version under `results/{version}/` contains:
-- `probe_training/probe_training_report.html` — 9-section probe training analysis (all 6 versions)
-- `v1_analysis_summary.html` — V1 causal intervention QC (labels, balanced_names, balanced_gpt, names)
-- `degradation_analysis/degradation_probe_report.html` — Text degradation vs probe confidence (labels only)
+- `probe_training/probe_training_report.html` — 9-section probe training analysis
+- `v1_analysis_summary.html` — V1 causal intervention QC ([labels](results/labels/v1_analysis_summary.html), [balanced_names](results/balanced_names/v1_analysis_summary.html), [balanced_gpt](results/balanced_gpt/v1_analysis_summary.html), [names](results/names/v1_analysis_summary.html))
+- `degradation_analysis/degradation_probe_report.html` — Text degradation vs probe confidence
 
 ## Key Findings
 
