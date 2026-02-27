@@ -19,6 +19,18 @@ This pipeline investigates whether large language models (LLMs) form internal re
 
 ---
 
+## Results
+
+### Cross-version alignment analysis
+
+Cosine alignment (R²) between concept vectors and Exp 2 conversational probes, across all 6 data versions. Layers 6–40 only.
+
+- **Raw contrast alignment:** [HTML](results/alignment/comparisons/raw_comparison.html) · [Markdown](results/alignment/comparisons/raw_comparison.md) — no entity subtraction
+- **Residual contrast alignment:** [HTML](results/alignment/comparisons/residual_comparison.html) · [Markdown](results/alignment/comparisons/residual_comparison.md) — entity baseline projected out
+- **Standalone concept alignment:** [HTML](results/alignment/comparisons/standalone_comparison.html) · [Markdown](results/alignment/comparisons/standalone_comparison.md) — no entity framing in prompts
+
+---
+
 ## Data Versions
 
 Analyses that interact with Exp 2 data (alignment, cross-prediction) require a `--version` flag specifying which Exp 2 data version to use. Results are saved to version-specific subdirectories.
