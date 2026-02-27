@@ -795,7 +795,7 @@ def main():
     _sys.path.insert(0, str(EXP2_ROOT / "code"))
     from src.report_utils import save_report
 
-    output_path = EXP2_ROOT / "results" / "cross_variant" / "v1_qc_summary_all_variants.html"
+    output_path = EXP2_ROOT / "results" / "comparisons" / "causality_qc" / "v1_qc_summary_all_variants.html"
     save_report(html, output_path)
 
     # Also save per-variant HTML summaries

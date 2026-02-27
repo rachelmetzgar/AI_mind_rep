@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generate an HTML visualization of probe accuracy across layers and conversation turns.
-Produces: /mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_2/results/cross_variant/turn_comparison_layerwise.html
+Produces: /mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_2/results/comparisons/probe_training/turn_comparison_layerwise.html
 """
 
 import pickle
@@ -31,7 +31,7 @@ TURNS = [1, 2, 3, 4, 5]
 PROBE_TYPES = ['reading_probe', 'control_probe']
 PROBE_LABELS = {'reading_probe': 'Reading Probe', 'control_probe': 'Control Probe'}
 N_LAYERS = 41
-OUTPUT_PATH = os.path.join(BASE, 'results', 'cross_variant', 'turn_comparison_layerwise.html')
+OUTPUT_PATH = os.path.join(BASE, 'results', 'comparisons', 'probe_training', 'turn_comparison_layerwise.html')
 
 # Color map: deep blue -> teal -> yellow-green -> orange -> red
 TURN_COLORS = ['#1a3399', '#2596be', '#45a847', '#e8961a', '#cc2233']
@@ -676,7 +676,7 @@ diluted in longer sequences (prompt dilution), not because the model updates its
 *<strong>Caveat on first &lt;/s&gt;:</strong> Because LLaMA-2 uses causal attention, the
 representation at the first &lt;/s&gt; depends only on preceding tokens, which are identical
 regardless of conversation length. Its perfect accuracy across turns is an artifact of probing an
-invariant position (see <a href="alt_position_comparison.html">cross-version analysis</a>).</p>
+invariant position (see <a href="alt_position_comparison.html">alt position comparison</a>).</p>
 </div>
 """
     return html

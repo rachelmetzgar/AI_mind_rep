@@ -160,8 +160,10 @@ class OutputPaths:
     probe_training: Path = None    # results/{version}/probe_training/
     degradation: Path = None       # results/{version}/degradation_analysis/
 
-    # Cross-variant results
-    cross_variant: Path = ROOT_DIR / "results" / "cross_variant"
+    # Cross-variant comparison results
+    comparisons: Path = ROOT_DIR / "results" / "comparisons"
+    probe_training_comparison: Path = ROOT_DIR / "results" / "comparisons" / "probe_training"
+    causality_qc_comparison: Path = ROOT_DIR / "results" / "comparisons" / "causality_qc"
 
     # Logs
     logs: Path = ROOT_DIR / "logs"

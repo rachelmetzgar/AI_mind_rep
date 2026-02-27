@@ -36,7 +36,9 @@ exp_2/
 │   └── shared/                # Version-independent data (topics, questions)
 ├── results/
 │   ├── {version}/             # Per-version analysis outputs
-│   └── cross_variant/         # Cross-variant comparison HTML reports
+│   └── comparisons/           # Cross-variant comparison HTML reports
+│       ├── probe_training/    # Probe accuracy, turn layerwise, alt token positions
+│       └── causality_qc/      # V1 causal intervention QC summary
 ├── archive/                   # Old self-contained variant directories
 └── logs/                      # SLURM logs by version
 ```
@@ -127,10 +129,10 @@ python code/analysis/create_v1_qc_summary.py
 
 | Report | Location | What it shows |
 |--------|----------|---------------|
-| Probe training comparison | `results/comparisons/probe_training/probe_training_comparison.html` | All 6 versions on unified y-axis. Summary table with peak accuracy, reading vs control paired t-tests, Cohen's d. |
-| Turn comparison layerwise | `results/cross_variant/turn_comparison_layerwise.html` | Per-variant layer profiles at each turn, peak layer migration, cross-variant overlays, alternative token position examples with real 5-turn conversation data. |
-| Alt position comparison | `results/cross_variant/alt_position_comparison.html` | BOS, random, first `</s>`, weather suffix probes across 3 versions × 5 turns. Includes causal attention confound documentation. |
-| V1 QC summary | `results/cross_variant/v1_qc_summary_all_variants.html` | Behavioral metrics (word count, interpretability, like rate) for causal interventions across 4 main versions and layer strategies. |
+| Probe training comparison | `results/comparisons/probe_training/` | All 6 versions on unified y-axis. Summary table with peak accuracy, reading vs control paired t-tests, Cohen's d. |
+| Turn comparison layerwise | `results/comparisons/probe_training/` | Per-variant layer profiles at each turn, peak layer migration, cross-variant overlays, alternative token position examples with real 5-turn conversation data. |
+| Alt position comparison | `results/comparisons/probe_training/` | BOS, random, first EOS, weather suffix probes across 3 versions x 5 turns. Includes causal attention confound documentation. |
+| V1 QC summary | `results/comparisons/causality_qc/` | Behavioral metrics (word count, interpretability, like rate) for causal interventions across 4 main versions and layer strategies. |
 
 ### Per-Version (deep dives)
 

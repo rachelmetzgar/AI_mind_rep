@@ -8,7 +8,7 @@ Conditions: control_first (BOS), control_random, control_eos (first </s>),
             reading_irrelevant (weather suffix), + baselines
 Turns: 1-5
 
-Output: exp_2/results/cross_variant/alt_position_comparison.html (+.md)
+Output: exp_2/results/comparisons/probe_training/alt_position_comparison.html (+.md)
 """
 
 import pickle
@@ -24,7 +24,7 @@ import matplotlib.ticker as ticker
 # ── Configuration ────────────────────────────────────────────────────────────
 
 BASE = '/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_2'
-OUTPUT_PATH = f'{BASE}/results/cross_variant/alt_position_comparison.html'
+OUTPUT_PATH = f'{BASE}/results/comparisons/probe_training/alt_position_comparison.html'
 
 VERSIONS = ['labels', 'balanced_gpt', 'nonsense_codeword']
 VERSION_LABELS = {
