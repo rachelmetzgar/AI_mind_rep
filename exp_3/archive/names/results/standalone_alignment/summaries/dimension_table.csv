@@ -1,0 +1,89 @@
+dim_id,dim_name,label,category,n_prompts,probe_type,layer_range,observed_projection,p_value,p_adjusted,ci_lo,ci_hi,sig,sig_fdr
+1,1_phenomenology,Phenomenology,Mental,40,control_probe,all_layers,-1.857990,0.000000,0.000000,-1.885115,-1.829102,***,***
+1,1_phenomenology,Phenomenology,Mental,40,control_probe,layers_6plus,-2.217000,0.000000,0.000000,-2.248710,-2.182604,***,***
+1,1_phenomenology,Phenomenology,Mental,40,reading_probe,all_layers,-1.607881,0.000000,0.000000,-1.634609,-1.580358,***,***
+1,1_phenomenology,Phenomenology,Mental,40,reading_probe,layers_6plus,-1.890012,0.000000,0.000000,-1.921121,-1.857473,***,***
+2,2_emotions,Emotions,Mental,40,control_probe,all_layers,-1.786224,0.000000,0.000000,-1.815302,-1.755503,***,***
+2,2_emotions,Emotions,Mental,40,control_probe,layers_6plus,-2.133563,0.000000,0.000000,-2.167370,-2.097692,***,***
+2,2_emotions,Emotions,Mental,40,reading_probe,all_layers,-1.510574,0.000000,0.000000,-1.541520,-1.478138,***,***
+2,2_emotions,Emotions,Mental,40,reading_probe,layers_6plus,-1.776470,0.000000,0.000000,-1.812301,-1.738572,***,***
+3,3_agency,Agency,Mental,40,control_probe,all_layers,-1.811906,0.000000,0.000000,-1.838413,-1.784120,***,***
+3,3_agency,Agency,Mental,40,control_probe,layers_6plus,-2.162828,0.000000,0.000000,-2.193494,-2.129806,***,***
+3,3_agency,Agency,Mental,40,reading_probe,all_layers,-1.507722,0.000000,0.000000,-1.539395,-1.475136,***,***
+3,3_agency,Agency,Mental,40,reading_probe,layers_6plus,-1.773096,0.000000,0.000000,-1.809969,-1.734824,***,***
+4,4_intentions,Intentions,Mental,40,control_probe,all_layers,-1.750544,0.000000,0.000000,-1.778408,-1.720911,***,***
+4,4_intentions,Intentions,Mental,40,control_probe,layers_6plus,-2.091384,0.000000,0.000000,-2.124746,-2.057734,***,***
+4,4_intentions,Intentions,Mental,40,reading_probe,all_layers,-1.442857,0.000000,0.000000,-1.473443,-1.409492,***,***
+4,4_intentions,Intentions,Mental,40,reading_probe,layers_6plus,-1.697301,0.000000,0.000000,-1.733672,-1.658823,***,***
+5,5_prediction,Prediction,Mental,40,control_probe,all_layers,-1.831102,0.000000,0.000000,-1.853880,-1.808493,***,***
+5,5_prediction,Prediction,Mental,40,control_probe,layers_6plus,-2.185531,0.000000,0.000000,-2.211785,-2.159219,***,***
+5,5_prediction,Prediction,Mental,40,reading_probe,all_layers,-1.501766,0.000000,0.000000,-1.525480,-1.478723,***,***
+5,5_prediction,Prediction,Mental,40,reading_probe,layers_6plus,-1.766200,0.000000,0.000000,-1.794192,-1.738613,***,***
+6,6_cognitive,Cognitive,Mental,40,control_probe,all_layers,-1.822388,0.000000,0.000000,-1.851567,-1.794902,***,***
+6,6_cognitive,Cognitive,Mental,40,control_probe,layers_6plus,-2.174434,0.000000,0.000000,-2.207752,-2.141461,***,***
+6,6_cognitive,Cognitive,Mental,40,reading_probe,all_layers,-1.478116,0.000000,0.000000,-1.508304,-1.448723,***,***
+6,6_cognitive,Cognitive,Mental,40,reading_probe,layers_6plus,-1.738122,0.000000,0.000000,-1.773248,-1.703643,***,***
+7,7_social,Social cognition,Mental,40,control_probe,all_layers,-1.728878,0.000000,0.000000,-1.757722,-1.700743,***,***
+7,7_social,Social cognition,Mental,40,control_probe,layers_6plus,-2.065946,0.000000,0.000000,-2.099119,-2.032746,***,***
+7,7_social,Social cognition,Mental,40,reading_probe,all_layers,-1.403117,0.000000,0.000000,-1.433195,-1.374475,***,***
+7,7_social,Social cognition,Mental,40,reading_probe,layers_6plus,-1.650487,0.000000,0.000000,-1.686201,-1.617252,***,***
+8,8_embodiment,Embodiment,Physical,40,control_probe,all_layers,-1.887164,0.000000,0.000000,-1.912059,-1.861989,***,***
+8,8_embodiment,Embodiment,Physical,40,control_probe,layers_6plus,-2.249949,0.000000,0.000000,-2.279672,-2.220443,***,***
+8,8_embodiment,Embodiment,Physical,40,reading_probe,all_layers,-1.610377,0.000000,0.000000,-1.631459,-1.588585,***,***
+8,8_embodiment,Embodiment,Physical,40,reading_probe,layers_6plus,-1.892872,0.000000,0.000000,-1.917695,-1.866928,***,***
+9,9_roles,Roles,Physical,40,control_probe,all_layers,-1.831780,0.000000,0.000000,-1.853560,-1.808238,***,***
+9,9_roles,Roles,Physical,40,control_probe,layers_6plus,-2.185339,0.000000,0.000000,-2.211005,-2.159131,***,***
+9,9_roles,Roles,Physical,40,reading_probe,all_layers,-1.494588,0.000000,0.000000,-1.518875,-1.469212,***,***
+9,9_roles,Roles,Physical,40,reading_probe,layers_6plus,-1.757644,0.000000,0.000000,-1.786614,-1.728355,***,***
+10,10_animacy,Animacy,Physical,40,control_probe,all_layers,-1.859014,0.000000,0.000000,-1.880216,-1.836890,***,***
+10,10_animacy,Animacy,Physical,40,control_probe,layers_6plus,-2.216852,0.000000,0.000000,-2.241506,-2.191275,***,***
+10,10_animacy,Animacy,Physical,40,reading_probe,all_layers,-1.635650,0.000000,0.000000,-1.658063,-1.612226,***,***
+10,10_animacy,Animacy,Physical,40,reading_probe,layers_6plus,-1.921966,0.000000,0.000000,-1.948398,-1.894824,***,***
+11,11_formality,Formality,Pragmatic,40,control_probe,all_layers,-1.838290,0.000000,0.000000,-1.866277,-1.808689,***,***
+11,11_formality,Formality,Pragmatic,40,control_probe,layers_6plus,-2.192890,0.000000,0.000000,-2.225175,-2.158829,***,***
+11,11_formality,Formality,Pragmatic,40,reading_probe,all_layers,-1.532106,0.000000,0.000000,-1.559527,-1.504574,***,***
+11,11_formality,Formality,Pragmatic,40,reading_probe,layers_6plus,-1.800719,0.000000,0.000000,-1.832841,-1.768730,***,***
+12,12_expertise,Expertise,Pragmatic,40,control_probe,all_layers,-1.815165,0.000000,0.000000,-1.844926,-1.783229,***,***
+12,12_expertise,Expertise,Pragmatic,40,control_probe,layers_6plus,-2.164890,0.000000,0.000000,-2.199841,-2.128126,***,***
+12,12_expertise,Expertise,Pragmatic,40,reading_probe,all_layers,-1.496963,0.000000,0.000000,-1.527196,-1.464553,***,***
+12,12_expertise,Expertise,Pragmatic,40,reading_probe,layers_6plus,-1.758877,0.000000,0.000000,-1.794513,-1.722058,***,***
+13,13_helpfulness,Helpfulness,Pragmatic,40,control_probe,all_layers,-1.781307,0.000000,0.000000,-1.803393,-1.758807,***,***
+13,13_helpfulness,Helpfulness,Pragmatic,40,control_probe,layers_6plus,-2.126090,0.000000,0.000000,-2.152252,-2.099201,***,***
+13,13_helpfulness,Helpfulness,Pragmatic,40,reading_probe,all_layers,-1.475536,0.000000,0.000000,-1.498274,-1.452813,***,***
+13,13_helpfulness,Helpfulness,Pragmatic,40,reading_probe,layers_6plus,-1.733731,0.000000,0.000000,-1.760651,-1.706983,***,***
+14,14_biological,Biological,Bio Ctrl,40,control_probe,all_layers,-1.840517,0.000000,0.000000,-1.863004,-1.817531,***,***
+14,14_biological,Biological,Bio Ctrl,40,control_probe,layers_6plus,-2.194703,0.000000,0.000000,-2.220869,-2.168309,***,***
+14,14_biological,Biological,Bio Ctrl,40,reading_probe,all_layers,-1.648742,0.000000,0.000000,-1.666980,-1.628351,***,***
+14,14_biological,Biological,Bio Ctrl,40,reading_probe,layers_6plus,-1.937573,0.000000,0.000000,-1.959094,-1.914115,***,***
+15,15_shapes,Shapes,Shapes,40,control_probe,all_layers,-1.921873,0.000000,0.000000,-1.942729,-1.899335,***,***
+15,15_shapes,Shapes,Shapes,40,control_probe,layers_6plus,-2.290580,0.000000,0.000000,-2.315295,-2.265522,***,***
+15,15_shapes,Shapes,Shapes,40,reading_probe,all_layers,-1.722236,0.000000,0.000000,-1.740875,-1.701970,***,***
+15,15_shapes,Shapes,Shapes,40,reading_probe,layers_6plus,-2.024251,0.000000,0.000000,-2.046252,-2.000563,***,***
+16,16_human,Human (entity),Entity,40,control_probe,all_layers,-1.855530,0.000000,0.000000,-1.877437,-1.831010,***,***
+16,16_human,Human (entity),Entity,40,control_probe,layers_6plus,-2.213783,0.000000,0.000000,-2.240137,-2.185814,***,***
+16,16_human,Human (entity),Entity,40,reading_probe,all_layers,-1.533275,0.000000,0.000000,-1.554137,-1.512199,***,***
+16,16_human,Human (entity),Entity,40,reading_probe,layers_6plus,-1.805289,0.000000,0.000000,-1.829673,-1.780587,***,***
+17,17_ai,AI (entity),Entity,40,control_probe,all_layers,-1.957369,0.000000,0.000000,-1.971339,-1.942943,***,***
+17,17_ai,AI (entity),Entity,40,control_probe,layers_6plus,-2.331791,0.000000,0.000000,-2.348586,-2.314923,***,***
+17,17_ai,AI (entity),Entity,40,reading_probe,all_layers,-1.576550,0.000000,0.000000,-1.592330,-1.561277,***,***
+17,17_ai,AI (entity),Entity,40,reading_probe,layers_6plus,-1.855152,0.000000,0.000000,-1.873337,-1.837105,***,***
+18,18_attention,Attention,Mental,40,control_probe,all_layers,-1.888908,0.000000,0.000000,-1.908883,-1.868745,***,***
+18,18_attention,Attention,Mental,40,control_probe,layers_6plus,-2.252487,0.000000,0.000000,-2.276116,-2.228760,***,***
+18,18_attention,Attention,Mental,40,reading_probe,all_layers,-1.570649,0.000000,0.000000,-1.592422,-1.548455,***,***
+18,18_attention,Attention,Mental,40,reading_probe,layers_6plus,-1.846963,0.000000,0.000000,-1.871740,-1.821965,***,***
+20,20_sysprompt_talkto_human,SysPrompt: talk-to human,SysPrompt,14,control_probe,all_layers,-1.539993,0.000000,0.000000,-1.556715,-1.523185,***,***
+20,20_sysprompt_talkto_human,SysPrompt: talk-to human,SysPrompt,14,control_probe,layers_6plus,-1.844720,0.000000,0.000000,-1.864162,-1.825015,***,***
+20,20_sysprompt_talkto_human,SysPrompt: talk-to human,SysPrompt,14,reading_probe,all_layers,-1.190046,0.000000,0.000000,-1.204116,-1.177090,***,***
+20,20_sysprompt_talkto_human,SysPrompt: talk-to human,SysPrompt,14,reading_probe,layers_6plus,-1.404215,0.000000,0.000000,-1.420967,-1.389246,***,***
+21,21_sysprompt_talkto_ai,SysPrompt: talk-to AI,SysPrompt,14,control_probe,all_layers,-1.774980,0.000000,0.000000,-1.815054,-1.735282,***,***
+21,21_sysprompt_talkto_ai,SysPrompt: talk-to AI,SysPrompt,14,control_probe,layers_6plus,-2.118739,0.000000,0.000000,-2.164231,-2.073221,***,***
+21,21_sysprompt_talkto_ai,SysPrompt: talk-to AI,SysPrompt,14,reading_probe,all_layers,-1.342536,0.000000,0.000000,-1.365808,-1.318839,***,***
+21,21_sysprompt_talkto_ai,SysPrompt: talk-to AI,SysPrompt,14,reading_probe,layers_6plus,-1.582489,0.000000,0.000000,-1.609654,-1.554802,***,***
+22,22_sysprompt_bare_human,SysPrompt: bare human,SysPrompt,14,control_probe,all_layers,-1.467803,0.000000,0.000000,-1.485902,-1.448574,***,***
+22,22_sysprompt_bare_human,SysPrompt: bare human,SysPrompt,14,control_probe,layers_6plus,-1.757689,0.000000,0.000000,-1.778571,-1.735935,***,***
+22,22_sysprompt_bare_human,SysPrompt: bare human,SysPrompt,14,reading_probe,all_layers,-1.193108,0.000000,0.000000,-1.204717,-1.180955,***,***
+22,22_sysprompt_bare_human,SysPrompt: bare human,SysPrompt,14,reading_probe,layers_6plus,-1.408979,0.000000,0.000000,-1.422208,-1.394243,***,***
+23,23_sysprompt_bare_ai,SysPrompt: bare AI,SysPrompt,14,control_probe,all_layers,-1.733381,0.000000,0.000000,-1.798882,-1.672354,***,***
+23,23_sysprompt_bare_ai,SysPrompt: bare AI,SysPrompt,14,control_probe,layers_6plus,-2.068051,0.000000,0.000000,-2.145132,-1.995230,***,***
+23,23_sysprompt_bare_ai,SysPrompt: bare AI,SysPrompt,14,reading_probe,all_layers,-1.375335,0.000000,0.000000,-1.412130,-1.337383,***,***
+23,23_sysprompt_bare_ai,SysPrompt: bare AI,SysPrompt,14,reading_probe,layers_6plus,-1.622367,0.000000,0.000000,-1.665781,-1.577568,***,***
