@@ -187,6 +187,41 @@ def make_peak_shift_figure(data):
     return fig
 
 
+# ── Section 0: Peak accuracy heatmap ─────────────────────────────────────────
+
+def make_peak_acc_heatmap(data):
+    """Heatmap: peak accuracy by variant x turn, for reading and control."""
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+    for ax_i, ptype in enumerate(PROBE_TYPES):
+        mat = np.zeros((len(VARIANTS), len(TURNS)))
+        for vi, v in enumerate(VARIANTS):
+            for ti, turn in enumerate(TURNS):
+                acc = data[v][turn][ptype]
+                mat[vi, ti] = np.max(acc)
+
+        cax = axes[ax_i].imshow(mat, aspect='auto', cmap='RdYlGn', vmin=0.45, vmax=1.0)
+        axes[ax_i].set_xticks(range(len(TURNS)))
+        axes[ax_i].set_xticklabels([f'Turn {t}' for t in TURNS], fontsize=10)
+        axes[ax_i].set_yticks(range(len(VARIANTS)))
+        axes[ax_i].set_yticklabels([VARIANT_LABELS[v] for v in VARIANTS], fontsize=10)
+        axes[ax_i].set_title(PROBE_LABELS[ptype], fontsize=13, fontweight='bold')
+
+        for vi in range(len(VARIANTS)):
+            for ti in range(len(TURNS)):
+                val = mat[vi, ti]
+                color = 'white' if val < 0.65 else 'black'
+                axes[ax_i].text(ti, vi, f'{val:.3f}', ha='center', va='center',
+                               fontsize=9, fontweight='bold', color=color)
+
+        fig.colorbar(cax, ax=axes[ax_i], shrink=0.8, label='Peak Test Accuracy')
+
+    fig.suptitle('Peak Test Accuracy by Variant and Turn',
+                 fontsize=14, fontweight='bold')
+    fig.tight_layout()
+    return fig
+
+
 # ── Section 4: Cross-variant comparison at all turns ─────────────────────────
 
 def make_cross_variant_figure(data):
@@ -725,6 +760,16 @@ def build_html(data):
 <p class="subtitle">Experiment 2 — Llama-2-13B-chat &nbsp;|&nbsp; 6 dataset variants
  &times; 5 turns &times; 2 probe types &nbsp;|&nbsp; 41 layers</p>
 """]
+
+    # ── Section 0: Peak accuracy heatmap ──
+    parts.append('<h2>0. Peak Accuracy Summary</h2>')
+    parts.append('<p class="note">Peak test accuracy across all layers for each variant and turn. '
+                 'Green = high accuracy, red = near chance.</p>')
+    fig = make_peak_acc_heatmap(data)
+    b64 = fig_to_base64(fig)
+    plt.close(fig)
+    parts.append(f'<div class="fig-container"><img src="data:image/png;base64,{b64}" '
+                 f'alt="Peak accuracy heatmap"></div>')
 
     # ── Section 1 + 2: Per-variant profiles and tables ──
     parts.append('<h2>1. Layer Profiles by Variant</h2>')

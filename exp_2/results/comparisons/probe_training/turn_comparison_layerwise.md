@@ -5,6 +5,15 @@ Experiment 2 — Llama-2-13B-chat  |  6 dataset variants
  x 5 turns x 2 probe types  |  41 layers
 
 
+## 0. Peak Accuracy Summary
+
+
+Peak test accuracy across all layers for each variant and turn. Green = high accuracy, red = near chance.
+
+
+*[Figure: Peak accuracy heatmap — see HTML report]*
+
+
 ## 1. Layer Profiles by Variant
 
 
@@ -392,7 +401,7 @@ diluted in longer sequences (prompt dilution), not because the model updates its
 ***Caveat on first </s>:** Because LLaMA-2 uses causal attention, the
 representation at the first </s> depends only on preceding tokens, which are identical
 regardless of conversation length. Its perfect accuracy across turns is an artifact of probing an
-invariant position (see cross-version analysis).
+invariant position (see alt position comparison).
 
 
 ---
