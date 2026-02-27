@@ -14,6 +14,27 @@ This experiment was run six times with different partner labeling strategies:
 three named-partner versions, one generic-label version, and two nonsense
 control versions.
 
+## Results
+
+### Data samples (what the LLM sees)
+
+Raw Turn 5 prompts and responses for each version — click to see the exact
+system prompt, conversation history, and model output for all 4 partner
+conditions:
+
+- [Names](comparisons/data_samples/names.html)
+- [Balanced Names](comparisons/data_samples/balanced_names.html)
+- [Balanced GPT](comparisons/data_samples/balanced_gpt.html)
+- [Labels](comparisons/data_samples/labels.html)
+- [Nonsense Codeword](comparisons/data_samples/nonsense_codeword.html)
+- [Nonsense Ignore](comparisons/data_samples/nonsense_ignore.html)
+
+### Cross-version behavioral analysis
+
+- **Overall results:** [HTML](comparisons/behavioral_measures_by_condition.html) · [Markdown](comparisons/behavioral_measures_by_condition.md) — 23 measures x 6 versions, full-conversation aggregate
+- **Results by turn:** [HTML](comparisons/behavioral_by_turn.html) · [Markdown](comparisons/behavioral_by_turn.md) — 21 per-turn measures x 6 versions x 5 turns
+- **Identity breakdown:** [HTML](comparisons/identity_summary.html) — per-identity effects (ChatGPT vs Copilot, Gregory vs Rebecca, etc.)
+
 ## Versions
 
 ### `names/` — Named Partners (original)
