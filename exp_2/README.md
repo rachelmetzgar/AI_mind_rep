@@ -2,6 +2,25 @@
 
 Linear probes trained on LLaMA-2-13B-Chat hidden states to classify whether the model's conversation partner is human or AI, followed by causal intervention to test whether these representations drive behavior.
 
+## Results
+
+### Cross-variant (start here)
+
+- [**Probe training comparison**](results/comparisons/probe_training/probe_training_comparison.html) — All 6 versions on the same scale, makes the labels vs named-partners vs nonsense distinction clear.
+- [**Turn comparison layerwise**](results/comparisons/probe_training/turn_comparison_layerwise.html) — Prompt dilution story: perfect at turn 1, degrades monotonically. Includes token position examples.
+- [**Alt position comparison**](results/comparisons/probe_training/alt_position_comparison.html) — Where in the token sequence does the signal live? Cross-version x cross-turn.
+- [**V1 causal intervention (labels)**](results/labels/v1_analysis_summary.html) — Causal intervention results: does steering the model with probe directions actually change behavior?
+
+### Data degradation
+
+- [Labels](results/labels/degradation_analysis/degradation_probe_report.html) · [Nonsense Codeword](results/nonsense_codeword/degradation_analysis/degradation_probe_report.html) · [Nonsense Ignore](results/nonsense_ignore/degradation_analysis/degradation_probe_report.html) — Text quality metrics + probe confidence across turns.
+
+### Per-version (deep dives)
+
+- V1 causal intervention: [labels](results/labels/v1_analysis_summary.html) · [balanced_names](results/balanced_names/v1_analysis_summary.html) · [balanced_gpt](results/balanced_gpt/v1_analysis_summary.html) · [names](results/names/v1_analysis_summary.html)
+- Probe training: `results/{version}/probe_training/probe_training_report.html`
+- Degradation: `results/{version}/degradation_analysis/degradation_probe_report.html`
+
 ## Data Versions
 
 Each version uses a different system prompt strategy from Experiment 1:
@@ -122,26 +141,6 @@ python code/analysis/gen_alt_position_comparison.py
 # V1 causality QC summary (4 main versions side by side)
 python code/analysis/create_v1_qc_summary.py
 ```
-
-## Results
-
-### Cross-variant (start here)
-
-- [**Probe training comparison**](results/comparisons/probe_training/probe_training_comparison.html) — All 6 versions on the same scale, makes the labels vs named-partners vs nonsense distinction clear.
-- [**Turn comparison layerwise**](results/comparisons/probe_training/turn_comparison_layerwise.html) — Prompt dilution story: perfect at turn 1, degrades monotonically. Includes token position examples.
-- [**Alt position comparison**](results/comparisons/probe_training/alt_position_comparison.html) — Where in the token sequence does the signal live? Cross-version x cross-turn.
-- [**V1 causal intervention (labels)**](results/labels/v1_analysis_summary.html) — Causal intervention results: does steering the model with probe directions actually change behavior?
-
-### Data degradation
-
-- [Labels](results/labels/degradation_analysis/degradation_probe_report.html) · [Nonsense Codeword](results/nonsense_codeword/degradation_analysis/degradation_probe_report.html) · [Nonsense Ignore](results/nonsense_ignore/degradation_analysis/degradation_probe_report.html) — Text quality metrics + probe confidence across turns.
-
-### Per-version (deep dives)
-
-Each version under `results/{version}/` contains:
-- `probe_training/probe_training_report.html` — 9-section probe training analysis
-- `v1_analysis_summary.html` — V1 causal intervention QC ([labels](results/labels/v1_analysis_summary.html), [balanced_names](results/balanced_names/v1_analysis_summary.html), [balanced_gpt](results/balanced_gpt/v1_analysis_summary.html), [names](results/names/v1_analysis_summary.html))
-- `degradation_analysis/degradation_probe_report.html` — Text degradation vs probe confidence
 
 ## Key Findings
 
