@@ -328,7 +328,13 @@ if __name__ == "__main__":
     print(f"  Token position: {cond['token_position']}")
     print(f"  Turn index: {args.turn_index}")
 
-    out_dir = str(config.PATHS.probe_checkpoints / "alternative" / args.condition)
+    # turn_index=-1 → turn 5 (backward compat: "alternative/")
+    # turn_index=0..3 → turns 1-4: "alternative_turn_{N}/"
+    if args.turn_index == -1:
+        alt_subdir = "alternative"
+    else:
+        alt_subdir = f"alternative_turn_{args.turn_index + 1}"
+    out_dir = str(config.PATHS.probe_checkpoints / alt_subdir / args.condition)
     print(f"  Output: {out_dir}")
 
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
