@@ -2,6 +2,12 @@
 
 **Author:** Rachel C. Metzgar, Princeton University
 
+## Reports
+
+- [Results walkthrough](exp4_results_walkthrough.html) — Combined results across both models: factor structure, human correlations, entity placements, RSA
+- [Base model results](llama_exp_4-13B-base/results_report.html) — Pairwise and individual rating analyses for the base model
+- [Analysis explainer](llama_exp_4-13B-base/analysis_explainer.html) — Step-by-step walkthrough of the PCA / varimax / factor-score methodology
+
 ---
 
 ## Motivation
