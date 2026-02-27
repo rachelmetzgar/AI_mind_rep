@@ -345,6 +345,33 @@ def build_html(data):
 Labels (Primary) &nbsp;|&nbsp; Balanced GPT &nbsp;|&nbsp; Nonsense Codeword (Control)</p>
 """]
 
+    # ── Caveat: causal attention and the </s> confound ──
+    parts.append("""
+<div style="background:#fff3cd; border:1px solid #ffc107; border-radius:8px; padding:16px 20px; margin:20px 0;">
+<h3 style="color:#856404; margin-top:0;">Important: Causal Attention Confound for First &lt;/s&gt; Token</h3>
+<p style="font-size:13px; color:#856404;">
+The <strong>first &lt;/s&gt; token</strong> achieves perfect accuracy (1.000) at every turn because
+LLaMA-2 uses <strong>causal (left-to-right) attention</strong>. The model&rsquo;s representation at
+the first &lt;/s&gt; depends only on tokens that precede it &mdash; and those tokens are
+<em>identical</em> regardless of how many conversation turns follow.
+</p>
+<ul style="font-size:13px; color:#856404; margin-bottom:0;">
+<li><strong>Turn 1</strong>: No &lt;/s&gt; token exists (only system + user prompt, no assistant response).
+The code falls back to the last token (<code>]</code> from <code>[/INST]</code>), making this
+condition identical to the baseline control probe.</li>
+<li><strong>Turns 2&ndash;5</strong>: The text before the first &lt;/s&gt; is <em>exactly identical</em>
+across all turns (same 1028 chars). The first &lt;/s&gt; sits at the same position with the same
+causal context. Subsequent turns cannot influence it because information flows only left-to-right.</li>
+</ul>
+<p style="font-size:13px; color:#856404; margin-bottom:0;">
+The constant perfect accuracy is therefore an artifact of probing an invariant position, not evidence
+that partner identity is preserved across turns. It remains true that this structural boundary token
+is an exceptionally informative position &mdash; but its accuracy does not address the prompt dilution
+question.
+</p>
+</div>
+""")
+
     # ── Section 1: Summary grid ──
     parts.append('<h2>1. Overview Grid (All Turns x Versions)</h2>')
     parts.append('<p class="note">Each panel shows all 6 conditions (2 baselines + 4 alternative) '

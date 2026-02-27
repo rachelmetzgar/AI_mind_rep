@@ -6,6 +6,29 @@ Comparing token position probes across 3 versions x 5 turns x 4 alternative cond
 Labels (Primary)  |  Balanced GPT  |  Nonsense Codeword (Control)
 
 
+### Important: Causal Attention Confound for First </s> Token
+
+
+The **first </s> token** achieves perfect accuracy (1.000) at every turn because
+LLaMA-2 uses **causal (left-to-right) attention**. The model's representation at
+the first </s> depends only on tokens that precede it — and those tokens are
+*identical* regardless of how many conversation turns follow.
+
+
+- **Turn 1**: No </s> token exists (only system + user prompt, no assistant response).
+The code falls back to the last token (`]` from `[/INST]`), making this
+condition identical to the baseline control probe.
+- **Turns 2–5**: The text before the first </s> is *exactly identical*
+across all turns (same 1028 chars). The first </s> sits at the same position with the same
+causal context. Subsequent turns cannot influence it because information flows only left-to-right.
+
+
+The constant perfect accuracy is therefore an artifact of probing an invariant position, not evidence
+that partner identity is preserved across turns. It remains true that this structural boundary token
+is an exceptionally informative position — but its accuracy does not address the prompt dilution
+question.
+
+
 ## 1. Overview Grid (All Turns x Versions)
 
 

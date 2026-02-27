@@ -323,9 +323,16 @@ Hey there! I've got to say, there's one natural landscape that's left a lasting 
 
 **Key finding:** The first </s> token carries *more* partner
 identity information than the baseline probes at the end of the conversation. At layer 33, the probe
-achieves perfect classification (1.000). This suggests the model "summarizes" its partner
-model at exchange boundaries — a structural compression point where the model consolidates its
-representation before the next turn begins.
+achieves perfect classification (1.000). This structural boundary token is an exceptionally informative
+position for partner identity.
+
+
+**Caveat:** Because LLaMA-2 uses causal (left-to-right)
+attention, the model's representation at the first </s> depends only on preceding tokens —
+which are *identical* regardless of how many turns follow. The perfect accuracy across turns is
+therefore an artifact of probing an invariant position, not evidence that identity survives prompt dilution.
+At turn 1, no </s> exists (no assistant response yet), so the probe falls back to the last token
+of `[/INST]`.
 
 
 #### Reading: Irrelevant Suffix (Weather)
@@ -366,7 +373,7 @@ to surface. The representation exists in the residual stream regardless of what 
 | --- | --- | --- | --- | --- |
 | BOS (<s>) | Position 0 | 0.505 | 0.510 | At chance. No partner info before attention mixing. |
 | Random mid-seq | ~25th–75th percentile | 0.512 | 0.560 | At chance. Partner info is NOT broadcast to arbitrary tokens. |
-| First </s> | End of 1st exchange | 0.716 | **1.000** | Best condition! Model summarizes partner identity at exchange boundaries. |
+| First </s> | End of 1st exchange | 0.716 | **1.000** | Best condition. Structural boundary token is highly informative.* |
 | Weather suffix | Last token ("is") | 0.562 | 0.600 | Nearly matches real suffix. Representation is accessible from any continuation. |
 | Baseline control | Last token [/INST] | 0.552 | 0.605 | Standard control probe at conversation end. |
 | Baseline reading | Last token ("is") | 0.580 | 0.653 | Standard reading probe with partner-relevant suffix. |
@@ -380,6 +387,12 @@ first exchange achieves perfect decoding at layer 33).
 "weather" suffix works nearly as well as asking about the partner.
 (4) The representation degrades across turns because the system prompt tokens become proportionally
 diluted in longer sequences (prompt dilution), not because the model updates its partner model.
+
+
+***Caveat on first </s>:** Because LLaMA-2 uses causal attention, the
+representation at the first </s> depends only on preceding tokens, which are identical
+regardless of conversation length. Its perfect accuracy across turns is an artifact of probing an
+invariant position (see cross-version analysis).
 
 
 ---

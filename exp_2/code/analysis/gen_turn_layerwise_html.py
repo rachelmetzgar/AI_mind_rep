@@ -614,9 +614,14 @@ as someone speaking to a Human or AI.</p>
 {fmt_final_turn(partner_5)}</div>
 <p class="note"><strong>Key finding:</strong> The first &lt;/s&gt; token carries <em>more</em> partner
 identity information than the baseline probes at the end of the conversation. At layer 33, the probe
-achieves perfect classification (1.000). This suggests the model &ldquo;summarizes&rdquo; its partner
-model at exchange boundaries &mdash; a structural compression point where the model consolidates its
-representation before the next turn begins.</p>
+achieves perfect classification (1.000). This structural boundary token is an exceptionally informative
+position for partner identity.</p>
+<p class="note" style="color:#996600;"><strong>Caveat:</strong> Because LLaMA-2 uses causal (left-to-right)
+attention, the model&rsquo;s representation at the first &lt;/s&gt; depends only on preceding tokens &mdash;
+which are <em>identical</em> regardless of how many turns follow. The perfect accuracy across turns is
+therefore an artifact of probing an invariant position, not evidence that identity survives prompt dilution.
+At turn 1, no &lt;/s&gt; exists (no assistant response yet), so the probe falls back to the last token
+of <code>[/INST]</code>.</p>
 </div>
 
 <!-- ═══════ CONDITION 6: reading_irrelevant (weather suffix) ═══════ -->
@@ -650,7 +655,7 @@ to surface. The representation exists in the residual stream regardless of what 
     <tr><td>Random mid-seq</td><td>~25th&ndash;75th percentile</td><td>0.512</td><td>0.560</td>
         <td>At chance. Partner info is NOT broadcast to arbitrary tokens.</td></tr>
     <tr><td>First &lt;/s&gt;</td><td>End of 1st exchange</td><td>0.716</td><td><strong>1.000</strong></td>
-        <td>Best condition! Model summarizes partner identity at exchange boundaries.</td></tr>
+        <td>Best condition. Structural boundary token is highly informative.*</td></tr>
     <tr><td>Weather suffix</td><td>Last token (&ldquo;is&rdquo;)</td><td>0.562</td><td>0.600</td>
         <td>Nearly matches real suffix. Representation is accessible from any continuation.</td></tr>
     <tr style="background:#f0f0f0;"><td>Baseline control</td><td>Last token [/INST]</td><td>0.552</td><td>0.605</td>
@@ -667,6 +672,11 @@ first exchange achieves perfect decoding at layer 33).
 &ldquo;weather&rdquo; suffix works nearly as well as asking about the partner.
 (4) The representation degrades across turns because the system prompt tokens become proportionally
 diluted in longer sequences (prompt dilution), not because the model updates its partner model.</p>
+<p style="font-size:12px; margin:4px 0 0 0; color:#996600;">
+*<strong>Caveat on first &lt;/s&gt;:</strong> Because LLaMA-2 uses causal attention, the
+representation at the first &lt;/s&gt; depends only on preceding tokens, which are identical
+regardless of conversation length. Its perfect accuracy across turns is an artifact of probing an
+invariant position (see <a href="alt_position_comparison.html">cross-version analysis</a>).</p>
 </div>
 """
     return html
