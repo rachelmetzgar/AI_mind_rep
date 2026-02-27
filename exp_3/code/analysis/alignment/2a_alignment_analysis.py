@@ -675,6 +675,17 @@ def main():
     reading_weights = load_probe_weights(READING_PROBE_DIR)
     control_weights = load_probe_weights(CONTROL_PROBE_DIR)
 
+    # Exclude early layers (0 through restricted_layer_start - 1).
+    # Layer 0 is the token embedding layer whose mean activation is
+    # content-independent, producing spurious alignment (especially for
+    # standalone analysis).  Layers 1-5 have prompt-format confounds and
+    # near-zero-norm contrast vectors that make cosine similarity unstable.
+    min_layer = config.ANALYSIS.restricted_layer_start
+    reading_weights = {k: v for k, v in reading_weights.items() if k >= min_layer}
+    control_weights = {k: v for k, v in control_weights.items() if k >= min_layer}
+    print(f"Layer filtering: using layers {min_layer}–{config.N_LAYERS - 1} "
+          f"({len(reading_weights)} layers)")
+
     if args.analysis in ("raw", "all"):
         run_raw_alignment(reading_weights, control_weights, dim_filter=dim_filter)
 

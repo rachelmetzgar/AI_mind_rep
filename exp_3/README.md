@@ -1,7 +1,7 @@
 # Experiment 3: Concept-of-Mind Representations
 
 **Author**: Rachel C. Metzgar, Princeton University
-**Last Updated**: February 22, 2026
+**Last Updated**: February 27, 2026
 
 ---
 
@@ -29,8 +29,10 @@ Analyses that interact with Exp 2 data (alignment, cross-prediction) require a `
 | `balanced_names` | Balanced gender names | Yes (124 files) | No |
 | `balanced_gpt` | Balanced names + GPT-4 replacement | Yes (124 files) | No |
 | `names` | Original Sam/Casey names (deprecated) | Yes (124 files) | Yes (2001 files) |
+| `nonsense_codeword` | Tokens framed as arbitrary session code | Yes (124 files) | No |
+| `nonsense_ignore` | Tokens framed with "ignore" instruction | Yes (124 files) | No |
 
-**Note**: Only `names` has conversations, so cross-prediction (Phase 7) will skip the "Concept → Conversation" direction for other versions.
+**Note**: Only `names` has conversations, so cross-prediction (Phase 7) will skip the "Concept → Conversation" direction for other versions. Nonsense versions serve as controls: `nonsense_codeword` is the clean null (0/23 behavioral effects), confirming that partner identity effects require semantic processing of the label, not just token presence.
 
 ---
 
@@ -145,6 +147,8 @@ sbatch code/slurm/1_elicit_contrasts.sh
 **Scripts**: `code/analysis/alignment/2a_alignment_analysis.py` through `2e_summarize_cross_dimension.py`
 
 Compute alignment between concept vectors (Phase 1) and Exp 2 conversational probes. No trained concept probes needed.
+
+**Layer filtering**: Alignment is computed over layers 6–40 only (35 of 41). Layers 0–5 are excluded because layer 0 (token embeddings) produces content-independent mean activations that create spurious alignment, and layers 1–5 have prompt-format confounds with near-zero-norm contrast vectors.
 
 ```bash
 # Core alignment (raw, residual, standalone)
@@ -301,7 +305,7 @@ All paths and hyperparameters are centralized in `code/config.py`:
 from config import config, set_version, add_version_argument
 
 # Set Exp 2 data version (required before accessing Exp 2 paths)
-set_version("labels")  # or "balanced_names", "balanced_gpt", "names"
+set_version("labels")  # or "balanced_names", "balanced_gpt", "names", "nonsense_codeword", "nonsense_ignore"
 
 # Key settings
 MODEL_NAME = "meta-llama/Llama-2-13b-chat-hf"
@@ -309,12 +313,13 @@ INPUT_DIM = 5120
 N_LAYERS = 41
 
 # Exp 2 paths (set dynamically by set_version)
-config.PATHS.exp2_probes     # → exp_2/{version}/llama_exp_2b-13B-chat/data/probe_checkpoints/
-config.PATHS.exp2_conversations  # → exp_2/{version}/llama_exp_2b-13B-chat/data/human_ai_conversations/
+config.PATHS.exp2_probes     # → exp_2/data/{version}/probe_checkpoints/
+config.PATHS.exp2_conversations  # → exp_2/data/{version}/human_ai_conversations/
 
 # Analysis settings
 ANALYSIS.n_permutations = 10000
-ANALYSIS.n_bootstrap = 10000
+ANALYSIS.n_bootstrap = 1000
+ANALYSIS.restricted_layer_start = 6  # Exclude layers 0-5 from alignment
 ANALYSIS.seed = 42
 ```
 
@@ -326,12 +331,11 @@ To change settings, edit `config.py` once instead of modifying 14 scripts.
 
 ### Internal Dependencies
 - **Exp 2 probes**: Required for alignment analysis and cross-prediction
-  - Path: `exp_2/{version}/llama_exp_2b-13B-chat/data/probe_checkpoints/`
-  - Files: `control_probe/`, `reading_probe/`
-  - Available for all 4 versions (labels, balanced_names, balanced_gpt, names)
+  - Path: `exp_2/data/{version}/probe_checkpoints/turn_5/{control,reading}_probe/`
+  - Available for all 6 versions (labels, balanced_names, balanced_gpt, names, nonsense_codeword, nonsense_ignore)
 
 - **Exp 2 conversations**: Required for cross-prediction "Concept → Conversation" direction (Phase 7)
-  - Path: `exp_2/{version}/llama_exp_2b-13B-chat/data/human_ai_conversations/`
+  - Path: `exp_2/data/{version}/human_ai_conversations/`
   - **Only available for `names` version** (2001 files). Other versions skip this direction.
 
 ### External Dependencies
@@ -447,6 +451,12 @@ Dimensions are defined in `concepts/{contrasts,standalone}/`.
 ---
 
 ## Changelog
+
+### February 27, 2026: Layer Filtering Fix + Nonsense Versions
+- **Fixed spurious alignment artifact**: Excluded layers 0–5 from alignment analysis (`2a_alignment_analysis.py`). Layer 0 (token embedding) produced content-independent mean activations that inflated standalone alignment, particularly for `balanced_gpt` (control probe R² was 5–17× higher than other versions due to a chance alignment at layer 0). Layers 1–5 excluded for prompt-format confounds.
+- **Added nonsense versions**: `nonsense_codeword` and `nonsense_ignore` now documented as supported data versions throughout
+- **Updated Exp 2 paths**: Corrected path references from old `exp_2/{version}/llama_exp_2b-13B-chat/data/` to current `exp_2/data/{version}/`
+- **Regenerated comparison reports**: `results/alignment/comparisons/{raw,residual,standalone}_comparison.html` updated with layer-filtered values
 
 ### February 22, 2026: Promote labels/ to Top Level
 - **Removed `labels/` nesting**: `exp_3/labels/{code,concepts,data,results,logs}` promoted to `exp_3/`

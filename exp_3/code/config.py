@@ -38,7 +38,10 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 PROJECT_ROOT = ROOT_DIR.parent
 
 # Valid Exp 2 / Exp 1 data versions
-VALID_VERSIONS = ("labels", "balanced_names", "balanced_gpt", "names")
+VALID_VERSIONS = (
+    "labels", "balanced_names", "balanced_gpt", "names",
+    "nonsense_codeword", "nonsense_ignore",
+)
 
 # Experiment 2 and 1 roots are set dynamically via set_version().
 # None until set_version() is called.
@@ -388,7 +391,7 @@ def set_version(version: str):
     Must be called before accessing any Exp 2 or Exp 1 paths.
 
     Args:
-        version: One of VALID_VERSIONS ("labels", "balanced_names", "balanced_gpt", "names")
+        version: One of VALID_VERSIONS
     """
     global _active_version, EXP2_ROOT, EXP1_ROOT
 
