@@ -23,10 +23,9 @@ from pathlib import Path
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from tqdm.auto import tqdm
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from src.dataset import llama_v2_prompt, prompt_translator
 from src.probes import LinearProbeClassification
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import config, set_version, add_version_argument, ensure_dir
 
 # ========================== CONFIG ========================== #

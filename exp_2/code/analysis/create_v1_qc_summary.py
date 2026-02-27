@@ -791,11 +791,12 @@ def main():
     print("[INFO] Generating HTML report...")
     html = generate_full_html(all_data)
 
+    import sys as _sys
+    _sys.path.insert(0, str(EXP2_ROOT / "code"))
+    from src.report_utils import save_report
+
     output_path = EXP2_ROOT / "results" / "cross_variant" / "v1_qc_summary_all_variants.html"
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, "w") as f:
-        f.write(html)
-    print(f"[SAVED] {output_path}")
+    save_report(html, output_path)
 
     # Also save per-variant HTML summaries
     for vname, vconf in VARIANTS.items():
@@ -819,9 +820,7 @@ img {{ max-width: 100%; }}
 {generate_variant_section(all_data, vname)}
 </body></html>"""
         variant_output = results_dir / "v1_analysis_summary.html"
-        with open(variant_output, "w") as f:
-            f.write(variant_html)
-        print(f"[SAVED] {variant_output}")
+        save_report(variant_html, variant_output)
 
     print("\n[DONE] All summaries generated.")
 

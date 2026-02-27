@@ -327,10 +327,9 @@ confidence — the probe just reads the prompt, and the prompt fades equally.
 </div>
 </body></html>"""
 
+    from src.report_utils import save_report
     html_path = OUT_DIR / "degradation_probe_report.html"
-    with open(html_path, "w") as f:
-        f.write(html)
-    print(f"\nHTML report: {html_path}")
+    save_report(html, html_path)
 
     # Save correlation results
     pd.DataFrame(correlation_results).to_csv(OUT_DIR / "correlation_results.csv", index=False)
