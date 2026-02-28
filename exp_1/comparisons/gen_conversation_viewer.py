@@ -20,42 +20,60 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 VERSIONS = [
     "names", "balanced_names", "balanced_gpt",
-    "labels", "nonsense_codeword", "nonsense_ignore",
+    "labels", "labels_turnwise",
+    "you_are_balanced_gpt", "you_are_labels", "you_are_labels_turnwise",
+    "nonsense_codeword", "nonsense_ignore",
 ]
 VERSION_LABELS = {
     "names": "Names",
     "balanced_names": "Bal. Names",
     "balanced_gpt": "Bal. GPT",
     "labels": "Labels",
+    "labels_turnwise": "Labels TW",
+    "you_are_balanced_gpt": "YA Bal. GPT",
+    "you_are_labels": "YA Labels",
+    "you_are_labels_turnwise": "YA Labels TW",
     "nonsense_codeword": "Non. Codeword",
     "nonsense_ignore": "Non. Ignore",
 }
 
 AGENT_NAMES = {
-    "names":             {"bot_1": "ChatGPT",  "bot_2": "Copilot",  "hum_1": "Casey",   "hum_2": "Sam"},
-    "balanced_names":    {"bot_1": "ChatGPT",  "bot_2": "Copilot",  "hum_1": "Gregory", "hum_2": "Rebecca"},
-    "balanced_gpt":      {"bot_1": "ChatGPT",  "bot_2": "GPT-4",    "hum_1": "Gregory", "hum_2": "Rebecca"},
-    "labels":            {"bot_1": "an AI",     "bot_2": "an AI",    "hum_1": "a Human", "hum_2": "a Human"},
-    "nonsense_codeword": {"bot_1": "an AI",     "bot_2": "an AI",    "hum_1": "a Human", "hum_2": "a Human"},
-    "nonsense_ignore":   {"bot_1": "an AI",     "bot_2": "an AI",    "hum_1": "a Human", "hum_2": "a Human"},
+    "names":                  {"bot_1": "ChatGPT",  "bot_2": "Copilot",  "hum_1": "Casey",   "hum_2": "Sam"},
+    "balanced_names":         {"bot_1": "ChatGPT",  "bot_2": "Copilot",  "hum_1": "Gregory", "hum_2": "Rebecca"},
+    "balanced_gpt":           {"bot_1": "ChatGPT",  "bot_2": "GPT-4",    "hum_1": "Gregory", "hum_2": "Rebecca"},
+    "labels":                 {"bot_1": "an AI",     "bot_2": "an AI",    "hum_1": "a Human", "hum_2": "a Human"},
+    "labels_turnwise":        {"bot_1": "AI",        "bot_2": "AI",       "hum_1": "Human",   "hum_2": "Human"},
+    "you_are_balanced_gpt":   {"bot_1": "ChatGPT",  "bot_2": "GPT-4",    "hum_1": "Gregory", "hum_2": "Rebecca"},
+    "you_are_labels":         {"bot_1": "an AI",     "bot_2": "an AI",    "hum_1": "a Human", "hum_2": "a Human"},
+    "you_are_labels_turnwise":{"bot_1": "AI",        "bot_2": "AI",       "hum_1": "Human",   "hum_2": "Human"},
+    "nonsense_codeword":      {"bot_1": "an AI",     "bot_2": "an AI",    "hum_1": "a Human", "hum_2": "a Human"},
+    "nonsense_ignore":        {"bot_1": "an AI",     "bot_2": "an AI",    "hum_1": "a Human", "hum_2": "a Human"},
 }
 
 PROMPT_KEY_SENTENCES = {
-    "names":             'You believe you are speaking with {name} ({type}).',
-    "balanced_names":    'You believe you are speaking with {name} ({type}).',
-    "balanced_gpt":      'You believe you are speaking with {name} ({type}).',
-    "labels":            'You believe you are speaking with {type}.',
-    "nonsense_codeword": 'Your assigned session code word is {type}.',
-    "nonsense_ignore":   'Ignore the following phrase: {type}.',
+    "names":                   'You believe you are speaking with {name} ({type}).',
+    "balanced_names":          'You believe you are speaking with {name} ({type}).',
+    "balanced_gpt":            'You believe you are speaking with {name} ({type}).',
+    "labels":                  'You believe you are speaking with {type}.',
+    "labels_turnwise":         'You believe you are speaking with {type}.',
+    "you_are_balanced_gpt":    'You are talking to {name} ({type}).',
+    "you_are_labels":          'You are talking to {type}.',
+    "you_are_labels_turnwise": 'You are talking to {type}.',
+    "nonsense_codeword":       'Your assigned session code word is {type}.',
+    "nonsense_ignore":         'Ignore the following phrase: {type}.',
 }
 
 PROMPT_AGENT_MAPS = {
-    "names":             "bot_1: ChatGPT (an AI), bot_2: Copilot (an AI), hum_1: Casey (a Human), hum_2: Sam (a Human)",
-    "balanced_names":    "bot_1: ChatGPT (an AI), bot_2: Copilot (an AI), hum_1: Gregory (a Human), hum_2: Rebecca (a Human)",
-    "balanced_gpt":      "bot_1: ChatGPT (an AI), bot_2: GPT-4 (an AI), hum_1: Gregory (a Human), hum_2: Rebecca (a Human)",
-    "labels":            'bot_1/2: "an AI", hum_1/2: "a Human"',
-    "nonsense_codeword": 'bot_1/2: "an AI", hum_1/2: "a Human"',
-    "nonsense_ignore":   'bot_1/2: "an AI", hum_1/2: "a Human"',
+    "names":                   "bot_1: ChatGPT (an AI), bot_2: Copilot (an AI), hum_1: Casey (a Human), hum_2: Sam (a Human)",
+    "balanced_names":          "bot_1: ChatGPT (an AI), bot_2: Copilot (an AI), hum_1: Gregory (a Human), hum_2: Rebecca (a Human)",
+    "balanced_gpt":            "bot_1: ChatGPT (an AI), bot_2: GPT-4 (an AI), hum_1: Gregory (a Human), hum_2: Rebecca (a Human)",
+    "labels":                  'bot_1/2: "an AI", hum_1/2: "a Human" (turn prefix: "Partner:")',
+    "labels_turnwise":         'bot_1/2: "AI", hum_1/2: "Human" (turn prefix: "Human:"/"AI:")',
+    "you_are_balanced_gpt":    "bot_1: ChatGPT (an AI), bot_2: GPT-4 (an AI), hum_1: Gregory (a Human), hum_2: Rebecca (a Human)",
+    "you_are_labels":          'bot_1/2: "an AI", hum_1/2: "a Human" (turn prefix: "Partner:")',
+    "you_are_labels_turnwise": 'bot_1/2: "AI", hum_1/2: "Human" (turn prefix: "Human:"/"AI:")',
+    "nonsense_codeword":       'bot_1/2: "an AI", hum_1/2: "a Human"',
+    "nonsense_ignore":         'bot_1/2: "an AI", hum_1/2: "a Human"',
 }
 
 

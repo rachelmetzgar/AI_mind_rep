@@ -10,9 +10,9 @@ LLaMA-2-Chat-13B "participant agents" (temperature 0.8) each hold 40
 conversations (4 partner conditions x 10 topics), and their speech is analyzed
 across 23 linguistic measures.
 
-This experiment was run six times with different partner labeling strategies:
-three named-partner versions, one generic-label version, and two nonsense
-control versions.
+This experiment was run ten times with different partner labeling strategies:
+three named-partner versions, three "you believe" label versions, three
+"you are" framing versions, and two nonsense control versions.
 
 ## Results
 
@@ -26,13 +26,17 @@ conditions:
 - [Balanced Names](comparisons/data_samples/balanced_names.html)
 - [Balanced GPT](comparisons/data_samples/balanced_gpt.html)
 - [Labels](comparisons/data_samples/labels.html)
+- [Labels Turnwise](comparisons/data_samples/labels_turnwise.html)
+- [You Are Balanced GPT](comparisons/data_samples/you_are_balanced_gpt.html)
+- [You Are Labels](comparisons/data_samples/you_are_labels.html)
+- [You Are Labels Turnwise](comparisons/data_samples/you_are_labels_turnwise.html)
 - [Nonsense Codeword](comparisons/data_samples/nonsense_codeword.html)
 - [Nonsense Ignore](comparisons/data_samples/nonsense_ignore.html)
 
 ### Cross-version behavioral analysis
 
-- **Overall results:** [HTML](comparisons/behavioral_measures_by_condition.html) · [Markdown](comparisons/behavioral_measures_by_condition.md) — 23 measures x 6 versions, full-conversation aggregate
-- **Results by turn:** [HTML](comparisons/behavioral_by_turn.html) · [Markdown](comparisons/behavioral_by_turn.md) — 21 per-turn measures x 6 versions x 5 turns
+- **Overall results:** [HTML](comparisons/behavioral_measures_by_condition.html) · [Markdown](comparisons/behavioral_measures_by_condition.md) — 23 measures x 10 versions, full-conversation aggregate
+- **Results by turn:** [HTML](comparisons/behavioral_by_turn.html) · [Markdown](comparisons/behavioral_by_turn.md) — 21 per-turn measures x 10 versions x 5 turns
 - **Identity breakdown:** [HTML](comparisons/identity_summary.html) — per-identity effects (ChatGPT vs Copilot, Gregory vs Rebecca, etc.)
 
 ### Data degradation analysis
@@ -99,6 +103,40 @@ must reflect the human/AI type distinction itself, not name-specific or
 gender-specific associations. All 5 significant effects are in the core set:
 interpersonal DMs, cognitive DMs, DM total, discourse "like", and politeness.
 
+### `labels_turnwise/` — Labels with Turn-Level Identity Prefix
+
+Like `labels/`, the system prompt uses only type labels ("a Human" / "an AI").
+Unlike `labels/`, each partner turn is prefixed with "Human:" or "AI:" instead
+of the generic "Partner:", reinforcing the identity label at every turn.
+- **System prompt:** "You believe you are speaking with a Human/an AI"
+- **Turn prefix:** "Human:" or "AI:" (not "Partner:")
+
+This tests whether reinforcing the identity label at every turn strengthens the
+behavioral effects seen in `labels/`.
+
+### `you_are_balanced_gpt/` — "You Are" Framing with GPT-4
+
+Same as `balanced_gpt/` but replaces "You believe you are speaking with" with
+"You are talking to" in the system prompt:
+- **Human-labeled:** Gregory, Rebecca
+- **AI-labeled:** ChatGPT, GPT-4
+- **Key sentence:** "You are talking to Gregory (a Human)."
+
+### `you_are_labels/` — "You Are" Framing with Labels
+
+Same as `labels/` but replaces "You believe you are speaking with" with
+"You are talking to" in the system prompt:
+- **Human-labeled:** "a Human"
+- **AI-labeled:** "an AI"
+- **Key sentence:** "You are talking to a Human."
+
+### `you_are_labels_turnwise/` — "You Are" Framing with Turn-Level Prefix
+
+Combines `you_are_labels/` and `labels_turnwise/`: uses "You are talking to"
+framing plus "Human:"/"AI:" turn prefixes.
+- **System prompt:** "You are talking to a Human/an AI"
+- **Turn prefix:** "Human:" or "AI:" (not "Partner:")
+
 ### `nonsense_codeword/` — Nonsense Control: Codeword
 
 Token-matched control for `labels/`. The critical instruction sentence is
@@ -138,13 +176,24 @@ All six versions use the same:
 
 ## Key Differences
 
+### Original 6 versions
+
 | | `names` | `bal_names` | `bal_gpt` | `labels` | `non_code` | `non_ignore` |
 |---|---|---|---|---|---|---|
 | Human partners | Sam, Casey | Gregory, Rebecca | Gregory, Rebecca | "a Human" | "a Human" | "a Human" |
 | AI partners | ChatGPT, Copilot | ChatGPT, Copilot | ChatGPT, GPT-4 | "an AI" | "an AI" | "an AI" |
-| Key sentence | "speaking with {name} ({type})" | "speaking with {name} ({type})" | "speaking with {name} ({type})" | "speaking with {type}" | "code word is {type}" | "Ignore: {type}" |
+| Key sentence | "believe...speaking with {name} ({type})" | same | same | "believe...speaking with {type}" | "code word is {type}" | "Ignore: {type}" |
+| Turn prefix | "{name}:" | "{name}:" | "{name}:" | "Partner:" | "Partner:" | "Partner:" |
 | Sig. measures | 16 / 23 | 10 / 23 | 17 / 23 | 5 / 23 | 0 / 23 | 14 / 23 |
-| Probe training | Confounded | Improved | Improved | Clean | Control | Control |
+
+### New versions (turnwise + "you are" framing)
+
+| | `labels_tw` | `ya_bal_gpt` | `ya_labels` | `ya_labels_tw` |
+|---|---|---|---|---|
+| Human partners | "a Human" | Gregory, Rebecca | "a Human" | "a Human" |
+| AI partners | "an AI" | ChatGPT, GPT-4 | "an AI" | "an AI" |
+| Key sentence | "believe...speaking with {type}" | "talking to {name} ({type})" | "talking to {type}" | "talking to {type}" |
+| Turn prefix | "Human:"/"AI:" | "{name}:" | "Partner:" | "Human:"/"AI:" |
 
 ## Cross-Version Comparisons (`comparisons/`)
 
@@ -179,6 +228,10 @@ exp_1/
 ├── balanced_names/                    # Gender-balanced names
 ├── balanced_gpt/                      # Gender-balanced + GPT-4
 ├── labels/                            # Generic type labels
+├── labels_turnwise/                   # Labels + turn-level Human:/AI: prefix
+├── you_are_balanced_gpt/              # "You are talking to" + GPT-4
+├── you_are_labels/                    # "You are talking to" + labels
+├── you_are_labels_turnwise/           # "You are talking to" + turn prefix
 ├── nonsense_codeword/                 # Control: codeword
 └── nonsense_ignore/                   # Control: ignore
     │

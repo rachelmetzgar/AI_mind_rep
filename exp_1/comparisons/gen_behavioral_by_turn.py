@@ -30,12 +30,21 @@ EXP1 = pathlib.Path("/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_1")
 OUT_DIR = EXP1 / "comparisons"
 OUT_DIR.mkdir(exist_ok=True)
 
-VERSIONS = ["names", "balanced_names", "balanced_gpt", "labels", "nonsense_codeword", "nonsense_ignore"]
+VERSIONS = [
+    "names", "balanced_names", "balanced_gpt",
+    "labels", "labels_turnwise",
+    "you_are_balanced_gpt", "you_are_labels", "you_are_labels_turnwise",
+    "nonsense_codeword", "nonsense_ignore",
+]
 VERSION_LABELS = {
     "names": "Names",
     "balanced_names": "Bal. Names",
     "balanced_gpt": "Bal. GPT",
     "labels": "Labels",
+    "labels_turnwise": "Labels TW",
+    "you_are_balanced_gpt": "YA Bal. GPT",
+    "you_are_labels": "YA Labels",
+    "you_are_labels_turnwise": "YA Labels TW",
     "nonsense_codeword": "Non. Code",
     "nonsense_ignore": "Non. Ignore",
 }
@@ -72,6 +81,10 @@ VERSION_COLORS = {
     "balanced_names": "#ff7f0e",
     "balanced_gpt": "#2ca02c",
     "labels": "#d62728",
+    "labels_turnwise": "#e377c2",
+    "you_are_balanced_gpt": "#17becf",
+    "you_are_labels": "#bcbd22",
+    "you_are_labels_turnwise": "#7f7f7f",
     "nonsense_codeword": "#9467bd",
     "nonsense_ignore": "#8c564b",
 }

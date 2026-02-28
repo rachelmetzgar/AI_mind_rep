@@ -4,7 +4,7 @@ Per-identity behavioral breakdown for Experiment 1.
 
 Shows how each specific partner identity (ChatGPT, Copilot, GPT-4, Casey,
 Sam, Gregory, Rebecca, "a Human", "an AI") drives behavioral differences
-within and across the 6 labeling versions — both aggregate and per-turn.
+within and across the 10 labeling versions — both aggregate and per-turn.
 
 Output → exp_1/comparisons/identity_summary.html
 """
@@ -25,25 +25,35 @@ OUT_DIR.mkdir(exist_ok=True)
 
 VERSIONS = [
     "names", "balanced_names", "balanced_gpt",
-    "labels", "nonsense_codeword", "nonsense_ignore",
+    "labels", "labels_turnwise",
+    "you_are_balanced_gpt", "you_are_labels", "you_are_labels_turnwise",
+    "nonsense_codeword", "nonsense_ignore",
 ]
 VERSION_LABELS = {
     "names": "Names",
     "balanced_names": "Bal. Names",
     "balanced_gpt": "Bal. GPT",
     "labels": "Labels",
+    "labels_turnwise": "Labels TW",
+    "you_are_balanced_gpt": "YA Bal. GPT",
+    "you_are_labels": "YA Labels",
+    "you_are_labels_turnwise": "YA Labels TW",
     "nonsense_codeword": "Non. Code",
     "nonsense_ignore": "Non. Ignore",
 }
 
 # What each agent key maps to per version (display label)
 AGENT_NAMES = {
-    "names":             {"bot_1": "ChatGPT",  "bot_2": "Copilot",  "hum_1": "Casey",   "hum_2": "Sam"},
-    "balanced_names":    {"bot_1": "ChatGPT",  "bot_2": "Copilot",  "hum_1": "Gregory", "hum_2": "Rebecca"},
-    "balanced_gpt":      {"bot_1": "ChatGPT",  "bot_2": "GPT-4",    "hum_1": "Gregory", "hum_2": "Rebecca"},
-    "labels":            {"bot_1": "an AI (1)", "bot_2": "an AI (2)", "hum_1": "a Human (1)", "hum_2": "a Human (2)"},
-    "nonsense_codeword": {"bot_1": "an AI (1)", "bot_2": "an AI (2)", "hum_1": "a Human (1)", "hum_2": "a Human (2)"},
-    "nonsense_ignore":   {"bot_1": "an AI (1)", "bot_2": "an AI (2)", "hum_1": "a Human (1)", "hum_2": "a Human (2)"},
+    "names":                  {"bot_1": "ChatGPT",  "bot_2": "Copilot",  "hum_1": "Casey",   "hum_2": "Sam"},
+    "balanced_names":         {"bot_1": "ChatGPT",  "bot_2": "Copilot",  "hum_1": "Gregory", "hum_2": "Rebecca"},
+    "balanced_gpt":           {"bot_1": "ChatGPT",  "bot_2": "GPT-4",    "hum_1": "Gregory", "hum_2": "Rebecca"},
+    "labels":                 {"bot_1": "an AI (1)", "bot_2": "an AI (2)", "hum_1": "a Human (1)", "hum_2": "a Human (2)"},
+    "labels_turnwise":        {"bot_1": "AI (1)",    "bot_2": "AI (2)",    "hum_1": "Human (1)",   "hum_2": "Human (2)"},
+    "you_are_balanced_gpt":   {"bot_1": "ChatGPT",  "bot_2": "GPT-4",    "hum_1": "Gregory", "hum_2": "Rebecca"},
+    "you_are_labels":         {"bot_1": "an AI (1)", "bot_2": "an AI (2)", "hum_1": "a Human (1)", "hum_2": "a Human (2)"},
+    "you_are_labels_turnwise":{"bot_1": "AI (1)",    "bot_2": "AI (2)",    "hum_1": "Human (1)",   "hum_2": "Human (2)"},
+    "nonsense_codeword":      {"bot_1": "an AI (1)", "bot_2": "an AI (2)", "hum_1": "a Human (1)", "hum_2": "a Human (2)"},
+    "nonsense_ignore":        {"bot_1": "an AI (1)", "bot_2": "an AI (2)", "hum_1": "a Human (1)", "hum_2": "a Human (2)"},
 }
 
 AGENTS = ["bot_1", "bot_2", "hum_1", "hum_2"]
@@ -361,10 +371,10 @@ def fig_agent_trajectories(all_data, version):
 
 def fig_within_type_sig_heatmap(all_data):
     """Heatmap: which measures show within-type differences (bot_1≠bot_2 or hum_1≠hum_2)?
-    Rows = measures, columns = 3 named versions × 2 (within-AI, within-Human).
+    Rows = measures, columns = 4 named versions × 2 (within-AI, within-Human).
     Aggregate only.
     """
-    named_versions = ["names", "balanced_names", "balanced_gpt"]
+    named_versions = ["names", "balanced_names", "balanced_gpt", "you_are_balanced_gpt"]
     n_rows = len(MEASURES)
     n_cols = len(named_versions) * 2  # within-AI and within-Human per version
 
@@ -518,7 +528,7 @@ symmetric or driven by specific identities.</p>
 <div class="section">
 <h2>1. Agent Identity Mapping</h2>
 <p>Each version uses 4 conversation partner conditions (2 AI-labeled, 2 Human-labeled).
-The 3 named versions assign distinct names; the 3 label/nonsense versions use
+The 4 named versions assign distinct names; the 6 label/nonsense versions use
 identical labels for both conditions within a type.</p>
 <table>
 <tr><th>Version</th><th>bot_1 (AI)</th><th>bot_2 (AI)</th><th>hum_1 (Human)</th><th>hum_2 (Human)</th><th>Prompt template</th></tr>
@@ -528,6 +538,10 @@ identical labels for both conditions within a type.</p>
         "balanced_names": "You believe you are speaking with {name} ({type}).",
         "balanced_gpt": "You believe you are speaking with {name} ({type}).",
         "labels": "You believe you are speaking with {type}.",
+        "labels_turnwise": "You believe you are speaking with {type}. [Turn prefix: Human:/AI:]",
+        "you_are_balanced_gpt": "You are talking to {name} ({type}).",
+        "you_are_labels": "You are talking to {type}.",
+        "you_are_labels_turnwise": "You are talking to {type}. [Turn prefix: Human:/AI:]",
         "nonsense_codeword": "Your assigned session code word is {type}.",
         "nonsense_ignore": "Ignore the following phrase: {type}.",
     }
@@ -545,7 +559,7 @@ identical labels for both conditions within a type.</p>
     parts.append("""
 <div class="section">
 <h2>2. Within-Type Differences: Do the Two AI (or Two Human) Conditions Differ?</h2>
-<p>For the 3 named versions, paired <em>t</em>-tests comparing bot_1 vs bot_2
+<p>For the 4 named versions, paired <em>t</em>-tests comparing bot_1 vs bot_2
 and hum_1 vs hum_2 (BH-FDR corrected across 21 measures). If within-type
 differences are large, effects may reflect specific name associations rather
 than abstract identity category.</p>
@@ -554,7 +568,7 @@ than abstract identity category.</p>
     parts.append("</div>")
 
     # ── Section 3: Per-version agent means (bar + trajectory) ───────────────
-    named_versions = ["names", "balanced_names", "balanced_gpt"]
+    named_versions = ["names", "balanced_names", "balanced_gpt", "you_are_balanced_gpt"]
     parts.append("""
 <div class="section">
 <h2>3. Per-Identity Means and Trajectories (Named Versions)</h2>
@@ -603,7 +617,11 @@ evolves across turns. Dashed lines = AI agents, solid = Human agents.</p>
     parts.append("</div>")
 
     # ── Section 4: Label/Nonsense versions (simpler — 2 conditions) ────────
-    other_versions = ["labels", "nonsense_codeword", "nonsense_ignore"]
+    other_versions = [
+        "labels", "labels_turnwise",
+        "you_are_labels", "you_are_labels_turnwise",
+        "nonsense_codeword", "nonsense_ignore",
+    ]
     parts.append("""
 <div class="section">
 <h2>4. Label and Nonsense Versions (Per-Agent Detail)</h2>
@@ -639,7 +657,7 @@ reflect only random variation across counterbalanced conditions.</p>
     parts.append("""
 <div class="section">
 <h2>5. Per-Turn Agent Means (Named Versions)</h2>
-<p>All measure means by agent and turn, for the 3 named versions.</p>
+<p>All measure means by agent and turn, for the 4 named versions.</p>
 """)
     for v in named_versions:
         an = AGENT_NAMES[v]
@@ -712,7 +730,7 @@ if __name__ == "__main__":
     figures["within_type_heatmap"] = fig_within_type_sig_heatmap(all_data)
 
     # Per-version bar charts and trajectories (named versions only)
-    named_versions = ["names", "balanced_names", "balanced_gpt"]
+    named_versions = ["names", "balanced_names", "balanced_gpt", "you_are_balanced_gpt"]
     for v in named_versions:
         print(f"  bar + trajectory: {v}...")
         figures[f"bar_{v}"] = fig_agent_means_bar(all_data, v)
