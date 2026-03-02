@@ -4,8 +4,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=64G
 #SBATCH --time=01:00:00
-#SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_3/logs/elicit/sysprompt_%A.out
-#SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_3/logs/elicit/sysprompt_%A.err
+#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_3/logs/elicit/sysprompt_%A.out
+#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_3/logs/elicit/sysprompt_%A.err
 # -------------------------------------------------------------
 # System prompt partner identity elicitation (Phase 2c)
 #
@@ -38,7 +38,7 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_3"
+PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_3"
 mkdir -p "$PROJECT_ROOT/logs/elicit"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 

@@ -3,8 +3,8 @@
 #SBATCH --partition=all
 #SBATCH --mem=32G
 #SBATCH --time=04:00:00
-#SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_3/logs/probe_pipeline/%j.out
-#SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_3/logs/probe_pipeline/%j.err
+#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_3/logs/probe_pipeline/%j.out
+#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_3/logs/probe_pipeline/%j.err
 # -------------------------------------------------------------
 # Concept-probe alignment pipeline: stats then figures.
 # No GPU needed — CPU-only permutation tests + bootstrap + plotting.
@@ -26,7 +26,7 @@ set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 VERSION=${VERSION:?ERROR: VERSION is required. Use --export=VERSION=labels}
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_3"
+PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_3"
 mkdir -p "$PROJECT_ROOT/logs/probe_pipeline"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 

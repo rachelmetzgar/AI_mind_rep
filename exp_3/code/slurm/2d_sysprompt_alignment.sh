@@ -4,8 +4,8 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
 #SBATCH --time=02:00:00
-#SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_3/logs/align/sysprompt_%A.out
-#SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_3/logs/align/sysprompt_%A.err
+#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_3/logs/align/sysprompt_%A.out
+#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_3/logs/align/sysprompt_%A.err
 # -------------------------------------------------------------
 # Phase 2d: System prompt ↔ concept alignment analysis
 #
@@ -25,7 +25,7 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_3"
+PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_3"
 mkdir -p "$PROJECT_ROOT/logs/align"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 

@@ -88,7 +88,7 @@ def _init_paths():
     global RESIDUAL_OUTPUT_DIR, STANDALONE_OUTPUT_DIR
     global READING_PROBE_DIR, CONTROL_PROBE_DIR
 
-    version_dir = get_version_results_dir(config.RESULTS.alignment)
+    version_dir = get_version_results_dir(config.RESULTS.alignment_versions)
     OUTPUT_ROOT = str(version_dir)
     CONTRASTS_OUTPUT_DIR = str(version_dir / "contrasts")
     RAW_OUTPUT_DIR = str(version_dir / "contrasts" / "raw")

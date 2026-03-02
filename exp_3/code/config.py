@@ -34,13 +34,15 @@ from dataclasses import dataclass
 # Root directory for this experiment (exp_3/)
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
-# Root for entire project (ai_mind_rep/)
+# Root for entire project (mind_rep/)
 PROJECT_ROOT = ROOT_DIR.parent
 
 # Valid Exp 2 / Exp 1 data versions
 VALID_VERSIONS = (
     "labels", "balanced_names", "balanced_gpt", "names",
     "nonsense_codeword", "nonsense_ignore",
+    "labels_turnwise", "you_are_labels",
+    "you_are_balanced_gpt", "you_are_labels_turnwise",
 )
 
 # Experiment 2 and 1 roots are set dynamically via set_version().
@@ -119,6 +121,7 @@ class OutputPaths:
 
     # Phase 1b: Alignment analysis
     alignment: Path = ROOT_DIR / "results" / "alignment"
+    alignment_versions: Path = ROOT_DIR / "results" / "alignment" / "versions"
     alignment_contrasts: Path = ROOT_DIR / "results" / "alignment" / "contrasts"
     alignment_contrasts_raw: Path = ROOT_DIR / "results" / "alignment" / "contrasts" / "raw"
     alignment_contrasts_residual: Path = ROOT_DIR / "results" / "alignment" / "contrasts" / "residual"
@@ -402,7 +405,7 @@ def set_version(version: str):
 
     _active_version = version
     EXP2_ROOT = PROJECT_ROOT / "exp_2"
-    EXP1_ROOT = PROJECT_ROOT / "exp_1" / version
+    EXP1_ROOT = PROJECT_ROOT / "exp_1" / "versions" / version
 
     # Update global config object
     config.EXP2_ROOT = EXP2_ROOT

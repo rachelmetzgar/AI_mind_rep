@@ -59,7 +59,7 @@ from config import config, set_version, add_version_argument
 # Version-independent paths
 CONTRAST_ACT_DIR = str(config.PATHS.concept_activations_contrasts)
 OUTPUT_ROOT_PROBES = str(config.PATHS.concept_probes)  # data/concept_probes (intermediate)
-OUTPUT_ROOT_ALIGN = str(config.RESULTS.alignment)  # results/alignment (final outputs)
+OUTPUT_ROOT_ALIGN = str(config.RESULTS.alignment_versions)  # results/alignment/versions (final outputs)
 
 INPUT_DIM = config.INPUT_DIM
 DEVICE = config.get_device()

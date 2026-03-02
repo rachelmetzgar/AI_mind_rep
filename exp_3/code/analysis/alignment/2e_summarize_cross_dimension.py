@@ -47,8 +47,8 @@ OUTPUT_DIR = None
 def _init_paths():
     """Initialize version-dependent paths after set_version() has been called."""
     global ALIGN_ROOT, OUTPUT_DIR
-    ALIGN_ROOT = str(get_version_results_dir(config.RESULTS.alignment))
-    OUTPUT_DIR = str(get_version_results_dir(config.RESULTS.alignment) / "summary")
+    ALIGN_ROOT = str(get_version_results_dir(config.RESULTS.alignment_versions))
+    OUTPUT_DIR = str(get_version_results_dir(config.RESULTS.alignment_versions) / "summary")
 
 
 def main():

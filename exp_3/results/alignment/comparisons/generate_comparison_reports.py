@@ -27,9 +27,11 @@ from datetime import datetime
 # CONFIG
 # ============================================================================
 
-ALIGNMENT_ROOT = Path(__file__).resolve().parent.parent
+ALIGNMENT_ROOT = Path(__file__).resolve().parent.parent / "versions"
 VERSIONS = ["labels", "balanced_names", "balanced_gpt", "names",
-            "nonsense_codeword", "nonsense_ignore"]
+            "nonsense_codeword", "nonsense_ignore",
+            "labels_turnwise", "you_are_labels",
+            "you_are_balanced_gpt", "you_are_labels_turnwise"]
 
 VERSION_LABELS = {
     "labels": "Labels",
@@ -38,6 +40,10 @@ VERSION_LABELS = {
     "names": "Names (orig.)",
     "nonsense_codeword": "Nonsense Codeword",
     "nonsense_ignore": "Nonsense Ignore",
+    "labels_turnwise": "Labels + Turnwise",
+    "you_are_labels": "You-Are Labels",
+    "you_are_balanced_gpt": "You-Are Bal. GPT",
+    "you_are_labels_turnwise": "You-Are Lab. Turn.",
 }
 
 VERSION_DESCRIPTIONS = {
@@ -47,6 +53,10 @@ VERSION_DESCRIPTIONS = {
     "names": "Original Sam/Casey names (deprecated due to name confound)",
     "nonsense_codeword": "Nonsense codewords replacing identity labels",
     "nonsense_ignore": "Nonsense labels with instruction to ignore them",
+    "labels_turnwise": "Labels + turn-level 'Human:'/'AI:' prefix each turn",
+    "you_are_labels": "'You are talking to a Human/an AI' framing",
+    "you_are_balanced_gpt": "'You are talking to' + named partners (Gregory/Rebecca, ChatGPT/GPT-4)",
+    "you_are_labels_turnwise": "'You are talking to' framing + turn-level prefix",
 }
 
 VERSION_COLORS = {
@@ -56,6 +66,10 @@ VERSION_COLORS = {
     "names": "#FB8C00",
     "nonsense_codeword": "#8E24AA",
     "nonsense_ignore": "#546E7A",
+    "labels_turnwise": "#D81B60",
+    "you_are_labels": "#00ACC1",
+    "you_are_balanced_gpt": "#7CB342",
+    "you_are_labels_turnwise": "#5E35B1",
 }
 
 # Analysis-specific config
@@ -226,7 +240,7 @@ def get_available_versions(dim_data):
 
 
 def svg_grouped_bar(dim_data, probe_type, global_max, analysis_type,
-                    chart_width=750, chart_height=300):
+                    chart_width=1100, chart_height=360):
     key = probe_type + "_r2"
     ci_key = probe_type + "_ci"
     sorted_dims = sort_dims(dim_data, analysis_type)
@@ -234,7 +248,7 @@ def svg_grouped_bar(dim_data, probe_type, global_max, analysis_type,
     n_dims = len(sorted_dims)
     n_av = len(available_versions)
 
-    margin = {"top": 30, "right": 20, "bottom": 110, "left": 70}
+    margin = {"top": 30, "right": 20, "bottom": 130, "left": 70}
     plot_w = chart_width - margin["left"] - margin["right"]
     plot_h = chart_height - margin["top"] - margin["bottom"]
     group_width = plot_w / max(n_dims, 1)
@@ -298,26 +312,30 @@ def svg_grouped_bar(dim_data, probe_type, global_max, analysis_type,
     lines.append(f'<line x1="0" y1="0" x2="0" y2="{plot_h}" stroke="#333"/>')
     lines.append('</g>')
 
-    # Legend
-    leg_y = chart_height - 15
+    # Legend (2 rows for many versions)
+    cols_per_row = 5
+    col_spacing = (chart_width - margin["left"] - margin["right"]) / cols_per_row
     for i, v in enumerate(available_versions):
-        x = margin["left"] + i * 115
-        lines.append(f'<rect x="{x}" y="{leg_y-8}" width="10" height="10" fill="{VERSION_COLORS[v]}"/>')
-        lines.append(f'<text x="{x+14}" y="{leg_y}" font-size="9" fill="#333">{VERSION_LABELS[v]}</text>')
+        row = i // cols_per_row
+        col = i % cols_per_row
+        x = margin["left"] + col * col_spacing
+        y = chart_height - 28 + row * 16
+        lines.append(f'<rect x="{x}" y="{y-8}" width="10" height="10" fill="{VERSION_COLORS[v]}"/>')
+        lines.append(f'<text x="{x+14}" y="{y}" font-size="8" fill="#333">{VERSION_LABELS[v]}</text>')
 
     lines.append('</svg>')
     return '\n'.join(lines)
 
 
 def svg_heatmap(dim_data, probe_type, global_max, analysis_type,
-                chart_width=750, row_height=26):
+                chart_width=1100, row_height=26):
     key = probe_type + "_r2"
     sorted_dims = sort_dims(dim_data, analysis_type)
     available_versions = get_available_versions(dim_data)
     n_dims = len(sorted_dims)
     n_vers = len(available_versions)
 
-    margin = {"top": 65, "right": 80, "bottom": 20, "left": 175}
+    margin = {"top": 140, "right": 80, "bottom": 20, "left": 175}
     cell_w = (chart_width - margin["left"] - margin["right"]) / max(n_vers, 1)
     chart_height = margin["top"] + n_dims * row_height + margin["bottom"]
 
@@ -329,9 +347,9 @@ def svg_heatmap(dim_data, probe_type, global_max, analysis_type,
 
     for vi, v in enumerate(available_versions):
         x = margin["left"] + vi * cell_w + cell_w / 2
-        lines.append(f'<text x="{x:.1f}" y="{margin["top"]-8}" text-anchor="end" '
+        lines.append(f'<text x="{x:.1f}" y="{margin["top"]-10}" text-anchor="start" '
                      f'font-size="10" fill="#333" '
-                     f'transform="rotate(-40,{x:.1f},{margin["top"]-8})">{VERSION_LABELS[v]}</text>')
+                     f'transform="rotate(-55,{x:.1f},{margin["top"]-10})">{VERSION_LABELS[v]}</text>')
 
     prev_cat = None
     for ri, dim_id in enumerate(sorted_dims):
@@ -386,7 +404,7 @@ def svg_heatmap(dim_data, probe_type, global_max, analysis_type,
     return '\n'.join(lines)
 
 
-def svg_version_summary(dim_data, analysis_type, chart_width=700, chart_height=300):
+def svg_version_summary(dim_data, analysis_type, chart_width=1100, chart_height=340):
     """Bar chart: mean R² across mental dims, per version, reading vs control."""
     mental_dims = [d for d in dim_data if dim_data[d]["category"] == "Mental"]
     available_versions = get_available_versions(dim_data)

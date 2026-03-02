@@ -5,8 +5,8 @@
 #SBATCH --mem=64G
 #SBATCH --time=24:00:00
 #SBATCH --array=0-49
-#SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_3/logs/concept_v2_%A_%a.out
-#SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_3/logs/concept_v2_%A_%a.err
+#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_3/logs/concept_v2_%A_%a.out
+#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_3/logs/concept_v2_%A_%a.err
 # -------------------------------------------------------------
 # Concept injection V2: multi-turn Exp 1 recreation
 # One subject per array task, using concept probe vectors
@@ -26,7 +26,7 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_3"
+PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_3"
 mkdir -p "$PROJECT_ROOT/logs"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 

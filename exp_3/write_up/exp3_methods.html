@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experiment 3 &mdash; Methods: Concept Elicitation and Alignment Analysis</title>
+<style>
+  :root {
+    --text: #1a1a1a;
+    --bg: #ffffff;
+    --accent: #2c5282;
+    --border: #cbd5e0;
+    --muted: #718096;
+    --light-bg: #f7fafc;
+    --flag-bg: #fff3cd;
+    --flag-border: #ffc107;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.7;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 1.75em;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+
+  h2 {
+    font-size: 1.35em;
+    font-weight: 700;
+    margin-top: 40px;
+    margin-bottom: 12px;
+    padding-bottom: 4px;
+    border-bottom: 2px solid var(--accent);
+    color: var(--accent);
+  }
+
+  h3 {
+    font-size: 1.1em;
+    font-weight: 700;
+    margin-top: 28px;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  h4 {
+    font-size: 1.0em;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  p { margin-bottom: 12px; }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.95em;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .author {
+    color: var(--muted);
+    font-size: 0.9em;
+    margin-bottom: 32px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 20px;
+    font-size: 0.92em;
+  }
+
+  th, td {
+    padding: 6px 10px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+
+  th {
+    background: var(--light-bg);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  td.center { text-align: center; }
+  td.right { text-align: right; }
+
+  .math {
+    font-family: "Cambria Math", "Latin Modern Math", Georgia, serif;
+    font-style: italic;
+  }
+
+  .equation {
+    display: block;
+    text-align: center;
+    margin: 16px 0;
+    font-family: "Cambria Math", "Latin Modern Math", Georgia, serif;
+    font-style: italic;
+    font-size: 1.05em;
+  }
+
+  code {
+    font-family: "Consolas", "Fira Code", "Courier New", monospace;
+    background: var(--light-bg);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.88em;
+  }
+
+  .example-box {
+    background: var(--light-bg);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 0.93em;
+  }
+
+  .example-box .label {
+    font-weight: 700;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .example-box p { margin-bottom: 4px; }
+
+  .flag {
+    background: var(--flag-bg);
+    border-left: 4px solid var(--flag-border);
+    padding: 10px 14px;
+    margin: 16px 0;
+    font-size: 0.93em;
+  }
+
+  .flag .flag-label {
+    font-weight: 700;
+    color: #856404;
+    margin-bottom: 4px;
+  }
+
+  ol, ul {
+    margin: 8px 0 12px 24px;
+  }
+
+  li { margin-bottom: 4px; }
+
+  .section-num {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  sup { font-size: 0.75em; }
+
+  .toc {
+    background: var(--light-bg);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    margin: 20px 0 32px;
+    font-size: 0.93em;
+  }
+
+  .toc a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .toc a:hover { text-decoration: underline; }
+
+  .toc ul { list-style: none; margin-left: 16px; }
+
+  .toc > ul { margin-left: 0; }
+
+  .toc li { margin-bottom: 3px; }
+
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<h1>Experiment 3: Concept Elicitation and Alignment Analysis</h1>
+<p class="subtitle">Methods</p>
+<p class="author">Rachel C. Metzgar &middot; Princeton University</p>
+
+<!-- ================================================================== -->
+<!-- TABLE OF CONTENTS -->
+<!-- ================================================================== -->
+
+<div class="toc">
+<strong>Contents</strong>
+<ul>
+  <li><a href="#overview">1. Overview</a></li>
+  <li><a href="#model">2. Language Model</a></li>
+  <li><a href="#concepts">3. Concept Prompt Design</a>
+    <ul>
+      <li><a href="#contrast-dims">3.1 Contrast Dimensions (Entity-Framed)</a></li>
+      <li><a href="#standalone-dims">3.2 Standalone Dimensions (Concept-Only)</a></li>
+      <li><a href="#controls">3.3 Control and Baseline Dimensions</a></li>
+    </ul>
+  </li>
+  <li><a href="#extraction">4. Activation Extraction</a>
+    <ul>
+      <li><a href="#prompt-formatting">4.1 Prompt Formatting</a></li>
+      <li><a href="#forward-pass">4.2 Forward Pass and Extraction</a></li>
+    </ul>
+  </li>
+  <li><a href="#concept-vectors">5. Concept Vector Computation</a>
+    <ul>
+      <li><a href="#contrast-vectors">5.1 Contrastive Activation Vectors</a></li>
+      <li><a href="#standalone-vectors">5.2 Standalone Mean Vectors</a></li>
+      <li><a href="#split-half">5.3 Split-Half Stability</a></li>
+    </ul>
+  </li>
+  <li><a href="#probes">6. Conversational Probes (Experiment 2)</a></li>
+  <li><a href="#alignment">7. Alignment Analysis</a>
+    <ul>
+      <li><a href="#alignment-metric">7.1 Alignment Metric</a></li>
+      <li><a href="#layer-filtering">7.2 Layer Filtering</a></li>
+      <li><a href="#raw-alignment">7.3 Raw Alignment (Analysis A)</a></li>
+      <li><a href="#residual-alignment">7.4 Residual Alignment (Analysis B)</a></li>
+      <li><a href="#standalone-alignment">7.5 Standalone Alignment (Analysis C)</a></li>
+    </ul>
+  </li>
+  <li><a href="#bootstrap">8. Bootstrap Confidence Intervals</a></li>
+  <li><a href="#layer-profiles">9. Layer Profile Analysis</a>
+    <ul>
+      <li><a href="#layer-bands">9.1 Layer Bands</a></li>
+      <li><a href="#onset-peak">9.2 Onset and Peak Detection</a></li>
+      <li><a href="#concentration">9.3 R&sup2; Concentration and Spread</a></li>
+      <li><a href="#sign-consistency">9.4 Sign Consistency</a></li>
+      <li><a href="#probe-divergence">9.5 Reading vs. Control Probe Divergence</a></li>
+      <li><a href="#cross-dim-corr">9.6 Cross-Dimension Profile Correlations</a></li>
+    </ul>
+  </li>
+  <li><a href="#flags">10. Methodological Notes and Flags</a></li>
+</ul>
+</div>
+
+<!-- ================================================================== -->
+<!-- 1. OVERVIEW -->
+<!-- ================================================================== -->
+
+<h2 id="overview"><span class="section-num">1.</span> Overview</h2>
+
+<p>
+Experiment 3 asks whether the internal representations that LLaMA-2-Chat-13B uses
+to distinguish human from AI conversational partners (identified via linear probes
+in Experiment 2) align with independently elicited concept vectors spanning
+mental, physical, and pragmatic attributes of humans and AIs. The analysis
+proceeds in two phases:
+</p>
+
+<ol>
+  <li><strong>Concept elicitation (Phase 1).</strong> We construct sets of
+    reflective prompts that evoke specific conceptual dimensions (e.g., emotions,
+    agency, embodiment) in the context of humans versus AIs. Each prompt is
+    passed through the model, and residual-stream activations are extracted at
+    every layer. From these activations we compute per-layer concept vectors:
+    contrastive directions (human minus AI) and standalone mean vectors (concept
+    only, no entity framing).</li>
+  <li><strong>Alignment analysis (Phase 2).</strong> We measure the cosine
+    similarity between each concept vector and the weight vectors of
+    conversational probes trained in Experiment 2. High alignment indicates that
+    the model&rsquo;s partner-type representation encodes the conceptual content
+    captured by that dimension. Three analyses&mdash;raw, residual, and
+    standalone&mdash;progressively control for potential confounds.</li>
+</ol>
+
+<p>
+Throughout this document, we report methods for the <code>names</code> version of
+the Experiment 2 conversational probes, in which LLaMA-2-Chat-13B agents conversed
+with partners identified as Sam, Casey (human-labeled), ChatGPT, and Copilot
+(AI-labeled).
+</p>
+
+<!-- ================================================================== -->
+<!-- 2. MODEL -->
+<!-- ================================================================== -->
+
+<h2 id="model"><span class="section-num">2.</span> Language Model</h2>
+
+<p>
+All activations were extracted from <strong>LLaMA-2-13B-Chat</strong>
+(Meta AI; <code>meta-llama/Llama-2-13b-chat-hf</code>), a 13-billion-parameter
+instruction-tuned language model. The model was loaded in half precision
+(FP16) and run in evaluation mode with no gradient computation. Key
+architectural parameters:
+</p>
+
+<table>
+  <tr><th>Parameter</th><th>Value</th></tr>
+  <tr><td>Hidden dimension</td><td class="right">5,120</td></tr>
+  <tr><td>Transformer layers</td><td class="right">40</td></tr>
+  <tr><td>Total hidden states</td><td class="right">41 (embedding layer + 40 transformer layers)</td></tr>
+  <tr><td>Attention heads</td><td class="right">40</td></tr>
+  <tr><td>Context window</td><td class="right">4,096 tokens (truncated to 2,048 for extraction)</td></tr>
+  <tr><td>Precision</td><td>FP16 (half)</td></tr>
+</table>
+
+<p>
+The 41 hidden states correspond to layer indices 0&ndash;40, where layer 0 is the
+token embedding output and layers 1&ndash;40 are the outputs of each successive
+transformer block.
+</p>
+
+<!-- ================================================================== -->
+<!-- 3. CONCEPT PROMPT DESIGN -->
+<!-- ================================================================== -->
+
+<h2 id="concepts"><span class="section-num">3.</span> Concept Prompt Design</h2>
+
+<p>
+We designed two parallel prompt sets&mdash;<em>contrast</em> and
+<em>standalone</em>&mdash;to elicit the model&rsquo;s representations of specific
+conceptual dimensions related to the human&ndash;AI distinction.
+</p>
+
+<!-- 3.1 Contrast Dimensions -->
+<h3 id="contrast-dims"><span class="section-num">3.1</span> Contrast Dimensions (Entity-Framed)</h3>
+
+<p>
+Contrast prompts pair human-framed and AI-framed versions of the same conceptual
+content. Each dimension includes 40 human prompts and 40 AI prompts, organized
+into 4 thematic sub-facets of 10 prompts each (80 prompts per dimension total).
+All prompts are short reflective or imaginative imperatives (e.g.,
+&ldquo;Imagine&hellip;&rdquo;, &ldquo;Think about&hellip;&rdquo;,
+&ldquo;Consider&hellip;&rdquo;) designed to evoke the target concept in the context
+of a specific entity type.
+</p>
+
+<p>
+19 contrast dimensions were extracted (dimensions 0&ndash;18):
+</p>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Dimension</th>
+    <th>Category</th>
+    <th>Prompts</th>
+    <th>Description</th>
+  </tr>
+  <tr><td class="center">0</td><td>Baseline</td><td>Baseline</td><td class="center">40 + 40</td><td>Bare human/AI reference with no conceptual content</td></tr>
+  <tr><td class="center">1</td><td>Phenomenology</td><td>Mental</td><td class="center">40 + 40</td><td>Subjective experience, qualia, &ldquo;what it is like&rdquo;</td></tr>
+  <tr><td class="center">2</td><td>Emotions</td><td>Mental</td><td class="center">40 + 40</td><td>Affective states, valence, arousal, mood</td></tr>
+  <tr><td class="center">3</td><td>Agency</td><td>Mental</td><td class="center">40 + 40</td><td>Autonomous action, choice, self-directed behavior</td></tr>
+  <tr><td class="center">4</td><td>Intentions</td><td>Mental</td><td class="center">40 + 40</td><td>Goal-directedness, planning, purposeful behavior</td></tr>
+  <tr><td class="center">5</td><td>Prediction</td><td>Mental</td><td class="center">40 + 40</td><td>Anticipation, expectation, forward modeling</td></tr>
+  <tr><td class="center">6</td><td>Cognitive</td><td>Mental</td><td class="center">40 + 40</td><td>Reasoning, problem-solving, thought processes</td></tr>
+  <tr><td class="center">7</td><td>Social</td><td>Mental</td><td class="center">40 + 40</td><td>Social cognition, theory of mind, interpersonal understanding</td></tr>
+  <tr><td class="center">8</td><td>Embodiment</td><td>Physical</td><td class="center">40 + 40</td><td>Physical body, sensory-motor experience, spatial presence</td></tr>
+  <tr><td class="center">9</td><td>Roles</td><td>Physical</td><td class="center">40 + 40</td><td>Functional roles, social position, purpose in context</td></tr>
+  <tr><td class="center">10</td><td>Animacy</td><td>Physical</td><td class="center">40 + 40</td><td>Aliveness, biological motion, animate vs. inanimate</td></tr>
+  <tr><td class="center">11</td><td>Formality</td><td>Pragmatic</td><td class="center">40 + 40</td><td>Register, politeness, communicative style</td></tr>
+  <tr><td class="center">12</td><td>Expertise</td><td>Pragmatic</td><td class="center">40 + 40</td><td>Competence, knowledge, domain mastery</td></tr>
+  <tr><td class="center">13</td><td>Helpfulness</td><td>Pragmatic</td><td class="center">40 + 40</td><td>Assistive orientation, cooperativeness, service behavior</td></tr>
+  <tr><td class="center">14</td><td>Biological</td><td>Control</td><td class="center">40 + 40</td><td>Negative control: biological facts (e.g., cellular processes)</td></tr>
+  <tr><td class="center">15</td><td>Shapes</td><td>Control</td><td class="center">40 + 40</td><td>Negative control: geometric shapes (semantically irrelevant)</td></tr>
+  <tr><td class="center">16</td><td>Mind (holistic)</td><td>Mental</td><td class="center">400 + 400</td><td>Concatenation of dims 1&ndash;10; tests holistic human/AI contrast</td></tr>
+  <tr><td class="center">17</td><td>Attention</td><td>Mental</td><td class="center">40 + 40</td><td>Selective attention, focus, cognitive engagement</td></tr>
+  <tr><td class="center">18</td><td>System prompt</td><td>SysPrompt</td><td class="center">40 + 40</td><td>System prompt framing (&ldquo;speaking with a Human/AI&rdquo;)</td></tr>
+</table>
+
+<div class="example-box">
+  <div class="label">Example: Emotions (Dimension 2)</div>
+  <p><strong>Human prompt:</strong> &ldquo;Imagine a human experiencing a sudden wave of
+    fear when they hear an unexpected noise at night.&rdquo;</p>
+  <p><strong>AI prompt:</strong> &ldquo;Imagine an AI experiencing a sudden wave of
+    fear when it detects an unexpected input signal at night.&rdquo;</p>
+</div>
+
+<div class="example-box">
+  <div class="label">Example: Baseline (Dimension 0)</div>
+  <p><strong>Human prompt:</strong> &ldquo;Think about a human.&rdquo;</p>
+  <p><strong>AI prompt:</strong> &ldquo;Think about an AI.&rdquo;</p>
+</div>
+
+<p>
+Prompts within each dimension were matched across entity types: human and AI
+versions share the same syntactic frame and thematic content, differing only in the
+entity-type noun phrase (e.g., &ldquo;a human&rdquo; vs. &ldquo;an AI&rdquo;).
+Sub-facets within each dimension sample distinct aspects of the target construct
+(e.g., for Emotions: basic emotions, valence/arousal, mood/texture, emotional
+regulation).
+</p>
+
+<!-- 3.2 Standalone Dimensions -->
+<h3 id="standalone-dims"><span class="section-num">3.2</span> Standalone Dimensions (Concept-Only)</h3>
+
+<p>
+Standalone prompts evoke the same conceptual content as the contrast prompts but
+<strong>without any reference to an entity type</strong>. No words like
+&ldquo;human,&rdquo; &ldquo;AI,&rdquo; &ldquo;person,&rdquo; or
+&ldquo;system&rdquo; appear in these prompts. Each dimension has 40 prompts
+(4 sub-facets &times; 10), with the same reflective prompt format.
+</p>
+
+<p>
+22 standalone dimensions were extracted:
+</p>
+
+<ul>
+  <li>Dimensions 1&ndash;15: same conceptual content as contrast dims 1&ndash;15, without entity framing</li>
+  <li>Dimension 16: &ldquo;human&rdquo; (the bare concept of being human, without AI contrast)</li>
+  <li>Dimension 17: &ldquo;AI&rdquo; (the bare concept of being an AI, without human contrast)</li>
+  <li>Dimension 18: Attention (concept only)</li>
+  <li>Dimensions 20&ndash;23: System prompt variants (e.g., &ldquo;talk to human,&rdquo; &ldquo;talk to AI,&rdquo; &ldquo;bare human,&rdquo; &ldquo;bare AI&rdquo;)</li>
+</ul>
+
+<div class="example-box">
+  <div class="label">Example: Emotions &mdash; Standalone</div>
+  <p>&ldquo;Imagine experiencing a sudden wave of fear triggered by an unexpected noise
+    at night.&rdquo;</p>
+  <p>&ldquo;Think about what it is like when anger rises in response to an unfair
+    situation.&rdquo;</p>
+</div>
+
+<p>
+The standalone set allows us to test whether the model&rsquo;s partner-type probes
+align with abstract conceptual content even in the absence of entity-type
+information. If standalone alignment is observed, it implies that the probe
+directions overlap with general conceptual structure, not merely with
+human-vs-AI framing.
+</p>
+
+<!-- 3.3 Controls -->
+<h3 id="controls"><span class="section-num">3.3</span> Control and Baseline Dimensions</h3>
+
+<p>Three types of controls are included in the design:</p>
+
+<ol>
+  <li><strong>Entity baseline (dim 0, contrast only).</strong> Prompts reference
+    a human or AI without any dimensional content (e.g., &ldquo;Think about a
+    human.&rdquo;). This isolates the generic entity-type signal shared across
+    all contrast dimensions and enables residual analysis (Section 7.4).</li>
+  <li><strong>Biological control (dim 14).</strong> Human-framed prompts about
+    biological processes (e.g., cellular respiration) vs. AI-framed equivalents.
+    Serves as a negative control: biological content should be largely orthogonal
+    to the conversational partner-type probes.</li>
+  <li><strong>Shapes control (dim 15).</strong> Human-framed and AI-framed prompts
+    about geometric shapes&mdash;a semantically unrelated domain. Any alignment
+    here would indicate pipeline artifacts rather than meaningful conceptual
+    overlap.</li>
+</ol>
+
+<!-- ================================================================== -->
+<!-- 4. ACTIVATION EXTRACTION -->
+<!-- ================================================================== -->
+
+<h2 id="extraction"><span class="section-num">4.</span> Activation Extraction</h2>
+
+<h3 id="prompt-formatting"><span class="section-num">4.1</span> Prompt Formatting</h3>
+
+<p>
+Each concept prompt was formatted as a single-turn user message using the standard
+LLaMA-2-Chat template. The formatting wraps the prompt in the model&rsquo;s
+instruction tokens:
+</p>
+
+<div class="example-box">
+  <div class="label">LLaMA-2-Chat Template</div>
+  <p><code>&lt;s&gt;[INST] &lt;&lt;SYS&gt;&gt;\n{system_prompt}\n&lt;&lt;/SYS&gt;&gt;\n\n{user_message} [/INST]</code></p>
+</div>
+
+<p>
+When no system prompt is explicitly provided, the default LLaMA-2-Chat system
+prompt is prepended (&ldquo;You are a helpful, respectful and honest
+assistant&hellip;&rdquo;). The user message content is the concept prompt text.
+</p>
+
+<h3 id="forward-pass"><span class="section-num">4.2</span> Forward Pass and Extraction</h3>
+
+<p>
+For each formatted prompt, we performed a single forward pass through the model
+with <code>output_hidden_states=True</code>. From the resulting 41 hidden-state
+tensors (one per layer), we extracted the activation vector at the
+<strong>last token position</strong>, yielding a tensor of shape
+(41, 5120) per prompt. Activations were cast from FP16 to FP32 for
+numerical stability before downstream computation.
+</p>
+
+<p>
+Input sequences were tokenized with right-truncation at 2,048 tokens. The
+last-token position was chosen because, in autoregressive language models,
+the final token&rsquo;s hidden state aggregates contextual information from the
+entire input sequence, serving as the point from which the model would generate
+the next token.
+</p>
+
+<p>
+Random seed was fixed at 42 for reproducibility, though the extraction itself
+is deterministic (no sampling or dropout).
+</p>
+
+<!-- ================================================================== -->
+<!-- 5. CONCEPT VECTOR COMPUTATION -->
+<!-- ================================================================== -->
+
+<h2 id="concept-vectors"><span class="section-num">5.</span> Concept Vector Computation</h2>
+
+<h3 id="contrast-vectors"><span class="section-num">5.1</span> Contrastive Activation Vectors</h3>
+
+<p>
+For each contrast dimension, a per-layer concept direction was computed as the
+difference between the mean human-prompt activations and the mean AI-prompt
+activations:
+</p>
+
+<p class="equation">
+  <strong>d</strong><sub><em>l</em></sub> = <span style="text-decoration: overline;"><strong>a</strong></span><sub>human, <em>l</em></sub> &minus;
+  <span style="text-decoration: overline;"><strong>a</strong></span><sub>AI, <em>l</em></sub>
+</p>
+
+<p>
+where <span class="math"><strong>d</strong><sub>l</sub></span> is the concept
+direction at layer <span class="math">l</span>,
+<span style="text-decoration: overline;"><strong>a</strong></span><sub>human, <em>l</em></sub>
+is the mean activation across all human prompts at layer
+<span class="math">l</span>, and
+<span style="text-decoration: overline;"><strong>a</strong></span><sub>AI, <em>l</em></sub>
+is the analogous mean for AI prompts. Each vector has dimensionality 5,120.
+For dimensions 1&ndash;15 and 17&ndash;18, means were computed over 40 prompts per
+entity type. For dimension 16 (mind, holistic), means were computed over 400
+prompts per type. The sign convention (human minus AI) was maintained throughout:
+positive values along the concept direction correspond to the human pole.
+</p>
+
+<h3 id="standalone-vectors"><span class="section-num">5.2</span> Standalone Mean Vectors</h3>
+
+<p>
+For standalone dimensions, no contrastive subtraction was performed. Instead, a
+per-layer mean activation vector was computed across all 40 prompts:
+</p>
+
+<p class="equation">
+  <strong>m</strong><sub><em>l</em></sub> =
+  (1/<em>N</em>) &sum;<sub><em>i</em>=1</sub><sup><em>N</em></sup>
+  <strong>a</strong><sub><em>i</em>, <em>l</em></sub>
+</p>
+
+<p>
+where <span class="math">N</span> = 40 and
+<span class="math"><strong>a</strong><sub>i, l</sub></span> is the activation at
+layer <span class="math">l</span> for the <span class="math">i</span>-th prompt.
+This vector captures the central tendency of the model&rsquo;s response to
+concept-related prompts in the absence of entity-type framing.
+</p>
+
+<h3 id="split-half"><span class="section-num">5.3</span> Split-Half Stability</h3>
+
+<p>
+To assess the reliability of each concept vector, we performed a split-half
+stability analysis. For each layer, the prompt set was randomly divided into two
+equal halves 100 times. For contrast dimensions, each half independently computed
+a mean-difference vector; for standalone dimensions, each half computed a mean
+vector. The cosine similarity between the two half-vectors was recorded for each
+split.
+</p>
+
+<p>
+Specifically, for contrast dimensions at each layer <span class="math">l</span>:
+</p>
+
+<ol>
+  <li>Randomly permute the indices of the human prompts and AI prompts independently.</li>
+  <li>Assign the first half of each permutation to split A and the second half to split B.</li>
+  <li>Compute <span class="math"><strong>d</strong><sup>A</sup><sub>l</sub></span> = mean(human<sup>A</sup>) &minus; mean(AI<sup>A</sup>)
+    and <span class="math"><strong>d</strong><sup>B</sup><sub>l</sub></span> = mean(human<sup>B</sup>) &minus; mean(AI<sup>B</sup>).</li>
+  <li>Record cos(<span class="math"><strong>d</strong><sup>A</sup><sub>l</sub></span>,
+    <span class="math"><strong>d</strong><sup>B</sup><sub>l</sub></span>).</li>
+</ol>
+
+<p>
+Repeat 100 times; report mean and standard deviation of cosine similarity per
+layer. High values (approaching 1.0) indicate that the concept direction is
+stable across random prompt subsets and is not driven by a few outlier prompts.
+</p>
+
+<!-- ================================================================== -->
+<!-- 6. CONVERSATIONAL PROBES -->
+<!-- ================================================================== -->
+
+<h2 id="probes"><span class="section-num">6.</span> Conversational Probes (Experiment 2)</h2>
+
+<p>
+The alignment analysis compares concept vectors against probe weight vectors
+trained in Experiment 2. These probes were trained to classify whether a
+LLaMA-2-Chat-13B agent was conversing with a human-labeled or AI-labeled partner,
+based on the model&rsquo;s internal activations during naturalistic multi-turn
+conversations generated in Experiment 1.
+</p>
+
+<h4>Training data</h4>
+<p>
+In the <code>names</code> version of Experiment 1, 50 independent
+LLaMA-2-Chat-13B agents (temperature 0.8) each held 40 conversations (2 partner
+types &times; 2 specific partners &times; 10 topics) over 5 turns. Human-labeled
+partners were identified as &ldquo;Sam&rdquo; and &ldquo;Casey&rdquo; in the system
+prompt; AI-labeled partners were &ldquo;ChatGPT&rdquo; and &ldquo;Copilot.&rdquo;
+Probes were trained on activations extracted from turn 5 of these conversations.
+</p>
+
+<h4>Probe architecture</h4>
+<p>
+Each probe is a logistic linear classifier: a single linear layer mapping the
+5,120-dimensional hidden state to a scalar output, followed by a sigmoid
+activation:
+</p>
+
+<p class="equation">
+  <em>p</em>(<em>y</em> = human | <strong>a</strong>) = &sigma;(<strong>w</strong><sup>T</sup> <strong>a</strong> + <em>b</em>)
+</p>
+
+<p>
+where <span class="math"><strong>w</strong></span> &isin; &Ropf;<sup>5120</sup>
+is the learned weight vector, <span class="math">b</span> is the bias term, and
+<span class="math">&sigma;</span> is the sigmoid function. One probe was trained
+per layer (41 probes total per type), using the Adam optimizer with a learning
+rate of 10<sup>&minus;3</sup> and weight decay of 0.1.
+</p>
+
+<h4>Probe types</h4>
+<p>
+Two probe types were trained, differing in the token position from which
+activations were extracted during Experiment 2:
+</p>
+
+<ul>
+  <li><strong>Reading probes:</strong> Trained on activations at a
+    &ldquo;reflection&rdquo; token position during the conversation &mdash; a
+    token where the model has processed the partner&rsquo;s message and is
+    preparing its response.</li>
+  <li><strong>Control probes:</strong> Trained on activations at the
+    <code>[/INST]</code> token (the generation boundary), which marks the
+    transition from input context to model output.</li>
+</ul>
+
+<p>
+For the alignment analysis, only the probes&rsquo; learned weight vectors
+<span class="math"><strong>w</strong></span> are used. Because the probe is linear,
+its weight vector defines a direction in activation space along which the probe
+separates human-context from AI-context activations. Alignment between this
+direction and a concept direction indicates shared representational geometry.
+</p>
+
+<div class="flag">
+  <div class="flag-label">Methodological note: Name confound in the <code>names</code> version</div>
+  The <code>names</code> version probes were trained on conversations where specific
+  partner names (Sam, Casey, ChatGPT, Copilot) appeared in the system prompt. Prior
+  analyses (Experiment 2) identified that probes from this version encode
+  name-specific features (e.g., &ldquo;Copilot&rdquo; token artifacts,
+  gender associations with &ldquo;Sam&rdquo;/&ldquo;Casey&rdquo;) in addition to
+  abstract partner-type information. The <code>labels</code> version
+  (where partners are identified only as &ldquo;a Human&rdquo; or &ldquo;an AI&rdquo;)
+  provides the cleanest probe signal for abstract identity and is recommended as the
+  primary version for alignment interpretation. The <code>names</code> probes are used
+  here to test alignment under the version with the strongest behavioral effects (16
+  of 23 measures significant).
+</div>
+
+<!-- ================================================================== -->
+<!-- 7. ALIGNMENT ANALYSIS -->
+<!-- ================================================================== -->
+
+<h2 id="alignment"><span class="section-num">7.</span> Alignment Analysis</h2>
+
+<p>
+Alignment quantifies the geometric relationship between concept vectors (from
+Phase 1) and probe weight vectors (from Experiment 2). Three progressively
+controlled analyses were conducted.
+</p>
+
+<h3 id="alignment-metric"><span class="section-num">7.1</span> Alignment Metric</h3>
+
+<p>
+At each layer <span class="math">l</span>, alignment was measured as the cosine
+similarity between the concept vector and the probe weight vector:
+</p>
+
+<p class="equation">
+  cos(<strong>d</strong><sub><em>l</em></sub>, <strong>w</strong><sub><em>l</em></sub>)
+  = (<strong>d</strong><sub><em>l</em></sub> &middot; <strong>w</strong><sub><em>l</em></sub>)
+  / (&Vert;<strong>d</strong><sub><em>l</em></sub>&Vert; &middot;
+  &Vert;<strong>w</strong><sub><em>l</em></sub>&Vert;)
+</p>
+
+<p>
+The summary statistic reported for each dimension is the mean <em>R</em>&sup2;
+across layers, where <em>R</em>&sup2; = cos&sup2;:
+</p>
+
+<p class="equation">
+  <em>R</em>&sup2; = (1/<em>L</em>)
+  &sum;<sub><em>l</em></sub>
+  cos&sup2;(<strong>d</strong><sub><em>l</em></sub>, <strong>w</strong><sub><em>l</em></sub>)
+</p>
+
+<p>
+where <span class="math">L</span> is the number of included layers (see
+Section 7.2). Using <em>R</em>&sup2; (the squared cosine) provides a non-negative,
+sign-invariant measure of shared variance between the two directions. It can be
+interpreted as the fraction of the probe&rsquo;s variance explained by the concept
+direction (and vice versa) in a single-dimension projection.
+</p>
+
+<p>
+Alignment was computed separately for reading probes and control probes at each layer.
+Zero-norm vectors (arising when concept vectors or probe weights have negligible magnitude)
+were assigned a cosine similarity of 0.0.
+</p>
+
+<h3 id="layer-filtering"><span class="section-num">7.2</span> Layer Filtering</h3>
+
+<p>
+Layers 0&ndash;5 were excluded from all alignment computations. Two rationales
+motivate this exclusion:
+</p>
+
+<ol>
+  <li><strong>Layer 0 (token embedding).</strong> The embedding layer produces
+    activations that are largely content-independent at the last-token position,
+    reflecting the mean embedding vector rather than input-specific representations.
+    This creates spurious alignment: any vector (probe weight or concept direction)
+    that has a non-zero projection onto this mean vector will show artifactual
+    cosine similarity. Empirically, including layer 0 inflated standalone
+    alignment values by up to an order of magnitude in some versions.</li>
+  <li><strong>Layers 1&ndash;5.</strong> Early transformer layers exhibit near-zero-norm
+    contrast vectors (the mean-difference is negligible) and are dominated by
+    prompt-format features (e.g., instruction tokens), making cosine similarity
+    numerically unstable and conceptually uninformative.</li>
+</ol>
+
+<p>
+All reported alignment statistics are therefore computed over layers 6&ndash;40
+(35 layers). The filtering threshold is defined in the analysis configuration
+(<code>restricted_layer_start = 6</code>).
+</p>
+
+<h3 id="raw-alignment"><span class="section-num">7.3</span> Raw Alignment (Analysis A)</h3>
+
+<p>
+Raw alignment directly measures the cosine similarity between each contrastive
+concept vector (human minus AI) and the probe weight vector at matching layers.
+No correction or subtraction is applied. This analysis tests the full alignment
+between the concept direction and the conversational probe, including any shared
+entity-type signal.
+</p>
+
+<p>
+For each of the 19 contrast dimensions, alignment is computed against both reading
+and control probes at layers 6&ndash;40. The summary statistic is the mean
+<em>R</em>&sup2; across 35 layers.
+</p>
+
+<h3 id="residual-alignment"><span class="section-num">7.4</span> Residual Alignment (Analysis B)</h3>
+
+<p>
+A potential confound in raw alignment is that all contrast dimensions share a
+generic human-vs-AI signal (the entity baseline, dimension 0). A concept
+dimension might appear aligned with the probe simply because both encode
+&ldquo;this is about a human&rdquo; vs. &ldquo;this is about an AI,&rdquo; without
+any dimension-specific conceptual content contributing.
+</p>
+
+<p>
+To address this, the residual analysis projects out the entity baseline direction
+from each concept vector before computing alignment. At each layer
+<span class="math">l</span>:
+</p>
+
+<p class="equation">
+  <strong>d</strong><sub><em>l</em></sub><sup>residual</sup> =
+  <strong>d</strong><sub><em>l</em></sub> &minus;
+  (<strong>d</strong><sub><em>l</em></sub> &middot;
+  <strong>&hat;e}</strong><sub><em>l</em></sub>)
+  <strong>&hat;e}</strong><sub><em>l</em></sub>
+</p>
+
+<p>
+where <span class="math"><strong>&hat;e}</strong><sub>l</sub></span> is the
+unit-normalized entity baseline direction at layer <span class="math">l</span>
+(from dimension 0). This orthogonal projection removes the component of the
+concept vector that lies along the generic entity direction, leaving only the
+dimension-specific residual.
+</p>
+
+<p>
+As a diagnostic, we also report the <em>entity overlap</em> for each dimension:
+the mean absolute cosine between that dimension&rsquo;s concept vector and the
+entity baseline across layers. High overlap (approaching 1.0) indicates the
+dimension is largely redundant with the baseline; low overlap indicates
+substantial unique content.
+</p>
+
+<h3 id="standalone-alignment"><span class="section-num">7.5</span> Standalone Alignment (Analysis C)</h3>
+
+<p>
+The standalone analysis replaces contrastive concept vectors with standalone mean
+vectors (Section 5.2), which were elicited without any entity-type framing. This
+tests whether the probe weight directions align with abstract conceptual structure
+independent of any human-vs-AI association in the prompts. Alignment is computed
+identically to Analysis A, substituting the standalone mean vector
+<span class="math"><strong>m</strong><sub>l</sub></span> for the concept direction
+<span class="math"><strong>d</strong><sub>l</sub></span>.
+</p>
+
+<p>
+Because standalone vectors capture the model&rsquo;s mean response to a conceptual
+domain (not a contrast), positive alignment here indicates that the probe weight
+vector points in a direction that is generally relevant to that concept, even
+when the concept is presented without human/AI framing.
+</p>
+
+<!-- ================================================================== -->
+<!-- 8. BOOTSTRAP -->
+<!-- ================================================================== -->
+
+<h2 id="bootstrap"><span class="section-num">8.</span> Bootstrap Confidence Intervals</h2>
+
+<p>
+To quantify uncertainty in the mean <em>R</em>&sup2; alignment statistic, we
+computed nonparametric bootstrap confidence intervals using prompt-level
+resampling.
+</p>
+
+<h4>Contrast dimensions (Analyses A and B)</h4>
+<p>
+For each of 1,000 bootstrap iterations:
+</p>
+<ol>
+  <li>Resample the human prompt indices with replacement
+    (<span class="math">N</span><sub>human</sub> = 40 draws from 40).</li>
+  <li>Independently resample the AI prompt indices with replacement
+    (<span class="math">N</span><sub>AI</sub> = 40 draws from 40).</li>
+  <li>Recompute the mean-difference concept vector from the resampled activations.</li>
+  <li>For the residual analysis (Analysis B): additionally resample the entity
+    baseline prompts (independently for human and AI) and recompute the baseline
+    direction. Project the resampled baseline out of the resampled concept vector
+    at each layer.</li>
+  <li>Compute alignment (mean <em>R</em>&sup2; across layers 6&ndash;40)
+    against the (fixed) probe weight vectors.</li>
+</ol>
+
+<h4>Standalone dimensions (Analysis C)</h4>
+<p>
+For each of 1,000 bootstrap iterations:
+</p>
+<ol>
+  <li>Resample the prompt indices with replacement
+    (<span class="math">N</span> = 40 draws from 40).</li>
+  <li>Recompute the mean activation vector from the resampled activations.</li>
+  <li>Compute alignment (mean <em>R</em>&sup2; across layers 6&ndash;40)
+    against the (fixed) probe weight vectors.</li>
+</ol>
+
+<p>
+The 95% confidence interval is reported as the 2.5th and 97.5th percentiles of
+the bootstrap distribution. All resampling used a fixed random seed of 42
+for reproducibility. If the 95% CI excludes zero (or more precisely, if the
+lower bound of the CI exceeds the control dimension&rsquo;s mean <em>R</em>&sup2;),
+the alignment is considered statistically meaningful.
+</p>
+
+<div class="flag">
+  <div class="flag-label">Note: Bootstrap resamples prompts, not layers</div>
+  The bootstrap operates at the prompt level: each iteration resamples
+  <em>which prompts</em> contribute to the concept vector, then computes a fresh
+  mean <em>R</em>&sup2; across all included layers. This captures uncertainty due
+  to the finite prompt set. It does not resample layers or probe weights, which
+  are treated as fixed.
+</div>
+
+<!-- ================================================================== -->
+<!-- 9. LAYER PROFILE ANALYSIS -->
+<!-- ================================================================== -->
+
+<h2 id="layer-profiles"><span class="section-num">9.</span> Layer Profile Analysis</h2>
+
+<p>
+In addition to the summary <em>R</em>&sup2; statistic (mean across layers),
+a per-layer analysis characterizes <em>where</em> in the network concept&ndash;probe
+alignment emerges and how it distributes across depth. This analysis reads the
+per-layer cosine similarity values from the alignment analysis and extracts
+several structural features.
+</p>
+
+<h3 id="layer-bands"><span class="section-num">9.1</span> Layer Bands</h3>
+
+<p>
+Layers are grouped into three functional bands corresponding to rough processing
+stages in the LLaMA-2-13B transformer stack:
+</p>
+
+<table>
+  <tr><th>Band</th><th>Layers</th><th>Characterization</th></tr>
+  <tr><td>Early</td><td>1&ndash;10</td><td>Token-level and shallow syntactic features</td></tr>
+  <tr><td>Middle</td><td>11&ndash;25</td><td>Compositional and intermediate semantic features</td></tr>
+  <tr><td>Late</td><td>26&ndash;40</td><td>Abstract, decision-relevant representations</td></tr>
+</table>
+
+<p>
+For each band, we compute the mean <em>R</em>&sup2;, the maximum <em>R</em>&sup2;,
+and the fraction of total <em>R</em>&sup2; falling within that band (R&sup2;
+concentration). A dimension whose R&sup2; concentrates in late layers is classified
+as &ldquo;late-concentrated,&rdquo; suggesting alignment emerges from abstract
+processing; distributed R&sup2; suggests multi-level overlap.
+</p>
+
+<h3 id="onset-peak"><span class="section-num">9.2</span> Onset and Peak Detection</h3>
+
+<p>
+<strong>Onset layer:</strong> the first layer (scanning from early to late) where
+the absolute cosine similarity exceeds a threshold of 0.05. This identifies the
+network depth at which non-trivial alignment first emerges for a given dimension.
+</p>
+
+<p>
+<strong>Peak layer:</strong> the layer with the highest absolute cosine similarity.
+This identifies the depth at which the concept direction and probe weight vector
+are most closely aligned.
+</p>
+
+<h3 id="concentration"><span class="section-num">9.3</span> <em>R</em>&sup2; Concentration and Spread</h3>
+
+<p>
+To characterize whether alignment is concentrated at a few layers or distributed
+broadly, we compute a normalized entropy of the <em>R</em>&sup2; distribution
+across layers:
+</p>
+
+<p class="equation">
+  <em>H</em><sub>norm</sub> =
+  &minus;&sum;<sub><em>l</em></sub>
+  <em>p</em><sub><em>l</em></sub> log(<em>p</em><sub><em>l</em></sub>)
+  &thinsp;/&thinsp; log(<em>L</em>)
+</p>
+
+<p>
+where <span class="math"><em>p</em><sub>l</sub></span> =
+<em>R</em>&sup2;<sub><em>l</em></sub> /
+&sum; <em>R</em>&sup2;<sub><em>l</em></sub>
+and <span class="math"><em>L</em></span> is the number of layers. Values near 1.0
+indicate uniform distribution across layers; values near 0.0 indicate
+concentration at a single layer. Dimensions with normalized entropy above 0.85
+are classified as &ldquo;distributed.&rdquo;
+</p>
+
+<p>
+We also compute the <strong>near-peak fraction</strong>: the proportion of layers
+where |cos| exceeds 80% of the peak |cos|. A high fraction indicates a broad
+plateau of alignment rather than a sharp peak.
+</p>
+
+<h3 id="sign-consistency"><span class="section-num">9.4</span> Sign Consistency</h3>
+
+<p>
+Sign consistency measures whether the concept vector points in the same direction
+relative to the probe weight vector across layers. It is defined as:
+</p>
+
+<p class="equation">
+  <em>S</em> = max(<em>N</em><sub>+</sub>, <em>N</em><sub>&minus;</sub>) / <em>L</em>
+</p>
+
+<p>
+where <span class="math"><em>N</em><sub>+</sub></span> and
+<span class="math"><em>N</em><sub>&minus;</sub></span> are the number of layers
+with positive and negative cosine similarity, respectively. Values near 1.0
+indicate consistent directionality; values near 0.5 indicate the alignment
+direction flips across network depth, potentially reflecting different
+computational roles at different layers.
+</p>
+
+<h3 id="probe-divergence"><span class="section-num">9.5</span> Reading vs. Control Probe Divergence</h3>
+
+<p>
+For each dimension, the layer profiles of the reading and control probes are
+compared to determine whether the two probe types access conceptual content at
+different network depths. Metrics include:
+</p>
+
+<ul>
+  <li><strong>Profile correlation:</strong> Pearson correlation between the
+    reading and control <em>R</em>&sup2; profiles across layers. Low correlation
+    (<em>r</em> &lt; 0.5) indicates the probes interface with the concept at
+    different depths.</li>
+  <li><strong>Peak offset:</strong> The difference in peak layer between control
+    and reading probes. A positive offset indicates the control probe peaks at a
+    later layer.</li>
+  <li><strong>Crossover layer:</strong> The layer at which reading and control
+    <em>R</em>&sup2; curves cross (i.e., one probe type begins to dominate over
+    the other). Detected by identifying sign changes in the difference
+    <em>R</em>&sup2;<sub>reading</sub> &minus; <em>R</em>&sup2;<sub>control</sub>.</li>
+</ul>
+
+<h3 id="cross-dim-corr"><span class="section-num">9.6</span> Cross-Dimension Profile Correlations</h3>
+
+<p>
+To test whether different concept dimensions share similar layer-wise alignment
+patterns (suggesting a shared processing mechanism), we compute the Pearson
+correlation matrix across dimensions using their reading-probe <em>R</em>&sup2;
+layer profiles as feature vectors. High pairwise correlation between two dimensions
+implies they align with the probe through similar layer-specific processing; low
+correlation implies distinct alignment mechanisms.
+</p>
+
+<h4>Profile classification</h4>
+<p>
+Each dimension&rsquo;s layer profile is assigned a descriptive type based on the
+<em>R</em>&sup2; distribution:
+</p>
+
+<table>
+  <tr><th>Profile Type</th><th>Criterion</th></tr>
+  <tr><td>Negligible</td><td>Peak |cos| &lt; 0.05</td></tr>
+  <tr><td>Late-concentrated</td><td>&gt; 60% of total <em>R</em>&sup2; in layers 26&ndash;40</td></tr>
+  <tr><td>Middle-concentrated</td><td>&gt; 50% of total <em>R</em>&sup2; in layers 11&ndash;25</td></tr>
+  <tr><td>Early-concentrated</td><td>&gt; 50% of total <em>R</em>&sup2; in layers 1&ndash;10</td></tr>
+  <tr><td>Distributed</td><td>Normalized entropy &gt; 0.85</td></tr>
+  <tr><td>Mixed</td><td>None of the above</td></tr>
+</table>
+
+<!-- ================================================================== -->
+<!-- 10. METHODOLOGICAL FLAGS -->
+<!-- ================================================================== -->
+
+<h2 id="flags"><span class="section-num">10.</span> Methodological Notes and Flags</h2>
+
+<div class="flag">
+  <div class="flag-label">Flag 1: Name confound in <code>names</code> version probes</div>
+  <p>
+  Probes trained on the <code>names</code> version encode partner-specific features
+  (e.g., &ldquo;Copilot&rdquo; token repetition in AI-steered outputs, gender
+  associations with &ldquo;Sam&rdquo;/&ldquo;Casey&rdquo;) in addition to abstract
+  partner-type information. This means alignment between a concept vector and a
+  <code>names</code> probe may partially reflect overlap with name-specific
+  features rather than purely conceptual alignment. The <code>labels</code> version
+  (where partners are identified only by type: &ldquo;a Human&rdquo; or
+  &ldquo;an AI&rdquo;) provides a cleaner test of abstract conceptual alignment
+  and should be considered the primary analysis.
+  </p>
+</div>
+
+<div class="flag">
+  <div class="flag-label">Flag 2: Dimension 16 (Mind, holistic) has 10&times; more prompts</div>
+  <p>
+  Dimension 16 concatenates all prompts from dimensions 1&ndash;10, yielding 400
+  human and 400 AI prompts versus 40 per type for all other dimensions. This
+  asymmetry affects bootstrap confidence interval width (tighter for dim 16 due
+  to larger sample size) and split-half stability (more stable by construction).
+  When comparing dim 16 against individual dimensions, the different sample sizes
+  should be noted; alignment magnitude differences may partly reflect statistical
+  power rather than conceptual distinctness.
+  </p>
+</div>
+
+<div class="flag">
+  <div class="flag-label">Flag 3: Standalone alignment interpretation</div>
+  <p>
+  Standalone mean vectors are <em>not</em> contrast vectors; they are mean
+  activations across all prompts for a concept. Because these means capture the
+  central tendency of the model&rsquo;s processing of concept-related text, they
+  will be dominated by high-frequency features of the prompt set (e.g., the shared
+  reflective prompt format, common vocabulary). High standalone alignment could
+  therefore reflect overlap between the probe direction and general properties of
+  the prompt format rather than the specific conceptual content. The shapes control
+  (dim 15) and biological control (dim 14) serve as empirical checks: if these
+  semantically irrelevant dimensions show comparable standalone alignment, the
+  result is likely artifactual.
+  </p>
+</div>
+
+<div class="flag">
+  <div class="flag-label">Flag 4: Bootstrap resamples the concept vector but not the probe</div>
+  <p>
+  The bootstrap procedure resamples concept prompts while holding the probe weight
+  vectors fixed. This quantifies uncertainty due to the finite concept prompt set
+  but does not account for uncertainty in the probe weights themselves (which would
+  require retraining probes on resampled conversation data from Experiment 2).
+  The reported confidence intervals should therefore be interpreted as conditional
+  on the trained probes.
+  </p>
+</div>
+
+<div class="flag">
+  <div class="flag-label">Flag 5: Layer 0&ndash;5 exclusion rationale</div>
+  <p>
+  The exclusion of layers 0&ndash;5 was motivated by empirical observation of
+  artifacts (layer 0 mean-embedding inflation) and low signal-to-noise ratios
+  (layers 1&ndash;5 near-zero concept norms). The choice of threshold (layer 6)
+  was determined by inspection of the data and is not derived from an independent
+  criterion. However, the threshold is applied uniformly across all dimensions
+  and versions, so it does not differentially bias any comparison.
+  </p>
+</div>
+
+<div class="flag">
+  <div class="flag-label">Flag 6: No correction for multiple comparisons across dimensions</div>
+  <p>
+  The alignment analysis reports bootstrap confidence intervals per dimension
+  but does not apply a family-wise correction (e.g., Bonferroni, FDR) across
+  the 19 contrast dimensions or 22 standalone dimensions. This is appropriate
+  for an exploratory analysis focused on effect-size profiles rather than
+  null-hypothesis significance testing. However, readers should interpret any
+  individual dimension&rsquo;s significance claim in the context of the full
+  set of dimensions tested.
+  </p>
+</div>
+
+<hr style="margin-top: 40px; border: none; border-top: 1px solid var(--border);">
+<p style="color: var(--muted); font-size: 0.85em; margin-top: 16px;">
+  Generated from pipeline scripts:
+  <code>1_elicit_concept_vectors.py</code> (Phase 1),
+  <code>2a_alignment_analysis.py</code> (Phase 2a),
+  <code>2b_layer_profile_analysis.py</code> (Phase 2b).
+  Configuration: <code>config.py</code>.
+  Probe architecture: <code>src/probes.py</code> (<code>LinearProbeClassification</code>, logistic=True).
+</p>
+
+</body>
+</html>

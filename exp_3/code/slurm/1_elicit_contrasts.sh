@@ -5,8 +5,8 @@
 #SBATCH --mem=64G
 #SBATCH --time=04:00:00
 #SBATCH --array=16-17
-#SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_3/logs/elicit/contrasts_%A_%a.out
-#SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_3/logs/elicit/contrasts_%A_%a.err
+#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_3/logs/elicit/contrasts_%A_%a.out
+#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_3/logs/elicit/contrasts_%A_%a.err
 # -------------------------------------------------------------
 # Concept elicitation: CONTRASTS mode (human vs AI paired prompts)
 # Parallelized: one dimension per SLURM array task
@@ -36,7 +36,7 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_3"
+PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_3"
 mkdir -p "$PROJECT_ROOT/logs/elicit"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 

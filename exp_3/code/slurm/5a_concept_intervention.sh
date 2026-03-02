@@ -5,8 +5,8 @@
 #SBATCH --mem=64G
 #SBATCH --time=12:00:00
 #SBATCH --array=0-19
-#SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_3/logs/concept_V1/%A_%a.out
-#SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_3/logs/concept_V1/%A_%a.err
+#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_3/logs/concept_V1/%A_%a.out
+#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_3/logs/concept_V1/%A_%a.err
 # ---------------------------------------------------------------------------
 # Experiment 3: Concept Injection V1 (single-turn, 60 questions)
 #
@@ -48,7 +48,7 @@ set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 # === Project paths ===
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_3"
+PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_3"
 mkdir -p "$PROJECT_ROOT/logs/concept_V1"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 
