@@ -6,8 +6,8 @@
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --array=0-19
-#SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_2/logs/alt_pos_all_%a_%A.out
-#SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_2/logs/alt_pos_all_%a_%A.err
+#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2/logs/alt_pos_all_%a_%A.out
+#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2/logs/alt_pos_all_%a_%A.err
 
 # ----------------------------------------------------------------
 # ALTERNATIVE POSITION PROBES — ALL 5 TURNS
@@ -44,7 +44,7 @@ TURN_INDEX=${TURN_INDICES[$TURN_IDX_POS]}
 CONDITION=${CONDITIONS[$COND_IDX]}
 TURN_LABEL=$(( TURN_IDX_POS + 1 ))
 
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_2"
+PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2"
 mkdir -p "$PROJECT_ROOT/logs/$VERSION"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 

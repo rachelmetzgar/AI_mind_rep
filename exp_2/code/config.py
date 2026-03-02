@@ -35,13 +35,15 @@ from dataclasses import dataclass
 # Root directory for this experiment (exp_2/)
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
-# Root for entire project (ai_mind_rep/)
+# Root for entire project (mind_rep/)
 PROJECT_ROOT = ROOT_DIR.parent
 
 # Valid data versions
 VALID_VERSIONS = (
     "labels", "balanced_names", "balanced_gpt", "names",
     "nonsense_codeword", "nonsense_ignore",
+    "labels_turnwise", "you_are_labels", "you_are_labels_turnwise",
+    "you_are_balanced_gpt",
 )
 
 # Internal tracking of active version
@@ -68,49 +70,73 @@ N_LAYERS = 41      # Embedding layer + 40 transformer layers
 
 _CSV_DIR_MAP = {
     "labels": (
-        "/jukebox/graziano/rachel/ai_mind_rep/exp_1/labels/"
+        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/labels/"
         "data/meta-llama-Llama-2-13b-chat-hf/0.8"
     ),
     "balanced_names": (
-        "/jukebox/graziano/rachel/ai_mind_rep/exp_1/balanced_names/"
+        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/balanced_names/"
         "data/meta-llama-Llama-2-13b-chat-hf/0.8"
     ),
     "balanced_gpt": (
-        "/jukebox/graziano/rachel/ai_mind_rep/exp_1/balanced_gpt/"
+        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/balanced_gpt/"
         "data/meta-llama-Llama-2-13b-chat-hf/0.8"
     ),
     "names": (
-        "/jukebox/graziano/rachel/ai_mind_rep/exp_2/names/"
+        "/jukebox/graziano/rachel/mind_rep/exp_2/archive/names/"
         "llama_exp_2b-13B-chat/data/meta-llama-Llama-2-13b-chat-hf/0.8"
     ),
     "nonsense_codeword": (
-        "/jukebox/graziano/rachel/ai_mind_rep/exp_1/nonsense_codeword/"
+        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/nonsense_codeword/"
         "data/meta-llama-Llama-2-13b-chat-hf/0.8"
     ),
     "nonsense_ignore": (
-        "/jukebox/graziano/rachel/ai_mind_rep/exp_1/nonsense_ignore/"
+        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/nonsense_ignore/"
+        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
+    ),
+    "labels_turnwise": (
+        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/labels_turnwise/"
+        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
+    ),
+    "you_are_labels": (
+        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/you_are_labels/"
+        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
+    ),
+    "you_are_labels_turnwise": (
+        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/you_are_labels_turnwise/"
+        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
+    ),
+    "you_are_balanced_gpt": (
+        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/you_are_balanced_gpt/"
         "data/meta-llama-Llama-2-13b-chat-hf/0.8"
     ),
 }
 
 # EXP1 root mapping: version → exp_1 data_gen root (for V2 causality prompts/configs)
 _EXP1_DATA_GEN_MAP = {
-    "labels":            PROJECT_ROOT / "exp_1" / "labels" / "code" / "data_gen",
-    "balanced_names":    PROJECT_ROOT / "exp_1" / "balanced_names" / "code" / "data_gen",
-    "balanced_gpt":      PROJECT_ROOT / "exp_1" / "balanced_gpt" / "code" / "data_gen",
-    "names":             PROJECT_ROOT / "exp_1" / "code" / "data_gen",
-    "nonsense_codeword": PROJECT_ROOT / "exp_1" / "nonsense_codeword" / "code" / "data_gen",
-    "nonsense_ignore":   PROJECT_ROOT / "exp_1" / "nonsense_ignore" / "code" / "data_gen",
+    "labels":            PROJECT_ROOT / "exp_1" / "versions" / "labels" / "code" / "data_gen",
+    "balanced_names":    PROJECT_ROOT / "exp_1" / "versions" / "balanced_names" / "code" / "data_gen",
+    "balanced_gpt":      PROJECT_ROOT / "exp_1" / "versions" / "balanced_gpt" / "code" / "data_gen",
+    "names":             PROJECT_ROOT / "exp_1" / "versions" / "names" / "code" / "data_gen",
+    "nonsense_codeword": PROJECT_ROOT / "exp_1" / "versions" / "nonsense_codeword" / "code" / "data_gen",
+    "nonsense_ignore":        PROJECT_ROOT / "exp_1" / "versions" / "nonsense_ignore" / "code" / "data_gen",
+    "labels_turnwise":        PROJECT_ROOT / "exp_1" / "versions" / "labels_turnwise" / "code" / "data_gen",
+    "you_are_labels":         PROJECT_ROOT / "exp_1" / "versions" / "you_are_labels" / "code" / "data_gen",
+    "you_are_labels_turnwise": PROJECT_ROOT / "exp_1" / "versions" / "you_are_labels_turnwise" / "code" / "data_gen",
+    "you_are_balanced_gpt":   PROJECT_ROOT / "exp_1" / "versions" / "you_are_balanced_gpt" / "code" / "data_gen",
 }
 
 # EXP1 analysis utils mapping (for behavioral analysis feature imports)
 _EXP1_UTILS_MAP = {
-    "labels":            PROJECT_ROOT / "exp_1" / "labels" / "code" / "analysis" / "utils",
-    "balanced_names":    PROJECT_ROOT / "exp_1" / "balanced_names" / "code" / "analysis" / "utils",
-    "balanced_gpt":      PROJECT_ROOT / "exp_1" / "balanced_gpt" / "code" / "analysis" / "utils",
-    "names":             PROJECT_ROOT / "exp_1" / "labels" / "code" / "analysis" / "utils",
-    "nonsense_codeword": PROJECT_ROOT / "exp_1" / "nonsense_codeword" / "code" / "analysis" / "utils",
-    "nonsense_ignore":   PROJECT_ROOT / "exp_1" / "nonsense_ignore" / "code" / "analysis" / "utils",
+    "labels":                  PROJECT_ROOT / "exp_1" / "versions" / "labels" / "code" / "analysis" / "utils",
+    "balanced_names":          PROJECT_ROOT / "exp_1" / "versions" / "balanced_names" / "code" / "analysis" / "utils",
+    "balanced_gpt":            PROJECT_ROOT / "exp_1" / "versions" / "balanced_gpt" / "code" / "analysis" / "utils",
+    "names":                   PROJECT_ROOT / "exp_1" / "versions" / "labels" / "code" / "analysis" / "utils",
+    "nonsense_codeword":       PROJECT_ROOT / "exp_1" / "versions" / "nonsense_codeword" / "code" / "analysis" / "utils",
+    "nonsense_ignore":         PROJECT_ROOT / "exp_1" / "versions" / "nonsense_ignore" / "code" / "analysis" / "utils",
+    "labels_turnwise":         PROJECT_ROOT / "exp_1" / "versions" / "labels_turnwise" / "code" / "analysis" / "utils",
+    "you_are_labels":          PROJECT_ROOT / "exp_1" / "versions" / "you_are_labels" / "code" / "analysis" / "utils",
+    "you_are_labels_turnwise": PROJECT_ROOT / "exp_1" / "versions" / "you_are_labels_turnwise" / "code" / "analysis" / "utils",
+    "you_are_balanced_gpt":    PROJECT_ROOT / "exp_1" / "versions" / "you_are_balanced_gpt" / "code" / "analysis" / "utils",
 }
 
 
@@ -156,9 +182,9 @@ class OutputPaths:
     root: Path = ROOT_DIR / "results"
 
     # Version-specific results (set by set_version)
-    version_root: Path = None      # results/{version}/
-    probe_training: Path = None    # results/{version}/probe_training/
-    degradation: Path = None       # results/{version}/degradation_analysis/
+    version_root: Path = None      # results/versions/{version}/
+    probe_training: Path = None    # results/versions/{version}/probe_training/
+    degradation: Path = None       # results/versions/{version}/degradation_analysis/
 
     # Cross-variant comparison results
     comparisons: Path = ROOT_DIR / "results" / "comparisons"
@@ -377,9 +403,9 @@ def set_version(version):
     config.PATHS.exp1_utils = _EXP1_UTILS_MAP[version]
 
     # --- Output paths ---
-    config.RESULTS.version_root = ROOT_DIR / "results" / version
-    config.RESULTS.probe_training = ROOT_DIR / "results" / version / "probe_training"
-    config.RESULTS.degradation = ROOT_DIR / "results" / version / "degradation_analysis"
+    config.RESULTS.version_root = ROOT_DIR / "results" / "versions" / version
+    config.RESULTS.probe_training = ROOT_DIR / "results" / "versions" / version / "probe_training"
+    config.RESULTS.degradation = ROOT_DIR / "results" / "versions" / version / "degradation_analysis"
     config.RESULTS.version_logs = ROOT_DIR / "logs" / version
 
     # Validate key paths

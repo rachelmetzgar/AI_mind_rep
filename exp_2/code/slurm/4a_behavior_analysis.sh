@@ -4,8 +4,8 @@
 #SBATCH --mem=16G
 #SBATCH --time=2:00:00
 #SBATCH --array=0-1
-#SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_2/logs/behavior_V1_%A_%a.out
-#SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_2/logs/behavior_V1_%A_%a.err
+#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2/logs/behavior_V1_%A_%a.out
+#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2/logs/behavior_V1_%A_%a.err
 
 # ---------------------------------------------------------------------------
 # V1 Behavioral analysis: peak_15 strategy only.
@@ -30,7 +30,7 @@ conda activate behavior_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_2"
+PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2"
 mkdir -p "$PROJECT_ROOT/logs/$VERSION"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 

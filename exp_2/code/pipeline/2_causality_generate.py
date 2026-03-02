@@ -101,7 +101,7 @@ class TraceDict:
 
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from config import config as cfg, set_version, add_version_argument, ensure_dir
+from config import config as cfg, set_version, add_version_argument, ensure_dir, ALL_STRATEGIES
 from src.dataset import llama_v2_prompt
 from src.probes import LinearProbeClassification
 

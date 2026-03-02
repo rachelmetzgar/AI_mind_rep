@@ -3,8 +3,8 @@
 #SBATCH --partition=all
 #SBATCH --mem=8G
 #SBATCH --time=4:00:00
-#SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_2/logs/judge_V1_%j.out
-#SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_2/logs/judge_V1_%j.err
+#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2/logs/judge_V1_%j.out
+#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2/logs/judge_V1_%j.err
 
 # ---------------------------------------------------------------------------
 # V1 Judge: peak_15 strategy, control_probes + reading_probes_peak.
@@ -31,7 +31,7 @@ elif [ -z "${OPENAI_API_KEY:-}" ]; then
     echo "[ERROR] OPENAI_API_KEY not set"; exit 1
 fi
 
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_2"
+PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2"
 mkdir -p "$PROJECT_ROOT/logs/$VERSION"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 

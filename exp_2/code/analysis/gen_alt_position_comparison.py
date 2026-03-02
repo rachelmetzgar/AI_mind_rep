@@ -23,7 +23,7 @@ import matplotlib.ticker as ticker
 
 # ── Configuration ────────────────────────────────────────────────────────────
 
-BASE = '/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_2'
+BASE = '/mnt/cup/labs/graziano/rachel/mind_rep/exp_2'
 OUTPUT_PATH = f'{BASE}/results/comparisons/probe_training/alt_position_comparison.html'
 
 VERSIONS = ['labels', 'balanced_gpt', 'nonsense_codeword']

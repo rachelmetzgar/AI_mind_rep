@@ -76,6 +76,60 @@ VARIANTS = {
         "reading_probe": "reading_probes_peak",
         "note": "PRIMARY: no name cues, pure identity labels",
     },
+    "labels_turnwise": {
+        "label": "Labels Turnwise (Human:/AI: prefix)",
+        "color": "#5c6bc0",
+        "path": EXP2_ROOT / "data" / "labels_turnwise",
+        "strategies": ["peak_15"],
+        "strengths": [2, 4, 8, 16],
+        "reading_probe": "reading_probes_peak",
+        "note": "Same as Labels but partner messages prefixed 'Human:' / 'AI:'",
+    },
+    "you_are_labels": {
+        "label": "You Are Labels ('you are talking to')",
+        "color": "#00897b",
+        "path": EXP2_ROOT / "data" / "you_are_labels",
+        "strategies": ["peak_15"],
+        "strengths": [2, 4, 8, 16],
+        "reading_probe": "reading_probes_peak",
+        "note": "'You are talking to {type}.' Direct framing with abstract labels",
+    },
+    "you_are_labels_turnwise": {
+        "label": "You Are Labels Turnwise",
+        "color": "#00acc1",
+        "path": EXP2_ROOT / "data" / "you_are_labels_turnwise",
+        "strategies": ["peak_15"],
+        "strengths": [2, 4, 8, 16],
+        "reading_probe": "reading_probes_peak",
+        "note": "'You are talking to {type}' + 'Human:'/'AI:' turn prefix",
+    },
+    "you_are_balanced_gpt": {
+        "label": "You Are Balanced GPT",
+        "color": "#d81b60",
+        "path": EXP2_ROOT / "data" / "you_are_balanced_gpt",
+        "strategies": ["peak_15"],
+        "strengths": [2, 4, 8, 16],
+        "reading_probe": "reading_probes_peak",
+        "note": "'You are talking to {name} ({type}).' Direct framing with names",
+    },
+    "nonsense_codeword": {
+        "label": "Nonsense Codeword (control)",
+        "color": "#ff9800",
+        "path": EXP2_ROOT / "data" / "nonsense_codeword",
+        "strategies": ["peak_15"],
+        "strengths": [2, 4, 8, 16],
+        "reading_probe": "reading_probes_peak",
+        "note": "CONTROL: nonsense codeword labels, near-chance probes",
+    },
+    "nonsense_ignore": {
+        "label": "Nonsense Ignore (control)",
+        "color": "#795548",
+        "path": EXP2_ROOT / "data" / "nonsense_ignore",
+        "strategies": ["peak_15"],
+        "strengths": [2, 4, 8, 16],
+        "reading_probe": "reading_probes_peak",
+        "note": "CONTROL: nonsense ignore labels, near-chance probes",
+    },
 }
 
 # Key metrics to highlight
@@ -800,7 +854,7 @@ def main():
 
     # Also save per-variant HTML summaries
     for vname, vconf in VARIANTS.items():
-        results_dir = EXP2_ROOT / "results" / vname
+        results_dir = EXP2_ROOT / "results" / "versions" / vname
         results_dir.mkdir(parents=True, exist_ok=True)
         variant_html = f"""<!DOCTYPE html>
 <html><head><meta charset="UTF-8"><title>Exp 2 ({vname}) V1 Summary</title>

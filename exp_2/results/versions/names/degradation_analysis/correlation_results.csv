@@ -1,0 +1,13 @@
+degradation_metric,probe,condition,r,p,n
+TTR Drop (Turn 1 to 5),Reading Probe Confidence,all,0.11029564877760378,7.630827017152484e-07,2000
+TTR Drop (Turn 1 to 5),Reading Probe Confidence,human,0.027199942101724627,0.39021867122446946,1000
+TTR Drop (Turn 1 to 5),Reading Probe Confidence,ai,0.09368052905984767,0.0030243081087122942,1000
+TTR Drop (Turn 1 to 5),Control Probe Confidence,all,0.1127188038909766,4.328775184865299e-07,2000
+TTR Drop (Turn 1 to 5),Control Probe Confidence,human,0.03883440386066289,0.21983064299675997,1000
+TTR Drop (Turn 1 to 5),Control Probe Confidence,ai,0.09637349102370395,0.0022816443827216636,1000
+Trigram Rep. Increase (Turn 1 to 5),Reading Probe Confidence,all,0.07412672314335639,0.0009081386780158527,2000
+Trigram Rep. Increase (Turn 1 to 5),Reading Probe Confidence,human,-0.0036999344260148746,0.9069739578268435,1000
+Trigram Rep. Increase (Turn 1 to 5),Reading Probe Confidence,ai,0.08138488178481236,0.010033605120551332,1000
+Trigram Rep. Increase (Turn 1 to 5),Control Probe Confidence,all,0.0768686784843691,0.0005803956342894685,2000
+Trigram Rep. Increase (Turn 1 to 5),Control Probe Confidence,human,0.007073486858324197,0.8232192825336724,1000
+Trigram Rep. Increase (Turn 1 to 5),Control Probe Confidence,ai,0.088279889350914,0.005212177900921734,1000

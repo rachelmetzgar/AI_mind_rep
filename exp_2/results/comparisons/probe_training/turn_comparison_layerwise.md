@@ -88,6 +88,74 @@ Stars mark peak accuracy layer for each turn. Dashed gray line = chance (0.5).
 | Turn 5 | 37 | 0.7875 | 0.7247 | 35 | 0.7900 | 0.7363 |
 
 
+### Labels Turnwise
+
+
+*[Figure: labels_turnwise layer profiles — see HTML report]*
+
+
+
+| Turn | Reading Probe | Control Probe |
+| --- | --- | --- |
+| Peak Layer | Peak Acc | Mean Acc | Peak Layer | Peak Acc | Mean Acc |
+| Turn 1 | 7 | 1.0000 | 0.9566 | 6 | 1.0000 | 0.9629 |
+| Turn 2 | 11 | 1.0000 | 0.9155 | 8 | 1.0000 | 0.9365 |
+| Turn 3 | 13 | 1.0000 | 0.9091 | 8 | 1.0000 | 0.9307 |
+| Turn 4 | 12 | 0.9325 | 0.8410 | 11 | 0.9300 | 0.8570 |
+| Turn 5 | 38 | 0.6775 | 0.6202 | 40 | 0.6750 | 0.6224 |
+
+
+### You Are Labels
+
+
+*[Figure: you_are_labels layer profiles — see HTML report]*
+
+
+
+| Turn | Reading Probe | Control Probe |
+| --- | --- | --- |
+| Peak Layer | Peak Acc | Mean Acc | Peak Layer | Peak Acc | Mean Acc |
+| Turn 1 | 7 | 1.0000 | 0.9589 | 5 | 1.0000 | 0.9704 |
+| Turn 2 | 16 | 1.0000 | 0.8957 | 15 | 1.0000 | 0.9007 |
+| Turn 3 | 27 | 0.9975 | 0.8633 | 20 | 0.9225 | 0.8115 |
+| Turn 4 | 27 | 0.8625 | 0.7434 | 17 | 0.7225 | 0.6588 |
+| Turn 5 | 38 | 0.6050 | 0.5579 | 34 | 0.6025 | 0.5629 |
+
+
+### You Are Labels Turnwise
+
+
+*[Figure: you_are_labels_turnwise layer profiles — see HTML report]*
+
+
+
+| Turn | Reading Probe | Control Probe |
+| --- | --- | --- |
+| Peak Layer | Peak Acc | Mean Acc | Peak Layer | Peak Acc | Mean Acc |
+| Turn 1 | 7 | 1.0000 | 0.9589 | 5 | 1.0000 | 0.9704 |
+| Turn 2 | 13 | 1.0000 | 0.9231 | 8 | 1.0000 | 0.9377 |
+| Turn 3 | 11 | 1.0000 | 0.9221 | 8 | 1.0000 | 0.9379 |
+| Turn 4 | 34 | 0.9425 | 0.8525 | 16 | 0.9400 | 0.8738 |
+| Turn 5 | 14 | 0.6850 | 0.6404 | 18 | 0.7050 | 0.6569 |
+
+
+### You Are Balanced GPT
+
+
+*[Figure: you_are_balanced_gpt layer profiles — see HTML report]*
+
+
+
+| Turn | Reading Probe | Control Probe |
+| --- | --- | --- |
+| Peak Layer | Peak Acc | Mean Acc | Peak Layer | Peak Acc | Mean Acc |
+| Turn 1 | 7 | 1.0000 | 0.9655 | 4 | 1.0000 | 0.9710 |
+| Turn 2 | 9 | 1.0000 | 0.9504 | 8 | 1.0000 | 0.9474 |
+| Turn 3 | 9 | 1.0000 | 0.9434 | 9 | 1.0000 | 0.9441 |
+| Turn 4 | 26 | 0.9650 | 0.8927 | 18 | 0.9650 | 0.9026 |
+| Turn 5 | 27 | 0.8200 | 0.7384 | 16 | 0.8100 | 0.7470 |
+
+
 ### Nonsense Codeword (Control)
 
 

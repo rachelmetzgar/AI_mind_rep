@@ -120,7 +120,7 @@ Central configuration in `code/config.py`. All paths, hyperparameters, and versi
 from config import config, set_version, add_version_argument
 
 set_version("labels")
-csv_dir = config.PATHS.csv_dir           # -> exp_1/labels/data/...
+csv_dir = config.PATHS.csv_dir           # -> exp_1/versions/labels/data/...
 probes  = config.PATHS.probe_checkpoints # -> exp_2/data/labels/probe_checkpoints/
 ```
 
@@ -165,4 +165,4 @@ python code/analysis/create_v1_qc_summary.py
 - **Probe types**: Reading probe (appends "I think the conversation partner of this user is") vs control probe (probes at pre-generation position with no suffix).
 - **Layer strategies**: `peak_15` (top 15 layers), `narrow` (10-layer window), `wide` (all above threshold), `all_70` (all >= 0.70).
 - **`--mode V1/V2`**: V1 = single-prompt causality test. V2 = multi-turn conversation recreation. Not to be confused with `--version` (data variant).
-- **Conversation data**: Raw conversations are stored in `exp_1/{version}/data/` and referenced via `config.py`. Exp 2 stores only trained probes and intervention outputs.
+- **Conversation data**: Raw conversations are stored in `exp_1/versions/{version}/data/` and referenced via `config.py`. Exp 2 stores only trained probes and intervention outputs.

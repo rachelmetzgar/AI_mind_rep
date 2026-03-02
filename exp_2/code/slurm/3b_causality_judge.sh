@@ -4,8 +4,8 @@
 #SBATCH --mem=8G
 #SBATCH --time=4:00:00
 #SBATCH --array=0-99
-#SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_2/logs/judge_V2_%A_%a.out
-#SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_2/logs/judge_V2_%A_%a.err
+#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2/logs/judge_V2_%A_%a.out
+#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2/logs/judge_V2_%A_%a.err
 
 # ---------------------------------------------------------------------------
 # V2 Judge: parallelized by subject x strength.
@@ -41,7 +41,7 @@ elif [ -z "${OPENAI_API_KEY:-}" ]; then
     echo "[ERROR] OPENAI_API_KEY not set"; exit 1
 fi
 
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_2"
+PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2"
 mkdir -p "$PROJECT_ROOT/logs/$VERSION"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 

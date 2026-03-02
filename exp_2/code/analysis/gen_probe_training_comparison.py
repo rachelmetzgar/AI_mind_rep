@@ -36,6 +36,10 @@ VERSIONS = [
     ("balanced_names",    "Balanced Names",              "Gender-balanced names (no Copilot). Removes gender confound but names still provide lexical signal."),
     ("balanced_gpt",      "Balanced GPT",                "Like balanced names but with GPT-4 replacing Copilot as AI partner. Tests whether AI partner identity matters."),
     ("labels",            "Labels (Primary)",            'Partner labeled as "a Human" / "an AI". Primary version: minimal lexical confound, tests abstract identity representation.'),
+    ("labels_turnwise",   "Labels Turnwise",             'Same as Labels but partner messages prefixed "Human:" / "AI:" instead of "Partner:". Tests turn-level identity reinforcement.'),
+    ("you_are_labels",    "You Are Labels",              '"You are talking to {type}." Uses direct framing instead of "you believe you are speaking with."'),
+    ("you_are_labels_turnwise", "You Are Labels Turnwise", '"You are talking to {type}" + "Human:"/"AI:" turn prefix. Combines direct framing with turn-level reinforcement.'),
+    ("you_are_balanced_gpt", "You Are Balanced GPT",     '"You are talking to {name} ({type})." Direct framing with gender-balanced names + GPT-4.'),
     ("nonsense_codeword", "Nonsense Codeword (Control)", 'Token-matched control: "Your session code word is {a Human/an AI}". Same tokens present but no identity meaning.'),
     ("nonsense_ignore",   "Nonsense Ignore (Control)",   "Token-present with ignore instruction: tokens appear but model is told to disregard them."),
 ]

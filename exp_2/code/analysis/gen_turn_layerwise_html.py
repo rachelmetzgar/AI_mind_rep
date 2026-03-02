@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generate an HTML visualization of probe accuracy across layers and conversation turns.
-Produces: /mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_2/results/comparisons/probe_training/turn_comparison_layerwise.html
+Produces: /mnt/cup/labs/graziano/rachel/mind_rep/exp_2/results/comparisons/probe_training/turn_comparison_layerwise.html
 """
 
 import pickle
@@ -17,13 +17,21 @@ import matplotlib.ticker as ticker
 
 # ── Configuration ────────────────────────────────────────────────────────────
 
-BASE = '/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_2'
-VARIANTS = ['labels', 'balanced_names', 'balanced_gpt', 'names', 'nonsense_codeword', 'nonsense_ignore']
+BASE = '/mnt/cup/labs/graziano/rachel/mind_rep/exp_2'
+VARIANTS = [
+    'labels', 'balanced_names', 'balanced_gpt', 'names',
+    'labels_turnwise', 'you_are_labels', 'you_are_labels_turnwise', 'you_are_balanced_gpt',
+    'nonsense_codeword', 'nonsense_ignore',
+]
 VARIANT_LABELS = {
     'labels': 'Labels',
     'balanced_names': 'Balanced Names',
     'balanced_gpt': 'Balanced GPT',
     'names': 'Names (Sam/Casey)',
+    'labels_turnwise': 'Labels Turnwise',
+    'you_are_labels': 'You Are Labels',
+    'you_are_labels_turnwise': 'You Are Labels Turnwise',
+    'you_are_balanced_gpt': 'You Are Balanced GPT',
     'nonsense_codeword': 'Nonsense Codeword (Control)',
     'nonsense_ignore': 'Nonsense Ignore (Control)',
 }
@@ -156,6 +164,8 @@ def make_peak_shift_figure(data):
     fig, ax = plt.subplots(figsize=(7, 5))
     variant_colors = {'labels': '#1a3399', 'balanced_names': '#2596be',
                       'balanced_gpt': '#cc2233', 'names': '#8e24aa',
+                      'labels_turnwise': '#5c6bc0', 'you_are_labels': '#00897b',
+                      'you_are_labels_turnwise': '#00acc1', 'you_are_balanced_gpt': '#d81b60',
                       'nonsense_codeword': '#e8961a', 'nonsense_ignore': '#45a847'}
     probe_markers = {'reading_probe': 'o', 'control_probe': 's'}
     probe_ls = {'reading_probe': '-', 'control_probe': '--'}
@@ -230,9 +240,13 @@ def make_cross_variant_figure(data):
     layers = np.arange(N_LAYERS)
     variant_colors = {'labels': '#1a3399', 'balanced_names': '#2596be',
                       'balanced_gpt': '#cc2233', 'names': '#8e24aa',
+                      'labels_turnwise': '#5c6bc0', 'you_are_labels': '#00897b',
+                      'you_are_labels_turnwise': '#00acc1', 'you_are_balanced_gpt': '#d81b60',
                       'nonsense_codeword': '#e8961a', 'nonsense_ignore': '#45a847'}
     variant_ls = {'labels': '-', 'balanced_names': '--', 'balanced_gpt': '-.',
-                  'names': ':', 'nonsense_codeword': (0, (5, 2, 1, 2)), 'nonsense_ignore': (0, (3, 1))}
+                  'names': ':', 'labels_turnwise': '-', 'you_are_labels': '--',
+                  'you_are_labels_turnwise': '-.', 'you_are_balanced_gpt': ':',
+                  'nonsense_codeword': (0, (5, 2, 1, 2)), 'nonsense_ignore': (0, (3, 1))}
 
     for col_i, ptype in enumerate(PROBE_TYPES):
         for row_i, turn in enumerate(TURNS):
