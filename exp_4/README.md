@@ -39,7 +39,8 @@ exp_4/
 ├── README.md                          # This file
 ├── exp4_results_walkthrough.html      # Visual walkthrough of results across both models
 ├── llama_exp_4-13B-chat/              # Chat model (RLHF fine-tuned)
-└── llama_exp_4-13B-base/              # Base model (pretrained, no RLHF)
+├── llama_exp_4-13B-base/              # Base model (pretrained, no RLHF)
+└── write_up/                          # Methods write-up (exp4_methods.html)
 ```
 
 ---
@@ -96,13 +97,15 @@ llama_exp_4-13B-base/
 ├── 2c_individual_ratings.py              # Individual Likert ratings (non-pairwise)
 ├── generate_figures.py                   # Publication figures for both models
 ├── entities/
-│   └── gray_entities.py                  # Same entity definitions as chat version
+│   ├── gray_entities.py                  # Same entity definitions as chat version
+│   └── gray2007.txt                      # Full text of Gray et al. paper + supplementary materials
 ├── data/
 │   ├── behavioral_replication/           # Pairwise results (with_self/, without_self/)
 │   └── individual_ratings/              # Likert results (with_self/, without_self/)
 ├── results/
 │   ├── behavioral_replication/           # Summary reports + figures
-│   └── individual_ratings/              # Summary reports + figures
+│   ├── individual_ratings/              # Summary reports + figures
+│   └── figures/                          # Cross-method summary figures
 ├── results_report.html                   # Visual walkthrough of the analysis pipeline
 ├── analysis_explainer.html               # Detailed analysis explainer
 ├── slurm/                                # SLURM job scripts

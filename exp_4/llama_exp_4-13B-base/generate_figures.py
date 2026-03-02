@@ -22,7 +22,7 @@ from scipy import stats
 
 # ── Paths ────────────────────────────────────────────────────────────
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(os.path.dirname(SCRIPT_DIR))  # ai_mind_rep/
+PROJECT_ROOT = os.path.dirname(os.path.dirname(SCRIPT_DIR))  # mind_rep/
 
 BASE_DIR = os.path.join(SCRIPT_DIR)  # llama_exp_4-13B-base/
 CHAT_DIR = os.path.join(PROJECT_ROOT, "exp_4", "llama_exp_4-13B-chat")

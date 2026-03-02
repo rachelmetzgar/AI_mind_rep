@@ -5,8 +5,8 @@
 #SBATCH --mem=64G
 #SBATCH --time=1:00:00
 #SBATCH --cpus-per-task=4
-#SBATCH --output=/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_4/llama_exp_4-13B-base/logs/2c_individual_%j.out
-#SBATCH --error=/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_4/llama_exp_4-13B-base/logs/2c_individual_%j.err
+#SBATCH --output=/mnt/cup/labs/graziano/rachel/mind_rep/exp_4/llama_exp_4-13B-base/logs/2c_individual_%j.out
+#SBATCH --error=/mnt/cup/labs/graziano/rachel/mind_rep/exp_4/llama_exp_4-13B-base/logs/2c_individual_%j.err
 
 # Experiment 4, Phase 2c: Individual Likert ratings — BASE model
 # Only 216-234 forward passes (vs 2376-2808 for pairwise), so much faster.
@@ -28,7 +28,7 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_4/llama_exp_4-13B-base"
+PROJECT_ROOT="/mnt/cup/labs/graziano/rachel/mind_rep/exp_4/llama_exp_4-13B-base"
 mkdir -p "$PROJECT_ROOT/logs"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 

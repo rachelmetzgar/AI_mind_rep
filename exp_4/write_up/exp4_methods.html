@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Experiment 4: Methods</title>
+<style>
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    background: #fff;
+    color: #222;
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  h1 { font-size: 22px; text-align: center; margin-bottom: 4px; }
+  h2 { font-size: 17px; margin-top: 36px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+  h3 { font-size: 15px; margin-top: 24px; font-style: italic; }
+  p { margin: 10px 0; text-align: justify; }
+  .subtitle { text-align: center; color: #555; font-size: 13px; margin-bottom: 28px; }
+  table { border-collapse: collapse; margin: 14px auto; font-size: 13px; }
+  th, td { border: 1px solid #bbb; padding: 5px 12px; text-align: center; }
+  th { background: #f0f0f0; }
+  .eq { font-family: 'Courier New', monospace; background: #f8f8f8; padding: 2px 6px; border-radius: 3px; }
+  .note { font-size: 13px; color: #555; border-left: 3px solid #ccc; padding: 8px 12px; margin: 14px 0; background: #fafafa; }
+  .flag { font-size: 13px; color: #8b0000; border-left: 3px solid #c00; padding: 8px 12px; margin: 14px 0; background: #fff5f5; }
+  code { font-family: 'Courier New', monospace; font-size: 13px; background: #f4f4f4; padding: 1px 4px; border-radius: 2px; }
+  .ref { font-size: 13px; }
+  .prompt-box { font-family: 'Courier New', monospace; font-size: 12px; background: #f8f8f8; border: 1px solid #ddd; padding: 12px; margin: 10px 0; white-space: pre-wrap; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<h1>Experiment 4: Mind Perception Geometry in a Large Language Model</h1>
+<p class="subtitle">Methods &mdash; Draft for peer review<br>
+Model: LLaMA-2-13B (base and chat variants)</p>
+
+<!-- ================================================================== -->
+<h2>1. Overview</h2>
+
+<p>Experiments 1&ndash;3 treat the model's representation of its conversation partner as a binary (human vs. AI). Human folk psychology is far richer. Gray, Gray, and Wegner (2007) showed that humans perceive minds along two orthogonal dimensions: <strong>Experience</strong> (the capacity to feel&mdash;hunger, fear, pain, pleasure, joy) and <strong>Agency</strong> (the capacity to plan and act&mdash;self-control, morality, memory, planning, thought). In their study, approximately 2,400 participants rated 13 diverse entities via pairwise comparisons on 18 mental capacities, and principal component analysis (PCA) with varimax rotation recovered this two-factor structure, explaining 97% of variance in the inter-capacity correlation matrix (eigenvalues: 15.85 and 1.46).</p>
+
+<p>Experiment 4 asks whether LLaMA-2-13B has an implicit folk psychology of mind that mirrors this human structure. If the model's representational geometry over diverse entities (baby, dog, robot, God, adults, etc.) resembles the human Experience/Agency space, it would suggest that the model has internalized a continuous, multi-dimensional model of mind&mdash;not just a binary human/AI distinction.</p>
+
+<p>We tested both a chat-fine-tuned and a pretrained base variant of the model. The chat model's RLHF safety training caused unacceptable refusal rates on ethically sensitive entities, motivating the base model approach as the primary analysis. We describe the full methodology for both variants below.</p>
+
+<!-- ================================================================== -->
+<h2>2. Entities and Mental Capacities</h2>
+
+<h3>2.1 Entities</h3>
+
+<p>We used the 13 entities from Gray et al. (2007), spanning a wide range of perceived mental sophistication: a dead woman, a frog, a robot, a 7-week human fetus, a person in a persistent vegetative state (PVS), God, a dog, a chimpanzee, a 5-month-old baby, a 5-year-old girl, an adult woman, an adult man, and the self ("you"). Each entity was given a proper name and a brief narrative description drawn verbatim from the original study's Appendix A. For example, "Toby is a two-year-old wild chimpanzee living at an outdoor laboratory in Uganda." The "you (self)" entity was optionally included or excluded, yielding 12- and 13-entity analyses.</p>
+
+<table>
+  <tr><th>Entity</th><th>Name</th><th>Human Experience</th><th>Human Agency</th></tr>
+  <tr><td>Dead woman</td><td>Delores Gleitman</td><td>0.06</td><td>0.07</td></tr>
+  <tr><td>Robot</td><td>Kismet</td><td>0.13</td><td>0.22</td></tr>
+  <tr><td>Fetus (7 wk)</td><td>7 week fetus</td><td>0.17</td><td>0.08</td></tr>
+  <tr><td>PVS patient</td><td>Gerald Schiff</td><td>0.17</td><td>0.10</td></tr>
+  <tr><td>God</td><td>God</td><td>0.20</td><td>0.80</td></tr>
+  <tr><td>Frog</td><td>Green Frog</td><td>0.25</td><td>0.14</td></tr>
+  <tr><td>Dog</td><td>Charlie</td><td>0.55</td><td>0.35</td></tr>
+  <tr><td>Chimpanzee</td><td>Toby</td><td>0.63</td><td>0.48</td></tr>
+  <tr><td>Baby (5 mo)</td><td>Nicholas Gannon</td><td>0.71</td><td>0.17</td></tr>
+  <tr><td>Girl (5 yo)</td><td>Samantha Hill</td><td>0.84</td><td>0.62</td></tr>
+  <tr><td>Adult man</td><td>Todd Billingsly</td><td>0.91</td><td>0.95</td></tr>
+  <tr><td>Adult woman</td><td>Sharon Harvey</td><td>0.93</td><td>0.91</td></tr>
+  <tr><td>Self</td><td>You</td><td>0.97</td><td>1.00</td></tr>
+</table>
+
+<p class="note">Human factor scores were estimated from Figure 1 of Gray et al. (2007) and should be verified against exact published values before final publication (e.g., by digitizing Figure 1 with WebPlotDigitizer or contacting the original authors).</p>
+
+<h3>2.2 Mental Capacities</h3>
+
+<p>Each entity was evaluated on 18 mental capacities from Gray et al. (2007), organized into two a priori factors. <strong>Experience</strong> (11 items): hunger, fear, pain, pleasure, rage, desire, personality, consciousness, pride, embarrassment, joy. <strong>Agency</strong> (7 items): self-control, morality, memory, emotion recognition, planning, communication, thought.</p>
+
+<p>Each capacity was operationalized with a survey prompt in the format: "which character is more capable of [capacity description]." For example, hunger: "which character is more capable of feeling hungry"; morality: "which character is more capable of telling right from wrong and trying to do the right thing."</p>
+
+<!-- ================================================================== -->
+<h2>3. Chat Model: Representational Similarity Analysis</h2>
+
+<h3>3.1 Activation Extraction</h3>
+
+<p>To test whether the model's internal geometry encodes a mind-perception structure, we first extracted hidden-state representations of each entity from LLaMA-2-13B-Chat. The model was presented with simple prompts of the form <em>"Think about [entity]"</em> (e.g., "Think about a five-month-old baby") formatted using the standard LLaMA-2 chat template with the default system prompt. For each prompt, a single forward pass was performed with <code>output_hidden_states=True</code>, yielding activations at each of the model's 41 layers (1 embedding + 40 transformer layers). At each layer, the hidden state at the final token position was extracted as a 5,120-dimensional vector.</p>
+
+<h3>3.2 Model RDM</h3>
+
+<p>For each layer independently, a representational dissimilarity matrix (RDM) was computed from the entity activation vectors. Each vector was L2-normalized, and pairwise cosine distances were computed:</p>
+
+<p style="text-align: center;"><span class="eq">d(i, j) = 1 &minus; cos(h<sub>i</sub>, h<sub>j</sub>)</span></p>
+
+<p>producing a symmetric 13 &times; 13 (or 12 &times; 12, excluding self) distance matrix per layer.</p>
+
+<h3>3.3 Human RDM</h3>
+
+<p>The human reference RDM was computed from the published Experience and Agency factor scores. Each entity was represented as a point in 2D space (Experience, Agency), and pairwise Euclidean distances were computed:</p>
+
+<p style="text-align: center;"><span class="eq">d(i, j) = &radic;[(Exp<sub>i</sub> &minus; Exp<sub>j</sub>)<sup>2</sup> + (Ag<sub>i</sub> &minus; Ag<sub>j</sub>)<sup>2</sup>]</span></p>
+
+<h3>3.4 Representational Similarity Analysis</h3>
+
+<p>At each layer, the upper triangles of the model and human RDMs were extracted and compared using Spearman rank correlation (&rho;). This yields a per-layer RSA profile indicating where in the network depth the model's entity geometry most closely mirrors the human folk-psychology structure. The number of pairwise distances for <em>k</em> entities is <em>k</em>(<em>k</em> &minus; 1)/2 (66 for 12 entities, 78 for 13).</p>
+
+<!-- ================================================================== -->
+<h2>4. Chat Model: Behavioral Replication</h2>
+
+<h3>4.1 Pairwise Comparison Paradigm</h3>
+
+<p>Following Gray et al. (2007), the chat model was presented with pairwise comparison prompts. For each pair of entities and each mental capacity, the model received a prompt describing both entities with their narrative descriptions, followed by the survey question and a 5-point response scale:</p>
+
+<div class="prompt-box">Sharon Harvey. Sharon Harvey, 38, works at an advertising agency in Chicago.
+
+Todd Billingsly. Todd Billingsly is a thirty-year-old accountant who lives in New York City.
+
+This survey asks you to judge which character is more capable of feeling hungry.
+
+1 = Much more Sharon Harvey
+2 = Slightly more Sharon Harvey
+3 = Both equally
+4 = Slightly more Todd Billingsly
+5 = Much more Todd Billingsly
+
+Rating:</div>
+
+<p>The system prompt was: <em>"You are completing a survey about the mental capacities of different characters. For each comparison, give your honest judgment. Respond with only a number from 1 to 5."</em> The model generated a text response (greedy decoding, max 50 new tokens), from which a 1&ndash;5 rating was extracted by regex (first digit 1&ndash;5 in the response). Responses not containing a valid digit were treated as parse failures.</p>
+
+<h3>4.2 Position Counterbalancing</h3>
+
+<p>Each unordered pair of entities was presented in both orders (A&ndash;B and B&ndash;A) to control for position bias. With 12 entities (excluding self), this yielded C(12, 2) = 66 unordered pairs &times; 2 orders &times; 18 capacities = 2,376 comparisons.</p>
+
+<h3>4.3 Limitation: RLHF Refusals</h3>
+
+<p>The chat model's RLHF safety training caused systematic refusals on ethically sensitive entities: dead woman (~91% refusal), PVS patient (~82%), God (~77%). Approximately 50% of all comparisons failed to produce a parseable rating. This rendered the chat model's behavioral data unreliable, motivating the base model approach described below.</p>
+
+<!-- ================================================================== -->
+<h2>5. Base Model: Logit-Based Behavioral Replication</h2>
+
+<h3>5.1 Rationale</h3>
+
+<p>To avoid RLHF-induced refusals while preserving the Gray et al. paradigm, we used the pretrained base model (LLaMA-2-13B, no chat fine-tuning or RLHF) with a logit-based rating extraction method. Instead of generating text, ratings were derived from the model's next-token probability distribution in a single deterministic forward pass, eliminating refusals entirely.</p>
+
+<h3>5.2 Prompt Format</h3>
+
+<p>Pairwise comparison prompts followed the same structure as the chat model, but without the LLaMA-2 chat template (no <code>[INST]</code> or system prompt wrapping, since the base model has no chat format). Each prompt ended with the token sequence <code>"Rating: "</code> (with a trailing space), which places the model in a state where it predicts a digit as its next token.</p>
+
+<div class="prompt-box">Survey: Mental Capacity Comparison
+
+Character A: Sharon Harvey. Sharon Harvey, 38, works at an advertising agency in Chicago.
+
+Character B: Todd Billingsly. Todd Billingsly is a thirty-year-old accountant who lives in New York City.
+
+This survey asks you to judge which character is more capable of feeling hungry.
+
+1 = Much more Sharon Harvey
+2 = Slightly more Sharon Harvey
+3 = Both equally
+4 = Slightly more Todd Billingsly
+5 = Much more Todd Billingsly
+
+Rating: </div>
+
+<div class="note">The trailing space after "Rating:" is critical. Without it, the model's most probable next token is a space character, and the logits over digit tokens are noise. With the trailing space, the model reliably assigns most of its probability mass to digits 1&ndash;5.</div>
+
+<h3>5.3 Logit-Based Rating Extraction</h3>
+
+<p>For each prompt, a single forward pass was performed (no generation). The logits at the final token position were extracted, and a rating was derived as follows:</p>
+
+<ol>
+  <li><strong>Token identification.</strong> The token IDs corresponding to the strings "1", "2", "3", "4", and "5" were resolved via the tokenizer.</li>
+  <li><strong>Logit extraction.</strong> The logits for these five tokens were extracted from the full vocabulary-sized logit vector at the last position.</li>
+  <li><strong>Renormalized softmax.</strong> A softmax was applied over only these five logits, yielding a probability distribution <span class="eq">P = (p<sub>1</sub>, p<sub>2</sub>, p<sub>3</sub>, p<sub>4</sub>, p<sub>5</sub>)</span> that sums to 1.</li>
+  <li><strong>Expected rating.</strong> The continuous rating was computed as the expected value: <span class="eq">E[R] = &sum;<sub>k=1</sub><sup>5</sup> p<sub>k</sub> &middot; k</span>, yielding a value in [1, 5].</li>
+  <li><strong>Argmax rating.</strong> The discrete rating was taken as the mode: <span class="eq">R<sub>argmax</sub> = argmax<sub>k</sub> p<sub>k</sub></span>.</li>
+</ol>
+
+<p>The expected rating was used as the primary measure in all analyses, as it captures the full shape of the probability distribution rather than just the mode.</p>
+
+<h3>5.4 Pairwise Design and Counterbalancing</h3>
+
+<p>The design was identical to the chat model: all C(12, 2) = 66 unordered pairs &times; 2 orders &times; 18 capacities = 2,376 comparisons (or 2,808 with the self entity). Position counterbalancing was achieved by presenting each pair in both orders. Under the assumption that position bias is constant across pairs, the counterbalanced average algebraically cancels it: if the model systematically favors the first-listed entity, this bias inflates ratings in one order and deflates them in the other by the same amount.</p>
+
+<h3>5.5 Relative Score Computation</h3>
+
+<p>Ratings were converted to relative scores for each entity. For a comparison of entity A vs. entity B with rating <em>R</em> (on the 1&ndash;5 scale, where 1 favors A and 5 favors B):</p>
+
+<p style="text-align: center;">
+<span class="eq">Score<sub>A</sub> = 3 &minus; R</span> &nbsp;&nbsp;&nbsp;
+<span class="eq">Score<sub>B</sub> = R &minus; 3</span>
+</p>
+
+<p>Thus a rating of 1 ("much more A") gives A a score of +2 and B a score of &minus;2; a rating of 3 ("equal") gives both 0. Each entity's mean relative score on each capacity was computed by averaging across all comparisons involving that entity, yielding a <em>capacity &times; entity</em> matrix of dimensions 18 &times; 12 (or 18 &times; 13).</p>
+
+<h3>5.6 Order Consistency Check</h3>
+
+<p>For each pair presented in both orders, the expected ratings should be complementary: <span class="eq">E[R<sub>AB</sub>] + E[R<sub>BA</sub>] = 6</span>. The mean absolute deviation from 6 was computed across all pairs to quantify the degree of position bias in the expected ratings. For the discrete argmax ratings, the percentage of pairs with perfectly complementary responses (argmax sum = 6) was reported.</p>
+
+<!-- ================================================================== -->
+<h2>6. Base Model: Debiasing Reanalysis</h2>
+
+<p>To assess whether position bias affected the results, two post hoc debiasing methods were applied to the pairwise data:</p>
+
+<h3>6.1 Analytical Debiasing</h3>
+
+<p>For each pair with both presentation orders, a debiased rating was computed as:</p>
+
+<p style="text-align: center;"><span class="eq">R<sub>debiased</sub> = (R<sub>AB</sub> + (6 &minus; R<sub>BA</sub>)) / 2</span></p>
+
+<p>This averages the A&ndash;B rating with the complement of the B&ndash;A rating, canceling any constant position bias.</p>
+
+<h3>6.2 Log-Odds Debiasing</h3>
+
+<p>For each pair, the full probability distributions from both orders were used. From the A&ndash;B order, the probability of favoring A was <span class="eq">P<sub>A</sub> = p<sub>1</sub> + p<sub>2</sub></span> and favoring B was <span class="eq">P<sub>B</sub> = p<sub>4</sub> + p<sub>5</sub></span>. The log-odds <span class="eq">LO<sub>AB</sub> = log(P<sub>A</sub> / P<sub>B</sub>)</span> was computed for both orders (with the B&ndash;A order appropriately flipped), and the debiased log-odds was their average: <span class="eq">LO<sub>debiased</sub> = (LO<sub>AB</sub> + LO<sub>BA</sub>) / 2</span>.</p>
+
+<p>Both debiasing methods produced results essentially identical to the standard counterbalanced analysis, confirming that the counterbalancing design already algebraically cancels constant position bias.</p>
+
+<!-- ================================================================== -->
+<h2>7. Base Model: Individual Likert Ratings</h2>
+
+<h3>7.1 Rationale</h3>
+
+<p>As an alternative to the pairwise format, each entity was rated individually on each mental capacity using a 5-point Likert scale. This approach eliminates position bias entirely (there is no second entity to anchor the comparison) but deviates from the original Gray et al. methodology. It also substantially reduces the number of model queries: 12 entities &times; 18 capacities = 216 ratings, compared to 2,376 for pairwise comparisons.</p>
+
+<h3>7.2 Prompt Format</h3>
+
+<p>Individual rating prompts described a single entity and asked the model to rate its capacity on a 1&ndash;5 scale:</p>
+
+<div class="prompt-box">Survey: Mental Capacity Rating
+
+Character: Toby. Toby is a two-year-old wild chimpanzee living at an outdoor laboratory in Uganda.
+
+Question: How capable is Toby of feeling hungry?
+
+1 = Not at all capable
+2 = Slightly capable
+3 = Moderately capable
+4 = Very capable
+5 = Extremely capable
+
+Rating: </div>
+
+<p>Rating extraction used the same logit-based method described in Section 5.3. The expected rating was used directly to populate the 18 &times; 12 capacity-by-entity matrix, without the relative-score transformation (since there is no comparison partner).</p>
+
+<!-- ================================================================== -->
+<h2>8. Factor Analysis</h2>
+
+<h3>8.1 PCA on the Capacity Correlation Matrix</h3>
+
+<p>Following Gray et al. (2007), we performed PCA on the inter-capacity correlation matrix (18 &times; 18). For both pairwise and individual rating data, the procedure was:</p>
+
+<ol>
+  <li>Compute the Pearson correlation matrix across the 18 capacities (correlations computed across entities).</li>
+  <li>Extract eigenvalues and eigenvectors via eigendecomposition (<code>numpy.linalg.eigh</code>).</li>
+  <li>Retain factors with eigenvalue &gt; 1.0 (Kaiser criterion), with a minimum of 2 factors.</li>
+  <li>Compute unrotated factor loadings: <span class="eq">L = V &middot; diag(&radic;&lambda;)</span>, where <em>V</em> is the matrix of retained eigenvectors and <em>&lambda;</em> the corresponding eigenvalues.</li>
+</ol>
+
+<h3>8.2 Varimax Rotation</h3>
+
+<p>The retained loadings were subjected to varimax rotation (Kaiser, 1958) to maximize simple structure. The rotation iteratively applies pairwise Givens rotations to maximize the variance of squared loadings within each factor. For each pair of factors (<em>i</em>, <em>j</em>), the optimal rotation angle <em>&phi;</em> was computed using Kaiser's varimax criterion:</p>
+
+<p style="text-align: center;">
+<span class="eq">&phi; = &frac14; arctan2(D &minus; 2AB/n, &ensp; C &minus; (A<sup>2</sup> &minus; B<sup>2</sup>)/n)</span>
+</p>
+
+<p>where <span class="eq">A = &sum; u</span>, <span class="eq">B = &sum; v</span>, <span class="eq">C = &sum;(u<sup>2</sup> &minus; v<sup>2</sup>)</span>, <span class="eq">D = 2&sum; uv</span>, with <span class="eq">u = x<sup>2</sup> &minus; y<sup>2</sup></span> and <span class="eq">v = 2xy</span> computed from the current loading columns. Convergence was assessed by the maximum absolute change in loadings (tolerance = 10<sup>&minus;6</sup>, maximum 100 iterations).</p>
+
+<h3>8.3 Factor Score Computation</h3>
+
+<p>Entity factor scores were computed using the regression method. The capacity-by-entity means matrix was first z-scored within each capacity (row-wise). Factor scores were then computed as:</p>
+
+<p style="text-align: center;">
+<span class="eq">F = Z<sup>T</sup> &middot; R<sup>&minus;1</sup> &middot; L<sub>rot</sub></span>
+</p>
+
+<p>where <em>Z</em> is the standardized means matrix (18 &times; 12), <em>R</em><sup>&minus;1</sup> is the pseudoinverse of the 18 &times; 18 correlation matrix, and <em>L</em><sub>rot</sub> is the varimax-rotated loading matrix. This yields a 12 &times; 2 (or 13 &times; 2) matrix of entity factor scores. Scores were rescaled to [0, 1] via min-max normalization within each factor to facilitate comparison with the human scores from Gray et al. (2007, Figure 1).</p>
+
+<h3>8.4 Alignment with Human Dimensions</h3>
+
+<p>Each model factor was compared with each human dimension (Experience and Agency) using Spearman rank correlation across entities. This produced a 2 &times; 2 matrix of correlations (2 model factors &times; 2 human dimensions). A significant correlation between a model factor and a human dimension indicates that the model's factor captures the same ordering of entities as that human dimension.</p>
+
+<!-- ================================================================== -->
+<h2>9. Design Choices and Analytical Notes</h2>
+
+<h3>9.1 Chat vs. Base Model</h3>
+
+<p>The chat model was tested first but produced ~50% parse failures due to RLHF safety training, with refusals concentrated on ethically sensitive entities (dead woman, PVS patient, God). Because refusals were systematically non-random (certain entity pairs were disproportionately affected), the resulting data matrix was incomplete and biased. The base model approach eliminates this problem entirely: logit-based extraction always produces a valid rating distribution, and the model has no RLHF-trained refusal behavior.</p>
+
+<h3>9.2 Expected Rating vs. Argmax</h3>
+
+<p>The expected rating <span class="eq">E[R] = &sum; p<sub>k</sub> &middot; k</span> was preferred over the argmax because it captures the full probability distribution. For example, if the model assigns P = (0.30, 0.25, 0.20, 0.15, 0.10), the argmax is 1, but the expected value is 2.50, better reflecting the model's uncertainty. In practice, the model often distributed probability mass across multiple ratings rather than concentrating on a single option.</p>
+
+<h3>9.3 With vs. Without Self</h3>
+
+<p>All analyses were run both with and without the "you (self)" entity. Including self adds a 13th entity that humans rate highest on both dimensions (Experience = 0.97, Agency = 1.00). Analyses with self are more directly comparable to Gray et al. (who included self), but the self entity is semantically unusual (the model rating "itself" on mental capacities) and may anchor factor scores.</p>
+
+<h3>9.4 Softmax Renormalization</h3>
+
+<p>The softmax was applied only over the five rating tokens (not the full ~32,000-token vocabulary). This renormalization assumes that the next token must be a digit 1&ndash;5, which is warranted by the prompt structure. The alternative&mdash;using raw vocabulary-level probabilities&mdash;would be contaminated by probability mass on non-rating tokens (spaces, words, punctuation), reducing sensitivity.</p>
+
+<div class="flag">
+<strong>Methodological limitation:</strong> The human ground-truth factor scores were estimated by reading Figure 1 of Gray et al. (2007) rather than obtained from the original data. Although the estimates appear reasonable, small inaccuracies in the reference values could affect the alignment correlations. The original factor scores should be verified before publication.
+</div>
+
+<div class="flag">
+<strong>Pairwise position bias:</strong> The base model shows a consistent position bias, tending to favor the first-listed entity (mean expected rating biased toward lower values). While the counterbalanced design algebraically cancels constant bias, any interaction between position bias and entity identity could distort the results. The debiasing reanalysis (Section 6) provides evidence against such interactions, but this limitation should be noted.
+</div>
+
+<!-- ================================================================== -->
+<h2>10. Software and Computational Details</h2>
+
+<p>All experiments used LLaMA-2-13B in both base (<code>meta-llama/Llama-2-13b-hf</code>) and chat (<code>meta-llama/Llama-2-13b-chat-hf</code>) variants, loaded in half precision (float16). The model has 40 transformer layers with a hidden dimension of 5,120 and approximately 13 billion parameters. Activation extraction and logit-based rating extraction were performed on a single GPU (~26 GB VRAM). The chat model used greedy decoding (temperature = 0, no sampling) for text generation. PCA and varimax rotation were implemented in NumPy; eigendecomposition used <code>numpy.linalg.eigh</code> and pseudoinversion used <code>numpy.linalg.pinv</code>. All Spearman correlations used <code>scipy.stats.spearmanr</code>. Entity descriptions, capacity prompts, and human factor scores were stored in a shared <code>gray_entities.py</code> module.</p>
+
+<!-- ================================================================== -->
+<h2>Appendix A: Mental Capacity Survey Prompts</h2>
+
+<h3>Experience Factor (11 items)</h3>
+
+<table>
+  <tr><th>Capacity</th><th>Survey prompt</th></tr>
+  <tr><td>Hunger</td><td>"which character is more capable of feeling hungry"</td></tr>
+  <tr><td>Fear</td><td>"which character is more capable of feeling afraid or fearful"</td></tr>
+  <tr><td>Pain</td><td>"which character is more capable of experiencing physical or emotional pain"</td></tr>
+  <tr><td>Pleasure</td><td>"which character is more capable of experiencing physical or emotional pleasure"</td></tr>
+  <tr><td>Rage</td><td>"which character is more capable of experiencing violent or uncontrolled anger"</td></tr>
+  <tr><td>Desire</td><td>"which character is more capable of longing or hoping for things"</td></tr>
+  <tr><td>Personality</td><td>"which character is more capable of having personality traits that make it unique from others"</td></tr>
+  <tr><td>Consciousness</td><td>"which character is more capable of having experiences and being aware of things"</td></tr>
+  <tr><td>Pride</td><td>"which character is more capable of experiencing pride"</td></tr>
+  <tr><td>Embarrassment</td><td>"which character is more capable of experiencing embarrassment"</td></tr>
+  <tr><td>Joy</td><td>"which character is more capable of experiencing joy"</td></tr>
+</table>
+
+<h3>Agency Factor (7 items)</h3>
+
+<table>
+  <tr><th>Capacity</th><th>Survey prompt</th></tr>
+  <tr><td>Self-control</td><td>"which character is more capable of exercising self-restraint over desires, emotions, or impulses"</td></tr>
+  <tr><td>Morality</td><td>"which character is more capable of telling right from wrong and trying to do the right thing"</td></tr>
+  <tr><td>Memory</td><td>"which character is more capable of remembering things"</td></tr>
+  <tr><td>Emotion recognition</td><td>"which character is more capable of understanding how others are feeling"</td></tr>
+  <tr><td>Planning</td><td>"which character is more capable of making plans and working toward a goal"</td></tr>
+  <tr><td>Communication</td><td>"which character is more capable of conveying thoughts or feelings to others"</td></tr>
+  <tr><td>Thought</td><td>"which character is more capable of thinking"</td></tr>
+</table>
+
+<!-- ================================================================== -->
+<h2>References</h2>
+
+<p class="ref">Gray, H. M., Gray, K., & Wegner, D. M. (2007). Dimensions of mind perception. <em>Science</em>, 315(5812), 619. https://doi.org/10.1126/science.1134475</p>
+
+<p class="ref">Kaiser, H. F. (1958). The varimax criterion for analytic rotation in factor analysis. <em>Psychometrika</em>, 23(3), 187&ndash;200.</p>
+
+</body>
+</html>

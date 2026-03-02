@@ -5,8 +5,8 @@
 #SBATCH --mem=64G
 #SBATCH --time=1:00:00
 #SBATCH --cpus-per-task=4
-#SBATCH --output=/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_4/llama_exp_4-13B-chat/logs/1_extract_entities_%j.out
-#SBATCH --error=/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_4/llama_exp_4-13B-chat/logs/1_extract_entities_%j.err
+#SBATCH --output=/mnt/cup/labs/graziano/rachel/mind_rep/exp_4/llama_exp_4-13B-chat/logs/1_extract_entities_%j.out
+#SBATCH --error=/mnt/cup/labs/graziano/rachel/mind_rep/exp_4/llama_exp_4-13B-chat/logs/1_extract_entities_%j.err
 
 # Experiment 4, Phase 1: Extract entity representations
 # Runs both conditions (without_self and with_self) in one job.
@@ -23,7 +23,7 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/mnt/cup/labs/graziano/rachel/ai_mind_rep/exp_4/llama_exp_4-13B-chat"
+PROJECT_ROOT="/mnt/cup/labs/graziano/rachel/mind_rep/exp_4/llama_exp_4-13B-chat"
 mkdir -p "$PROJECT_ROOT/logs"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 
