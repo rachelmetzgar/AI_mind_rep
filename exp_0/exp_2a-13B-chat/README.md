@@ -23,7 +23,7 @@ Status:
 --------------------------------------------------------------------------------
 
 Repository root:
-    ai_mind_rep/exp_2a
+    mind_rep/exp_2a
 
 Key scripts:
     1_generate_human_ai_dataset.py

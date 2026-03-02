@@ -5,8 +5,8 @@
 #SBATCH --mem=64G
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_2a-7B-base/logs/train_probes_%A.out
-#SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_2a-7B-base/logs/train_probes_%A.err
+#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2a-7B-base/logs/train_probes_%A.out
+#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2a-7B-base/logs/train_probes_%A.err
 
 # -------------------------------------------------------------
 # TRAIN PROBES — Human vs AI
@@ -27,7 +27,7 @@ set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 # === Project paths ===
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_2a-7B-base"
+PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2a-7B-base"
 PY_SCRIPT="$PROJECT_ROOT/2_train_and_read_controlling_probes.py"
 LOG_DIR="$PROJECT_ROOT/logs"
 

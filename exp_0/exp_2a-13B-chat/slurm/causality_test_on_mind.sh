@@ -4,8 +4,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=64G
 #SBATCH --time=12:00:00
-#SBATCH --output=/jukebox/graziano/rachel/ai_mind_rep/exp_2a-13B-chat/logs/causality_%A.out
-#SBATCH --error=/jukebox/graziano/rachel/ai_mind_rep/exp_2a-13B-chat/logs/causality_%A.err
+#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2a-13B-chat/logs/causality_%A.out
+#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2a-13B-chat/logs/causality_%A.err
 
 # Prevent conda / module PS1 bug under -u
 export PS1=${PS1:-}
@@ -22,7 +22,7 @@ set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 # === Project paths ===
-PROJECT_ROOT="/jukebox/graziano/rachel/ai_mind_rep/exp_2a-13B-chat"
+PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2a-13B-chat"
 PY_SCRIPT="$PROJECT_ROOT/3_causality_test_on_mind.py"
 LOG_DIR="$PROJECT_ROOT/logs"
 
