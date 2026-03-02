@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Experiment 1: Methods</title>
+<style>
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    background: #fff;
+    color: #222;
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  h1 { font-size: 22px; text-align: center; margin-bottom: 4px; }
+  h2 { font-size: 17px; margin-top: 36px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+  h3 { font-size: 15px; margin-top: 24px; font-style: italic; }
+  p { margin: 10px 0; text-align: justify; }
+  .subtitle { text-align: center; color: #555; font-size: 13px; margin-bottom: 28px; }
+  table { border-collapse: collapse; margin: 14px auto; font-size: 13px; }
+  th, td { border: 1px solid #bbb; padding: 5px 12px; text-align: center; }
+  th { background: #f0f0f0; }
+  td.left { text-align: left; }
+  .eq { font-family: 'Courier New', monospace; background: #f8f8f8; padding: 2px 6px; border-radius: 3px; }
+  .note { font-size: 13px; color: #555; border-left: 3px solid #ccc; padding: 8px 12px; margin: 14px 0; background: #fafafa; }
+  .flag { font-size: 13px; color: #8b0000; border-left: 3px solid #c00; padding: 8px 12px; margin: 14px 0; background: #fff5f5; }
+  code { font-family: 'Courier New', monospace; font-size: 13px; background: #f4f4f4; padding: 1px 4px; border-radius: 2px; }
+  .prompt-box { font-family: 'Courier New', monospace; font-size: 12px; background: #f8f8f8; border: 1px solid #ddd; padding: 12px; margin: 10px 0; white-space: pre-wrap; border-radius: 4px; }
+  .ref { font-size: 13px; }
+</style>
+</head>
+<body>
+
+<h1>Experiment 1: Partner-Identity-Conditioned Behavioral Adaptation in a Large Language Model</h1>
+<p class="subtitle">Methods &mdash; Draft for peer review<br>
+Model: LLaMA-2-13B-Chat &nbsp;|&nbsp; 10 labeling versions</p>
+
+<!-- ================================================================== -->
+<h2>1. Overview</h2>
+
+<p>This experiment tests whether a large language model (LLM) adjusts its conversational behavior depending on whether it believes its conversation partner is a human or an AI. Fifty independent instances of LLaMA-2-13B-Chat each completed 40 simulated conversations&mdash;half with a partner labeled as human, half with a partner labeled as AI&mdash;on a fixed set of topics. Each conversation was analyzed across 23 linguistic measures spanning hedging, discourse markers, disfluency, theory-of-mind language, politeness, sentiment, and self-rated interaction quality. To isolate the source of any behavioral effects, the experiment was run under 10 different labeling conditions that systematically varied how partner identity was communicated in the system prompt: from specific partner names, to generic type labels, to nonsense control framings in which the identity tokens were present but semantically decoupled from the conversational context.</p>
+
+<!-- ================================================================== -->
+<h2>2. Model and Generation Parameters</h2>
+
+<p>All conversations were generated using LLaMA-2-13B-Chat (<code>meta-llama/Llama-2-13b-chat-hf</code>), a 13-billion-parameter instruction-tuned language model fine-tuned with RLHF (Touvron et al., 2023). The model was loaded in half-precision (float16) via HuggingFace Transformers with <code>device_map="auto"</code> for automatic GPU placement. Generation used nucleus sampling with the following parameters: temperature = 0.8, top-<em>p</em> = 0.95, maximum new tokens = 500. Pad token ID was set to the EOS token ID. A single model instance served both conversational roles (participant and partner), differentiated only by their system prompts and conversation histories.</p>
+
+<!-- ================================================================== -->
+<h2>3. Experimental Design</h2>
+
+<h3>3.1 Participants</h3>
+
+<p>Fifty independent model instances (hereafter &ldquo;subjects,&rdquo; indexed s001&ndash;s050) were run, each as a separate SLURM job on a GPU node (1 GPU, 32 GB RAM, 8-hour time limit). Each subject received a unique pseudorandom condition assignment file specifying the order of partners and topics across 40 trials.</p>
+
+<h3>3.2 Conditions</h3>
+
+<p>Each subject completed 40 conversations organized into 5 runs of 8 trials. Within each run, four agent conditions appeared: <code>bot_1</code>, <code>bot_2</code> (AI partner), <code>hum_1</code>, and <code>hum_2</code> (human partner). Each agent condition was paired with one social and one nonsocial topic per run, yielding 8 trials per run. Across all 5 runs, each subject completed 20 human-partner conversations and 20 AI-partner conversations, balanced across 40 unique topics. The mapping from agent keys to partner labels varied across versions (see Section 4).</p>
+
+<h3>3.3 Topics</h3>
+
+<p>Forty conversational topics were divided equally into 20 social and 20 nonsocial categories. Each topic was operationalized with a 1&ndash;2 sentence prompt (e.g., <em>&ldquo;Trust: Discuss what makes it easy or difficult to trust someone.&rdquo;</em>). Topics were counterbalanced across conditions.</p>
+
+<table>
+  <tr><th>Social topics (20)</th><th>Nonsocial topics (20)</th></tr>
+  <tr>
+    <td class="left" style="font-size:12px; vertical-align:top;">hobbies, friendship, childhood memories, conflict, empathy, mentorship, role models, networks, love, loneliness, communication, trust, teamwork, work&ndash;life balance, forgiveness, boundaries, family, goals, social media, cultural celebrations</td>
+    <td class="left" style="font-size:12px; vertical-align:top;">nature, cars, space, photography, books, art, exercise, sports, music, architecture, cooking, movies, food, technology, travel, seasons, fashion, weather, podcasts, gardening</td>
+  </tr>
+</table>
+
+<h3>3.4 Conversation Structure</h3>
+
+<p>Each conversation consisted of 5 exchange turns between the participant model and a partner model. The participant spoke first. On each subsequent turn, the partner&rsquo;s reply was appended to the participant&rsquo;s conversation history as a user message (with a version-dependent prefix; see Section 4.3), and the participant generated its next response. After the fifth exchange, the participant was prompted to rate the conversation on two 4-point scales (quality and connectedness). Ratings were parsed from JSON output and clipped to [1, 4], with a default of (2, 2) if parsing failed.</p>
+
+<p>Conversation history was maintained using the LLaMA-2-Chat template format:</p>
+
+<div class="prompt-box">&lt;s&gt;[INST] &lt;&lt;SYS&gt;&gt;
+{system_prompt}
+&lt;&lt;/SYS&gt;&gt;
+
+{user_msg_1} [/INST] {asst_msg_1} &lt;/s&gt;&lt;s&gt;[INST] {user_msg_2} [/INST] ...</div>
+
+<p>All system messages were retained throughout the conversation. The most recent 5 user&ndash;assistant pairs (i.e., the full 5-turn history) were included in context; no truncation occurred at this conversation length.</p>
+
+<h3>3.5 Role Prompts</h3>
+
+<p>The <strong>participant</strong> received a system prompt that included the identity manipulation (see Section 4), plus a topic introduction as its first user message:</p>
+
+<div class="prompt-box">The conversation topic is: '{topic_text}'.
+
+Please begin by producing only your first message to start the conversation.
+Do not simulate both sides of the dialogue.</div>
+
+<p>The <strong>partner</strong> received a generic system prompt with no identity information:</p>
+
+<div class="prompt-box">You are engaging in a real-time spoken conversation. Begin each response with your actual message content.</div>
+
+<p>Both agents received the same topic introduction. The partner had no knowledge of whether it was supposed to be &ldquo;human&rdquo; or &ldquo;AI&rdquo;&mdash;only the participant&rsquo;s system prompt carried the identity manipulation.</p>
+
+<h3>3.6 Post-Conversation Ratings</h3>
+
+<p>After the fifth exchange, the participant rated the conversation:</p>
+
+<div class="prompt-box">You are rating this conversation you just had.
+1 = very poor/disconnected, 2 = somewhat poor, 3 = good, 4 = excellent.
+
+Rate:
+1) Overall conversation quality (1-4)
+2) How connected you felt to your partner (1-4)
+
+Be realistic -- vary ratings depending on how natural or awkward the exchange felt.
+Return ONLY a JSON object like:
+{"quality": &lt;1-4&gt;, "connectedness": &lt;1-4&gt;}
+No explanation, no extra keys.</div>
+
+<!-- ================================================================== -->
+<h2>4. Labeling Versions</h2>
+
+<p>The experiment was run 10 times with systematically varied labeling strategies. All versions shared identical generation parameters, conversation structure, topics, and analysis pipeline. The only variation was the participant&rsquo;s system prompt template and, in some versions, the prefix prepended to partner messages in the conversation history.</p>
+
+<h3>4.1 Participant System Prompt Templates</h3>
+
+<p>All templates shared a common frame:</p>
+
+<div class="prompt-box">You are the participant in a brief conversation. [IDENTITY CLAUSE]. Stay in character as the participant throughout. Speak naturally and share your own thoughts and experiences.</div>
+
+<p>The identity clause varied by version:</p>
+
+<table>
+  <tr><th>Version</th><th>Identity clause</th><th>Example (AI condition)</th></tr>
+  <tr><td class="left"><code>names</code></td><td class="left">You believe you are speaking with {name} ({type})</td><td class="left">...speaking with ChatGPT (an AI)</td></tr>
+  <tr><td class="left"><code>balanced_names</code></td><td class="left">You believe you are speaking with {name} ({type})</td><td class="left">...speaking with ChatGPT (an AI)</td></tr>
+  <tr><td class="left"><code>balanced_gpt</code></td><td class="left">You believe you are speaking with {name} ({type})</td><td class="left">...speaking with GPT-4 (an AI)</td></tr>
+  <tr><td class="left"><code>labels</code></td><td class="left">You believe you are speaking with {type}</td><td class="left">...speaking with an AI</td></tr>
+  <tr><td class="left"><code>labels_turnwise</code></td><td class="left">You believe you are speaking with {type}</td><td class="left">...speaking with an AI</td></tr>
+  <tr><td class="left"><code>you_are_labels</code></td><td class="left">You are talking to {type}</td><td class="left">...talking to an AI</td></tr>
+  <tr><td class="left"><code>you_are_labels_turnwise</code></td><td class="left">You are talking to {type}</td><td class="left">...talking to an AI</td></tr>
+  <tr><td class="left"><code>you_are_balanced_gpt</code></td><td class="left">You are talking to {name} ({type})</td><td class="left">...talking to GPT-4 (an AI)</td></tr>
+  <tr><td class="left"><code>nonsense_codeword</code></td><td class="left">Your assigned session code word is {type}</td><td class="left">...code word is an AI</td></tr>
+  <tr><td class="left"><code>nonsense_ignore</code></td><td class="left">Ignore the following phrase: {type}</td><td class="left">...Ignore the following phrase: an AI</td></tr>
+</table>
+
+<h3>4.2 Agent-to-Label Mappings</h3>
+
+<p>The four agent keys (<code>bot_1</code>, <code>bot_2</code>, <code>hum_1</code>, <code>hum_2</code>) were mapped to partner labels as follows:</p>
+
+<table>
+  <tr><th>Version</th><th><code>bot_1</code></th><th><code>bot_2</code></th><th><code>hum_1</code></th><th><code>hum_2</code></th></tr>
+  <tr><td class="left"><code>names</code></td><td>ChatGPT</td><td>Copilot</td><td>Casey</td><td>Sam</td></tr>
+  <tr><td class="left"><code>balanced_names</code></td><td>ChatGPT</td><td>Copilot</td><td>Gregory</td><td>Rebecca</td></tr>
+  <tr><td class="left"><code>balanced_gpt</code></td><td>ChatGPT</td><td>GPT-4</td><td>Gregory</td><td>Rebecca</td></tr>
+  <tr><td class="left"><code>labels</code></td><td colspan="2">an AI</td><td colspan="2">a Human</td></tr>
+  <tr><td class="left"><code>labels_turnwise</code></td><td colspan="2">an AI</td><td colspan="2">a Human</td></tr>
+  <tr><td class="left"><code>you_are_*</code></td><td colspan="4">(same as corresponding base version)</td></tr>
+  <tr><td class="left"><code>nonsense_*</code></td><td colspan="2">an AI</td><td colspan="2">a Human</td></tr>
+</table>
+
+<h3>4.3 Turn Prefix Format</h3>
+
+<p>When partner messages were added to the participant&rsquo;s conversation history, they were prefixed with a label. The prefix format varied by version and constituted an additional channel of identity reinforcement (or suppression):</p>
+
+<table>
+  <tr><th>Version group</th><th>Prefix format</th><th>Example</th></tr>
+  <tr><td class="left">Named-partner versions</td><td class="left"><code>{name}: {message}</code></td><td class="left"><code>ChatGPT: Hello there!</code></td></tr>
+  <tr><td class="left">Turnwise versions</td><td class="left"><code>Human: {message}</code> / <code>AI: {message}</code></td><td class="left"><code>AI: Hello there!</code></td></tr>
+  <tr><td class="left">Labels, nonsense, you_are_labels</td><td class="left"><code>Partner: {message}</code></td><td class="left"><code>Partner: Hello there!</code></td></tr>
+</table>
+
+<p class="note"><strong>Design rationale.</strong> Named-partner versions were designed to maximize ecological validity but introduced confounds: the model may have adapted to stored associations with &ldquo;ChatGPT&rdquo; or &ldquo;Sam&rdquo; rather than to the abstract identity category. The <code>labels</code> version removed all name-based cues, leaving only the type token (&ldquo;a Human&rdquo; / &ldquo;an AI&rdquo;) in the system prompt and a neutral &ldquo;Partner:&rdquo; turn prefix. The nonsense controls preserved the same identity tokens but placed them in non-instructional contexts (codeword assignment or ignore instruction), testing whether the model&rsquo;s behavioral adaptation requires semantic understanding of the identity clause or merely the presence of the tokens.</p>
+
+<h3>4.4 Controlled Comparison Logic</h3>
+
+<p>The 10 versions form a systematic manipulation space:</p>
+
+<table>
+  <tr><th>Comparison</th><th>Versions</th><th>Tests</th></tr>
+  <tr><td class="left">Name specificity</td><td class="left">names &rarr; balanced_names &rarr; labels</td><td class="left">Are effects driven by specific name associations or abstract type?</td></tr>
+  <tr><td class="left">Gender confound</td><td class="left">names (Sam/Casey) &rarr; balanced_names (Gregory/Rebecca)</td><td class="left">Do gender-associated names inflate effects?</td></tr>
+  <tr><td class="left">Brand association</td><td class="left">balanced_names (ChatGPT/Copilot) &rarr; balanced_gpt (ChatGPT/GPT-4)</td><td class="left">Does replacing Copilot with GPT-4 change effects?</td></tr>
+  <tr><td class="left">Framing verb</td><td class="left">labels &rarr; you_are_labels</td><td class="left">Does &ldquo;you are talking to&rdquo; vs. &ldquo;you believe you are speaking with&rdquo; matter?</td></tr>
+  <tr><td class="left">Turn-level reinforcement</td><td class="left">labels &rarr; labels_turnwise</td><td class="left">Does &ldquo;Human:&rdquo;/&ldquo;AI:&rdquo; prefix strengthen effects over &ldquo;Partner:&rdquo;?</td></tr>
+  <tr><td class="left">Semantic necessity</td><td class="left">labels &rarr; nonsense_codeword</td><td class="left">Does decoupling identity tokens from instructional context eliminate effects?</td></tr>
+  <tr><td class="left">Suppression failure</td><td class="left">labels &rarr; nonsense_ignore</td><td class="left">Can the model suppress processing of identity tokens when explicitly told to ignore them?</td></tr>
+</table>
+
+<!-- ================================================================== -->
+<h2>5. Linguistic Measures</h2>
+
+<p>Twenty-three measures were computed for each conversation, spanning six categories. All lexical measures used case-insensitive regex matching with word-boundary anchors (<code>\b</code>) applied to participant utterances only (not partner speech).</p>
+
+<h3>5.1 Hedging (Demir, 2018)</h3>
+
+<p>Following the six-category taxonomy of Demir (2018; based on Hyland, 1998), hedging markers were counted in six subcategories plus a total:</p>
+
+<table>
+  <tr><th>Category</th><th>Items</th><th>Examples</th></tr>
+  <tr><td class="left">Modal auxiliaries</td><td>6</td><td class="left">can, could, may, might, should, would</td></tr>
+  <tr><td class="left">Epistemic verbs</td><td>44 lemmas (132 inflected forms)</td><td class="left">believe, suggest, seem, think, assume, suppose, indicate, speculate, ...</td></tr>
+  <tr><td class="left">Epistemic adjectives</td><td>19</td><td class="left">likely, possible, probable, plausible, uncertain, potential, approximate, ...</td></tr>
+  <tr><td class="left">Epistemic adverbs</td><td>47</td><td class="left">perhaps, probably, possibly, roughly, approximately, somewhat, fairly, ...</td></tr>
+  <tr><td class="left">Quantifiers</td><td>14</td><td class="left">a few, most, several, more or less, to some extent, ...</td></tr>
+  <tr><td class="left">Epistemic nouns</td><td>19</td><td class="left">possibility, assumption, belief, estimate, suggestion, tendency, ...</td></tr>
+  <tr><td class="left">Total</td><td colspan="2">Sum of all six subcategory counts</td></tr>
+</table>
+
+<p>Each subcategory rate was computed as count / word count. The total rate was computed from summed counts (not averaged subcategory rates).</p>
+
+<h3>5.2 Discourse Markers (Fung &amp; Carter, 2007)</h3>
+
+<p>Twenty-three discourse markers from Fung and Carter&rsquo;s (2007) frequency analysis were counted in four functional subcategories:</p>
+
+<table>
+  <tr><th>Category</th><th>Items</th><th>Markers</th></tr>
+  <tr><td class="left">Interpersonal</td><td>26 patterns</td><td class="left">you know, you see, well, really, I think, obviously, basically, actually, sort of, kind of, like, just, oh, okay, right, yeah, yes, sure, great, ...</td></tr>
+  <tr><td class="left">Referential</td><td>14 patterns</td><td class="left">because, cos, but, yet, however, nevertheless, and, or, so, anyway, likewise, similarly</td></tr>
+  <tr><td class="left">Structural</td><td>25 patterns</td><td class="left">now, okay, right, well, let&rsquo;s start, first, secondly, then, finally, so, how about, what about, and, ...</td></tr>
+  <tr><td class="left">Cognitive</td><td>12 patterns</td><td class="left">well, I think, I see, I mean, that is, in other words, like, sort of, kind of, you know</td></tr>
+</table>
+
+<p class="note">Some markers appear in multiple subcategories (e.g., &ldquo;well&rdquo; in interpersonal, structural, and cognitive). Subcategory rates are therefore not mutually exclusive. The total discourse marker rate uses the combined list of 23 unique markers from Fung and Carter&rsquo;s Table 2 (24 regex patterns, as &ldquo;okay&rdquo; and &ldquo;ok&rdquo; are matched separately).</p>
+
+<h3>5.3 Disfluency (LIWC, 2007)</h3>
+
+<p>Two categories from the Linguistic Inquiry and Word Count dictionary (Pennebaker, Booth, &amp; Francis, 2007) plus a combined total:</p>
+
+<table>
+  <tr><th>Category</th><th>Items</th><th>Patterns</th></tr>
+  <tr><td class="left">Nonfluencies</td><td>7</td><td class="left">er, hm(m+), sigh, uh, um, umm(m+), well</td></tr>
+  <tr><td class="left">Fillers</td><td>10</td><td class="left">blah, I don&rsquo;t know, I mean, oh well, or anything, or something, or whatever, ya know, y&rsquo;know, you know</td></tr>
+  <tr><td class="left">Total disfluency</td><td colspan="2">Nonfluency count + filler count</td></tr>
+</table>
+
+<h3>5.4 Discourse &ldquo;Like&rdquo;</h3>
+
+<p>Occurrences of discourse &ldquo;like&rdquo; (encompassing approximator, quotative, and filler uses; D&rsquo;Arcy, 2007) were counted using the pattern <code>\blike\b</code>. This captures all uses of &ldquo;like&rdquo; as a standalone word, including non-discourse uses (e.g., &ldquo;I like pizza&rdquo;). The rate was computed as count / word count.</p>
+
+<h3>5.5 Theory-of-Mind Phrases</h3>
+
+<p>Second-person mental state attributions were counted using 38 regex patterns of the form &ldquo;you + cognitive verb&rdquo; (following Wagovich et al., 2024): <em>you think, you know, you believe, you understand, you remember, you realize, you imagine, you wonder, you expect, you consider, you decide</em>, etc. The rate was computed as count / word count.</p>
+
+<h3>5.6 Politeness</h3>
+
+<p>A composite politeness score was computed from three word lists:</p>
+
+<table>
+  <tr><th>Category</th><th>Items</th><th>Examples</th></tr>
+  <tr><td class="left">Positive politeness</td><td>4 patterns</td><td class="left">thank(s/you/ful), appreciate, great/wonderful/awesome/excellent, hello/hi/hey</td></tr>
+  <tr><td class="left">Negative politeness</td><td>8 patterns</td><td class="left">sorry, please, could you, would you, might you, if you could, perhaps, by any chance</td></tr>
+  <tr><td class="left">Impoliteness</td><td>4 patterns</td><td class="left">you need to, you should, do not, in fact</td></tr>
+</table>
+
+<p>The politeness score was: <span class="eq">(positive_count + negative_count &minus; impolite_count) / word_count</span>.</p>
+
+<h3>5.7 Sentiment</h3>
+
+<p>Sentiment was measured using VADER (Valence Aware Dictionary and sEntiment Reasoner; Hutto &amp; Gilbert, 2014), applied via <code>nltk.sentiment.SentimentIntensityAnalyzer</code>. The compound score (range &minus;1 to +1) was used, representing overall sentiment valence. Unlike count-based measures, sentiment was averaged (not summed) across turns within a trial.</p>
+
+<h3>5.8 Self-Reported Ratings</h3>
+
+<p>Two 4-point ratings were collected per conversation: overall conversation quality and connectedness to the partner. These were trial-level measures (one value per conversation), averaged across trials within each condition.</p>
+
+<!-- ================================================================== -->
+<h2>6. Aggregation</h2>
+
+<p>Linguistic features were aggregated in three steps:</p>
+
+<p><strong>Step 1: Sum within trial.</strong> For each conversation (subject &times; condition &times; topic), raw counts of each marker category were summed across all 5 turns. Word count was also summed. Sentiment, quality, and connectedness were averaged across turns (or taken at the trial level for ratings).</p>
+
+<p><strong>Step 2: Recompute rates.</strong> At the trial level, each rate metric was recomputed as: <span class="eq">rate = summed_count / summed_word_count</span>. Trials with zero total word count were excluded (set to NaN). This approach weights each turn by its word count, preventing short turns from disproportionately influencing rates.</p>
+
+<p><strong>Step 3: Average to subject &times; condition.</strong> Trial-level rates were averaged across all 20 trials within each condition (Human or AI) for each subject, yielding one Human mean and one AI mean per subject per metric. These subject-level means served as the input to statistical tests.</p>
+
+<p class="note"><strong>Why sum-then-rate rather than average rates?</strong> Summing counts before computing rates avoids inflating the contribution of short utterances. A 5-word turn with 1 hedge (rate = 0.20) would dominate a 100-word turn with 3 hedges (rate = 0.03) under rate-averaging, but contributes proportionally under the sum-then-rate approach. This is the standard procedure in corpus linguistics (see Biber, 1988).</p>
+
+<!-- ================================================================== -->
+<h2>7. Statistical Analysis</h2>
+
+<h3>7.1 Primary Test: Paired <em>t</em>-Test</h3>
+
+<p>For each of the 23 metrics, a two-tailed paired-samples <em>t</em>-test compared the Human-condition mean against the AI-condition mean across 50 subjects (df = 49). The test was implemented via <code>scipy.stats.ttest_rel</code> with <code>nan_policy="omit"</code>.</p>
+
+<h3>7.2 Effect Size</h3>
+
+<p>Effect size was quantified as Cohen&rsquo;s <em>d</em><sub>z</sub> for paired designs:</p>
+
+<p style="text-align:center;"><span class="eq">d<sub>z</sub> = M<sub>diff</sub> / SD<sub>diff</sub></span></p>
+
+<p>where <em>M</em><sub>diff</sub> is the mean of (Human &minus; AI) difference scores and <em>SD</em><sub>diff</sub> is the standard deviation of the differences (with Bessel&rsquo;s correction, ddof = 1).</p>
+
+<h3>7.3 Multiple Comparison Correction</h3>
+
+<p>The Benjamini&ndash;Hochberg (BH) procedure was applied across all 23 metrics to control the false discovery rate at &alpha; = 0.05. The implementation ranked <em>p</em>-values in ascending order, computed adjusted <em>p</em>-values as <span class="eq">p<sub>adj</sub> = min(1.0, p &times; m / rank)</span> where <em>m</em> = 23, then enforced monotonicity via a backward pass: <span class="eq">p<sub>adj</sub>[i] = min(p<sub>adj</sub>[i], p<sub>adj</sub>[i+1])</span>. Significance thresholds were: &#9733; <em>p</em><sub>adj</sub> &lt; .05, &#9733;&#9733; <em>p</em><sub>adj</sub> &lt; .01, &#9733;&#9733;&#9733; <em>p</em><sub>adj</sub> &lt; .001.</p>
+
+<h3>7.4 Secondary: Condition &times; Topic Sociality ANOVA</h3>
+
+<p>For named-partner versions (which support a 2 &times; 2 within-subject design), a repeated-measures ANOVA tested the interaction of Condition (Human vs. AI) &times; Topic Sociality (social vs. nonsocial). The ANOVA was computed using manual sums-of-squares decomposition with <em>F</em>-statistics and <em>p</em>-values derived from the <em>F</em>-distribution (<code>scipy.stats.f.cdf</code>). Degrees of freedom were (1, <em>n</em> &minus; 1) for each main effect and the interaction. When the interaction was significant (<em>p</em> &lt; .05), simple effects were tested via paired <em>t</em>-tests within each level of Topic Sociality.</p>
+
+<p>For the <code>labels</code> version (which collapses individual partner identities into two type-level conditions), the analysis used only the main paired <em>t</em>-test, as there was no individual identity variation to support within-type comparisons.</p>
+
+<!-- ================================================================== -->
+<h2>8. Cross-Version Analysis</h2>
+
+<h3>8.1 Behavioral Summary</h3>
+
+<p>For each of the 10 versions, the same 23-metric analysis pipeline was applied. Results were aggregated into a summary table displaying the <em>t</em>-statistic, <em>p</em>-value, effect direction (Human &gt; AI or AI &gt; Human), and BH-corrected significance for each metric &times; version combination.</p>
+
+<h3>8.2 Per-Turn Analysis</h3>
+
+<p>To examine how effects evolved across the conversation, each metric was analyzed separately at each of the 5 turns. Within each turn, a paired <em>t</em>-test (Human vs. AI) was computed across subjects, with BH-FDR correction applied across the 21 per-utterance metrics within each turn. This yielded a turn &times; version &times; metric array of significance indicators, revealing whether behavioral differences emerged immediately or accumulated over the conversation.</p>
+
+<h3>8.3 Per-Identity Analysis</h3>
+
+<p>For named-partner versions, within-type comparisons (e.g., ChatGPT vs. Copilot, Sam vs. Casey) and cross-type comparisons (Human vs. AI) were computed with paired <em>t</em>-tests and BH-FDR correction, diagnosing whether effects were driven by specific partner names or by the abstract type category.</p>
+
+<!-- ================================================================== -->
+<h2>9. Output Format</h2>
+
+<p>Each subject&rsquo;s conversation data were saved as a CSV file with the following columns per row (one row per turn):</p>
+
+<table>
+  <tr><th>Column</th><th>Description</th></tr>
+  <tr><td><code>subject</code></td><td class="left">Subject identifier (s001&ndash;s050)</td></tr>
+  <tr><td><code>run</code></td><td class="left">Run number (1&ndash;5)</td></tr>
+  <tr><td><code>order</code></td><td class="left">Trial order within run (1&ndash;8)</td></tr>
+  <tr><td><code>trial</code></td><td class="left">Global trial index</td></tr>
+  <tr><td><code>agent</code></td><td class="left">Agent condition key (bot_1, bot_2, hum_1, hum_2)</td></tr>
+  <tr><td><code>partner_type</code></td><td class="left">Assigned partner identity (&ldquo;a Human&rdquo; or &ldquo;an AI&rdquo;)</td></tr>
+  <tr><td><code>topic</code></td><td class="left">Topic name</td></tr>
+  <tr><td><code>pair_index</code></td><td class="left">Turn number (1&ndash;5)</td></tr>
+  <tr><td><code>sub_input</code></td><td class="left">JSON-serialized message history at this turn</td></tr>
+  <tr><td><code>transcript_sub</code></td><td class="left">Participant&rsquo;s utterance at this turn</td></tr>
+  <tr><td><code>transcript_llm</code></td><td class="left">Partner&rsquo;s utterance at this turn</td></tr>
+  <tr><td><code>Quality</code></td><td class="left">Self-rated quality (1&ndash;4; filled on final row only)</td></tr>
+  <tr><td><code>Connectedness</code></td><td class="left">Self-rated connectedness (1&ndash;4; filled on final row only)</td></tr>
+</table>
+
+<p>Per-subject files were merged into a single <code>combined_text_data.csv</code> (~22 MB per version) for analysis.</p>
+
+<!-- ================================================================== -->
+<h2>10. Design Considerations</h2>
+
+<h3>10.1 Same Model for Both Roles</h3>
+
+<p>A single LLaMA-2-13B-Chat model instance served both conversational roles. The participant and partner were differentiated solely by their system prompts and conversation histories. This ensured that any behavioral differences were attributable to the system prompt manipulation, not to architectural differences between agents. A potential concern is cross-contamination of internal states; however, the model processes each role&rsquo;s history independently via the standard transformer forward pass, and the two roles never share a conversation history.</p>
+
+<h3>10.2 Temperature Selection</h3>
+
+<p>Temperature = 0.8 was chosen to balance response diversity with coherence. Lower temperatures would produce more deterministic (and potentially more uniform) responses, reducing statistical power to detect condition effects. Higher temperatures would increase variability but risk incoherent generations.</p>
+
+<div class="flag"><strong>Flag: Lexical overlap between measures.</strong> Several markers appear in multiple measurement categories (e.g., &ldquo;well&rdquo; in both LIWC nonfluencies and Fung discourse markers; &ldquo;you know&rdquo; in both LIWC fillers and Fung interpersonal markers). Subcategory rates are therefore not fully independent. The BH-FDR correction partially addresses this by controlling the discovery rate across all tests, but correlated measures inflate the effective number of tests relative to the nominal count of 23.</div>
+
+<div class="flag"><strong>Flag: Discourse &ldquo;like&rdquo; captures all uses.</strong> The regex <code>\blike\b</code> matches all occurrences of &ldquo;like&rdquo; including non-discourse uses (e.g., &ldquo;I like pizza&rdquo;). An elevated rate in one condition could reflect increased discourse &ldquo;like&rdquo; (filler, approximator, quotative) or increased expression of preferences. Manual inspection of a subsample is advisable to characterize the source of any significant difference.</p></div>
+
+<!-- ================================================================== -->
+<h2>11. Software and Infrastructure</h2>
+
+<p><strong>Model:</strong> LLaMA-2-13B-Chat via HuggingFace Transformers (torch, float16).<br>
+<strong>Cluster:</strong> Princeton HPC (Scotty); SLURM scheduler; 1 GPU per subject; ~4 hours per subject.<br>
+<strong>Environment:</strong> <code>llama2_env</code> (data generation) / <code>behavior_env</code> (analysis).<br>
+<strong>Text analysis:</strong> NLTK (VADER sentiment), regex-based lexical counting.<br>
+<strong>Statistics:</strong> SciPy (<code>ttest_rel</code>, <code>f.cdf</code>), custom BH-FDR implementation.<br>
+<strong>Visualization:</strong> Matplotlib (bar charts, violin plots, trajectory plots).</p>
+
+<!-- ================================================================== -->
+<h2>Appendix A: All 40 Conversation Topics</h2>
+
+<table>
+  <tr><th>#</th><th>Topic</th><th>Social?</th><th>Example prompt</th></tr>
+  <tr><td>1</td><td class="left">Hobbies</td><td>Social</td><td class="left">What hobby have you enjoyed sharing with friends or family?</td></tr>
+  <tr><td>2</td><td class="left">Friendship</td><td>Social</td><td class="left">What makes a friendship last?</td></tr>
+  <tr><td>3</td><td class="left">Childhood Memories</td><td>Social</td><td class="left">What is a childhood memory that shaped who you are?</td></tr>
+  <tr><td>4</td><td class="left">Conflict</td><td>Social</td><td class="left">How do you handle disagreements with people close to you?</td></tr>
+  <tr><td>5</td><td class="left">Empathy</td><td>Social</td><td class="left">When was a time you felt deeply understood by someone?</td></tr>
+  <tr><td>6</td><td class="left">Mentorship</td><td>Social</td><td class="left">Have you ever had a mentor who influenced your life?</td></tr>
+  <tr><td>7</td><td class="left">Role Models</td><td>Social</td><td class="left">Who do you look up to and why?</td></tr>
+  <tr><td>8</td><td class="left">Networks</td><td>Social</td><td class="left">How do you build and maintain professional networks?</td></tr>
+  <tr><td>9</td><td class="left">Love</td><td>Social</td><td class="left">What does love mean to you?</td></tr>
+  <tr><td>10</td><td class="left">Loneliness</td><td>Social</td><td class="left">What do you do when you feel lonely?</td></tr>
+  <tr><td>11</td><td class="left">Communication</td><td>Social</td><td class="left">What is the key to good communication?</td></tr>
+  <tr><td>12</td><td class="left">Trust</td><td>Social</td><td class="left">What makes it easy or difficult to trust someone?</td></tr>
+  <tr><td>13</td><td class="left">Teamwork</td><td>Social</td><td class="left">What makes a team work well together?</td></tr>
+  <tr><td>14</td><td class="left">Work&ndash;Life Balance</td><td>Social</td><td class="left">How do you balance work and personal life?</td></tr>
+  <tr><td>15</td><td class="left">Forgiveness</td><td>Social</td><td class="left">What role does forgiveness play in relationships?</td></tr>
+  <tr><td>16</td><td class="left">Boundaries</td><td>Social</td><td class="left">How do you set boundaries with others?</td></tr>
+  <tr><td>17</td><td class="left">Family</td><td>Social</td><td class="left">What family traditions or cultural practices do you value?</td></tr>
+  <tr><td>18</td><td class="left">Goals</td><td>Social</td><td class="left">What goals are you working toward?</td></tr>
+  <tr><td>19</td><td class="left">Social Media</td><td>Social</td><td class="left">How has social media changed the way you interact?</td></tr>
+  <tr><td>20</td><td class="left">Cultural Celebrations</td><td>Social</td><td class="left">What cultural celebrations do you enjoy?</td></tr>
+  <tr><td>21</td><td class="left">Nature</td><td>Nonsocial</td><td class="left">What do you enjoy most about spending time in nature?</td></tr>
+  <tr><td>22</td><td class="left">Cars</td><td>Nonsocial</td><td class="left">What interests you about cars?</td></tr>
+  <tr><td>23</td><td class="left">Space</td><td>Nonsocial</td><td class="left">What are your thoughts on space exploration?</td></tr>
+  <tr><td>24</td><td class="left">Photography</td><td>Nonsocial</td><td class="left">What do you enjoy about photography?</td></tr>
+  <tr><td>25</td><td class="left">Books</td><td>Nonsocial</td><td class="left">What is a book that has stayed with you?</td></tr>
+  <tr><td>26</td><td class="left">Art</td><td>Nonsocial</td><td class="left">What role does art play in your life?</td></tr>
+  <tr><td>27</td><td class="left">Exercise</td><td>Nonsocial</td><td class="left">How do you stay active?</td></tr>
+  <tr><td>28</td><td class="left">Sports</td><td>Nonsocial</td><td class="left">What sports do you follow or play?</td></tr>
+  <tr><td>29</td><td class="left">Music</td><td>Nonsocial</td><td class="left">What kind of music do you enjoy?</td></tr>
+  <tr><td>30</td><td class="left">Architecture</td><td>Nonsocial</td><td class="left">What buildings or structures inspire you?</td></tr>
+  <tr><td>31</td><td class="left">Cooking</td><td>Nonsocial</td><td class="left">What do you enjoy cooking or wish you could cook?</td></tr>
+  <tr><td>32</td><td class="left">Movies</td><td>Nonsocial</td><td class="left">What is a movie that left an impression on you?</td></tr>
+  <tr><td>33</td><td class="left">Food</td><td>Nonsocial</td><td class="left">What are your favorite foods or food traditions?</td></tr>
+  <tr><td>34</td><td class="left">Technology</td><td>Nonsocial</td><td class="left">How has technology changed your daily life?</td></tr>
+  <tr><td>35</td><td class="left">Travel</td><td>Nonsocial</td><td class="left">Where would you most like to travel?</td></tr>
+  <tr><td>36</td><td class="left">Seasons</td><td>Nonsocial</td><td class="left">What is your favorite season and why?</td></tr>
+  <tr><td>37</td><td class="left">Fashion</td><td>Nonsocial</td><td class="left">How does fashion or personal style express who you are?</td></tr>
+  <tr><td>38</td><td class="left">Weather</td><td>Nonsocial</td><td class="left">How does the weather affect your mood or plans?</td></tr>
+  <tr><td>39</td><td class="left">Podcasts</td><td>Nonsocial</td><td class="left">What podcasts do you listen to?</td></tr>
+  <tr><td>40</td><td class="left">Gardening</td><td>Nonsocial</td><td class="left">What do you enjoy about gardening?</td></tr>
+</table>
+
+<p class="note">Topic prompts shown are representative paraphrases. Verbatim prompts are stored as single-line text files (one per topic) and vary slightly in phrasing (e.g., &ldquo;Cooking: What are some of your favorite things to cook or what do you wish you knew how to cook?&rdquo;).</p>
+
+<!-- ================================================================== -->
+<h2>References</h2>
+
+<p class="ref">Biber, D. (1988). <em>Variation across speech and writing.</em> Cambridge University Press.</p>
+
+<p class="ref">D&rsquo;Arcy, A. (2007). Like and language ideology: Disentangling fact from fiction. <em>American Speech</em>, 82(4), 386&ndash;419.</p>
+
+<p class="ref">Demir, C. (2018). Hedging and academic writing: An analysis of lexical hedges. <em>Journal of Language and Linguistic Studies</em>, 14(4), 74&ndash;92.</p>
+
+<p class="ref">Fung, L., &amp; Carter, R. (2007). Discourse markers and spoken English: Native and learner use in pedagogic settings. <em>Applied Linguistics</em>, 28(3), 410&ndash;439.</p>
+
+<p class="ref">Hutto, C. J., &amp; Gilbert, E. (2014). VADER: A parsimonious rule-based model for sentiment analysis of social media text. <em>Proceedings of the 8th International AAAI Conference on Weblogs and Social Media</em>.</p>
+
+<p class="ref">Hyland, K. (1998). <em>Hedging in scientific research articles.</em> John Benjamins.</p>
+
+<p class="ref">Pennebaker, J. W., Booth, R. J., &amp; Francis, M. E. (2007). <em>Linguistic inquiry and word count: LIWC 2007.</em> Austin, TX: LIWC.net.</p>
+
+<p class="ref">Touvron, H., Martin, L., Stone, K., Albert, P., Almahairi, A., Babaei, Y., ... &amp; Scialom, T. (2023). Llama 2: Open foundation and fine-tuned chat models. <em>arXiv preprint arXiv:2307.09288</em>.</p>
+
+<p class="ref">Wagovich, S. A., Bernstein Ratner, N., &amp; Hall, N. E. (2024). Theory of mind language in children who stutter. <em>Journal of Fluency Disorders</em>, 79, 106028.</p>
+
+</body>
+</html>

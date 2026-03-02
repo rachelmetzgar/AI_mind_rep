@@ -52,7 +52,7 @@ condition:
 
 ## Versions
 
-### `names/` — Named Partners (original)
+### `versions/names/` — Named Partners (original)
 
 Partners are identified by specific names in the system prompt:
 - **Human-labeled:** Sam, Casey
@@ -71,7 +71,7 @@ Exp 1 behavioral results remain valid (the name-conditioned effects are real
 and interesting). The confound only matters when these conversations are used
 as training data for linear probes in subsequent experiments.
 
-### `balanced_names/` — Gender-Balanced Names
+### `versions/balanced_names/` — Gender-Balanced Names
 
 Partners are identified by gender-balanced names in the system prompt:
 - **Human-labeled:** Gregory (male), Rebecca (female)
@@ -80,7 +80,7 @@ Partners are identified by gender-balanced names in the system prompt:
 This addresses the gender confound from `names/` by using one explicitly male
 and one explicitly female human partner name (10 of 23 measures significant).
 
-### `balanced_gpt/` — Gender-Balanced Names with GPT-4
+### `versions/balanced_gpt/` — Gender-Balanced Names with GPT-4
 
 Same gender-balanced human names, but replaces Copilot with GPT-4:
 - **Human-labeled:** Gregory, Rebecca
@@ -90,7 +90,7 @@ Both AI partners are now members of the same model family (OpenAI), controlling
 for potential brand-specific associations. This version produced the most
 significant effects (17 of 23 measures).
 
-### `labels/` — Generic Type Labels
+### `versions/labels/` — Generic Type Labels
 
 Partners are identified only by category in the system prompt:
 - **Human-labeled:** "a Human"
@@ -103,7 +103,7 @@ must reflect the human/AI type distinction itself, not name-specific or
 gender-specific associations. All 5 significant effects are in the core set:
 interpersonal DMs, cognitive DMs, DM total, discourse "like", and politeness.
 
-### `labels_turnwise/` — Labels with Turn-Level Identity Prefix
+### `versions/labels_turnwise/` — Labels with Turn-Level Identity Prefix
 
 Like `labels/`, the system prompt uses only type labels ("a Human" / "an AI").
 Unlike `labels/`, each partner turn is prefixed with "Human:" or "AI:" instead
@@ -114,7 +114,7 @@ of the generic "Partner:", reinforcing the identity label at every turn.
 This tests whether reinforcing the identity label at every turn strengthens the
 behavioral effects seen in `labels/`.
 
-### `you_are_balanced_gpt/` — "You Are" Framing with GPT-4
+### `versions/you_are_balanced_gpt/` — "You Are" Framing with GPT-4
 
 Same as `balanced_gpt/` but replaces "You believe you are speaking with" with
 "You are talking to" in the system prompt:
@@ -122,7 +122,7 @@ Same as `balanced_gpt/` but replaces "You believe you are speaking with" with
 - **AI-labeled:** ChatGPT, GPT-4
 - **Key sentence:** "You are talking to Gregory (a Human)."
 
-### `you_are_labels/` — "You Are" Framing with Labels
+### `versions/you_are_labels/` — "You Are" Framing with Labels
 
 Same as `labels/` but replaces "You believe you are speaking with" with
 "You are talking to" in the system prompt:
@@ -130,14 +130,14 @@ Same as `labels/` but replaces "You believe you are speaking with" with
 - **AI-labeled:** "an AI"
 - **Key sentence:** "You are talking to a Human."
 
-### `you_are_labels_turnwise/` — "You Are" Framing with Turn-Level Prefix
+### `versions/you_are_labels_turnwise/` — "You Are" Framing with Turn-Level Prefix
 
 Combines `you_are_labels/` and `labels_turnwise/`: uses "You are talking to"
 framing plus "Human:"/"AI:" turn prefixes.
 - **System prompt:** "You are talking to a Human/an AI"
 - **Turn prefix:** "Human:" or "AI:" (not "Partner:")
 
-### `nonsense_codeword/` — Nonsense Control: Codeword
+### `versions/nonsense_codeword/` — Nonsense Control: Codeword
 
 Token-matched control for `labels/`. The critical instruction sentence is
 replaced with a semantically inert one:
@@ -149,7 +149,7 @@ context. Result: **0 of 23 measures significant** — the strongest evidence
 that behavioral effects require the model to semantically process the identity
 instruction, not merely encounter the tokens.
 
-### `nonsense_ignore/` — Nonsense Control: Ignore
+### `versions/nonsense_ignore/` — Nonsense Control: Ignore
 
 Token-matched control for `labels/`. The critical instruction sentence
 explicitly tells the model to ignore the label:
@@ -224,35 +224,36 @@ exp_1/
 │   ├── identity_summary.html
 │   └── data_samples/                  # Per-version conversation viewers
 │
-├── names/                             # Named partners (original)
-├── balanced_names/                    # Gender-balanced names
-├── balanced_gpt/                      # Gender-balanced + GPT-4
-├── labels/                            # Generic type labels
-├── labels_turnwise/                   # Labels + turn-level Human:/AI: prefix
-├── you_are_balanced_gpt/              # "You are talking to" + GPT-4
-├── you_are_labels/                    # "You are talking to" + labels
-├── you_are_labels_turnwise/           # "You are talking to" + turn prefix
-├── nonsense_codeword/                 # Control: codeword
-└── nonsense_ignore/                   # Control: ignore
-    │
-    ├── code/
-    │   ├── data_gen/                  # Conversation generation
-    │   │   ├── llm_data_generation.py
-    │   │   └── utils/
-    │   │       ├── config/            # Per-subject condition CSVs
-    │   │       ├── prompts/           # Topic text files
-    │   │       └── prompts_config.py  # Version-specific partner names
-    │   └── analysis/
-    │       ├── combine_text_data.py   # Aggregate per-subject CSVs
-    │       ├── identity_breakdown.py  # Behavioral stats + HTML report
-    │       └── utils/                 # Feature extraction (shared)
-    │
-    ├── data/
-    │   └── meta-llama-Llama-2-13b-chat-hf/0.8/  # s001.csv ... s050.csv
-    │
-    └── results/
-        └── meta-llama-Llama-2-13b-chat-hf/0.8/  # Analysis outputs
+└── versions/                          # All data versions
+    ├── names/                         # Named partners (original)
+    ├── balanced_names/                # Gender-balanced names
+    ├── balanced_gpt/                  # Gender-balanced + GPT-4
+    ├── labels/                        # Generic type labels
+    ├── labels_turnwise/               # Labels + turn-level Human:/AI: prefix
+    ├── you_are_balanced_gpt/          # "You are talking to" + GPT-4
+    ├── you_are_labels/                # "You are talking to" + labels
+    ├── you_are_labels_turnwise/       # "You are talking to" + turn prefix
+    ├── nonsense_codeword/             # Control: codeword
+    └── nonsense_ignore/               # Control: ignore
+        │
+        ├── code/
+        │   ├── data_gen/              # Conversation generation
+        │   │   ├── llm_data_generation.py
+        │   │   └── utils/
+        │   │       ├── config/        # Per-subject condition CSVs
+        │   │       ├── prompts/       # Topic text files
+        │   │       └── prompts_config.py  # Version-specific partner names
+        │   └── analysis/
+        │       ├── combine_text_data.py   # Aggregate per-subject CSVs
+        │       ├── identity_breakdown.py  # Behavioral stats + HTML report
+        │       └── utils/             # Feature extraction (shared)
+        │
+        ├── data/
+        │   └── meta-llama-Llama-2-13b-chat-hf/0.8/  # s001.csv ... s050.csv
+        │
+        └── results/
+            └── meta-llama-Llama-2-13b-chat-hf/0.8/  # Analysis outputs
 ```
 
 Each version directory follows this structure. The nonsense versions share
-config, prompts, and analysis utils via symlinks to `labels/`.
+config, prompts, and analysis utils via symlinks to `versions/labels/`.
