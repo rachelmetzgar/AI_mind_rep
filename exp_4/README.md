@@ -4,17 +4,19 @@
 
 ## Reports
 
-- [Results walkthrough](exp4_results_walkthrough.html) — Combined results across both models: factor structure, human correlations, entity placements, RSA
-- [Base model results](llama_exp_4-13B-base/results_report.html) — Pairwise and individual rating analyses for the base model
-- [Analysis explainer](llama_exp_4-13B-base/analysis_explainer.html) — Step-by-step walkthrough of the PCA / varimax / factor-score methodology
+- [Results walkthrough](archive/exp4_results_walkthrough.html) — Combined results across both models: factor structure, human correlations, entity placements, RSA
+- [Base model results](results/behavior/base/results_report.html) — Pairwise and individual rating analyses for the base model
+- [Analysis explainer](results/behavior/base/analysis_explainer.html) — Step-by-step walkthrough of the PCA / varimax / factor-score methodology
+- [Chat RSA report](results/internals/chat/rsa_report.html) — RSA-by-dimension analysis for the chat model
+- [Base RSA report](results/internals/base/rsa_report.html) — RSA-by-dimension analysis for the base model
 
 ---
 
 ## Motivation
 
-Experiments 1-3 treat partner identity as a binary (human vs. AI). Human folk psychology is far richer. Gray, Gray, & Wegner (2007, *Science*) showed that humans perceive minds along two orthogonal dimensions: **Experience** (the capacity to feel — hunger, fear, pain, pleasure, joy) and **Agency** (the capacity to plan and act — self-control, morality, memory, planning, thought). ~2,400 participants rated 13 diverse entities via pairwise comparisons on 18 mental capacities, and PCA with varimax rotation recovered this two-factor structure, explaining 97% of variance.
+Experiments 1-3 treat partner identity as a binary (human vs. AI). Human folk psychology is far richer. Gray, Gray, & Wegner (2007, *Science*) showed that humans perceive minds along two orthogonal dimensions: **Experience** (the capacity to feel -- hunger, fear, pain, pleasure, joy) and **Agency** (the capacity to plan and act -- self-control, morality, memory, planning, thought). ~2,400 participants rated 13 diverse entities via pairwise comparisons on 18 mental capacities, and PCA with varimax rotation recovered this two-factor structure, explaining 97% of variance.
 
-Exp 4 asks: **does LLaMA-2-13B have an implicit folk psychology of mind that mirrors this human structure?** If the model's representational geometry over diverse entities (baby, dog, robot, God, adults, etc.) resembles the human Experience/Agency space, it would suggest the model has internalized a continuous, multi-dimensional folk psychology — not just a binary human/AI switch.
+Exp 4 asks: **does LLaMA-2-13B have an implicit folk psychology of mind that mirrors this human structure?** If the model's representational geometry over diverse entities (baby, dog, robot, God, adults, etc.) resembles the human Experience/Agency space, it would suggest the model has internalized a continuous, multi-dimensional folk psychology -- not just a binary human/AI switch.
 
 ---
 
@@ -36,80 +38,122 @@ Both a chat and base model variant are tested, since the chat model's RLHF safet
 
 ```
 exp_4/
-├── README.md                          # This file
-├── exp4_results_walkthrough.html      # Visual walkthrough of results across both models
-├── llama_exp_4-13B-chat/              # Chat model (RLHF fine-tuned)
-├── llama_exp_4-13B-base/              # Base model (pretrained, no RLHF)
-└── write_up/                          # Methods write-up (exp4_methods.html)
-```
-
----
-
-## `llama_exp_4-13B-chat/` — Chat Model
-
-Uses LLaMA-2-13B-Chat to both extract entity representations and run a behavioral replication.
-
-### Approach
-- **Phase 1** (`1_extract_entity_representations.py`): Present entity prompts to the chat model, extract last-token residual-stream activations across all 41 layers. Compute representational dissimilarity matrices (RDMs) via cosine distance and compare to the human RDM using RSA (representational similarity analysis) at every layer.
-- **Phase 2** (`2_behavioral_replication.py`): Direct behavioral replication — the chat model generates text responses to pairwise comparison prompts (66 pairs x 2 orders x 18 capacities = 2,376 comparisons). Responses are parsed for a 1-5 rating. PCA with varimax rotation on entity-by-capacity means.
-
-### Limitation
-RLHF safety training caused high refusal rates on ethically sensitive entities (dead woman ~91%, PVS patient ~82%, God ~77%), making the behavioral replication unreliable. This motivated the base model approach.
-
-### Contents
-```
-llama_exp_4-13B-chat/
 ├── README.md
-├── 1_extract_entity_representations.py   # Phase 1: activation extraction + RSA
-├── 2_behavioral_replication.py           # Phase 2: pairwise comparisons (text generation)
-├── entities/
-│   ├── gray_entities.py                  # 13 entities, descriptions, capacities, human scores
-│   └── gray2007.txt                      # Full text of Gray et al. paper + supplementary materials
-├── data/
-│   ├── entity_activations/               # Activations + RDMs (with_self/, without_self/)
-│   └── behavioral_replication/           # Raw responses, character means, PCA results
-├── results/                              # Summary reports + figures (RSA layerwise, RDM comparison)
-├── slurm/                                # SLURM job scripts
-└── logs/                                 # SLURM output/error logs
-```
-
----
-
-## `llama_exp_4-13B-base/` — Base Model
-
-Uses LLaMA-2-13B (pretrained, no chat fine-tuning) to avoid RLHF refusals. Instead of generating text, ratings are extracted from next-token logits in a single forward pass: the probability distribution over tokens "1"-"5" yields continuous expected ratings with no refusals.
-
-### Approach
-- **Pairwise comparisons** (`2_behavioral_replication.py`): Same design as the chat version (66 pairs x 2 orders x 18 capacities), but using logit-based rating extraction. PCA with varimax rotation, Spearman correlation with human scores.
-- **Debiasing reanalysis** (`2b_reanalysis_debiased.py`): Tests two strategies (analytical debiasing, log-odds) on the pairwise data to address position bias.
-- **Individual Likert ratings** (`2c_individual_ratings.py`): Alternative non-pairwise approach — each entity rated individually on each capacity (1-5 Likert), avoiding pairwise position bias entirely. Deviates from Gray et al. methodology but may produce cleaner signal.
-- **Figure generation** (`generate_figures.py`): Publication-quality figures for both base and chat model results (scree plots, loading comparisons, entity scatter plots, mind space comparisons, heatmaps, RSA profiles).
-
-### Key Technical Detail
-Prompts must end with `"Rating: "` (trailing space) for correct digit prediction. Without it, the model predicts a space token and bare digit logits are noise.
-
-### Contents
-```
-llama_exp_4-13B-base/
-├── README.md
-├── 2_behavioral_replication.py           # Pairwise comparisons (logit-based)
-├── 2b_reanalysis_debiased.py             # Debiasing reanalysis (no GPU needed)
-├── 2c_individual_ratings.py              # Individual Likert ratings (non-pairwise)
-├── generate_figures.py                   # Publication figures for both models
-├── entities/
-│   ├── gray_entities.py                  # Same entity definitions as chat version
-│   └── gray2007.txt                      # Full text of Gray et al. paper + supplementary materials
-├── data/
-│   ├── behavioral_replication/           # Pairwise results (with_self/, without_self/)
-│   └── individual_ratings/              # Likert results (with_self/, without_self/)
+├── archive/                                    # Old structure preserved (browsable)
+│   ├── llama_exp_4-13B-chat/                   # Complete old chat dir
+│   ├── llama_exp_4-13B-base/                   # Complete old base dir
+│   ├── write_up/
+│   └── exp4_results_walkthrough.html
+├── code/
+│   ├── config.py                               # Central config (set_model, paths, constants)
+│   ├── src/
+│   │   ├── __init__.py
+│   │   └── utils.py                            # Shared: varimax, PCA, RDM, RSA, correlation
+│   ├── internals/                              # Activation extraction + RSA pipeline
+│   │   ├── 1_extract_entity_representations.py
+│   │   ├── 1a_rsa_report.py
+│   │   └── slurm/
+│   │       ├── 1_extract_entities_chat.sh
+│   │       └── 1_extract_entities_base.sh
+│   ├── behavior/                               # Behavioral replication pipeline
+│   │   ├── 1_pairwise_replication.py
+│   │   ├── 2_debiasing_reanalysis.py           # Base-only, CPU
+│   │   ├── 3_individual_ratings.py             # Base-only, GPU
+│   │   └── slurm/
+│   │       ├── 1_pairwise_chat.sh
+│   │       ├── 1_pairwise_base.sh
+│   │       └── 3_individual_base.sh
+│   └── comparisons/                            # Cross-model analyses
+│       └── 1_behavioral_summary_figures.py
+├── entities/                                   # Shared (single copy)
+│   ├── gray_entities.py
+│   └── gray2007.txt
 ├── results/
-│   ├── behavioral_replication/           # Summary reports + figures
-│   ├── individual_ratings/              # Summary reports + figures
-│   └── figures/                          # Cross-method summary figures
-├── results_report.html                   # Visual walkthrough of the analysis pipeline
-├── analysis_explainer.html               # Detailed analysis explainer
-├── slurm/                                # SLURM job scripts
-└── logs/                                 # SLURM output/error logs
+│   ├── internals/
+│   │   ├── chat/
+│   │   │   ├── rsa_report.html
+│   │   │   ├── with_self/{data,figures}/
+│   │   │   └── without_self/{data,figures}/
+│   │   └── base/
+│   │       ├── rsa_report.html
+│   │       ├── with_self/{data,figures}/
+│   │       └── without_self/{data,figures}/
+│   ├── behavior/
+│   │   ├── chat/
+│   │   │   ├── with_self/{data}/
+│   │   │   └── without_self/{data}/
+│   │   └── base/
+│   │       ├── results_report.html
+│   │       ├── analysis_explainer.html
+│   │       ├── with_self/{data}/
+│   │       └── without_self/{data}/
+│   └── comparisons/
+│       └── figures/                            # 10 cross-model publication figures
+├── writeup/
+│   └── exp4_methods.html
+└── logs/                                       # All SLURM logs
+```
+
+---
+
+## Scripts
+
+All scripts use `--model chat|base` to select the model variant. Run from `exp_4/code/`.
+
+### Internals Pipeline
+
+| Script | Description | GPU | SLURM |
+|--------|-------------|-----|-------|
+| `internals/1_extract_entity_representations.py` | Extract last-token activations for 13 entities, compute RDMs, run RSA at every layer (3 variants: combined, experience, agency) | Yes | `internals/slurm/1_extract_entities_{chat,base}.sh` |
+| `internals/1a_rsa_report.py` | Generate HTML report with FDR correction, layerwise profiles, RDM heatmaps | No | -- |
+
+### Behavior Pipeline
+
+| Script | Description | GPU | SLURM |
+|--------|-------------|-----|-------|
+| `behavior/1_pairwise_replication.py` | Pairwise comparisons (66 pairs x 2 orders x 18 capacities). Chat: text generation. Base: logit extraction. PCA + varimax + human correlation. | Yes | `behavior/slurm/1_pairwise_{chat,base}.sh` |
+| `behavior/2_debiasing_reanalysis.py` | Analytical debiasing + log-odds reanalysis of pairwise data (base only) | No | -- |
+| `behavior/3_individual_ratings.py` | Individual Likert ratings per entity per capacity (base only) | Yes | `behavior/slurm/3_individual_base.sh` |
+
+### Comparisons
+
+| Script | Description |
+|--------|-------------|
+| `comparisons/1_behavioral_summary_figures.py` | 10 cross-model publication figures (scree plots, loading comparisons, entity scatter, mind space maps, heatmaps, RSA profiles, correlation summaries, RDM comparisons) |
+
+### Common Arguments
+
+- `--model chat|base` — Required. Selects model variant.
+- `--include_self` — Include "you_self" entity (default: exclude, giving 12 entities).
+- `--both` — Run both with_self and without_self conditions.
+
+---
+
+## Execution
+
+```bash
+# From exp_4/code/
+
+# Phase 1: Extract entity representations + RSA
+sbatch internals/slurm/1_extract_entities_chat.sh
+sbatch internals/slurm/1_extract_entities_base.sh
+
+# Phase 1a: Generate RSA reports (CPU, run directly)
+python internals/1a_rsa_report.py --model chat
+python internals/1a_rsa_report.py --model base
+
+# Phase 2: Behavioral replication
+sbatch behavior/slurm/1_pairwise_chat.sh
+sbatch behavior/slurm/1_pairwise_base.sh
+
+# Phase 2b: Debiasing reanalysis (CPU, run directly)
+python behavior/2_debiasing_reanalysis.py --model base --both
+
+# Phase 2c: Individual ratings
+sbatch behavior/slurm/3_individual_base.sh
+
+# Phase 3: Cross-model figures (CPU, run directly)
+python comparisons/1_behavioral_summary_figures.py
 ```
 
 ---
