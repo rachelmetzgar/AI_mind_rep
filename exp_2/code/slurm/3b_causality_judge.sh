@@ -51,7 +51,7 @@ elif [ "$JUDGE_BACKEND" = "gpt" ] && [ -z "${OPENAI_API_KEY:-}" ]; then
 fi
 
 EXP2_DIR="/mnt/cup/labs/graziano/rachel/mind_rep/exp_2"
-LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}"
+LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}/V2_causality"
 mkdir -p "$LOG_DIR"
 exec > "${LOG_DIR}/judge_v2_${SLURM_ARRAY_TASK_ID}_${SLURM_JOB_ID}.out" 2> "${LOG_DIR}/judge_v2_${SLURM_ARRAY_TASK_ID}_${SLURM_JOB_ID}.err"
 cd "$EXP2_DIR" || { echo "FATAL: Cannot cd to $EXP2_DIR"; exit 1; }
@@ -60,7 +60,7 @@ echo "[$(date)] V2 judge | version=$VERSION | subject=$SUBJECT_ID | strength=$N 
 
 STRATEGY="peak_15"
 
-for PROBE_TYPE in operational metacognitive_peak; do
+for PROBE_TYPE in operational metacognitive; do
     RESULT_DIR="$EXP2_DIR/data/$VERSION/intervention_results/V2/${STRATEGY}/${PROBE_TYPE}/is_${N}"
     if [ -d "$RESULT_DIR/per_subject" ] && [ -f "$RESULT_DIR/per_subject/${SUBJECT_ID}.csv" ]; then
         echo "[$(date)] Judging ${STRATEGY}/$PROBE_TYPE/is_$N/$SUBJECT_ID ..."

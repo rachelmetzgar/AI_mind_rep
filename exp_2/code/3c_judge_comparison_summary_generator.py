@@ -7,7 +7,7 @@ with statistical tests (Fisher's exact, chi-squared) for each probe type
 and an overall grouped bar chart.
 
 Output:
-    results/comparisons/v1_causality/judge/judge_comparison.html
+    results/llama2_13b_chat/comparisons/v1_causality/judge/judge_comparison.html
 
 Usage:
     python gen_judge_comparison.py
@@ -54,7 +54,7 @@ VERSION_SHORT = {
 
 PROBE_TYPE_LABELS = {
     "operational": "Operational",
-    "metacognitive_peak": "Metacognitive (peak)",
+    "metacognitive": "Metacognitive",
     "metacognitive_matched": "Metacognitive (matched)",
 }
 
@@ -816,7 +816,7 @@ def main():
 
     html = generate_html(all_entries)
 
-    out_dir = EXP2_ROOT / "results" / "comparisons" / "llama2_13b_chat" / "v1_causality" / "judge"
+    out_dir = EXP2_ROOT / "results" / "llama2_13b_chat" / "comparisons" / "v1_causality" / "judge"
     out_path = out_dir / "judge_comparison.html"
     save_report(html, out_path)
 

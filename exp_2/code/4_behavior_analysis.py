@@ -6,7 +6,7 @@ Purpose: Compute linguistic feature profiles on Experiment 2b steered conversati
 data and compare across conditions (baseline, human-steered, AI-steered).
 
 Handles the directory structure from 2_causality_generate.py:
-    intervention_results/V{1,2}/{operational,metacognitive_peak}/is_{N}/...
+    intervention_results/V{1,2}/{operational,metacognitive}/is_{N}/...
 
 V1: auto-walks probe types × strengths under the result root.
 V2: auto-walks probe types × strengths, loads per-subject CSVs.
@@ -145,7 +145,7 @@ def parse_args():
     parser.add_argument(
         "--input", default=None,
         help=(
-            "Root dir containing {operational,metacognitive_peak}/is_{N}/ subdirs. "
+            "Root dir containing {operational,metacognitive}/is_{N}/ subdirs. "
             "Default: cfg.PATHS.intervention_results / V1 or V2 (set by --version)."
         ),
     )
@@ -180,12 +180,12 @@ def parse_args():
 
 def discover_probe_strength_dirs(base_dir, strength_filter=None):
     """
-    Walk base_dir/{operational,metacognitive_peak}/is_{N}/ and return list of
+    Walk base_dir/{operational,metacognitive}/is_{N}/ and return list of
     (probe_label, strength, dir_path) tuples.
 
     Also supports legacy names (*_probes*) for backward compatibility.
     """
-    KNOWN_PROBE_DIRS = {"operational", "metacognitive_peak", "metacognitive_matched"}
+    KNOWN_PROBE_DIRS = {"operational", "metacognitive", "metacognitive_matched"}
     results = []
     for probe_dir_name in sorted(os.listdir(base_dir)):
         probe_path = os.path.join(base_dir, probe_dir_name)
@@ -209,7 +209,7 @@ def discover_probe_strength_dirs(base_dir, strength_filter=None):
     if not results:
         raise FileNotFoundError(
             f"No probe/strength dirs found under {base_dir}.\n"
-            f"Expected structure: {base_dir}/{{operational,metacognitive_peak}}/is_{{N}}/"
+            f"Expected structure: {base_dir}/{{operational,metacognitive}}/is_{{N}}/"
         )
     print(f"[INFO] Discovered {len(results)} probe×strength combinations in {base_dir}")
     for label, N, path in results:
@@ -719,7 +719,7 @@ def format_cross_probe_comparison(all_results):
         lines.append("-" * 100)
 
         ctrl = {r["metric"]: r for r in probe_results.get("operational", [])}
-        read = {r["metric"]: r for r in probe_results.get("metacognitive_peak", [])}
+        read = {r["metric"]: r for r in probe_results.get("metacognitive", [])}
 
         for metric in sorted(set(list(ctrl.keys()) + list(read.keys()))):
             def _v(r, k):

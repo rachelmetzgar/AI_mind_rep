@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generate an HTML visualization of probe accuracy across layers and conversation turns.
-Produces: exp_2/results/comparisons/llama2_13b_chat/probe_training/turn_comparison_layerwise.html
+Produces: exp_2/results/llama2_13b_chat/comparisons/probe_training/turn_comparison_layerwise.html
 """
 
 import pickle
@@ -40,7 +40,7 @@ TURNS = [1, 2, 3, 4, 5]
 PROBE_TYPES = ['metacognitive', 'operational']
 PROBE_LABELS = {'metacognitive': 'Metacognitive Probe', 'operational': 'Operational Probe'}
 N_LAYERS = 41
-OUTPUT_PATH = os.path.join(BASE, 'results', 'comparisons', 'llama2_13b_chat', 'probe_training', 'turn_comparison_layerwise.html')
+OUTPUT_PATH = os.path.join(BASE, 'results', 'llama2_13b_chat', 'comparisons', 'probe_training', 'turn_comparison_layerwise.html')
 
 # Color map: deep blue -> teal -> yellow-green -> orange -> red
 TURN_COLORS = ['#1a3399', '#2596be', '#45a847', '#e8961a', '#cc2233']

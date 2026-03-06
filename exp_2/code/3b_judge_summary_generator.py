@@ -57,19 +57,19 @@ VERSION_DISPLAY = {
 
 PROBE_TYPE_LABELS = {
     "operational": "Operational",
-    "metacognitive_peak": "Metacognitive (peak)",
+    "metacognitive": "Metacognitive",
     "metacognitive_matched": "Metacognitive (matched)",
 }
 
 # Color scheme from plan
 COLORS = {
     "partner_identity": {
-        "metacognitive_peak": "#8FBC8F",   # light muted green
+        "metacognitive": "#8FBC8F",   # light muted green
         "metacognitive_matched": "#8FBC8F",
         "operational": "#4A7C59",           # darker muted green
     },
     "control": {
-        "metacognitive_peak": "#B0B0B0",   # light gray
+        "metacognitive": "#B0B0B0",   # light gray
         "metacognitive_matched": "#B0B0B0",
         "operational": "#707070",           # darker gray
     },
@@ -77,7 +77,7 @@ COLORS = {
 
 # Fallback colors for versions not in VERSION_DISPLAY
 DEFAULT_COLORS = {
-    "metacognitive_peak": "#6BAED6",
+    "metacognitive": "#6BAED6",
     "metacognitive_matched": "#6BAED6",
     "operational": "#2171B5",
 }

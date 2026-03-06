@@ -7,8 +7,8 @@ range, and generates acc_by_layer_group and best_test_acc_by_layer figures
 on the same scale for fair visual comparison.
 
 Outputs:
-    results/comparisons/llama2_13b_chat/probe_training/probe_training_comparison.html
-    results/comparisons/llama2_13b_chat/probe_training/probe_training_comparison.md
+    results/llama2_13b_chat/comparisons/probe_training/probe_training_comparison.html
+    results/llama2_13b_chat/comparisons/probe_training/probe_training_comparison.md
 
 Usage:
     python code/analysis/gen_probe_training_comparison.py
@@ -45,7 +45,7 @@ VERSIONS = [
 ]
 
 RESULTS_ROOT = Path(__file__).resolve().parent.parent / "results"
-OUT_DIR = RESULTS_ROOT / "comparisons" / "llama2_13b_chat" / "probe_training"
+OUT_DIR = RESULTS_ROOT / "llama2_13b_chat" / "comparisons" / "probe_training"
 
 LAYER_GROUPS = {
     "early":  (0, 13),

@@ -14,7 +14,7 @@ Analyses:
   C3: Layer-by-layer statistical comparison (paired t-test / bootstrap CI
       comparing weather vs partner suffix probe accuracies)
 
-Output: exp_2/results/comparisons/llama2_13b_chat/probe_training/alt_tokens/weather_suffix_investigation.html
+Output: exp_2/results/llama2_13b_chat/comparisons/probe_training/alt_tokens/weather_suffix_investigation.html
 
 Env: llama2_env (needs GPU for C1; C3 can run CPU-only if probe data exists)
 Rachel C. Metzgar · Mar 2026
@@ -40,7 +40,7 @@ from scipy import stats
 # ── Configuration ────────────────────────────────────────────────────────────
 
 BASE = str(Path(__file__).resolve().parent.parent)  # exp_2/
-OUTPUT_PATH = f'{BASE}/results/comparisons/llama2_13b_chat/probe_training/alt_tokens/weather_suffix_investigation.html'
+OUTPUT_PATH = f'{BASE}/results/llama2_13b_chat/comparisons/probe_training/alt_tokens/weather_suffix_investigation.html'
 
 VERSIONS = ['labels', 'balanced_gpt', 'nonsense_codeword']
 VERSION_LABELS = {

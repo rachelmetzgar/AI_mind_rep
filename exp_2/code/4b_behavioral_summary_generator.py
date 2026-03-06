@@ -29,7 +29,7 @@ VERSIONS = ["balanced_gpt", "nonsense_codeword"]
 
 PROBE_LABELS = {
     "operational": "Operational (pre-generation position)",
-    "metacognitive_peak": "Metacognitive (peak layers)",
+    "metacognitive": "Metacognitive",
     "metacognitive_matched": "Metacognitive (matched layers)",
 }
 

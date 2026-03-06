@@ -24,11 +24,11 @@ All scripts accept `MODEL` env var (default: `llama2_13b_chat`).
 
 ### Cross-version comparisons (start here)
 
-- [**Probe training comparison**](results/comparisons/llama2_13b_chat/probe_training/probe_training_comparison.html) — All versions on the same scale
-- [**Turn comparison layerwise**](results/comparisons/llama2_13b_chat/probe_training/turn_comparison_layerwise.html) — Prompt dilution story: perfect at turn 1, degrades monotonically
-- [**Alt position comparison**](results/comparisons/llama2_13b_chat/probe_training/alt_tokens/combined.html) — Where in the token sequence does the signal live?
-- [**V1 QC summary**](results/comparisons/llama2_13b_chat/causality_qc/v1_qc_summary_all_variants.html) — Cross-version causal intervention quality check
-- [**Judge comparison**](results/comparisons/llama2_13b_chat/v1_causality/judge/judge_comparison.html) — Cross-version judge accuracy
+- [**Probe training comparison**](results/llama2_13b_chat/comparisons/probe_training/probe_training_comparison.html) — All versions on the same scale
+- [**Turn comparison layerwise**](results/llama2_13b_chat/comparisons/probe_training/turn_comparison_layerwise.html) — Prompt dilution story: perfect at turn 1, degrades monotonically
+- [**Alt position comparison**](results/llama2_13b_chat/comparisons/probe_training/alt_tokens/combined.html) — Where in the token sequence does the signal live?
+- [**V1 QC summary**](results/llama2_13b_chat/comparisons/v1_causality/causality_qc/v1_qc_summary_all_variants.html) — Cross-version causal intervention quality check
+- [**Judge comparison**](results/llama2_13b_chat/comparisons/v1_causality/judge/judge_comparison.html) — Cross-version judge accuracy
 
 ### Per-version reports
 
@@ -38,8 +38,8 @@ For each active version (`balanced_gpt`, `nonsense_codeword`):
 - Degradation: `results/llama2_13b_chat/{version}/probe_training/degradation/degradation_probe_report.html`
 - V1 judge: `results/llama2_13b_chat/{version}/V1_causality/judge/judge_report.html`
 - V1 behavioral: `results/llama2_13b_chat/{version}/V1_causality/behavioral/peak_15/behavioral_summary.html`
-- V1 summary: `results/llama2_13b_chat/{version}/v1_analysis_summary.html`
-- Steered samples: `results/llama2_13b_chat/{version}/steered_samples_v1.html`
+- V1 summary: `results/llama2_13b_chat/{version}/V1_causality/v1_analysis_summary.html`
+- Steered samples: `results/llama2_13b_chat/{version}/V1_causality/steered_samples.html`
 
 ## Data Versions
 
@@ -101,15 +101,19 @@ exp_2/
 │   │   ├── V1_causality/
 │   │   │   ├── data/                           # Generated CSVs (gitignored)
 │   │   │   ├── judge/                          # Judge reports + figures
-│   │   │   └── behavioral/                     # Behavioral analysis reports
-│   │   ├── V2_causality/
-│   │   │   └── data/                           # Generated CSVs (gitignored)
-│   │   └── v1_analysis_summary.html/.md
-│   └── comparisons/{model}/                    # Cross-version comparisons
-│       ├── probe_training/
-│       ├── v1_causality/
-│       └── causality_qc/
-├── logs/{model}/{version}/                     # SLURM logs (gitignored)
+│   │   │   ├── behavioral/                     # Behavioral analysis reports
+│   │   │   ├── steered_samples.html            # Steered sample viewer
+│   │   │   └── v1_analysis_summary.html/.md    # Per-version V1 summary
+│   │   └── V2_causality/
+│   │       └── data/                           # Generated CSVs (gitignored)
+│   └── {model}/comparisons/                    # Within-model cross-version comparisons
+│       ├── probe_training/                     # Probe training comparisons + figures
+│       │   └── alt_tokens/                     # Alt position comparisons
+│       └── v1_causality/
+│           ├── judge/                          # Cross-version judge comparison
+│           └── causality_qc/                   # V1 QC summary across versions
+├── logs/{model}/{version}/{step}/              # SLURM logs (gitignored)
+│   # step = probe_training | V1_causality | V2_causality
 └── write_up/
 ```
 

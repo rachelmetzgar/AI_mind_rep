@@ -44,7 +44,7 @@ CONDITION=${CONDITIONS[$COND_IDX]}
 TURN_LABEL=$(( TURN_IDX_POS + 1 ))
 
 EXP2_DIR="/mnt/cup/labs/graziano/rachel/mind_rep/exp_2"
-LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}"
+LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}/probe_training"
 mkdir -p "$LOG_DIR"
 exec > "${LOG_DIR}/alt_pos_all_${SLURM_ARRAY_TASK_ID}_${SLURM_JOB_ID}.out" 2> "${LOG_DIR}/alt_pos_all_${SLURM_ARRAY_TASK_ID}_${SLURM_JOB_ID}.err"
 cd "$EXP2_DIR" || { echo "FATAL: Cannot cd to $EXP2_DIR"; exit 1; }

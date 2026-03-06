@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate steered_samples_v1.html for a given variant.
+Generate V1_causality/steered_samples.html for a given variant.
 
 Shows 3 sample responses per condition (baseline, human, ai) at each
 strength for the peak_15 strategy (operational), so you can visually
@@ -160,9 +160,9 @@ def generate_html(version):
 
 </body></html>"""
 
-    out_dir = EXP2_ROOT / "results" / "llama2_13b_chat" / version
+    out_dir = EXP2_ROOT / "results" / "llama2_13b_chat" / version / "V1_causality"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / "steered_samples_v1.html"
+    out_path = out_dir / "steered_samples.html"
     out_path.write_text(html)
     print(f"  Saved: {out_path}")
 

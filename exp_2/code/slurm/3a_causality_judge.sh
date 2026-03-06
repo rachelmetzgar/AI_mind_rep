@@ -5,7 +5,7 @@
 #SBATCH --time=4:00:00
 
 # ---------------------------------------------------------------------------
-# V1 Judge: peak_15 strategy, operational + metacognitive_peak.
+# V1 Judge: peak_15 strategy, operational + metacognitive.
 # Usage: VERSION=labels sbatch 3a_causality_judge.sh
 # ---------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ elif [ "$JUDGE_BACKEND" = "gpt" ] && [ -z "${OPENAI_API_KEY:-}" ]; then
 fi
 
 EXP2_DIR="/mnt/cup/labs/graziano/rachel/mind_rep/exp_2"
-LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}"
+LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}/V1_causality"
 mkdir -p "$LOG_DIR"
 exec > "${LOG_DIR}/judge_v1_${SLURM_JOB_ID}.out" 2> "${LOG_DIR}/judge_v1_${SLURM_JOB_ID}.err"
 cd "$EXP2_DIR" || { echo "FATAL: Cannot cd to $EXP2_DIR"; exit 1; }
@@ -53,7 +53,7 @@ RESULT_BASE="$EXP2_DIR/data/$VERSION/intervention_results/V1/${STRATEGY}"
 echo "[$(date)] V1 judge | version=$VERSION | strategy=$STRATEGY | N=$N | backend=$JUDGE_BACKEND | host=$HOSTNAME"
 
 FOUND=0
-for PROBE_TYPE in operational metacognitive_peak; do
+for PROBE_TYPE in operational metacognitive; do
     PROBE_DIR="${RESULT_BASE}/${PROBE_TYPE}/is_${N}"
     if [ -d "$PROBE_DIR" ]; then
         echo "[$(date)] Judging ${STRATEGY}/${PROBE_TYPE}/is_${N} ..."

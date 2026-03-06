@@ -29,12 +29,12 @@ Multiple strategies can be run in one invocation:
     --layer_strategy narrow wide
 
 Output directory structure:
-    intervention_results/V{1,2}/{layer_strategy}/{operational,metacognitive_peak}/is_{N}/...
+    intervention_results/V{1,2}/{layer_strategy}/{operational,metacognitive}/is_{N}/...
 
 Probe configurations (applied within each layer strategy):
   - operational:             operational probes, layers selected by strategy
   - metacognitive_matched:   metacognitive probes, restricted to operational probe layers
-  - metacognitive_peak:      metacognitive probes, only layers where operational probes fail
+  - metacognitive:            metacognitive probes, only layers where operational probes fail
 
 Judging is done separately via 3_causality_judge.py.
 
@@ -148,7 +148,7 @@ def _init_paths():
     PROBE_CONFIGS = [
         {"label": "operational",             "probe_dir": CONTROL_PROBE_DIR, "layer_mode": "all"},
     #    {"label": "metacognitive_matched",  "probe_dir": READING_PROBE_DIR, "layer_mode": "matched"},
-        {"label": "metacognitive_peak",      "probe_dir": READING_PROBE_DIR, "layer_mode": "all"},
+        {"label": "metacognitive",            "probe_dir": READING_PROBE_DIR, "layer_mode": "all"},
     ]
 
 

@@ -9,7 +9,7 @@ Conditions: control_first (BOS), control_random, control_eos (first </s>),
 Turns: 1-5
 
 Output structure:
-  exp_2/results/comparisons/llama2_13b_chat/probe_training/alt_tokens/
+  exp_2/results/llama2_13b_chat/comparisons/probe_training/alt_tokens/
     balanced_gpt.html    — Per-version: token examples + all turns/conditions
     nonsense_codeword.html — Per-version: token examples + all turns/conditions
     combined.html        — Cross-version: summary figure, comparison tables, overlays
@@ -29,7 +29,7 @@ from pathlib import Path
 # ── Configuration ────────────────────────────────────────────────────────────
 
 BASE = str(Path(__file__).resolve().parent.parent)  # exp_2/
-OUTPUT_DIR = f'{BASE}/results/comparisons/llama2_13b_chat/probe_training/alt_tokens'
+OUTPUT_DIR = f'{BASE}/results/llama2_13b_chat/comparisons/probe_training/alt_tokens'
 
 VERSIONS = ['balanced_gpt', 'nonsense_codeword']
 VERSION_LABELS = {

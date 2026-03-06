@@ -47,7 +47,7 @@ VARIANTS = {
         "data_path": EXP2_ROOT / "results" / "llama2_13b_chat" / "balanced_gpt",
         "strategies": ["peak_15"],
         "strengths": [2, 4, 5, 8, 16],
-        "reading_probe": "metacognitive_peak",
+        "reading_probe": "metacognitive",
         "note": "Cross-model generalization: AI partner was GPT, not LLaMA",
     },
     "nonsense_codeword": {
@@ -57,7 +57,7 @@ VARIANTS = {
         "data_path": EXP2_ROOT / "results" / "llama2_13b_chat" / "nonsense_codeword",
         "strategies": ["peak_15"],
         "strengths": [2, 4, 5, 8, 16],
-        "reading_probe": "metacognitive_peak",
+        "reading_probe": "metacognitive",
         "note": "CONTROL: nonsense codeword labels, near-chance probes",
     },
 }
@@ -65,7 +65,7 @@ VARIANTS = {
 # Human-readable probe type labels for display
 PROBE_TYPE_LABELS = {
     "operational": "Operational (pre-generation probe)",
-    "metacognitive_peak": "Metacognitive (peak layers)",
+    "metacognitive": "Metacognitive",
     "metacognitive_matched": "Metacognitive (matched layers)",
 }
 
@@ -858,7 +858,7 @@ def main():
     _sys.path.insert(0, str(Path(__file__).resolve().parent))
     from src.report_utils import save_report
 
-    output_path = EXP2_ROOT / "results" / "comparisons" / "llama2_13b_chat" / "causality_qc" / "v1_qc_summary_all_variants.html"
+    output_path = EXP2_ROOT / "results" / "llama2_13b_chat" / "comparisons" / "v1_causality" / "causality_qc" / "v1_qc_summary_all_variants.html"
     save_report(html, output_path)
 
     # Also save per-variant HTML summaries (only for variants with data)
@@ -885,7 +885,7 @@ img {{ max-width: 100%; }}
 <p class="note">Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
 {generate_variant_section(all_data, vname)}
 </body></html>"""
-        variant_output = results_dir / "v1_analysis_summary.html"
+        variant_output = results_dir / "V1_causality" / "v1_analysis_summary.html"
         save_report(variant_html, variant_output)
 
     print("\n[DONE] All summaries generated.")

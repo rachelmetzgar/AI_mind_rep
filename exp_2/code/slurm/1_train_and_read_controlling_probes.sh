@@ -29,7 +29,7 @@ set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 EXP2_DIR="/mnt/cup/labs/graziano/rachel/mind_rep/exp_2"
-LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}"
+LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}/probe_training"
 mkdir -p "$LOG_DIR"
 exec > "${LOG_DIR}/train_probes_${SLURM_JOB_ID}.out" 2> "${LOG_DIR}/train_probes_${SLURM_JOB_ID}.err"
 cd "$EXP2_DIR" || { echo "FATAL: Cannot cd to $EXP2_DIR"; exit 1; }

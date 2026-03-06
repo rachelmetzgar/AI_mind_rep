@@ -8,9 +8,9 @@ a two-panel figure, statistical tests (binomial vs chance, between-version
 z-tests), and an HTML report with auto-generated Markdown companion.
 
 Outputs:
-    results/comparisons/llama2_13b_chat/probe_training/operational_comparison.html
-    results/comparisons/llama2_13b_chat/probe_training/operational_comparison.md
-    results/comparisons/llama2_13b_chat/probe_training/figures/operational_comparison.png
+    results/llama2_13b_chat/comparisons/probe_training/operational_comparison.html
+    results/llama2_13b_chat/comparisons/probe_training/operational_comparison.md
+    results/llama2_13b_chat/comparisons/probe_training/figures/operational_comparison.png
 
 Usage:
     python code/analysis/gen_operational_comparison.py
@@ -36,7 +36,7 @@ from src.report_utils import save_report
 
 # ========================== CONFIG ========================== #
 RESULTS_ROOT = Path(__file__).resolve().parent.parent / "results"
-OUT_DIR = RESULTS_ROOT / "comparisons" / "llama2_13b_chat" / "probe_training"
+OUT_DIR = RESULTS_ROOT / "llama2_13b_chat" / "comparisons" / "probe_training"
 FIG_DIR = OUT_DIR / "figures"
 
 N_TEST = 400   # 20% of ~2000 samples

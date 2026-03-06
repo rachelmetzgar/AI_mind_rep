@@ -391,9 +391,9 @@ def set_version(version, model=None):
     config.RESULTS.v2_behavioral = ROOT_DIR / "results" / m / version / "V2_causality" / "behavioral"
 
     # Comparisons
-    config.RESULTS.comparisons = ROOT_DIR / "results" / "comparisons" / m
-    config.RESULTS.probe_training_comparison = ROOT_DIR / "results" / "comparisons" / m / "probe_training"
-    config.RESULTS.causality_qc_comparison = ROOT_DIR / "results" / "comparisons" / m / "causality_qc"
+    config.RESULTS.comparisons = ROOT_DIR / "results" / m / "comparisons"
+    config.RESULTS.probe_training_comparison = ROOT_DIR / "results" / m / "comparisons" / "probe_training"
+    config.RESULTS.causality_qc_comparison = ROOT_DIR / "results" / m / "comparisons" / "v1_causality" / "causality_qc"
 
     # Logs
     config.RESULTS.version_logs = ROOT_DIR / "logs" / m / version
