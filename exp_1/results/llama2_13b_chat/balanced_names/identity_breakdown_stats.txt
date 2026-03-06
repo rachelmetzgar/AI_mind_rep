@@ -1,0 +1,533 @@
+IDENTITY BREAKDOWN STATS
+Generated: 2026-02-19 14:45:10
+======================================================================
+
+
+────────────────────────────────────────────────────────────
+Word Count
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 0.081, p = 0.9701 , η² = 0.001, N = 50
+Agent means:
+  Gregory     : M = 870.16400 ± 9.99592
+  Rebecca     : M = 867.47600 ± 10.27092
+  ChatGPT     : M = 873.45200 ± 9.88180
+  Copilot     : M = 872.75200 ± 8.77730
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 0.183, p_raw = 0.8555, p_adj = 0.9428 , dz = 0.026
+  Gregory vs ChatGPT            : t = -0.223, p_raw = 0.8246, p_adj = 0.9428 , dz = -0.032
+  Gregory vs Copilot            : t = -0.183, p_raw = 0.8553, p_adj = 0.9428 , dz = -0.026
+  Rebecca vs ChatGPT            : t = -0.426, p_raw = 0.6717, p_adj = 0.9428 , dz = -0.060
+  Rebecca vs Copilot            : t = -0.406, p_raw = 0.6863, p_adj = 0.9428 , dz = -0.057
+  ChatGPT vs Copilot            : t = 0.072, p_raw = 0.9428, p_adj = 0.9428 , dz = 0.010
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = -0.394, p_raw = 0.6952, p_adj = 0.8298 , dz = -0.056
+  Gregory vs AI avg                       : t = -0.216, p_raw = 0.8298, p_adj = 0.8298 , dz = -0.031
+  Rebecca vs AI avg                       : t = -0.446, p_raw = 0.6573, p_adj = 0.8298 , dz = -0.063
+
+────────────────────────────────────────────────────────────
+Questions (#)
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 6.611, p = 0.0003 ***, η² = 0.101, N = 50
+Agent means:
+  Gregory     : M = 9.15600 ± 0.29069
+  Rebecca     : M = 8.68800 ± 0.24376
+  ChatGPT     : M = 7.56600 ± 0.23313
+  Copilot     : M = 8.65000 ± 0.21915
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 1.184, p_raw = 0.2422, p_adj = 0.2907 , dz = 0.167
+  Gregory vs ChatGPT            : t = 3.951, p_raw = 0.0002, p_adj = 0.0015 **, dz = 0.559
+  Gregory vs Copilot            : t = 1.379, p_raw = 0.1742, p_adj = 0.2612 , dz = 0.195
+  Rebecca vs ChatGPT            : t = 2.958, p_raw = 0.0048, p_adj = 0.0095 **, dz = 0.418
+  Rebecca vs Copilot            : t = 0.124, p_raw = 0.9020, p_adj = 0.9020 , dz = 0.018
+  ChatGPT vs Copilot            : t = -2.989, p_raw = 0.0044, p_adj = 0.0095 **, dz = -0.423
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 3.276, p_raw = 0.0019, p_adj = 0.0050 **, dz = 0.463
+  Gregory vs AI avg                       : t = 3.085, p_raw = 0.0033, p_adj = 0.0050 **, dz = 0.436
+  Rebecca vs AI avg                       : t = 1.975, p_raw = 0.0539, p_adj = 0.0539 , dz = 0.279
+
+────────────────────────────────────────────────────────────
+Demir: Modal Aux.
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 0.218, p = 0.8839 , η² = 0.003, N = 50
+Agent means:
+  Gregory     : M = 0.01198 ± 0.00028
+  Rebecca     : M = 0.01204 ± 0.00029
+  ChatGPT     : M = 0.01226 ± 0.00031
+  Copilot     : M = 0.01197 ± 0.00028
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = -0.141, p_raw = 0.8886, p_adj = 0.9959 , dz = -0.020
+  Gregory vs ChatGPT            : t = -0.667, p_raw = 0.5081, p_adj = 0.9959 , dz = -0.094
+  Gregory vs Copilot            : t = 0.005, p_raw = 0.9959, p_adj = 0.9959 , dz = 0.001
+  Rebecca vs ChatGPT            : t = -0.546, p_raw = 0.5877, p_adj = 0.9959 , dz = -0.077
+  Rebecca vs Copilot            : t = 0.154, p_raw = 0.8781, p_adj = 0.9959 , dz = 0.022
+  ChatGPT vs Copilot            : t = 0.764, p_raw = 0.4487, p_adj = 0.9959 , dz = 0.108
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = -0.373, p_raw = 0.7111, p_adj = 0.8275 , dz = -0.053
+  Gregory vs AI avg                       : t = -0.380, p_raw = 0.7053, p_adj = 0.8275 , dz = -0.054
+  Rebecca vs AI avg                       : t = -0.219, p_raw = 0.8275, p_adj = 0.8275 , dz = -0.031
+
+────────────────────────────────────────────────────────────
+Demir: Epistemic Verbs
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 0.013, p = 0.9980 , η² = 0.000, N = 50
+Agent means:
+  Gregory     : M = 0.01344 ± 0.00035
+  Rebecca     : M = 0.01340 ± 0.00036
+  ChatGPT     : M = 0.01337 ± 0.00034
+  Copilot     : M = 0.01334 ± 0.00033
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 0.082, p_raw = 0.9353, p_adj = 0.9651 , dz = 0.012
+  Gregory vs ChatGPT            : t = 0.136, p_raw = 0.8926, p_adj = 0.9651 , dz = 0.019
+  Gregory vs Copilot            : t = 0.196, p_raw = 0.8456, p_adj = 0.9651 , dz = 0.028
+  Rebecca vs ChatGPT            : t = 0.044, p_raw = 0.9651, p_adj = 0.9651 , dz = 0.006
+  Rebecca vs Copilot            : t = 0.103, p_raw = 0.9180, p_adj = 0.9651 , dz = 0.015
+  ChatGPT vs Copilot            : t = 0.061, p_raw = 0.9516, p_adj = 0.9651 , dz = 0.009
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 0.166, p_raw = 0.8689, p_adj = 0.9355 , dz = 0.023
+  Gregory vs AI avg                       : t = 0.188, p_raw = 0.8520, p_adj = 0.9355 , dz = 0.027
+  Rebecca vs AI avg                       : t = 0.081, p_raw = 0.9355, p_adj = 0.9355 , dz = 0.012
+
+────────────────────────────────────────────────────────────
+Demir: Epistemic Adverbs
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 2.702, p = 0.0477 *, η² = 0.041, N = 50
+Agent means:
+  Gregory     : M = 0.01057 ± 0.00021
+  Rebecca     : M = 0.01081 ± 0.00026
+  ChatGPT     : M = 0.01037 ± 0.00024
+  Copilot     : M = 0.00986 ± 0.00025
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = -0.748, p_raw = 0.4580, p_adj = 0.5496 , dz = -0.106
+  Gregory vs ChatGPT            : t = 0.596, p_raw = 0.5537, p_adj = 0.5537 , dz = 0.084
+  Gregory vs Copilot            : t = 2.365, p_raw = 0.0220, p_adj = 0.0660 , dz = 0.335
+  Rebecca vs ChatGPT            : t = 1.169, p_raw = 0.2481, p_adj = 0.3721 , dz = 0.165
+  Rebecca vs Copilot            : t = 2.393, p_raw = 0.0206, p_adj = 0.0660 , dz = 0.338
+  ChatGPT vs Copilot            : t = 1.458, p_raw = 0.1512, p_adj = 0.3024 , dz = 0.206
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 2.182, p_raw = 0.0339, p_adj = 0.0734 , dz = 0.309
+  Gregory vs AI avg                       : t = 1.712, p_raw = 0.0932, p_adj = 0.0932 , dz = 0.242
+  Rebecca vs AI avg                       : t = 2.019, p_raw = 0.0489, p_adj = 0.0734 , dz = 0.286
+
+────────────────────────────────────────────────────────────
+Demir: Epistemic Adj.
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 5.181, p = 0.0020 **, η² = 0.077, N = 50
+Agent means:
+  Gregory     : M = 0.00056 ± 0.00006
+  Rebecca     : M = 0.00045 ± 0.00005
+  ChatGPT     : M = 0.00073 ± 0.00005
+  Copilot     : M = 0.00073 ± 0.00007
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 1.555, p_raw = 0.1264, p_adj = 0.1517 , dz = 0.220
+  Gregory vs ChatGPT            : t = -1.985, p_raw = 0.0528, p_adj = 0.0926 , dz = -0.281
+  Gregory vs Copilot            : t = -1.912, p_raw = 0.0617, p_adj = 0.0926 , dz = -0.270
+  Rebecca vs ChatGPT            : t = -3.429, p_raw = 0.0012, p_adj = 0.0074 **, dz = -0.485
+  Rebecca vs Copilot            : t = -2.981, p_raw = 0.0045, p_adj = 0.0134 *, dz = -0.422
+  ChatGPT vs Copilot            : t = -0.025, p_raw = 0.9804, p_adj = 0.9804 , dz = -0.003
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = -3.549, p_raw = 0.0009, p_adj = 0.0013 **, dz = -0.502
+  Gregory vs AI avg                       : t = -2.310, p_raw = 0.0251, p_adj = 0.0251 *, dz = -0.327
+  Rebecca vs AI avg                       : t = -3.689, p_raw = 0.0006, p_adj = 0.0013 **, dz = -0.522
+
+────────────────────────────────────────────────────────────
+Demir: Quantifiers
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 2.427, p = 0.0679 , η² = 0.039, N = 50
+Agent means:
+  Gregory     : M = 0.00527 ± 0.00020
+  Rebecca     : M = 0.00511 ± 0.00020
+  ChatGPT     : M = 0.00512 ± 0.00020
+  Copilot     : M = 0.00583 ± 0.00023
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 0.539, p_raw = 0.5922, p_adj = 0.7106 , dz = 0.076
+  Gregory vs ChatGPT            : t = 0.597, p_raw = 0.5535, p_adj = 0.7106 , dz = 0.084
+  Gregory vs Copilot            : t = -1.665, p_raw = 0.1022, p_adj = 0.2044 , dz = -0.236
+  Rebecca vs ChatGPT            : t = -0.032, p_raw = 0.9748, p_adj = 0.9748 , dz = -0.004
+  Rebecca vs Copilot            : t = -2.317, p_raw = 0.0247, p_adj = 0.1132 , dz = -0.328
+  ChatGPT vs Copilot            : t = -2.136, p_raw = 0.0377, p_adj = 0.1132 , dz = -0.302
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = -1.381, p_raw = 0.1735, p_adj = 0.2603 , dz = -0.195
+  Gregory vs AI avg                       : t = -0.823, p_raw = 0.4143, p_adj = 0.4143 , dz = -0.116
+  Rebecca vs AI avg                       : t = -1.393, p_raw = 0.1700, p_adj = 0.2603 , dz = -0.197
+
+────────────────────────────────────────────────────────────
+Demir: Epistemic Nouns
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 2.169, p = 0.0942 , η² = 0.037, N = 50
+Agent means:
+  Gregory     : M = 0.00102 ± 0.00008
+  Rebecca     : M = 0.00088 ± 0.00007
+  ChatGPT     : M = 0.00116 ± 0.00009
+  Copilot     : M = 0.00113 ± 0.00008
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 1.352, p_raw = 0.1826, p_adj = 0.3652 , dz = 0.191
+  Gregory vs ChatGPT            : t = -1.117, p_raw = 0.2693, p_adj = 0.4039 , dz = -0.158
+  Gregory vs Copilot            : t = -0.966, p_raw = 0.3388, p_adj = 0.4066 , dz = -0.137
+  Rebecca vs ChatGPT            : t = -2.279, p_raw = 0.0270, p_adj = 0.1372 , dz = -0.322
+  Rebecca vs Copilot            : t = -2.050, p_raw = 0.0457, p_adj = 0.1372 , dz = -0.290
+  ChatGPT vs Copilot            : t = 0.205, p_raw = 0.8382, p_adj = 0.8382 , dz = 0.029
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = -2.281, p_raw = 0.0269, p_adj = 0.0404 *, dz = -0.323
+  Gregory vs AI avg                       : t = -1.275, p_raw = 0.2084, p_adj = 0.2084 , dz = -0.180
+  Rebecca vs AI avg                       : t = -2.629, p_raw = 0.0114, p_adj = 0.0342 *, dz = -0.372
+
+────────────────────────────────────────────────────────────
+Demir: Hedging (Total)
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 0.065, p = 0.9782 , η² = 0.001, N = 50
+Agent means:
+  Gregory     : M = 0.04285 ± 0.00048
+  Rebecca     : M = 0.04267 ± 0.00050
+  ChatGPT     : M = 0.04301 ± 0.00053
+  Copilot     : M = 0.04287 ± 0.00058
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 0.238, p_raw = 0.8131, p_adj = 0.9781 , dz = 0.034
+  Gregory vs ChatGPT            : t = -0.220, p_raw = 0.8266, p_adj = 0.9781 , dz = -0.031
+  Gregory vs Copilot            : t = -0.028, p_raw = 0.9781, p_adj = 0.9781 , dz = -0.004
+  Rebecca vs ChatGPT            : t = -0.423, p_raw = 0.6743, p_adj = 0.9781 , dz = -0.060
+  Rebecca vs Copilot            : t = -0.269, p_raw = 0.7887, p_adj = 0.9781 , dz = -0.038
+  ChatGPT vs Copilot            : t = 0.179, p_raw = 0.8585, p_adj = 0.9781 , dz = 0.025
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = -0.327, p_raw = 0.7453, p_adj = 0.8902 , dz = -0.046
+  Gregory vs AI avg                       : t = -0.139, p_raw = 0.8902, p_adj = 0.8902 , dz = -0.020
+  Rebecca vs AI avg                       : t = -0.406, p_raw = 0.6862, p_adj = 0.8902 , dz = -0.057
+
+────────────────────────────────────────────────────────────
+Fung: Interpersonal DMs
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 19.338, p = 0.0000 ***, η² = 0.244, N = 50
+Agent means:
+  Gregory     : M = 0.04203 ± 0.00086
+  Rebecca     : M = 0.04221 ± 0.00080
+  ChatGPT     : M = 0.03468 ± 0.00065
+  Copilot     : M = 0.03798 ± 0.00082
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = -0.153, p_raw = 0.8789, p_adj = 0.8789 , dz = -0.022
+  Gregory vs ChatGPT            : t = 5.924, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.838
+  Gregory vs Copilot            : t = 3.190, p_raw = 0.0025, p_adj = 0.0037 **, dz = 0.451
+  Rebecca vs ChatGPT            : t = 7.517, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 1.063
+  Rebecca vs Copilot            : t = 3.777, p_raw = 0.0004, p_adj = 0.0009 ***, dz = 0.534
+  ChatGPT vs Copilot            : t = -3.069, p_raw = 0.0035, p_adj = 0.0042 **, dz = -0.434
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 6.974, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.986
+  Gregory vs AI avg                       : t = 5.024, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.710
+  Rebecca vs AI avg                       : t = 6.410, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.906
+
+────────────────────────────────────────────────────────────
+Fung: Referential DMs
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 0.919, p = 0.4335 , η² = 0.014, N = 50
+Agent means:
+  Gregory     : M = 0.08041 ± 0.00056
+  Rebecca     : M = 0.08069 ± 0.00057
+  ChatGPT     : M = 0.08053 ± 0.00054
+  Copilot     : M = 0.07954 ± 0.00046
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = -0.357, p_raw = 0.7228, p_adj = 0.8939 , dz = -0.050
+  Gregory vs ChatGPT            : t = -0.134, p_raw = 0.8939, p_adj = 0.8939 , dz = -0.019
+  Gregory vs Copilot            : t = 1.118, p_raw = 0.2689, p_adj = 0.5379 , dz = 0.158
+  Rebecca vs ChatGPT            : t = 0.234, p_raw = 0.8156, p_adj = 0.8939 , dz = 0.033
+  Rebecca vs Copilot            : t = 1.479, p_raw = 0.1456, p_adj = 0.4367 , dz = 0.209
+  ChatGPT vs Copilot            : t = 1.559, p_raw = 0.1253, p_adj = 0.4367 , dz = 0.221
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 0.866, p_raw = 0.3906, p_adj = 0.5859 , dz = 0.123
+  Gregory vs AI avg                       : t = 0.499, p_raw = 0.6199, p_adj = 0.6199 , dz = 0.071
+  Rebecca vs AI avg                       : t = 0.983, p_raw = 0.3306, p_adj = 0.5859 , dz = 0.139
+
+────────────────────────────────────────────────────────────
+Fung: Structural DMs
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 1.418, p = 0.2398 , η² = 0.022, N = 50
+Agent means:
+  Gregory     : M = 0.07594 ± 0.00057
+  Rebecca     : M = 0.07652 ± 0.00054
+  ChatGPT     : M = 0.07594 ± 0.00059
+  Copilot     : M = 0.07493 ± 0.00050
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = -0.737, p_raw = 0.4648, p_adj = 0.5577 , dz = -0.104
+  Gregory vs ChatGPT            : t = 0.002, p_raw = 0.9983, p_adj = 0.9983 , dz = 0.000
+  Gregory vs Copilot            : t = 1.285, p_raw = 0.2048, p_adj = 0.4096 , dz = 0.182
+  Rebecca vs ChatGPT            : t = 0.773, p_raw = 0.4434, p_adj = 0.5577 , dz = 0.109
+  Rebecca vs Copilot            : t = 2.124, p_raw = 0.0387, p_adj = 0.2324 , dz = 0.300
+  ChatGPT vs Copilot            : t = 1.451, p_raw = 0.1530, p_adj = 0.4096 , dz = 0.205
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 1.300, p_raw = 0.1998, p_adj = 0.2996 , dz = 0.184
+  Gregory vs AI avg                       : t = 0.646, p_raw = 0.5214, p_adj = 0.5214 , dz = 0.091
+  Rebecca vs AI avg                       : t = 1.636, p_raw = 0.1083, p_adj = 0.2996 , dz = 0.231
+
+────────────────────────────────────────────────────────────
+Fung: Cognitive DMs
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 11.006, p = 0.0000 ***, η² = 0.148, N = 50
+Agent means:
+  Gregory     : M = 0.01672 ± 0.00062
+  Rebecca     : M = 0.01641 ± 0.00055
+  ChatGPT     : M = 0.01274 ± 0.00045
+  Copilot     : M = 0.01523 ± 0.00051
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 0.369, p_raw = 0.7140, p_adj = 0.7140 , dz = 0.052
+  Gregory vs ChatGPT            : t = 4.990, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.706
+  Gregory vs Copilot            : t = 1.726, p_raw = 0.0906, p_adj = 0.1087 , dz = 0.244
+  Rebecca vs ChatGPT            : t = 5.396, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.763
+  Rebecca vs Copilot            : t = 1.774, p_raw = 0.0823, p_adj = 0.1087 , dz = 0.251
+  ChatGPT vs Copilot            : t = -3.380, p_raw = 0.0014, p_adj = 0.0029 **, dz = -0.478
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 5.170, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.731
+  Gregory vs AI avg                       : t = 3.675, p_raw = 0.0006, p_adj = 0.0006 ***, dz = 0.520
+  Rebecca vs AI avg                       : t = 4.325, p_raw = 0.0001, p_adj = 0.0001 ***, dz = 0.612
+
+────────────────────────────────────────────────────────────
+Fung: Discourse Markers (Total)
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 16.365, p = 0.0000 ***, η² = 0.210, N = 50
+Agent means:
+  Gregory     : M = 0.12030 ± 0.00111
+  Rebecca     : M = 0.12049 ± 0.00096
+  ChatGPT     : M = 0.11179 ± 0.00099
+  Copilot     : M = 0.11515 ± 0.00099
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = -0.132, p_raw = 0.8956, p_adj = 0.8956 , dz = -0.019
+  Gregory vs ChatGPT            : t = 4.996, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.706
+  Gregory vs Copilot            : t = 3.251, p_raw = 0.0021, p_adj = 0.0031 **, dz = 0.460
+  Rebecca vs ChatGPT            : t = 6.973, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.986
+  Rebecca vs Copilot            : t = 3.722, p_raw = 0.0005, p_adj = 0.0010 **, dz = 0.526
+  ChatGPT vs Copilot            : t = -2.355, p_raw = 0.0226, p_adj = 0.0271 *, dz = -0.333
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 6.228, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.881
+  Gregory vs AI avg                       : t = 4.608, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.652
+  Rebecca vs AI avg                       : t = 6.162, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.871
+
+────────────────────────────────────────────────────────────
+Nonfluency Rate (LIWC)
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 1.260, p = 0.2903 , η² = 0.018, N = 50
+Agent means:
+  Gregory     : M = 0.00160 ± 0.00014
+  Rebecca     : M = 0.00134 ± 0.00008
+  ChatGPT     : M = 0.00151 ± 0.00010
+  Copilot     : M = 0.00157 ± 0.00009
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 1.703, p_raw = 0.0949, p_adj = 0.2848 , dz = 0.241
+  Gregory vs ChatGPT            : t = 0.544, p_raw = 0.5890, p_adj = 0.7477 , dz = 0.077
+  Gregory vs Copilot            : t = 0.200, p_raw = 0.8420, p_adj = 0.8420 , dz = 0.028
+  Rebecca vs ChatGPT            : t = -1.359, p_raw = 0.1804, p_adj = 0.3608 , dz = -0.192
+  Rebecca vs Copilot            : t = -1.921, p_raw = 0.0605, p_adj = 0.2848 , dz = -0.272
+  ChatGPT vs Copilot            : t = -0.495, p_raw = 0.6231, p_adj = 0.7477 , dz = -0.070
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = -0.598, p_raw = 0.5529, p_adj = 0.6852 , dz = -0.085
+  Gregory vs AI avg                       : t = 0.408, p_raw = 0.6852, p_adj = 0.6852 , dz = 0.058
+  Rebecca vs AI avg                       : t = -1.945, p_raw = 0.0575, p_adj = 0.1725 , dz = -0.275
+
+────────────────────────────────────────────────────────────
+Filler Rate (LIWC)
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 17.255, p = 0.0000 ***, η² = 0.214, N = 50
+Agent means:
+  Gregory     : M = 0.00346 ± 0.00022
+  Rebecca     : M = 0.00278 ± 0.00019
+  ChatGPT     : M = 0.00164 ± 0.00012
+  Copilot     : M = 0.00272 ± 0.00017
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 2.356, p_raw = 0.0225, p_adj = 0.0270 *, dz = 0.333
+  Gregory vs ChatGPT            : t = 6.984, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.988
+  Gregory vs Copilot            : t = 2.566, p_raw = 0.0134, p_adj = 0.0201 *, dz = 0.363
+  Rebecca vs ChatGPT            : t = 4.695, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.664
+  Rebecca vs Copilot            : t = 0.250, p_raw = 0.8039, p_adj = 0.8039 , dz = 0.035
+  ChatGPT vs Copilot            : t = -5.091, p_raw = 0.0000, p_adj = 0.0000 ***, dz = -0.720
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 5.095, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.721
+  Gregory vs AI avg                       : t = 5.046, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.714
+  Rebecca vs AI avg                       : t = 2.804, p_raw = 0.0072, p_adj = 0.0072 **, dz = 0.397
+
+────────────────────────────────────────────────────────────
+Disfluency Rate (Total)
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 16.010, p = 0.0000 ***, η² = 0.203, N = 50
+Agent means:
+  Gregory     : M = 0.00507 ± 0.00023
+  Rebecca     : M = 0.00412 ± 0.00019
+  ChatGPT     : M = 0.00315 ± 0.00016
+  Copilot     : M = 0.00429 ± 0.00018
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 3.248, p_raw = 0.0021, p_adj = 0.0032 **, dz = 0.459
+  Gregory vs ChatGPT            : t = 6.384, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.903
+  Gregory vs Copilot            : t = 2.417, p_raw = 0.0194, p_adj = 0.0233 *, dz = 0.342
+  Rebecca vs ChatGPT            : t = 3.798, p_raw = 0.0004, p_adj = 0.0008 ***, dz = 0.537
+  Rebecca vs Copilot            : t = -0.682, p_raw = 0.4983, p_adj = 0.4983 , dz = -0.096
+  ChatGPT vs Copilot            : t = -4.594, p_raw = 0.0000, p_adj = 0.0001 ***, dz = -0.650
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 4.203, p_raw = 0.0001, p_adj = 0.0002 ***, dz = 0.594
+  Gregory vs AI avg                       : t = 4.731, p_raw = 0.0000, p_adj = 0.0001 ***, dz = 0.669
+  Rebecca vs AI avg                       : t = 1.848, p_raw = 0.0707, p_adj = 0.0707 , dz = 0.261
+
+────────────────────────────────────────────────────────────
+Discourse 'Like' Rate
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 9.818, p = 0.0000 ***, η² = 0.137, N = 50
+Agent means:
+  Gregory     : M = 0.01045 ± 0.00051
+  Rebecca     : M = 0.01101 ± 0.00047
+  ChatGPT     : M = 0.00772 ± 0.00040
+  Copilot     : M = 0.00928 ± 0.00042
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = -0.759, p_raw = 0.4515, p_adj = 0.4515 , dz = -0.107
+  Gregory vs ChatGPT            : t = 3.923, p_raw = 0.0003, p_adj = 0.0008 ***, dz = 0.555
+  Gregory vs Copilot            : t = 1.638, p_raw = 0.1078, p_adj = 0.1293 , dz = 0.232
+  Rebecca vs ChatGPT            : t = 5.651, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.799
+  Rebecca vs Copilot            : t = 3.109, p_raw = 0.0031, p_adj = 0.0062 **, dz = 0.440
+  ChatGPT vs Copilot            : t = -2.487, p_raw = 0.0163, p_adj = 0.0245 *, dz = -0.352
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 5.340, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.755
+  Gregory vs AI avg                       : t = 3.089, p_raw = 0.0033, p_adj = 0.0033 **, dz = 0.437
+  Rebecca vs AI avg                       : t = 5.278, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.746
+
+────────────────────────────────────────────────────────────
+ToM Phrases Rate
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 9.372, p = 0.0000 ***, η² = 0.126, N = 50
+Agent means:
+  Gregory     : M = 0.00298 ± 0.00019
+  Rebecca     : M = 0.00254 ± 0.00016
+  ChatGPT     : M = 0.00183 ± 0.00014
+  Copilot     : M = 0.00257 ± 0.00014
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 1.681, p_raw = 0.0991, p_adj = 0.1324 , dz = 0.238
+  Gregory vs ChatGPT            : t = 5.266, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.745
+  Gregory vs Copilot            : t = 1.626, p_raw = 0.1104, p_adj = 0.1324 , dz = 0.230
+  Rebecca vs ChatGPT            : t = 3.346, p_raw = 0.0016, p_adj = 0.0032 **, dz = 0.473
+  Rebecca vs Copilot            : t = -0.132, p_raw = 0.8952, p_adj = 0.8952 , dz = -0.019
+  ChatGPT vs Copilot            : t = -3.892, p_raw = 0.0003, p_adj = 0.0009 ***, dz = -0.550
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 3.816, p_raw = 0.0004, p_adj = 0.0011 **, dz = 0.540
+  Gregory vs AI avg                       : t = 3.616, p_raw = 0.0007, p_adj = 0.0011 **, dz = 0.511
+  Rebecca vs AI avg                       : t = 1.990, p_raw = 0.0522, p_adj = 0.0522 , dz = 0.281
+
+────────────────────────────────────────────────────────────
+Politeness Rate
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 6.886, p = 0.0002 ***, η² = 0.092, N = 50
+Agent means:
+  Gregory     : M = 0.00580 ± 0.00016
+  Rebecca     : M = 0.00558 ± 0.00022
+  ChatGPT     : M = 0.00673 ± 0.00025
+  Copilot     : M = 0.00656 ± 0.00024
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 0.831, p_raw = 0.4100, p_adj = 0.4919 , dz = 0.118
+  Gregory vs ChatGPT            : t = -2.844, p_raw = 0.0065, p_adj = 0.0130 *, dz = -0.402
+  Gregory vs Copilot            : t = -2.639, p_raw = 0.0111, p_adj = 0.0167 *, dz = -0.373
+  Rebecca vs ChatGPT            : t = -3.512, p_raw = 0.0010, p_adj = 0.0030 **, dz = -0.497
+  Rebecca vs Copilot            : t = -3.499, p_raw = 0.0010, p_adj = 0.0030 **, dz = -0.495
+  ChatGPT vs Copilot            : t = 0.521, p_raw = 0.6047, p_adj = 0.6047 , dz = 0.074
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = -4.291, p_raw = 0.0001, p_adj = 0.0002 ***, dz = -0.607
+  Gregory vs AI avg                       : t = -3.225, p_raw = 0.0022, p_adj = 0.0022 **, dz = -0.456
+  Rebecca vs AI avg                       : t = -4.122, p_raw = 0.0001, p_adj = 0.0002 ***, dz = -0.583
+
+────────────────────────────────────────────────────────────
+Sentiment (VADER)
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 0.834, p = 0.4772 , η² = 0.012, N = 50
+Agent means:
+  Gregory     : M = 0.95772 ± 0.00286
+  Rebecca     : M = 0.96539 ± 0.00262
+  ChatGPT     : M = 0.96183 ± 0.00413
+  Copilot     : M = 0.96158 ± 0.00395
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = -1.813, p_raw = 0.0759, p_adj = 0.4555 , dz = -0.256
+  Gregory vs ChatGPT            : t = -0.868, p_raw = 0.3896, p_adj = 0.6082 , dz = -0.123
+  Gregory vs Copilot            : t = -0.893, p_raw = 0.3761, p_adj = 0.6082 , dz = -0.126
+  Rebecca vs ChatGPT            : t = 0.669, p_raw = 0.5068, p_adj = 0.6082 , dz = 0.095
+  Rebecca vs Copilot            : t = 0.795, p_raw = 0.4305, p_adj = 0.6082 , dz = 0.112
+  ChatGPT vs Copilot            : t = 0.046, p_raw = 0.9636, p_adj = 0.9636 , dz = 0.006
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = -0.045, p_raw = 0.9640, p_adj = 0.9640 , dz = -0.006
+  Gregory vs AI avg                       : t = -1.114, p_raw = 0.2706, p_adj = 0.5819 , dz = -0.158
+  Rebecca vs AI avg                       : t = 0.871, p_raw = 0.3879, p_adj = 0.5819 , dz = 0.123
+
+────────────────────────────────────────────────────────────
+Conv. Quality (1–4)
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 0.952, p = 0.4174 , η² = 0.015, N = 50
+Agent means:
+  Gregory     : M = 2.89600 ± 0.02440
+  Rebecca     : M = 2.92200 ± 0.02006
+  ChatGPT     : M = 2.94000 ± 0.01539
+  Copilot     : M = 2.90200 ± 0.01969
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = -0.781, p_raw = 0.4386, p_adj = 0.6092 , dz = -0.110
+  Gregory vs ChatGPT            : t = -1.502, p_raw = 0.1396, p_adj = 0.4441 , dz = -0.212
+  Gregory vs Copilot            : t = -0.191, p_raw = 0.8496, p_adj = 0.8496 , dz = -0.027
+  Rebecca vs ChatGPT            : t = -0.777, p_raw = 0.4407, p_adj = 0.6092 , dz = -0.110
+  Rebecca vs Copilot            : t = 0.667, p_raw = 0.5076, p_adj = 0.6092 , dz = 0.094
+  ChatGPT vs Copilot            : t = 1.470, p_raw = 0.1480, p_adj = 0.4441 , dz = 0.208
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = -0.618, p_raw = 0.5392, p_adj = 0.8088 , dz = -0.087
+  Gregory vs AI avg                       : t = -0.908, p_raw = 0.3682, p_adj = 0.8088 , dz = -0.128
+  Rebecca vs AI avg                       : t = 0.043, p_raw = 0.9662, p_adj = 0.9662 , dz = 0.006
+
+────────────────────────────────────────────────────────────
+Connectedness (1–4)
+────────────────────────────────────────────────────────────
+RM-ANOVA: F(3,147) = 7.220, p = 0.0001 ***, η² = 0.106, N = 50
+Agent means:
+  Gregory     : M = 3.08600 ± 0.01457
+  Rebecca     : M = 3.03000 ± 0.01597
+  ChatGPT     : M = 2.99200 ± 0.01063
+  Copilot     : M = 3.06400 ± 0.01709
+
+Post-hoc pairwise (BH-FDR):
+  Gregory vs Rebecca            : t = 2.548, p_raw = 0.0140, p_adj = 0.0280 *, dz = 0.360
+  Gregory vs ChatGPT            : t = 5.309, p_raw = 0.0000, p_adj = 0.0000 ***, dz = 0.751
+  Gregory vs Copilot            : t = 0.882, p_raw = 0.3823, p_adj = 0.3823 , dz = 0.125
+  Rebecca vs ChatGPT            : t = 1.902, p_raw = 0.0630, p_adj = 0.0946 , dz = 0.269
+  Rebecca vs Copilot            : t = -1.378, p_raw = 0.1746, p_adj = 0.2095 , dz = -0.195
+  ChatGPT vs Copilot            : t = -3.714, p_raw = 0.0005, p_adj = 0.0016 **, dz = -0.525
+
+Aggregate contrasts (BH-FDR):
+  Human avg vs AI avg                     : t = 1.821, p_raw = 0.0747, p_adj = 0.1121 , dz = 0.258
+  Gregory vs AI avg                       : t = 2.998, p_raw = 0.0043, p_adj = 0.0128 *, dz = 0.424
+  Rebecca vs AI avg                       : t = 0.099, p_raw = 0.9217, p_adj = 0.9217 , dz = 0.014
