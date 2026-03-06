@@ -89,8 +89,8 @@ def _init_paths():
 
     EXP2_CONV_DIR = str(config.PATHS.exp2_conversations)
     EXP2_PROBE_DIRS = {
-        "control_probe": str(config.PATHS.exp2_control_probe),
-        "reading_probe": str(config.PATHS.exp2_reading_probe),
+        "operational": str(config.PATHS.exp2_operational),
+        "metacognitive": str(config.PATHS.exp2_metacognitive),
     }
     OUTPUT_DIR = str(get_version_results_dir(config.RESULTS.cross_prediction))
 
@@ -464,7 +464,7 @@ def main():
     # === Cross-prediction ===
     all_cross_results = {}
 
-    for probe_type in ["control_probe", "reading_probe"]:
+    for probe_type in ["operational", "metacognitive"]:
         print(f"\n{'#'*70}")
         print(f"# Cross-prediction: {probe_type}")
         print(f"{'#'*70}")
@@ -473,8 +473,8 @@ def main():
 
         # Direction 1: Concept probes → Conversational activations (requires conversations)
         if has_convs:
-            conv_acts = conv_acts_control if probe_type == "control_probe" else conv_acts_reading
-            conv_labels = conv_labels_control if probe_type == "control_probe" else conv_labels_reading
+            conv_acts = conv_acts_control if probe_type == "operational" else conv_acts_reading
+            conv_labels = conv_labels_control if probe_type == "operational" else conv_labels_reading
 
             d1 = run_cross_prediction(
                 concept_probes, conv_acts, conv_labels,
@@ -496,7 +496,7 @@ def main():
 
     # === Cosine alignment (always available — only needs probe weights) ===
     all_cosine_results = {}
-    for probe_type in ["control_probe", "reading_probe"]:
+    for probe_type in ["operational", "metacognitive"]:
         print(f"\n{'#'*70}")
         print(f"# Cosine alignment: {probe_type}")
         print(f"{'#'*70}")
@@ -538,7 +538,7 @@ def main():
     print(f"SUMMARY (version: {args.version})")
     print(f"{'='*70}")
 
-    for probe_type in ["control_probe", "reading_probe"]:
+    for probe_type in ["operational", "metacognitive"]:
         print(f"\n  {probe_type}:")
         for direction, results in all_cross_results[probe_type].items():
             if results:

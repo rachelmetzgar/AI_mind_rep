@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
-from config import config, set_version, add_version_argument, get_version_results_dir
+from config import config, set_version, add_version_argument, add_turn_argument, get_turn_results_dir
 
 # Import dimension registry from pipeline script
 from importlib.util import spec_from_file_location, module_from_spec
@@ -47,8 +47,8 @@ OUTPUT_DIR = None
 def _init_paths():
     """Initialize version-dependent paths after set_version() has been called."""
     global ALIGN_ROOT, OUTPUT_DIR
-    ALIGN_ROOT = str(get_version_results_dir(config.RESULTS.alignment_versions))
-    OUTPUT_DIR = str(get_version_results_dir(config.RESULTS.alignment_versions) / "summary")
+    ALIGN_ROOT = str(get_turn_results_dir(config.RESULTS.alignment_versions))
+    OUTPUT_DIR = str(get_turn_results_dir(config.RESULTS.alignment_versions) / "summary")
 
 
 def main():
@@ -57,12 +57,14 @@ def main():
         description="Exp 3: Cross-dimension alignment summary"
     )
     add_version_argument(parser)
+    add_turn_argument(parser)
     args = parser.parse_args()
 
     # Set version and initialize paths
-    set_version(args.version)
+    set_version(args.version, turn=args.turn)
     _init_paths()
     print(f"Version: {args.version}")
+    print(f"Turn: {args.turn}")
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
@@ -84,7 +86,7 @@ def main():
             print(f"  [SKIP] No probe accuracy for {dim_name}")
 
         # Alignment with control and reading probes
-        for probe_type in ["control_probe", "reading_probe"]:
+        for probe_type in ["operational", "metacognitive"]:
             align_path = os.path.join(
                 ALIGN_ROOT, dim_name, probe_type, "alignment_results.json"
             )
@@ -123,16 +125,16 @@ def main():
     print(f"EXPERIMENT 3: Cross-Dimension Alignment Summary")
     print(f"{'='*90}")
     print(f"\n{'ID':<4} {'Dimension':<28} {'Acc':<8} "
-          f"{'Ctrl max|cos|':<16} {'Read max|cos|':<16}")
+          f"{'Oper max|cos|':<16} {'Meta max|cos|':<16}")
     print("-" * 80)
 
     for dim_id in sorted(summary.keys()):
         e = summary[dim_id]
         acc_str = f"{e['probe_acc_max']:.3f}" if e.get("probe_acc_mean") else "N/A"
-        ctrl_str = (f"{e['control_probe_probe_max_cos']:.4f}"
-                    if e.get("control_probe_probe_max_cos") is not None else "N/A")
-        read_str = (f"{e['reading_probe_probe_max_cos']:.4f}"
-                    if e.get("reading_probe_probe_max_cos") is not None else "N/A")
+        ctrl_str = (f"{e['operational_probe_max_cos']:.4f}"
+                    if e.get("operational_probe_max_cos") is not None else "N/A")
+        read_str = (f"{e['metacognitive_probe_max_cos']:.4f}"
+                    if e.get("metacognitive_probe_max_cos") is not None else "N/A")
         print(f"{dim_id:<4} {e['dim_name']:<28} {acc_str:<8} "
               f"{ctrl_str:<16} {read_str:<16}")
 
@@ -143,8 +145,8 @@ def main():
         ctrl_vals = []
         read_vals = []
         for d in dim_ids:
-            c = summary[d].get("control_probe_probe_max_cos")
-            r = summary[d].get("reading_probe_probe_max_cos")
+            c = summary[d].get("operational_probe_max_cos")
+            r = summary[d].get("metacognitive_probe_max_cos")
             ctrl_vals.append(abs(c) if c is not None else 0)
             read_vals.append(abs(r) if r is not None else 0)
 
@@ -152,9 +154,9 @@ def main():
         width = 0.35
 
         fig, ax = plt.subplots(figsize=(16, 6))
-        ax.bar(x - width / 2, ctrl_vals, width, label="Control probe",
+        ax.bar(x - width / 2, ctrl_vals, width, label="Operational probe",
                color="tab:red", alpha=0.8)
-        ax.bar(x + width / 2, read_vals, width, label="Reading probe",
+        ax.bar(x + width / 2, read_vals, width, label="Metacognitive probe",
                color="tab:blue", alpha=0.8)
         ax.set_xlabel("Concept Dimension")
         ax.set_ylabel("Max |Cosine Similarity| with Exp 2b")
@@ -180,11 +182,11 @@ def main():
 
         for dim_id in dim_ids:
             e = summary[dim_id]
-            key = "reading_probe_probe_to_2b"
+            key = "metacognitive_probe_to_2b"
             if key in e and e[key] is not None:
                 vals = [v if v is not None else 0.0 for v in e[key]]
                 if all_layers is None:
-                    all_layers = e["reading_probe_layers"]
+                    all_layers = e["metacognitive_layers"]
                 heatmap_data.append(vals)
                 heatmap_labels.append(e["dim_name"])
 

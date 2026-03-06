@@ -1,0 +1,17 @@
+dim_id,name,category,mean_abs_cosine,ci_lower,ci_upper
+0,Baseline,Baseline,0.2554,0.1533,0.3227
+1,Phenomenology,Mental,0.2515,0.1924,0.2846
+2,Emotions,Mental,0.2172,0.1690,0.2531
+3,Agency,Mental,0.3156,0.2429,0.3508
+4,Intentions,Mental,0.2872,0.2291,0.3199
+5,Prediction,Mental,0.2837,0.2161,0.3257
+6,Cognitive,Mental,0.2745,0.2120,0.3120
+7,Social,Mental,0.3367,0.2426,0.3882
+8,Embodiment,Mental,0.2919,0.2364,0.3225
+9,Roles,Mental,0.2425,0.1804,0.3028
+11,Formality,Pragmatic,0.0219,0.0182,0.1022
+12,Expertise,Pragmatic,0.1523,0.1042,0.1923
+13,Helpfulness,Pragmatic,0.0733,0.0289,0.1197
+14,Biological,Bio Ctrl,0.2162,0.1701,0.2487
+15,Shapes,Shapes,0.0388,0.0173,0.1254
+17,Attention,Mental,0.2571,0.1987,0.2900

@@ -50,8 +50,12 @@ VALID_VERSIONS = (
 EXP2_ROOT = None
 EXP1_ROOT = None
 
-# Internal tracking of active version
+# Valid turn numbers for Exp 2 conversational probes
+VALID_TURNS = (1, 2, 3, 4, 5)
+
+# Internal tracking of active version and turn
 _active_version = None
+_active_turn = None
 
 
 # ============================================================================
@@ -89,8 +93,8 @@ class InputPaths:
     # Experiment 2 conversational probes (for alignment analysis)
     # Set dynamically by set_version(); None until then.
     exp2_probes: Path = None
-    exp2_control_probe: Path = None
-    exp2_reading_probe: Path = None
+    exp2_operational: Path = None
+    exp2_metacognitive: Path = None
     exp2_conversations: Path = None
 
     # Concept activations (extracted in Phase 1)
@@ -386,24 +390,30 @@ validate_config()
 # VERSION MANAGEMENT (for multi-version Exp 2/Exp 1 support)
 # ============================================================================
 
-def set_version(version: str):
+def set_version(version: str, turn: int = 5):
     """
-    Set the active Exp 2 / Exp 1 data version.
+    Set the active Exp 2 / Exp 1 data version and conversation turn.
 
     Updates config.EXP2_ROOT, config.EXP1_ROOT, and all derived input paths.
     Must be called before accessing any Exp 2 or Exp 1 paths.
 
     Args:
         version: One of VALID_VERSIONS
+        turn: Conversation turn for Exp 2 probes (1-5, default=5)
     """
-    global _active_version, EXP2_ROOT, EXP1_ROOT
+    global _active_version, _active_turn, EXP2_ROOT, EXP1_ROOT
 
     if version not in VALID_VERSIONS:
         raise ValueError(
             f"Invalid version '{version}'. Must be one of: {VALID_VERSIONS}"
         )
+    if turn not in VALID_TURNS:
+        raise ValueError(
+            f"Invalid turn {turn}. Must be one of: {VALID_TURNS}"
+        )
 
     _active_version = version
+    _active_turn = turn
     EXP2_ROOT = PROJECT_ROOT / "exp_2"
     EXP1_ROOT = PROJECT_ROOT / "exp_1" / "versions" / version
 
@@ -412,9 +422,10 @@ def set_version(version: str):
     config.EXP1_ROOT = EXP1_ROOT
 
     # Update all derived input paths (new exp_2 structure: data/{version}/...)
+    turn_dir = f"turn_{turn}"
     config.PATHS.exp2_probes = EXP2_ROOT / "data" / version / "probe_checkpoints"
-    config.PATHS.exp2_control_probe = EXP2_ROOT / "data" / version / "probe_checkpoints" / "turn_5" / "control_probe"
-    config.PATHS.exp2_reading_probe = EXP2_ROOT / "data" / version / "probe_checkpoints" / "turn_5" / "reading_probe"
+    config.PATHS.exp2_operational = EXP2_ROOT / "data" / version / "probe_checkpoints" / turn_dir / "operational"
+    config.PATHS.exp2_metacognitive = EXP2_ROOT / "data" / version / "probe_checkpoints" / turn_dir / "metacognitive"
     config.PATHS.exp2_conversations = EXP2_ROOT / "data" / version / "human_ai_conversations"
     config.PATHS.exp1_prompts = EXP1_ROOT / "code" / "data_gen" / "utils" / "prompts"
     config.PATHS.exp1_configs = EXP1_ROOT / "code" / "data_gen" / "utils" / "config"
@@ -453,6 +464,41 @@ def get_version_results_dir(base_path):
             "No version set. Call set_version() before get_version_results_dir()."
         )
     return Path(base_path) / _active_version
+
+
+def add_turn_argument(parser):
+    """
+    Add an optional --turn argument to an argparse parser.
+
+    Args:
+        parser: argparse.ArgumentParser instance
+    """
+    parser.add_argument(
+        "--turn", type=int, default=5,
+        choices=list(VALID_TURNS),
+        help=f"Exp 2 conversation turn for probes (default: 5). Choices: {VALID_TURNS}"
+    )
+
+
+def get_turn_results_dir(base_path):
+    """
+    Return a version- and turn-specific subdirectory under base_path.
+
+    Args:
+        base_path: Path to the base results directory
+
+    Returns:
+        Path: base_path / _active_version / turn_{_active_turn}
+    """
+    if _active_version is None:
+        raise RuntimeError(
+            "No version set. Call set_version() before get_turn_results_dir()."
+        )
+    if _active_turn is None:
+        raise RuntimeError(
+            "No turn set. Call set_version(version, turn=N) before get_turn_results_dir()."
+        )
+    return Path(base_path) / _active_version / f"turn_{_active_turn}"
 
 
 # ============================================================================

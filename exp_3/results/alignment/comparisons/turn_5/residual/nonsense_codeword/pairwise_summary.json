@@ -1,0 +1,480 @@
+{
+  "0": {
+    "name": "Baseline",
+    "folder": "0_baseline",
+    "category": "Control",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 0,
+        "sig_greater_than": [],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 0,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": []
+      }
+    }
+  },
+  "1": {
+    "name": "Phenomenology",
+    "folder": "1_phenomenology",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 0,
+        "sig_greater_than": [],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 2,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": [
+          "Emotions",
+          "Agency"
+        ]
+      }
+    }
+  },
+  "2": {
+    "name": "Emotions",
+    "folder": "2_emotions",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 2,
+        "sig_greater_than": [],
+        "sig_less_than": [
+          "Expertise",
+          "Attention"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 6,
+        "n_sig_less": 0,
+        "sig_greater_than": [
+          "Phenomenology",
+          "Formality",
+          "Biological",
+          "Shapes",
+          "Attention",
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": []
+      }
+    }
+  },
+  "3": {
+    "name": "Agency",
+    "folder": "3_agency",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 2,
+        "sig_greater_than": [],
+        "sig_less_than": [
+          "Expertise",
+          "Attention"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 12,
+        "n_sig_less": 0,
+        "sig_greater_than": [
+          "Phenomenology",
+          "Cognitive",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Shapes",
+          "Attention",
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": []
+      }
+    }
+  },
+  "4": {
+    "name": "Intentions",
+    "folder": "4_intentions",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 2,
+        "sig_greater_than": [],
+        "sig_less_than": [
+          "Expertise",
+          "Attention"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 8,
+        "n_sig_less": 0,
+        "sig_greater_than": [
+          "Animacy",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Shapes",
+          "Attention",
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": []
+      }
+    }
+  },
+  "5": {
+    "name": "Prediction",
+    "folder": "5_prediction",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 0,
+        "sig_greater_than": [],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 2,
+        "n_sig_less": 0,
+        "sig_greater_than": [
+          "Biological",
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": []
+      }
+    }
+  },
+  "6": {
+    "name": "Cognitive",
+    "folder": "6_cognitive",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 0,
+        "sig_greater_than": [],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 1,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": [
+          "Agency"
+        ]
+      }
+    }
+  },
+  "7": {
+    "name": "Social",
+    "folder": "7_social",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 0,
+        "sig_greater_than": [],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 0,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": []
+      }
+    }
+  },
+  "8": {
+    "name": "Embodiment",
+    "folder": "8_embodiment",
+    "category": "Physical",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 0,
+        "sig_greater_than": [],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 1,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": [
+          "Agency"
+        ]
+      }
+    }
+  },
+  "9": {
+    "name": "Roles",
+    "folder": "9_roles",
+    "category": "Physical",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 0,
+        "sig_greater_than": [],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 1,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": [
+          "Agency"
+        ]
+      }
+    }
+  },
+  "10": {
+    "name": "Animacy",
+    "folder": "10_animacy",
+    "category": "Physical",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 0,
+        "sig_greater_than": [],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 2,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": [
+          "Agency",
+          "Intentions"
+        ]
+      }
+    }
+  },
+  "11": {
+    "name": "Formality",
+    "folder": "11_formality",
+    "category": "Pragmatic",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 0,
+        "sig_greater_than": [],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 3,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": [
+          "Emotions",
+          "Agency",
+          "Intentions"
+        ]
+      }
+    }
+  },
+  "12": {
+    "name": "Expertise",
+    "folder": "12_expertise",
+    "category": "Pragmatic",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 5,
+        "n_sig_less": 0,
+        "sig_greater_than": [
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Biological",
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 2,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": [
+          "Agency",
+          "Intentions"
+        ]
+      }
+    }
+  },
+  "13": {
+    "name": "Helpfulness",
+    "folder": "13_helpfulness",
+    "category": "Pragmatic",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 0,
+        "sig_greater_than": [],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 2,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": [
+          "Agency",
+          "Intentions"
+        ]
+      }
+    }
+  },
+  "14": {
+    "name": "Biological",
+    "folder": "14_biological",
+    "category": "Control",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 2,
+        "sig_greater_than": [],
+        "sig_less_than": [
+          "Expertise",
+          "Attention"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 4,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": [
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Prediction"
+        ]
+      }
+    }
+  },
+  "15": {
+    "name": "Shapes",
+    "folder": "15_shapes",
+    "category": "Control",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 0,
+        "sig_greater_than": [],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 3,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": [
+          "Emotions",
+          "Agency",
+          "Intentions"
+        ]
+      }
+    }
+  },
+  "17": {
+    "name": "Attention",
+    "folder": "17_attention",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 4,
+        "n_sig_less": 0,
+        "sig_greater_than": [
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Biological"
+        ],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 3,
+        "sig_greater_than": [
+          "SysPrompt (labeled)"
+        ],
+        "sig_less_than": [
+          "Emotions",
+          "Agency",
+          "Intentions"
+        ]
+      }
+    }
+  },
+  "18": {
+    "name": "SysPrompt (labeled)",
+    "folder": "18_sysprompt_labeled",
+    "category": "SysPrompt",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 1,
+        "sig_greater_than": [],
+        "sig_less_than": [
+          "Expertise"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 0,
+        "n_sig_less": 17,
+        "sig_greater_than": [],
+        "sig_less_than": [
+          "Baseline",
+          "Phenomenology",
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Shapes",
+          "Attention"
+        ]
+      }
+    }
+  }
+}

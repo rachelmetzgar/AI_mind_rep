@@ -34,10 +34,11 @@ mkdir -p "$PROJECT_ROOT/logs/alignment"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 
 ANALYSIS=${ANALYSIS:-all}
+TURN=${TURN:-5}
 
-echo "[$(date)] Starting layer profile analysis — version=${VERSION}, mode=${ANALYSIS}"
+echo "[$(date)] Starting layer profile analysis — version=${VERSION}, turn=${TURN}, mode=${ANALYSIS}"
 echo "  Node: $(hostname)"
 
-python code/analysis/alignment/2b_layer_profile_analysis.py --version "${VERSION}" --analysis "${ANALYSIS}"
+python code/analysis/alignment/2b_layer_profile_analysis.py --version "${VERSION}" --turn "${TURN}" --analysis "${ANALYSIS}"
 
-echo "[$(date)] Finished layer profile analysis — version=${VERSION}, mode=${ANALYSIS}"
+echo "[$(date)] Finished layer profile analysis — version=${VERSION}, turn=${TURN}, mode=${ANALYSIS}"

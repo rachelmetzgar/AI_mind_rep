@@ -47,7 +47,7 @@ from collections import OrderedDict
 from datetime import datetime
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
-from config import config, set_version, add_version_argument, get_version_results_dir
+from config import config, set_version, add_version_argument, add_turn_argument, get_turn_results_dir
 
 
 # ========================== CONFIG ========================== #
@@ -62,14 +62,14 @@ def _init_paths():
     """Initialize version-dependent paths after set_version() has been called."""
     global ALIGNMENT_ROOT, OUTPUT_ROOT, ANALYSIS_DIR_MAP
 
-    version_dir = get_version_results_dir(config.RESULTS.alignment_versions)
-    ALIGNMENT_ROOT = str(version_dir)
-    OUTPUT_ROOT = str(version_dir)
+    turn_dir = get_turn_results_dir(config.RESULTS.alignment_versions)
+    ALIGNMENT_ROOT = str(turn_dir)
+    OUTPUT_ROOT = str(turn_dir)
 
     ANALYSIS_DIR_MAP = {
-        "raw": str(version_dir / "contrasts" / "raw"),
-        "residual": str(version_dir / "contrasts" / "residual"),
-        "standalone": str(version_dir / "standalone"),
+        "raw": str(turn_dir / "contrasts" / "raw"),
+        "residual": str(turn_dir / "contrasts" / "residual"),
+        "standalone": str(turn_dir / "standalone"),
     }
 
 # LLaMA-2-13B has 40 transformer layers → 41 hidden states (0=embedding, 1-40=layers)
@@ -141,16 +141,16 @@ def load_alignment_results(analysis_dir):
             entity_overlap = {int(k): float(v) for k, v in eo_raw.items()}
 
         # Load bootstrap distributions if present
-        boot_reading = data.get("boot_reading_r2", None)
-        boot_control = data.get("boot_control_r2", None)
+        boot_reading = data.get("boot_metacognitive_r2", None)
+        boot_control = data.get("boot_operational_r2", None)
 
         results[dim_name] = {
             "dim_id": dim_id,
             "reading": reading,
             "control": control,
             "entity_overlap": entity_overlap,
-            "boot_reading_r2": boot_reading,
-            "boot_control_r2": boot_control,
+            "boot_metacognitive_r2": boot_reading,
+            "boot_operational_r2": boot_control,
         }
 
     return results
@@ -962,15 +962,17 @@ def main():
         description="Exp 3 Phase 1c: Per-layer alignment profile analysis"
     )
     add_version_argument(parser)
+    add_turn_argument(parser)
     parser.add_argument("--analysis", type=str, required=True,
                         choices=["raw", "residual", "standalone", "all"],
                         help="Which analysis to run")
     args = parser.parse_args()
 
     # Set version and initialize paths
-    set_version(args.version)
+    set_version(args.version, turn=args.turn)
     _init_paths()
     print(f"Version: {args.version}")
+    print(f"Turn: {args.turn}")
 
     analyses_to_run = (
         ["raw", "residual", "standalone"] if args.analysis == "all"

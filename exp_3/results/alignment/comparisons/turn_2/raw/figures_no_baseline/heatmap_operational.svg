@@ -1,0 +1,199 @@
+<svg viewBox="0 0 700 596" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;height:auto;font-family:Arial,sans-serif;">
+<rect width="700" height="596" fill="white"/>
+
+<text x="260.0" y="90" text-anchor="start" font-size="10" fill="#333" transform="rotate(-55,260.0,90)">Partner Identity</text>
+<text x="500.0" y="90" text-anchor="start" font-size="10" fill="#333" transform="rotate(-55,500.0,90)">Control</text>
+<text x="132" y="118.0" text-anchor="end" font-size="10" fill="#9E9E9E">Biological</text>
+<rect x="140.0" y="100.0" width="240.0" height="28" fill="rgb(168,203,170)" stroke="white" stroke-width="1"><title>Partner Identity — Biological: R²=0.003487</title></rect>
+<text x="260.0" y="118.0" text-anchor="middle" font-size="8" fill="#333">3.49</text>
+<rect x="380.0" y="100.0" width="240.0" height="28" fill="rgb(217,217,217)" stroke="white" stroke-width="1"><title>Control — Biological: R²=0.001454</title></rect>
+<text x="500.0" y="118.0" text-anchor="middle" font-size="8" fill="#333">1.45</text>
+<text x="132" y="146.0" text-anchor="end" font-size="10" fill="#9E9E9E">Shapes</text>
+<rect x="140.0" y="128.0" width="240.0" height="28" fill="rgb(221,238,222)" stroke="white" stroke-width="1"><title>Partner Identity — Shapes: R²=0.000565</title></rect>
+<text x="260.0" y="146.0" text-anchor="middle" font-size="8" fill="#333">0.56</text>
+<rect x="380.0" y="128.0" width="240.0" height="28" fill="rgb(233,233,233)" stroke="white" stroke-width="1"><title>Control — Shapes: R²=0.000298</title></rect>
+<text x="500.0" y="146.0" text-anchor="middle" font-size="8" fill="#333">0.30</text>
+<line x1="140" y1="156" x2="620.0" y2="156" stroke="#999" stroke-width="1.5"/>
+<text x="132" y="174.0" text-anchor="end" font-size="10" fill="#2196F3">Social</text>
+<rect x="140.0" y="156.0" width="240.0" height="28" fill="rgb(63,136,67)" stroke="white" stroke-width="1"><title>Partner Identity — Social: R²=0.009183</title></rect>
+<text x="260.0" y="174.0" text-anchor="middle" font-size="8" fill="#fff">9.18</text>
+<rect x="380.0" y="156.0" width="240.0" height="28" fill="rgb(215,215,215)" stroke="white" stroke-width="1"><title>Control — Social: R²=0.001602</title></rect>
+<text x="500.0" y="174.0" text-anchor="middle" font-size="8" fill="#333">1.60</text>
+<text x="132" y="202.0" text-anchor="end" font-size="10" fill="#2196F3">Attention</text>
+<rect x="140.0" y="184.0" width="240.0" height="28" fill="rgb(70,140,74)" stroke="white" stroke-width="1"><title>Partner Identity — Attention: R²=0.008817</title></rect>
+<text x="260.0" y="202.0" text-anchor="middle" font-size="8" fill="#fff">8.82</text>
+<rect x="380.0" y="184.0" width="240.0" height="28" fill="rgb(221,221,221)" stroke="white" stroke-width="1"><title>Control — Attention: R²=0.001163</title></rect>
+<text x="500.0" y="202.0" text-anchor="middle" font-size="8" fill="#333">1.16</text>
+<text x="132" y="230.0" text-anchor="end" font-size="10" fill="#2196F3">Prediction</text>
+<rect x="140.0" y="212.0" width="240.0" height="28" fill="rgb(72,142,76)" stroke="white" stroke-width="1"><title>Partner Identity — Prediction: R²=0.008696</title></rect>
+<text x="260.0" y="230.0" text-anchor="middle" font-size="8" fill="#fff">8.70</text>
+<rect x="380.0" y="212.0" width="240.0" height="28" fill="rgb(220,220,220)" stroke="white" stroke-width="1"><title>Control — Prediction: R²=0.001240</title></rect>
+<text x="500.0" y="230.0" text-anchor="middle" font-size="8" fill="#333">1.24</text>
+<text x="132" y="258.0" text-anchor="end" font-size="10" fill="#2196F3">Agency</text>
+<rect x="140.0" y="240.0" width="240.0" height="28" fill="rgb(87,151,90)" stroke="white" stroke-width="1"><title>Partner Identity — Agency: R²=0.007906</title></rect>
+<text x="260.0" y="258.0" text-anchor="middle" font-size="8" fill="#fff">7.91</text>
+<rect x="380.0" y="240.0" width="240.0" height="28" fill="rgb(219,219,219)" stroke="white" stroke-width="1"><title>Control — Agency: R²=0.001351</title></rect>
+<text x="500.0" y="258.0" text-anchor="middle" font-size="8" fill="#333">1.35</text>
+<text x="132" y="286.0" text-anchor="end" font-size="10" fill="#2196F3">Cognitive</text>
+<rect x="140.0" y="268.0" width="240.0" height="28" fill="rgb(94,156,97)" stroke="white" stroke-width="1"><title>Partner Identity — Cognitive: R²=0.007500</title></rect>
+<text x="260.0" y="286.0" text-anchor="middle" font-size="8" fill="#fff">7.50</text>
+<rect x="380.0" y="268.0" width="240.0" height="28" fill="rgb(224,224,224)" stroke="white" stroke-width="1"><title>Control — Cognitive: R²=0.000966</title></rect>
+<text x="500.0" y="286.0" text-anchor="middle" font-size="8" fill="#333">0.97</text>
+<text x="132" y="314.0" text-anchor="end" font-size="10" fill="#2196F3">Roles</text>
+<rect x="140.0" y="296.0" width="240.0" height="28" fill="rgb(91,154,94)" stroke="white" stroke-width="1"><title>Partner Identity — Roles: R²=0.007672</title></rect>
+<text x="260.0" y="314.0" text-anchor="middle" font-size="8" fill="#fff">7.67</text>
+<rect x="380.0" y="296.0" width="240.0" height="28" fill="rgb(220,220,220)" stroke="white" stroke-width="1"><title>Control — Roles: R²=0.001230</title></rect>
+<text x="500.0" y="314.0" text-anchor="middle" font-size="8" fill="#333">1.23</text>
+<text x="132" y="342.0" text-anchor="end" font-size="10" fill="#2196F3">Intentions</text>
+<rect x="140.0" y="324.0" width="240.0" height="28" fill="rgb(94,156,98)" stroke="white" stroke-width="1"><title>Partner Identity — Intentions: R²=0.007491</title></rect>
+<text x="260.0" y="342.0" text-anchor="middle" font-size="8" fill="#fff">7.49</text>
+<rect x="380.0" y="324.0" width="240.0" height="28" fill="rgb(218,218,218)" stroke="white" stroke-width="1"><title>Control — Intentions: R²=0.001406</title></rect>
+<text x="500.0" y="342.0" text-anchor="middle" font-size="8" fill="#333">1.41</text>
+<text x="132" y="370.0" text-anchor="end" font-size="10" fill="#2196F3">Emotions</text>
+<rect x="140.0" y="352.0" width="240.0" height="28" fill="rgb(109,165,112)" stroke="white" stroke-width="1"><title>Partner Identity — Emotions: R²=0.006696</title></rect>
+<text x="260.0" y="370.0" text-anchor="middle" font-size="8" fill="#fff">6.70</text>
+<rect x="380.0" y="352.0" width="240.0" height="28" fill="rgb(221,221,221)" stroke="white" stroke-width="1"><title>Control — Emotions: R²=0.001172</title></rect>
+<text x="500.0" y="370.0" text-anchor="middle" font-size="8" fill="#333">1.17</text>
+<text x="132" y="398.0" text-anchor="end" font-size="10" fill="#2196F3">Embodiment</text>
+<rect x="140.0" y="380.0" width="240.0" height="28" fill="rgb(125,176,127)" stroke="white" stroke-width="1"><title>Partner Identity — Embodiment: R²=0.005838</title></rect>
+<text x="260.0" y="398.0" text-anchor="middle" font-size="8" fill="#fff">5.84</text>
+<rect x="380.0" y="380.0" width="240.0" height="28" fill="rgb(218,218,218)" stroke="white" stroke-width="1"><title>Control — Embodiment: R²=0.001435</title></rect>
+<text x="500.0" y="398.0" text-anchor="middle" font-size="8" fill="#333">1.43</text>
+<text x="132" y="426.0" text-anchor="end" font-size="10" fill="#2196F3">Phenomenology</text>
+<rect x="140.0" y="408.0" width="240.0" height="28" fill="rgb(126,177,129)" stroke="white" stroke-width="1"><title>Partner Identity — Phenomenology: R²=0.005739</title></rect>
+<text x="260.0" y="426.0" text-anchor="middle" font-size="8" fill="#fff">5.74</text>
+<rect x="380.0" y="408.0" width="240.0" height="28" fill="rgb(219,219,219)" stroke="white" stroke-width="1"><title>Control — Phenomenology: R²=0.001307</title></rect>
+<text x="500.0" y="426.0" text-anchor="middle" font-size="8" fill="#333">1.31</text>
+<text x="132" y="454.0" text-anchor="end" font-size="10" fill="#2196F3">Animacy</text>
+<rect x="140.0" y="436.0" width="240.0" height="28" fill="rgb(136,183,139)" stroke="white" stroke-width="1"><title>Partner Identity — Animacy: R²=0.005201</title></rect>
+<text x="260.0" y="454.0" text-anchor="middle" font-size="8" fill="#fff">5.20</text>
+<rect x="380.0" y="436.0" width="240.0" height="28" fill="rgb(222,222,222)" stroke="white" stroke-width="1"><title>Control — Animacy: R²=0.001095</title></rect>
+<text x="500.0" y="454.0" text-anchor="middle" font-size="8" fill="#333">1.09</text>
+<line x1="140" y1="464" x2="620.0" y2="464" stroke="#999" stroke-width="1.5"/>
+<text x="132" y="482.0" text-anchor="end" font-size="10" fill="#FF9800">Expertise</text>
+<rect x="140.0" y="464.0" width="240.0" height="28" fill="rgb(152,193,155)" stroke="white" stroke-width="1"><title>Partner Identity — Expertise: R²=0.004327</title></rect>
+<text x="260.0" y="482.0" text-anchor="middle" font-size="8" fill="#333">4.33</text>
+<rect x="380.0" y="464.0" width="240.0" height="28" fill="rgb(236,236,236)" stroke="white" stroke-width="1"><title>Control — Expertise: R²=0.000124</title></rect>
+<text x="500.0" y="482.0" text-anchor="middle" font-size="8" fill="#333">0.12</text>
+<text x="132" y="510.0" text-anchor="end" font-size="10" fill="#FF9800">Formality</text>
+<rect x="140.0" y="492.0" width="240.0" height="28" fill="rgb(203,226,204)" stroke="white" stroke-width="1"><title>Partner Identity — Formality: R²=0.001569</title></rect>
+<text x="260.0" y="510.0" text-anchor="middle" font-size="8" fill="#333">1.57</text>
+<rect x="380.0" y="492.0" width="240.0" height="28" fill="rgb(229,229,229)" stroke="white" stroke-width="1"><title>Control — Formality: R²=0.000606</title></rect>
+<text x="500.0" y="510.0" text-anchor="middle" font-size="8" fill="#333">0.61</text>
+<text x="132" y="538.0" text-anchor="end" font-size="10" fill="#FF9800">Helpfulness</text>
+<rect x="140.0" y="520.0" width="240.0" height="28" fill="rgb(217,235,218)" stroke="white" stroke-width="1"><title>Partner Identity — Helpfulness: R²=0.000794</title></rect>
+<text x="260.0" y="538.0" text-anchor="middle" font-size="8" fill="#333">0.79</text>
+<rect x="380.0" y="520.0" width="240.0" height="28" fill="rgb(227,227,227)" stroke="white" stroke-width="1"><title>Control — Helpfulness: R²=0.000742</title></rect>
+<text x="500.0" y="538.0" text-anchor="middle" font-size="8" fill="#333">0.74</text>
+<line x1="140" y1="548" x2="620.0" y2="548" stroke="#999" stroke-width="1.5"/>
+<text x="132" y="566.0" text-anchor="end" font-size="10" fill="#00BCD4">SysPrompt</text>
+<rect x="140.0" y="548.0" width="240.0" height="28" fill="rgb(96,157,100)" stroke="white" stroke-width="1"><title>Partner Identity — SysPrompt: R²=0.007380</title></rect>
+<text x="260.0" y="566.0" text-anchor="middle" font-size="8" fill="#fff">7.38</text>
+<rect x="380.0" y="548.0" width="240.0" height="28" fill="rgb(232,232,232)" stroke="white" stroke-width="1"><title>Control — SysPrompt: R²=0.000407</title></rect>
+<text x="500.0" y="566.0" text-anchor="middle" font-size="8" fill="#333">0.41</text>
+<rect x="635.0" y="576.0" width="12" height="10.7" fill="rgb(232,245,233)"/>
+<rect x="635.0" y="566.3" width="12" height="10.7" fill="rgb(228,242,229)"/>
+<rect x="635.0" y="556.6" width="12" height="10.7" fill="rgb(224,240,225)"/>
+<rect x="635.0" y="546.9" width="12" height="10.7" fill="rgb(220,237,221)"/>
+<rect x="635.0" y="537.1" width="12" height="10.7" fill="rgb(216,235,218)"/>
+<rect x="635.0" y="527.4" width="12" height="10.7" fill="rgb(213,232,214)"/>
+<rect x="635.0" y="517.7" width="12" height="10.7" fill="rgb(209,230,210)"/>
+<rect x="635.0" y="508.0" width="12" height="10.7" fill="rgb(205,227,206)"/>
+<rect x="635.0" y="498.3" width="12" height="10.7" fill="rgb(201,225,203)"/>
+<rect x="635.0" y="488.6" width="12" height="10.7" fill="rgb(197,222,199)"/>
+<rect x="635.0" y="478.9" width="12" height="10.7" fill="rgb(194,220,195)"/>
+<rect x="635.0" y="469.1" width="12" height="10.7" fill="rgb(190,218,191)"/>
+<rect x="635.0" y="459.4" width="12" height="10.7" fill="rgb(186,215,188)"/>
+<rect x="635.0" y="449.7" width="12" height="10.7" fill="rgb(182,213,184)"/>
+<rect x="635.0" y="440.0" width="12" height="10.7" fill="rgb(178,210,180)"/>
+<rect x="635.0" y="430.3" width="12" height="10.7" fill="rgb(175,208,176)"/>
+<rect x="635.0" y="420.6" width="12" height="10.7" fill="rgb(171,205,173)"/>
+<rect x="635.0" y="410.9" width="12" height="10.7" fill="rgb(167,203,169)"/>
+<rect x="635.0" y="401.1" width="12" height="10.7" fill="rgb(163,200,165)"/>
+<rect x="635.0" y="391.4" width="12" height="10.7" fill="rgb(159,198,162)"/>
+<rect x="635.0" y="381.7" width="12" height="10.7" fill="rgb(156,196,158)"/>
+<rect x="635.0" y="372.0" width="12" height="10.7" fill="rgb(152,193,154)"/>
+<rect x="635.0" y="362.3" width="12" height="10.7" fill="rgb(148,191,150)"/>
+<rect x="635.0" y="352.6" width="12" height="10.7" fill="rgb(144,188,147)"/>
+<rect x="635.0" y="342.9" width="12" height="10.7" fill="rgb(140,186,143)"/>
+<rect x="635.0" y="333.1" width="12" height="10.7" fill="rgb(137,183,139)"/>
+<rect x="635.0" y="323.4" width="12" height="10.7" fill="rgb(133,181,135)"/>
+<rect x="635.0" y="313.7" width="12" height="10.7" fill="rgb(129,178,132)"/>
+<rect x="635.0" y="304.0" width="12" height="10.7" fill="rgb(125,176,128)"/>
+<rect x="635.0" y="294.3" width="12" height="10.7" fill="rgb(121,173,124)"/>
+<rect x="635.0" y="284.6" width="12" height="10.7" fill="rgb(118,171,120)"/>
+<rect x="635.0" y="274.9" width="12" height="10.7" fill="rgb(114,169,117)"/>
+<rect x="635.0" y="265.1" width="12" height="10.7" fill="rgb(110,166,113)"/>
+<rect x="635.0" y="255.4" width="12" height="10.7" fill="rgb(106,164,109)"/>
+<rect x="635.0" y="245.7" width="12" height="10.7" fill="rgb(102,161,106)"/>
+<rect x="635.0" y="236.0" width="12" height="10.7" fill="rgb(99,159,102)"/>
+<rect x="635.0" y="226.3" width="12" height="10.7" fill="rgb(95,156,98)"/>
+<rect x="635.0" y="216.6" width="12" height="10.7" fill="rgb(91,154,94)"/>
+<rect x="635.0" y="206.9" width="12" height="10.7" fill="rgb(87,151,91)"/>
+<rect x="635.0" y="197.1" width="12" height="10.7" fill="rgb(83,149,87)"/>
+<rect x="635.0" y="187.4" width="12" height="10.7" fill="rgb(80,147,83)"/>
+<rect x="635.0" y="177.7" width="12" height="10.7" fill="rgb(76,144,79)"/>
+<rect x="635.0" y="168.0" width="12" height="10.7" fill="rgb(72,142,76)"/>
+<rect x="635.0" y="158.3" width="12" height="10.7" fill="rgb(68,139,72)"/>
+<rect x="635.0" y="148.6" width="12" height="10.7" fill="rgb(64,137,68)"/>
+<rect x="635.0" y="138.9" width="12" height="10.7" fill="rgb(61,134,64)"/>
+<rect x="635.0" y="129.1" width="12" height="10.7" fill="rgb(57,132,61)"/>
+<rect x="635.0" y="119.4" width="12" height="10.7" fill="rgb(53,129,57)"/>
+<rect x="635.0" y="109.7" width="12" height="10.7" fill="rgb(49,127,53)"/>
+<rect x="635.0" y="100.0" width="12" height="10.7" fill="rgb(46,125,50)"/>
+<text x="641.0" y="96" text-anchor="middle" font-size="7" fill="#333">Partner Identity</text>
+<text x="650.0" y="104" font-size="7" fill="#333">10.16</text>
+<text x="650.0" y="580" font-size="7" fill="#333">0.00</text>
+<text x="650.0" y="342.0" font-size="7" fill="#666">×10⁻³</text>
+<rect x="677.0" y="576.0" width="12" height="10.7" fill="rgb(238,238,238)"/>
+<rect x="677.0" y="566.3" width="12" height="10.7" fill="rgb(235,235,235)"/>
+<rect x="677.0" y="556.6" width="12" height="10.7" fill="rgb(232,232,232)"/>
+<rect x="677.0" y="546.9" width="12" height="10.7" fill="rgb(229,229,229)"/>
+<rect x="677.0" y="537.1" width="12" height="10.7" fill="rgb(226,226,226)"/>
+<rect x="677.0" y="527.4" width="12" height="10.7" fill="rgb(223,223,223)"/>
+<rect x="677.0" y="517.7" width="12" height="10.7" fill="rgb(220,220,220)"/>
+<rect x="677.0" y="508.0" width="12" height="10.7" fill="rgb(217,217,217)"/>
+<rect x="677.0" y="498.3" width="12" height="10.7" fill="rgb(214,214,214)"/>
+<rect x="677.0" y="488.6" width="12" height="10.7" fill="rgb(212,212,212)"/>
+<rect x="677.0" y="478.9" width="12" height="10.7" fill="rgb(209,209,209)"/>
+<rect x="677.0" y="469.1" width="12" height="10.7" fill="rgb(206,206,206)"/>
+<rect x="677.0" y="459.4" width="12" height="10.7" fill="rgb(203,203,203)"/>
+<rect x="677.0" y="449.7" width="12" height="10.7" fill="rgb(200,200,200)"/>
+<rect x="677.0" y="440.0" width="12" height="10.7" fill="rgb(197,197,197)"/>
+<rect x="677.0" y="430.3" width="12" height="10.7" fill="rgb(194,194,194)"/>
+<rect x="677.0" y="420.6" width="12" height="10.7" fill="rgb(191,191,191)"/>
+<rect x="677.0" y="410.9" width="12" height="10.7" fill="rgb(189,189,189)"/>
+<rect x="677.0" y="401.1" width="12" height="10.7" fill="rgb(186,186,186)"/>
+<rect x="677.0" y="391.4" width="12" height="10.7" fill="rgb(183,183,183)"/>
+<rect x="677.0" y="381.7" width="12" height="10.7" fill="rgb(180,180,180)"/>
+<rect x="677.0" y="372.0" width="12" height="10.7" fill="rgb(177,177,177)"/>
+<rect x="677.0" y="362.3" width="12" height="10.7" fill="rgb(174,174,174)"/>
+<rect x="677.0" y="352.6" width="12" height="10.7" fill="rgb(171,171,171)"/>
+<rect x="677.0" y="342.9" width="12" height="10.7" fill="rgb(168,168,168)"/>
+<rect x="677.0" y="333.1" width="12" height="10.7" fill="rgb(166,166,166)"/>
+<rect x="677.0" y="323.4" width="12" height="10.7" fill="rgb(163,163,163)"/>
+<rect x="677.0" y="313.7" width="12" height="10.7" fill="rgb(160,160,160)"/>
+<rect x="677.0" y="304.0" width="12" height="10.7" fill="rgb(157,157,157)"/>
+<rect x="677.0" y="294.3" width="12" height="10.7" fill="rgb(154,154,154)"/>
+<rect x="677.0" y="284.6" width="12" height="10.7" fill="rgb(151,151,151)"/>
+<rect x="677.0" y="274.9" width="12" height="10.7" fill="rgb(148,148,148)"/>
+<rect x="677.0" y="265.1" width="12" height="10.7" fill="rgb(145,145,145)"/>
+<rect x="677.0" y="255.4" width="12" height="10.7" fill="rgb(143,143,143)"/>
+<rect x="677.0" y="245.7" width="12" height="10.7" fill="rgb(140,140,140)"/>
+<rect x="677.0" y="236.0" width="12" height="10.7" fill="rgb(137,137,137)"/>
+<rect x="677.0" y="226.3" width="12" height="10.7" fill="rgb(134,134,134)"/>
+<rect x="677.0" y="216.6" width="12" height="10.7" fill="rgb(131,131,131)"/>
+<rect x="677.0" y="206.9" width="12" height="10.7" fill="rgb(128,128,128)"/>
+<rect x="677.0" y="197.1" width="12" height="10.7" fill="rgb(125,125,125)"/>
+<rect x="677.0" y="187.4" width="12" height="10.7" fill="rgb(122,122,122)"/>
+<rect x="677.0" y="177.7" width="12" height="10.7" fill="rgb(120,120,120)"/>
+<rect x="677.0" y="168.0" width="12" height="10.7" fill="rgb(117,117,117)"/>
+<rect x="677.0" y="158.3" width="12" height="10.7" fill="rgb(114,114,114)"/>
+<rect x="677.0" y="148.6" width="12" height="10.7" fill="rgb(111,111,111)"/>
+<rect x="677.0" y="138.9" width="12" height="10.7" fill="rgb(108,108,108)"/>
+<rect x="677.0" y="129.1" width="12" height="10.7" fill="rgb(105,105,105)"/>
+<rect x="677.0" y="119.4" width="12" height="10.7" fill="rgb(102,102,102)"/>
+<rect x="677.0" y="109.7" width="12" height="10.7" fill="rgb(99,99,99)"/>
+<rect x="677.0" y="100.0" width="12" height="10.7" fill="rgb(97,97,97)"/>
+<text x="683.0" y="96" text-anchor="middle" font-size="7" fill="#333">Control</text>
+</svg>

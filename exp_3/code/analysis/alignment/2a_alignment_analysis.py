@@ -52,7 +52,7 @@ import torch.nn.functional as F
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 from src.probes import LinearProbeClassification
-from config import config, set_version, add_version_argument, get_version_results_dir
+from config import config, set_version, add_version_argument, add_turn_argument, get_turn_results_dir
 
 
 # ========================== CONFIG ========================== #
@@ -78,25 +78,25 @@ CONTRASTS_OUTPUT_DIR = None
 RAW_OUTPUT_DIR = None
 RESIDUAL_OUTPUT_DIR = None
 STANDALONE_OUTPUT_DIR = None
-READING_PROBE_DIR = None
-CONTROL_PROBE_DIR = None
+METACOGNITIVE_PROBE_DIR = None
+OPERATIONAL_PROBE_DIR = None
 
 
 def _init_paths():
     """Initialize version-dependent paths after set_version() has been called."""
     global OUTPUT_ROOT, CONTRASTS_OUTPUT_DIR, RAW_OUTPUT_DIR
     global RESIDUAL_OUTPUT_DIR, STANDALONE_OUTPUT_DIR
-    global READING_PROBE_DIR, CONTROL_PROBE_DIR
+    global METACOGNITIVE_PROBE_DIR, OPERATIONAL_PROBE_DIR
 
-    version_dir = get_version_results_dir(config.RESULTS.alignment_versions)
-    OUTPUT_ROOT = str(version_dir)
-    CONTRASTS_OUTPUT_DIR = str(version_dir / "contrasts")
-    RAW_OUTPUT_DIR = str(version_dir / "contrasts" / "raw")
-    RESIDUAL_OUTPUT_DIR = str(version_dir / "contrasts" / "residual")
-    STANDALONE_OUTPUT_DIR = str(version_dir / "standalone")
+    turn_dir = get_turn_results_dir(config.RESULTS.alignment_versions)
+    OUTPUT_ROOT = str(turn_dir)
+    CONTRASTS_OUTPUT_DIR = str(turn_dir / "contrasts")
+    RAW_OUTPUT_DIR = str(turn_dir / "contrasts" / "raw")
+    RESIDUAL_OUTPUT_DIR = str(turn_dir / "contrasts" / "residual")
+    STANDALONE_OUTPUT_DIR = str(turn_dir / "standalone")
 
-    READING_PROBE_DIR = str(config.PATHS.exp2_reading_probe)
-    CONTROL_PROBE_DIR = str(config.PATHS.exp2_control_probe)
+    METACOGNITIVE_PROBE_DIR = str(config.PATHS.exp2_metacognitive)
+    OPERATIONAL_PROBE_DIR = str(config.PATHS.exp2_operational)
 
 
 # ========================== PROBE LOADING ========================== #
@@ -341,7 +341,7 @@ def bootstrap_standalone_alignment(activations, probe_weights,
 
 # ========================== ANALYSIS RUNNERS ========================== #
 
-def run_raw_alignment(reading_weights, control_weights, dim_filter=None):
+def run_raw_alignment(metacognitive_weights, operational_weights, dim_filter=None):
     """Analysis A: Raw alignment of contrast vectors with probes."""
     print("\n" + "=" * 60)
     print("ANALYSIS: raw alignment (contrast vectors, no subtraction)")
@@ -371,18 +371,18 @@ def run_raw_alignment(reading_weights, control_weights, dim_filter=None):
         acts, labels = load_contrast_activations(dim_name)
 
         # Per-layer alignment
-        reading_align = compute_alignment_per_layer(cv, reading_weights)
-        control_align = compute_alignment_per_layer(cv, control_weights)
+        metacognitive_align = compute_alignment_per_layer(cv, metacognitive_weights)
+        operational_align = compute_alignment_per_layer(cv, operational_weights)
 
-        reading_summary = mean_across_layers(reading_align)
-        control_summary = mean_across_layers(control_align)
+        reading_summary = mean_across_layers(metacognitive_align)
+        control_summary = mean_across_layers(operational_align)
 
         print(f"  Reading: mean R² = {reading_summary['mean_r_squared']:.4f}")
         print(f"  Control: mean R² = {control_summary['mean_r_squared']:.4f}")
 
         # Bootstrap
-        boot_reading = bootstrap_contrast_alignment(acts, labels, reading_weights)
-        boot_control = bootstrap_contrast_alignment(acts, labels, control_weights)
+        boot_metacognitive = bootstrap_contrast_alignment(acts, labels, metacognitive_weights)
+        boot_operational = bootstrap_contrast_alignment(acts, labels, operational_weights)
 
         # Save per-dimension
         dim_out = os.path.join(out_dir, dim_name)
@@ -390,10 +390,10 @@ def run_raw_alignment(reading_weights, control_weights, dim_filter=None):
 
         np.savez_compressed(
             os.path.join(dim_out, "alignment.npz"),
-            reading_per_layer=json.dumps(reading_align),
-            control_per_layer=json.dumps(control_align),
-            boot_reading_r2=boot_reading,
-            boot_control_r2=boot_control,
+            reading_per_layer=json.dumps(metacognitive_align),
+            control_per_layer=json.dumps(operational_align),
+            boot_metacognitive_r2=boot_metacognitive,
+            boot_operational_r2=boot_operational,
         )
 
         summary[dim_name] = {
@@ -401,12 +401,12 @@ def run_raw_alignment(reading_weights, control_weights, dim_filter=None):
             "reading_mean_r2": reading_summary["mean_r_squared"],
             "control_mean_r2": control_summary["mean_r_squared"],
             "reading_boot_ci95": [
-                float(np.percentile(boot_reading, 2.5)),
-                float(np.percentile(boot_reading, 97.5)),
+                float(np.percentile(boot_metacognitive, 2.5)),
+                float(np.percentile(boot_metacognitive, 97.5)),
             ],
             "control_boot_ci95": [
-                float(np.percentile(boot_control, 2.5)),
-                float(np.percentile(boot_control, 97.5)),
+                float(np.percentile(boot_operational, 2.5)),
+                float(np.percentile(boot_operational, 97.5)),
             ],
         }
 
@@ -418,7 +418,7 @@ def run_raw_alignment(reading_weights, control_weights, dim_filter=None):
     return summary
 
 
-def run_residual_alignment(reading_weights, control_weights, dim_filter=None):
+def run_residual_alignment(metacognitive_weights, operational_weights, dim_filter=None):
     """Analysis B: Residual alignment after projecting out entity baseline."""
     print("\n" + "=" * 60)
     print("ANALYSIS: residual alignment (entity baseline projected out)")
@@ -484,25 +484,25 @@ def run_residual_alignment(reading_weights, control_weights, dim_filter=None):
             residual_cv[layer] = project_out(cv[layer], baseline_cv[layer])
 
         # Per-layer alignment of residual
-        reading_align = compute_alignment_per_layer(residual_cv, reading_weights)
-        control_align = compute_alignment_per_layer(residual_cv, control_weights)
+        metacognitive_align = compute_alignment_per_layer(residual_cv, metacognitive_weights)
+        operational_align = compute_alignment_per_layer(residual_cv, operational_weights)
 
-        reading_summary = mean_across_layers(reading_align)
-        control_summary = mean_across_layers(control_align)
+        reading_summary = mean_across_layers(metacognitive_align)
+        control_summary = mean_across_layers(operational_align)
 
         print(f"  Reading (residual): mean R² = {reading_summary['mean_r_squared']:.4f}")
         print(f"  Control (residual): mean R² = {control_summary['mean_r_squared']:.4f}")
 
         # Bootstrap with joint entity baseline resampling
         acts, labels = load_contrast_activations(dim_name)
-        boot_reading = bootstrap_contrast_alignment(
-            acts, labels, reading_weights,
+        boot_metacognitive = bootstrap_contrast_alignment(
+            acts, labels, metacognitive_weights,
             entity_baseline_acts=baseline_acts,
             entity_baseline_labels=baseline_labels,
             residual_mode=True,
         )
-        boot_control = bootstrap_contrast_alignment(
-            acts, labels, control_weights,
+        boot_operational = bootstrap_contrast_alignment(
+            acts, labels, operational_weights,
             entity_baseline_acts=baseline_acts,
             entity_baseline_labels=baseline_labels,
             residual_mode=True,
@@ -514,13 +514,13 @@ def run_residual_alignment(reading_weights, control_weights, dim_filter=None):
 
         np.savez_compressed(
             os.path.join(dim_out, "alignment.npz"),
-            reading_per_layer=json.dumps(reading_align),
-            control_per_layer=json.dumps(control_align),
+            reading_per_layer=json.dumps(metacognitive_align),
+            control_per_layer=json.dumps(operational_align),
             entity_overlap_per_layer=json.dumps(
                 {str(k): v for k, v in entity_overlaps.items()}
             ),
-            boot_reading_r2=boot_reading,
-            boot_control_r2=boot_control,
+            boot_metacognitive_r2=boot_metacognitive,
+            boot_operational_r2=boot_operational,
         )
 
         summary[dim_name] = {
@@ -529,12 +529,12 @@ def run_residual_alignment(reading_weights, control_weights, dim_filter=None):
             "reading_mean_r2": reading_summary["mean_r_squared"],
             "control_mean_r2": control_summary["mean_r_squared"],
             "reading_boot_ci95": [
-                float(np.percentile(boot_reading, 2.5)),
-                float(np.percentile(boot_reading, 97.5)),
+                float(np.percentile(boot_metacognitive, 2.5)),
+                float(np.percentile(boot_metacognitive, 97.5)),
             ],
             "control_boot_ci95": [
-                float(np.percentile(boot_control, 2.5)),
-                float(np.percentile(boot_control, 97.5)),
+                float(np.percentile(boot_operational, 2.5)),
+                float(np.percentile(boot_operational, 97.5)),
             ],
         }
 
@@ -545,7 +545,7 @@ def run_residual_alignment(reading_weights, control_weights, dim_filter=None):
     return summary
 
 
-def run_standalone_alignment(reading_weights, control_weights, dim_filter=None):
+def run_standalone_alignment(metacognitive_weights, operational_weights, dim_filter=None):
     """Analysis C: Standalone concept alignment (mean activation vectors)."""
     print("\n" + "=" * 60)
     print("ANALYSIS: standalone alignment (concept-only, no entity framing)")
@@ -575,18 +575,18 @@ def run_standalone_alignment(reading_weights, control_weights, dim_filter=None):
         acts = load_standalone_activations(dim_name)
 
         # Per-layer alignment
-        reading_align = compute_alignment_per_layer(mean_vec, reading_weights)
-        control_align = compute_alignment_per_layer(mean_vec, control_weights)
+        metacognitive_align = compute_alignment_per_layer(mean_vec, metacognitive_weights)
+        operational_align = compute_alignment_per_layer(mean_vec, operational_weights)
 
-        reading_summary = mean_across_layers(reading_align)
-        control_summary = mean_across_layers(control_align)
+        reading_summary = mean_across_layers(metacognitive_align)
+        control_summary = mean_across_layers(operational_align)
 
         print(f"  Reading: mean R² = {reading_summary['mean_r_squared']:.4f}")
         print(f"  Control: mean R² = {control_summary['mean_r_squared']:.4f}")
 
         # Bootstrap
-        boot_reading = bootstrap_standalone_alignment(acts, reading_weights)
-        boot_control = bootstrap_standalone_alignment(acts, control_weights)
+        boot_metacognitive = bootstrap_standalone_alignment(acts, metacognitive_weights)
+        boot_operational = bootstrap_standalone_alignment(acts, operational_weights)
 
         # Save per-dimension
         dim_out = os.path.join(out_dir, dim_name)
@@ -594,10 +594,10 @@ def run_standalone_alignment(reading_weights, control_weights, dim_filter=None):
 
         np.savez_compressed(
             os.path.join(dim_out, "alignment.npz"),
-            reading_per_layer=json.dumps(reading_align),
-            control_per_layer=json.dumps(control_align),
-            boot_reading_r2=boot_reading,
-            boot_control_r2=boot_control,
+            reading_per_layer=json.dumps(metacognitive_align),
+            control_per_layer=json.dumps(operational_align),
+            boot_metacognitive_r2=boot_metacognitive,
+            boot_operational_r2=boot_operational,
         )
 
         summary[dim_name] = {
@@ -605,12 +605,12 @@ def run_standalone_alignment(reading_weights, control_weights, dim_filter=None):
             "reading_mean_r2": reading_summary["mean_r_squared"],
             "control_mean_r2": control_summary["mean_r_squared"],
             "reading_boot_ci95": [
-                float(np.percentile(boot_reading, 2.5)),
-                float(np.percentile(boot_reading, 97.5)),
+                float(np.percentile(boot_metacognitive, 2.5)),
+                float(np.percentile(boot_metacognitive, 97.5)),
             ],
             "control_boot_ci95": [
-                float(np.percentile(boot_control, 2.5)),
-                float(np.percentile(boot_control, 97.5)),
+                float(np.percentile(boot_operational, 2.5)),
+                float(np.percentile(boot_operational, 97.5)),
             ],
         }
 
@@ -650,6 +650,7 @@ def main():
         description="Exp 3 Phase 1b: Concept-probe alignment analysis"
     )
     add_version_argument(parser)
+    add_turn_argument(parser)
     parser.add_argument("--analysis", type=str, required=True,
                         choices=["raw", "residual", "standalone", "all"],
                         help="Which analysis to run")
@@ -659,9 +660,10 @@ def main():
     args = parser.parse_args()
 
     # Set version and initialize version-dependent paths
-    set_version(args.version)
+    set_version(args.version, turn=args.turn)
     _init_paths()
     print(f"Version: {args.version}")
+    print(f"Turn: {args.turn}")
     print(f"Output root: {OUTPUT_ROOT}")
 
     # Parse optional dimension filter
@@ -672,8 +674,8 @@ def main():
 
     # Load probe weights (shared across all analyses)
     print("Loading probe weight vectors...")
-    reading_weights = load_probe_weights(READING_PROBE_DIR)
-    control_weights = load_probe_weights(CONTROL_PROBE_DIR)
+    metacognitive_weights = load_probe_weights(METACOGNITIVE_PROBE_DIR)
+    operational_weights = load_probe_weights(OPERATIONAL_PROBE_DIR)
 
     # Exclude early layers (0 through restricted_layer_start - 1).
     # Layer 0 is the token embedding layer whose mean activation is
@@ -681,19 +683,19 @@ def main():
     # standalone analysis).  Layers 1-5 have prompt-format confounds and
     # near-zero-norm contrast vectors that make cosine similarity unstable.
     min_layer = config.ANALYSIS.restricted_layer_start
-    reading_weights = {k: v for k, v in reading_weights.items() if k >= min_layer}
-    control_weights = {k: v for k, v in control_weights.items() if k >= min_layer}
+    metacognitive_weights = {k: v for k, v in metacognitive_weights.items() if k >= min_layer}
+    operational_weights = {k: v for k, v in operational_weights.items() if k >= min_layer}
     print(f"Layer filtering: using layers {min_layer}–{config.N_LAYERS - 1} "
-          f"({len(reading_weights)} layers)")
+          f"({len(metacognitive_weights)} layers)")
 
     if args.analysis in ("raw", "all"):
-        run_raw_alignment(reading_weights, control_weights, dim_filter=dim_filter)
+        run_raw_alignment(metacognitive_weights, operational_weights, dim_filter=dim_filter)
 
     if args.analysis in ("residual", "all"):
-        run_residual_alignment(reading_weights, control_weights, dim_filter=dim_filter)
+        run_residual_alignment(metacognitive_weights, operational_weights, dim_filter=dim_filter)
 
     if args.analysis in ("standalone", "all"):
-        run_standalone_alignment(reading_weights, control_weights, dim_filter=dim_filter)
+        run_standalone_alignment(metacognitive_weights, operational_weights, dim_filter=dim_filter)
 
     print("✅ Phase 2 alignment analysis complete.")
 

@@ -1,0 +1,1082 @@
+{
+  "1": {
+    "name": "Phenomenology",
+    "folder": "1_phenomenology",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 17,
+        "n_sig_less": 0,
+        "sig_greater_than": [
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto AI)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 2,
+        "n_sig_less": 6,
+        "sig_greater_than": [
+          "Human (concept)",
+          "AI (concept)"
+        ],
+        "sig_less_than": [
+          "Embodiment",
+          "Biological",
+          "Shapes",
+          "SysPrompt (talkto human)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "2": {
+    "name": "Emotions",
+    "folder": "2_emotions",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 19,
+        "n_sig_less": 0,
+        "sig_greater_than": [
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (talkto AI)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 2,
+        "n_sig_less": 11,
+        "sig_greater_than": [
+          "Human (concept)",
+          "AI (concept)"
+        ],
+        "sig_less_than": [
+          "Agency",
+          "Intentions",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Biological",
+          "Shapes",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "3": {
+    "name": "Agency",
+    "folder": "3_agency",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 4,
+        "n_sig_less": 6,
+        "sig_greater_than": [
+          "Social",
+          "Roles",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Formality",
+          "Shapes",
+          "Attention",
+          "SysPrompt (talkto human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 4,
+        "n_sig_less": 5,
+        "sig_greater_than": [
+          "Emotions",
+          "Prediction",
+          "Human (concept)",
+          "AI (concept)"
+        ],
+        "sig_less_than": [
+          "Embodiment",
+          "Biological",
+          "SysPrompt (talkto human)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "4": {
+    "name": "Intentions",
+    "folder": "4_intentions",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 5,
+        "n_sig_less": 5,
+        "sig_greater_than": [
+          "Cognitive",
+          "Social",
+          "Roles",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Formality",
+          "Shapes",
+          "SysPrompt (talkto human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 8,
+        "n_sig_less": 4,
+        "sig_greater_than": [
+          "Emotions",
+          "Prediction",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Human (concept)",
+          "AI (concept)",
+          "SysPrompt (talkto AI)"
+        ],
+        "sig_less_than": [
+          "Embodiment",
+          "Biological",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "5": {
+    "name": "Prediction",
+    "folder": "5_prediction",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 5,
+        "n_sig_less": 5,
+        "sig_greater_than": [
+          "Cognitive",
+          "Social",
+          "Roles",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Formality",
+          "Shapes",
+          "SysPrompt (talkto human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 1,
+        "n_sig_less": 11,
+        "sig_greater_than": [
+          "AI (concept)"
+        ],
+        "sig_less_than": [
+          "Agency",
+          "Intentions",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Biological",
+          "Shapes",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "6": {
+    "name": "Cognitive",
+    "folder": "6_cognitive",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 15,
+        "sig_greater_than": [],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Intentions",
+          "Prediction",
+          "Embodiment",
+          "Animacy",
+          "Formality",
+          "Helpfulness",
+          "Biological",
+          "Shapes",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (talkto AI)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 2,
+        "n_sig_less": 6,
+        "sig_greater_than": [
+          "Human (concept)",
+          "AI (concept)"
+        ],
+        "sig_less_than": [
+          "Embodiment",
+          "Biological",
+          "Shapes",
+          "SysPrompt (talkto human)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "7": {
+    "name": "Social",
+    "folder": "7_social",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 1,
+        "n_sig_less": 16,
+        "sig_greater_than": [
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Embodiment",
+          "Animacy",
+          "Formality",
+          "Helpfulness",
+          "Biological",
+          "Shapes",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (talkto AI)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 2,
+        "n_sig_less": 6,
+        "sig_greater_than": [
+          "Human (concept)",
+          "AI (concept)"
+        ],
+        "sig_less_than": [
+          "Embodiment",
+          "Biological",
+          "Shapes",
+          "SysPrompt (talkto human)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "8": {
+    "name": "Embodiment",
+    "folder": "8_embodiment",
+    "category": "Physical",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 5,
+        "n_sig_less": 5,
+        "sig_greater_than": [
+          "Cognitive",
+          "Social",
+          "Roles",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Formality",
+          "Shapes",
+          "SysPrompt (talkto human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 17,
+        "n_sig_less": 2,
+        "sig_greater_than": [
+          "Phenomenology",
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Roles",
+          "Animacy",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Shapes",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto AI)"
+        ],
+        "sig_less_than": [
+          "Biological",
+          "SysPrompt (bare human)"
+        ]
+      }
+    }
+  },
+  "9": {
+    "name": "Roles",
+    "folder": "9_roles",
+    "category": "Physical",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 1,
+        "n_sig_less": 16,
+        "sig_greater_than": [
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Embodiment",
+          "Animacy",
+          "Formality",
+          "Helpfulness",
+          "Biological",
+          "Shapes",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (talkto AI)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 5,
+        "n_sig_less": 4,
+        "sig_greater_than": [
+          "Emotions",
+          "Prediction",
+          "Human (concept)",
+          "AI (concept)",
+          "SysPrompt (talkto AI)"
+        ],
+        "sig_less_than": [
+          "Embodiment",
+          "Biological",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "10": {
+    "name": "Animacy",
+    "folder": "10_animacy",
+    "category": "Physical",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 5,
+        "n_sig_less": 5,
+        "sig_greater_than": [
+          "Cognitive",
+          "Social",
+          "Roles",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Formality",
+          "Shapes",
+          "SysPrompt (talkto human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 7,
+        "n_sig_less": 4,
+        "sig_greater_than": [
+          "Emotions",
+          "Prediction",
+          "Formality",
+          "Expertise",
+          "Human (concept)",
+          "AI (concept)",
+          "SysPrompt (talkto AI)"
+        ],
+        "sig_less_than": [
+          "Embodiment",
+          "Biological",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "11": {
+    "name": "Formality",
+    "folder": "11_formality",
+    "category": "Pragmatic",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 16,
+        "n_sig_less": 1,
+        "sig_greater_than": [
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Emotions"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 2,
+        "n_sig_less": 8,
+        "sig_greater_than": [
+          "Human (concept)",
+          "AI (concept)"
+        ],
+        "sig_less_than": [
+          "Intentions",
+          "Embodiment",
+          "Animacy",
+          "Biological",
+          "Shapes",
+          "SysPrompt (talkto human)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "12": {
+    "name": "Expertise",
+    "folder": "12_expertise",
+    "category": "Pragmatic",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 2,
+        "n_sig_less": 6,
+        "sig_greater_than": [
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Formality",
+          "Shapes",
+          "Attention",
+          "SysPrompt (talkto human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 2,
+        "n_sig_less": 8,
+        "sig_greater_than": [
+          "Human (concept)",
+          "AI (concept)"
+        ],
+        "sig_less_than": [
+          "Intentions",
+          "Embodiment",
+          "Animacy",
+          "Biological",
+          "Shapes",
+          "SysPrompt (talkto human)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "13": {
+    "name": "Helpfulness",
+    "folder": "13_helpfulness",
+    "category": "Pragmatic",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 5,
+        "n_sig_less": 5,
+        "sig_greater_than": [
+          "Cognitive",
+          "Social",
+          "Roles",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Formality",
+          "Shapes",
+          "SysPrompt (talkto human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 2,
+        "n_sig_less": 7,
+        "sig_greater_than": [
+          "Human (concept)",
+          "AI (concept)"
+        ],
+        "sig_less_than": [
+          "Intentions",
+          "Embodiment",
+          "Biological",
+          "Shapes",
+          "SysPrompt (talkto human)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "14": {
+    "name": "Biological",
+    "folder": "14_biological",
+    "category": "Control",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 5,
+        "n_sig_less": 5,
+        "sig_greater_than": [
+          "Cognitive",
+          "Social",
+          "Roles",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Formality",
+          "Shapes",
+          "SysPrompt (talkto human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 19,
+        "n_sig_less": 1,
+        "sig_greater_than": [
+          "Phenomenology",
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Shapes",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (talkto AI)"
+        ],
+        "sig_less_than": [
+          "SysPrompt (bare human)"
+        ]
+      }
+    }
+  },
+  "15": {
+    "name": "Shapes",
+    "folder": "15_shapes",
+    "category": "Control",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 17,
+        "n_sig_less": 0,
+        "sig_greater_than": [
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto AI)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": []
+      },
+      "operational": {
+        "n_sig_greater": 11,
+        "n_sig_less": 4,
+        "sig_greater_than": [
+          "Phenomenology",
+          "Emotions",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Human (concept)",
+          "AI (concept)",
+          "SysPrompt (talkto AI)"
+        ],
+        "sig_less_than": [
+          "Embodiment",
+          "Biological",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "16": {
+    "name": "Human (concept)",
+    "folder": "16_human",
+    "category": "Entity",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 5,
+        "n_sig_less": 6,
+        "sig_greater_than": [
+          "Cognitive",
+          "Social",
+          "Roles",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Formality",
+          "Shapes",
+          "Attention",
+          "SysPrompt (talkto human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 0,
+        "n_sig_less": 19,
+        "sig_greater_than": [],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Cognitive",
+          "Social",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Shapes",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (talkto AI)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "17": {
+    "name": "AI (concept)",
+    "folder": "17_ai",
+    "category": "Entity",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 5,
+        "n_sig_less": 5,
+        "sig_greater_than": [
+          "Cognitive",
+          "Social",
+          "Roles",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Formality",
+          "Shapes",
+          "SysPrompt (talkto human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 0,
+        "n_sig_less": 20,
+        "sig_greater_than": [],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Shapes",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (talkto AI)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "18": {
+    "name": "Attention",
+    "folder": "18_attention",
+    "category": "Mental",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 8,
+        "n_sig_less": 5,
+        "sig_greater_than": [
+          "Agency",
+          "Cognitive",
+          "Social",
+          "Roles",
+          "Expertise",
+          "Human (concept)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Formality",
+          "Shapes",
+          "SysPrompt (talkto human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 4,
+        "n_sig_less": 4,
+        "sig_greater_than": [
+          "Emotions",
+          "Prediction",
+          "Human (concept)",
+          "AI (concept)"
+        ],
+        "sig_less_than": [
+          "Embodiment",
+          "Biological",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "20": {
+    "name": "SysPrompt (talkto human)",
+    "folder": "20_sysprompt_talkto_human",
+    "category": "SysPrompt",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 17,
+        "n_sig_less": 1,
+        "sig_greater_than": [
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto AI)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Emotions"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 12,
+        "n_sig_less": 3,
+        "sig_greater_than": [
+          "Phenomenology",
+          "Emotions",
+          "Agency",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Human (concept)",
+          "AI (concept)",
+          "SysPrompt (talkto AI)"
+        ],
+        "sig_less_than": [
+          "Biological",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "21": {
+    "name": "SysPrompt (talkto AI)",
+    "folder": "21_sysprompt_talkto_ai",
+    "category": "SysPrompt",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 5,
+        "n_sig_less": 4,
+        "sig_greater_than": [
+          "Cognitive",
+          "Social",
+          "Roles",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Shapes",
+          "SysPrompt (talkto human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 2,
+        "n_sig_less": 9,
+        "sig_greater_than": [
+          "Human (concept)",
+          "AI (concept)"
+        ],
+        "sig_less_than": [
+          "Intentions",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Biological",
+          "Shapes",
+          "SysPrompt (talkto human)",
+          "SysPrompt (bare human)",
+          "SysPrompt (bare AI)"
+        ]
+      }
+    }
+  },
+  "22": {
+    "name": "SysPrompt (bare human)",
+    "folder": "22_sysprompt_bare_human",
+    "category": "SysPrompt",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 1,
+        "n_sig_less": 17,
+        "sig_greater_than": [
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Embodiment",
+          "Animacy",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Shapes",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (talkto AI)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 21,
+        "n_sig_less": 0,
+        "sig_greater_than": [
+          "Phenomenology",
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Shapes",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (talkto AI)",
+          "SysPrompt (bare AI)"
+        ],
+        "sig_less_than": []
+      }
+    }
+  },
+  "23": {
+    "name": "SysPrompt (bare AI)",
+    "folder": "23_sysprompt_bare_ai",
+    "category": "SysPrompt",
+    "probes": {
+      "metacognitive": {
+        "n_sig_greater": 0,
+        "n_sig_less": 20,
+        "sig_greater_than": [],
+        "sig_less_than": [
+          "Phenomenology",
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Social",
+          "Embodiment",
+          "Roles",
+          "Animacy",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Biological",
+          "Shapes",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (talkto AI)",
+          "SysPrompt (bare human)"
+        ]
+      },
+      "operational": {
+        "n_sig_greater": 18,
+        "n_sig_less": 1,
+        "sig_greater_than": [
+          "Phenomenology",
+          "Emotions",
+          "Agency",
+          "Intentions",
+          "Prediction",
+          "Cognitive",
+          "Social",
+          "Roles",
+          "Animacy",
+          "Formality",
+          "Expertise",
+          "Helpfulness",
+          "Shapes",
+          "Human (concept)",
+          "AI (concept)",
+          "Attention",
+          "SysPrompt (talkto human)",
+          "SysPrompt (talkto AI)"
+        ],
+        "sig_less_than": [
+          "SysPrompt (bare human)"
+        ]
+      }
+    }
+  }
+}

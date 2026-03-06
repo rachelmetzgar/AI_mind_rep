@@ -53,7 +53,7 @@ alignment = {}  # dim_id -> observed_projection  (control_probe, all_layers)
 with open(DIM_TABLE) as f:
     reader = csv.DictReader(f)
     for row in reader:
-        if row["probe_type"] == "control_probe" and row["layer_range"] == "all_layers":
+        if row["probe_type"] == "operational" and row["layer_range"] == "all_layers":
             alignment[int(row["dim_id"])] = float(row["observed_projection"])
 
 # ── dim 16 excluded per project convention ─────────────────────────────────

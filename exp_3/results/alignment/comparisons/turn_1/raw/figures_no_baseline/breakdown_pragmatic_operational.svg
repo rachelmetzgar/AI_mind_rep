@@ -1,0 +1,71 @@
+<svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:800px;height:auto;font-family:Arial,sans-serif;">
+<rect width="800" height="320" fill="white"/>
+
+<g transform="translate(70,30)">
+<line x1="0" y1="180.0" x2="710" y2="180.0" stroke="#eee" stroke-width="1"/>
+<text x="-8" y="184.0" text-anchor="end" font-size="10" fill="#666">0.00</text>
+<line x1="0" y1="144.0" x2="710" y2="144.0" stroke="#eee" stroke-width="1"/>
+<text x="-8" y="148.0" text-anchor="end" font-size="10" fill="#666">1.65</text>
+<line x1="0" y1="108.0" x2="710" y2="108.0" stroke="#eee" stroke-width="1"/>
+<text x="-8" y="112.0" text-anchor="end" font-size="10" fill="#666">3.30</text>
+<line x1="0" y1="72.0" x2="710" y2="72.0" stroke="#eee" stroke-width="1"/>
+<text x="-8" y="76.0" text-anchor="end" font-size="10" fill="#666">4.95</text>
+<line x1="0" y1="36.0" x2="710" y2="36.0" stroke="#eee" stroke-width="1"/>
+<text x="-8" y="40.0" text-anchor="end" font-size="10" fill="#666">6.60</text>
+<line x1="0" y1="0.0" x2="710" y2="0.0" stroke="#eee" stroke-width="1"/>
+<text x="-8" y="4.0" text-anchor="end" font-size="10" fill="#666">8.25</text>
+<text x="-50" y="90.0" text-anchor="middle" font-size="11" fill="#333" transform="rotate(-90,-50,90.0)">Mean R² (×10⁻³)</text>
+<rect x="21.30" y="170.14" width="49.70" height="9.86" fill="#2E7D32" opacity="0.85"><title>Partner Identity — Helpfulness: 0.452 ×10⁻³</title></rect>
+<line x1="46.15" y1="175.07" x2="46.15" y2="166.13" stroke="#333" stroke-width="1"/>
+<line x1="44.15" y1="175.07" x2="48.15" y2="175.07" stroke="#333" stroke-width="1"/>
+<line x1="44.15" y1="166.13" x2="48.15" y2="166.13" stroke="#333" stroke-width="1"/>
+<rect x="73.00" y="173.08" width="49.70" height="6.92" fill="#616161" opacity="0.85"><title>Control — Helpfulness: 0.317 ×10⁻³</title></rect>
+<line x1="97.85" y1="175.46" x2="97.85" y2="165.56" stroke="#333" stroke-width="1"/>
+<line x1="95.85" y1="175.46" x2="99.85" y2="175.46" stroke="#333" stroke-width="1"/>
+<line x1="95.85" y1="165.56" x2="99.85" y2="165.56" stroke="#333" stroke-width="1"/>
+<text x="73.0" y="194" text-anchor="end" font-size="10" fill="#FF9800" transform="rotate(-30,73.0,194)">Helpfulness</text>
+<rect x="163.30" y="173.05" width="49.70" height="6.95" fill="#2E7D32" opacity="0.85"><title>Partner Identity — Expertise: 0.318 ×10⁻³</title></rect>
+<line x1="188.15" y1="174.31" x2="188.15" y2="170.73" stroke="#333" stroke-width="1"/>
+<line x1="186.15" y1="174.31" x2="190.15" y2="174.31" stroke="#333" stroke-width="1"/>
+<line x1="186.15" y1="170.73" x2="190.15" y2="170.73" stroke="#333" stroke-width="1"/>
+<rect x="215.00" y="167.59" width="49.70" height="12.41" fill="#616161" opacity="0.85"><title>Control — Expertise: 0.569 ×10⁻³</title></rect>
+<line x1="239.85" y1="170.12" x2="239.85" y2="163.89" stroke="#333" stroke-width="1"/>
+<line x1="237.85" y1="170.12" x2="241.85" y2="170.12" stroke="#333" stroke-width="1"/>
+<line x1="237.85" y1="163.89" x2="241.85" y2="163.89" stroke="#333" stroke-width="1"/>
+<text x="215.0" y="194" text-anchor="end" font-size="10" fill="#FF9800" transform="rotate(-30,215.0,194)">Expertise</text>
+<rect x="305.30" y="175.61" width="49.70" height="4.39" fill="#2E7D32" opacity="0.85"><title>Partner Identity — Formality: 0.201 ×10⁻³</title></rect>
+<line x1="330.15" y1="176.88" x2="330.15" y2="173.47" stroke="#333" stroke-width="1"/>
+<line x1="328.15" y1="176.88" x2="332.15" y2="176.88" stroke="#333" stroke-width="1"/>
+<line x1="328.15" y1="173.47" x2="332.15" y2="173.47" stroke="#333" stroke-width="1"/>
+<rect x="357.00" y="173.79" width="49.70" height="6.21" fill="#616161" opacity="0.85"><title>Control — Formality: 0.284 ×10⁻³</title></rect>
+<line x1="381.85" y1="175.32" x2="381.85" y2="170.27" stroke="#333" stroke-width="1"/>
+<line x1="379.85" y1="175.32" x2="383.85" y2="175.32" stroke="#333" stroke-width="1"/>
+<line x1="379.85" y1="170.27" x2="383.85" y2="170.27" stroke="#333" stroke-width="1"/>
+<text x="357.0" y="194" text-anchor="end" font-size="10" fill="#FF9800" transform="rotate(-30,357.0,194)">Formality</text>
+<line x1="426.0" y1="0" x2="426.0" y2="180" stroke="#ccc" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="447.30" y="135.08" width="49.70" height="44.92" fill="#2E7D32" opacity="0.5"><title>Partner Identity — Biological: 2.058 ×10⁻³</title></rect>
+<line x1="472.15" y1="141.28" x2="472.15" y2="131.45" stroke="#333" stroke-width="1"/>
+<line x1="470.15" y1="141.28" x2="474.15" y2="141.28" stroke="#333" stroke-width="1"/>
+<line x1="470.15" y1="131.45" x2="474.15" y2="131.45" stroke="#333" stroke-width="1"/>
+<rect x="499.00" y="90.84" width="49.70" height="89.16" fill="#616161" opacity="0.5"><title>Control — Biological: 4.084 ×10⁻³</title></rect>
+<line x1="523.85" y1="103.01" x2="523.85" y2="83.13" stroke="#333" stroke-width="1"/>
+<line x1="521.85" y1="103.01" x2="525.85" y2="103.01" stroke="#333" stroke-width="1"/>
+<line x1="521.85" y1="83.13" x2="525.85" y2="83.13" stroke="#333" stroke-width="1"/>
+<text x="499.0" y="194" text-anchor="end" font-size="10" fill="#9E9E9E" transform="rotate(-30,499.0,194)">Biological</text>
+<rect x="589.30" y="168.65" width="49.70" height="11.35" fill="#2E7D32" opacity="0.5"><title>Partner Identity — Shapes: 0.520 ×10⁻³</title></rect>
+<line x1="614.15" y1="173.05" x2="614.15" y2="164.91" stroke="#333" stroke-width="1"/>
+<line x1="612.15" y1="173.05" x2="616.15" y2="173.05" stroke="#333" stroke-width="1"/>
+<line x1="612.15" y1="164.91" x2="616.15" y2="164.91" stroke="#333" stroke-width="1"/>
+<rect x="641.00" y="166.02" width="49.70" height="13.98" fill="#616161" opacity="0.5"><title>Control — Shapes: 0.641 ×10⁻³</title></rect>
+<line x1="665.85" y1="172.85" x2="665.85" y2="156.92" stroke="#333" stroke-width="1"/>
+<line x1="663.85" y1="172.85" x2="667.85" y2="172.85" stroke="#333" stroke-width="1"/>
+<line x1="663.85" y1="156.92" x2="667.85" y2="156.92" stroke="#333" stroke-width="1"/>
+<text x="641.0" y="194" text-anchor="end" font-size="10" fill="#9E9E9E" transform="rotate(-30,641.0,194)">Shapes</text>
+<line x1="0" y1="180" x2="710" y2="180" stroke="#333"/>
+<line x1="0" y1="0" x2="0" y2="180" stroke="#333"/>
+</g>
+<rect x="70" y="300" width="10" height="10" fill="#2E7D32"/>
+<text x="84" y="308" font-size="9" fill="#333">Partner Identity</text>
+<rect x="210" y="300" width="10" height="10" fill="#616161"/>
+<text x="224" y="308" font-size="9" fill="#333">Control</text>
+</svg>

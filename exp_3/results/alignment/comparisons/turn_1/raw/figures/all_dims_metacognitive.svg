@@ -1,0 +1,188 @@
+<svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:800px;height:auto;font-family:Arial,sans-serif;">
+<rect width="800" height="340" fill="white"/>
+
+<g transform="translate(70,30)">
+<line x1="0" y1="190.0" x2="710" y2="190.0" stroke="#eee" stroke-width="1"/>
+<text x="-8" y="194.0" text-anchor="end" font-size="10" fill="#666">0.00</text>
+<line x1="0" y1="152.0" x2="710" y2="152.0" stroke="#eee" stroke-width="1"/>
+<text x="-8" y="156.0" text-anchor="end" font-size="10" fill="#666">2.30</text>
+<line x1="0" y1="114.0" x2="710" y2="114.0" stroke="#eee" stroke-width="1"/>
+<text x="-8" y="118.0" text-anchor="end" font-size="10" fill="#666">4.60</text>
+<line x1="0" y1="76.0" x2="710" y2="76.0" stroke="#eee" stroke-width="1"/>
+<text x="-8" y="80.0" text-anchor="end" font-size="10" fill="#666">6.90</text>
+<line x1="0" y1="38.0" x2="710" y2="38.0" stroke="#eee" stroke-width="1"/>
+<text x="-8" y="42.0" text-anchor="end" font-size="10" fill="#666">9.20</text>
+<line x1="0" y1="0.0" x2="710" y2="0.0" stroke="#eee" stroke-width="1"/>
+<text x="-8" y="4.0" text-anchor="end" font-size="10" fill="#666">11.50</text>
+<text x="-50" y="95.0" text-anchor="middle" font-size="11" fill="#333" transform="rotate(-90,-50,95.0)">Mean R² (×10⁻³)</text>
+<line x1="118.33333333333333" y1="0" x2="118.33333333333333" y2="190" stroke="#ddd" stroke-width="1" stroke-dasharray="4,3"/>
+<rect x="5.92" y="184.73" width="13.81" height="5.27" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.319 ×10⁻³</title></rect>
+<line x1="12.82" y1="185.90" x2="12.82" y2="183.32" stroke="#333" stroke-width="1"/>
+<line x1="10.82" y1="185.90" x2="14.82" y2="185.90" stroke="#333" stroke-width="1"/>
+<line x1="10.82" y1="183.32" x2="14.82" y2="183.32" stroke="#333" stroke-width="1"/>
+<rect x="21.72" y="177.44" width="13.81" height="12.56" fill="#BDBDBD" opacity="0.85"><title>Control: 0.760 ×10⁻³</title></rect>
+<line x1="28.62" y1="180.71" x2="28.62" y2="175.24" stroke="#333" stroke-width="1"/>
+<line x1="26.62" y1="180.71" x2="30.62" y2="180.71" stroke="#333" stroke-width="1"/>
+<line x1="26.62" y1="175.24" x2="30.62" y2="175.24" stroke="#333" stroke-width="1"/>
+<text x="21.7" y="204" text-anchor="end" font-size="9" fill="#9E9E9E" transform="rotate(-45,21.7,204)">Human vs AI (general)</text>
+<rect x="45.36" y="185.49" width="13.81" height="4.51" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.273 ×10⁻³</title></rect>
+<line x1="52.26" y1="186.03" x2="52.26" y2="184.92" stroke="#333" stroke-width="1"/>
+<line x1="50.26" y1="186.03" x2="54.26" y2="186.03" stroke="#333" stroke-width="1"/>
+<line x1="50.26" y1="184.92" x2="54.26" y2="184.92" stroke="#333" stroke-width="1"/>
+<rect x="61.17" y="185.63" width="13.81" height="4.37" fill="#BDBDBD" opacity="0.85"><title>Control: 0.265 ×10⁻³</title></rect>
+<line x1="68.07" y1="186.19" x2="68.07" y2="184.93" stroke="#333" stroke-width="1"/>
+<line x1="66.07" y1="186.19" x2="70.07" y2="186.19" stroke="#333" stroke-width="1"/>
+<line x1="66.07" y1="184.93" x2="70.07" y2="184.93" stroke="#333" stroke-width="1"/>
+<text x="61.2" y="204" text-anchor="end" font-size="9" fill="#9E9E9E" transform="rotate(-45,61.2,204)">Biological</text>
+<rect x="84.81" y="185.50" width="13.81" height="4.50" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.272 ×10⁻³</title></rect>
+<line x1="91.71" y1="187.03" x2="91.71" y2="184.23" stroke="#333" stroke-width="1"/>
+<line x1="89.71" y1="187.03" x2="93.71" y2="187.03" stroke="#333" stroke-width="1"/>
+<line x1="89.71" y1="184.23" x2="93.71" y2="184.23" stroke="#333" stroke-width="1"/>
+<rect x="100.61" y="182.16" width="13.81" height="7.84" fill="#BDBDBD" opacity="0.85"><title>Control: 0.475 ×10⁻³</title></rect>
+<line x1="107.51" y1="185.25" x2="107.51" y2="180.37" stroke="#333" stroke-width="1"/>
+<line x1="105.51" y1="185.25" x2="109.51" y2="185.25" stroke="#333" stroke-width="1"/>
+<line x1="105.51" y1="180.37" x2="109.51" y2="180.37" stroke="#333" stroke-width="1"/>
+<text x="100.6" y="204" text-anchor="end" font-size="9" fill="#9E9E9E" transform="rotate(-45,100.6,204)">Shapes</text>
+<rect x="124.25" y="185.82" width="13.81" height="4.18" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.253 ×10⁻³</title></rect>
+<line x1="131.15" y1="186.39" x2="131.15" y2="185.09" stroke="#333" stroke-width="1"/>
+<line x1="129.15" y1="186.39" x2="133.15" y2="186.39" stroke="#333" stroke-width="1"/>
+<line x1="129.15" y1="185.09" x2="133.15" y2="185.09" stroke="#333" stroke-width="1"/>
+<rect x="140.06" y="183.79" width="13.81" height="6.21" fill="#BDBDBD" opacity="0.85"><title>Control: 0.376 ×10⁻³</title></rect>
+<line x1="146.96" y1="185.02" x2="146.96" y2="182.51" stroke="#333" stroke-width="1"/>
+<line x1="144.96" y1="185.02" x2="148.96" y2="185.02" stroke="#333" stroke-width="1"/>
+<line x1="144.96" y1="182.51" x2="148.96" y2="182.51" stroke="#333" stroke-width="1"/>
+<text x="140.1" y="204" text-anchor="end" font-size="9" fill="#2196F3" transform="rotate(-45,140.1,204)">Phenomenology</text>
+<rect x="163.69" y="185.91" width="13.81" height="4.09" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.247 ×10⁻³</title></rect>
+<line x1="170.60" y1="186.50" x2="170.60" y2="185.21" stroke="#333" stroke-width="1"/>
+<line x1="168.60" y1="186.50" x2="172.60" y2="186.50" stroke="#333" stroke-width="1"/>
+<line x1="168.60" y1="185.21" x2="172.60" y2="185.21" stroke="#333" stroke-width="1"/>
+<rect x="179.50" y="183.96" width="13.81" height="6.04" fill="#BDBDBD" opacity="0.85"><title>Control: 0.366 ×10⁻³</title></rect>
+<line x1="186.40" y1="185.01" x2="186.40" y2="182.90" stroke="#333" stroke-width="1"/>
+<line x1="184.40" y1="185.01" x2="188.40" y2="185.01" stroke="#333" stroke-width="1"/>
+<line x1="184.40" y1="182.90" x2="188.40" y2="182.90" stroke="#333" stroke-width="1"/>
+<text x="179.5" y="204" text-anchor="end" font-size="9" fill="#2196F3" transform="rotate(-45,179.5,204)">Emotions</text>
+<rect x="203.14" y="185.53" width="13.81" height="4.47" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.271 ×10⁻³</title></rect>
+<line x1="210.04" y1="186.25" x2="210.04" y2="184.49" stroke="#333" stroke-width="1"/>
+<line x1="208.04" y1="186.25" x2="212.04" y2="186.25" stroke="#333" stroke-width="1"/>
+<line x1="208.04" y1="184.49" x2="212.04" y2="184.49" stroke="#333" stroke-width="1"/>
+<rect x="218.94" y="182.66" width="13.81" height="7.34" fill="#BDBDBD" opacity="0.85"><title>Control: 0.444 ×10⁻³</title></rect>
+<line x1="225.85" y1="183.99" x2="225.85" y2="181.32" stroke="#333" stroke-width="1"/>
+<line x1="223.85" y1="183.99" x2="227.85" y2="183.99" stroke="#333" stroke-width="1"/>
+<line x1="223.85" y1="181.32" x2="227.85" y2="181.32" stroke="#333" stroke-width="1"/>
+<text x="218.9" y="204" text-anchor="end" font-size="9" fill="#2196F3" transform="rotate(-45,218.9,204)">Agency</text>
+<rect x="242.58" y="185.01" width="13.81" height="4.99" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.302 ×10⁻³</title></rect>
+<line x1="249.49" y1="186.02" x2="249.49" y2="184.06" stroke="#333" stroke-width="1"/>
+<line x1="247.49" y1="186.02" x2="251.49" y2="186.02" stroke="#333" stroke-width="1"/>
+<line x1="247.49" y1="184.06" x2="251.49" y2="184.06" stroke="#333" stroke-width="1"/>
+<rect x="258.39" y="180.75" width="13.81" height="9.25" fill="#BDBDBD" opacity="0.85"><title>Control: 0.560 ×10⁻³</title></rect>
+<line x1="265.29" y1="182.81" x2="265.29" y2="179.25" stroke="#333" stroke-width="1"/>
+<line x1="263.29" y1="182.81" x2="267.29" y2="182.81" stroke="#333" stroke-width="1"/>
+<line x1="263.29" y1="179.25" x2="267.29" y2="179.25" stroke="#333" stroke-width="1"/>
+<text x="258.4" y="204" text-anchor="end" font-size="9" fill="#2196F3" transform="rotate(-45,258.4,204)">Intentions</text>
+<rect x="282.03" y="184.45" width="13.81" height="5.55" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.336 ×10⁻³</title></rect>
+<line x1="288.93" y1="185.95" x2="288.93" y2="182.34" stroke="#333" stroke-width="1"/>
+<line x1="286.93" y1="185.95" x2="290.93" y2="185.95" stroke="#333" stroke-width="1"/>
+<line x1="286.93" y1="182.34" x2="290.93" y2="182.34" stroke="#333" stroke-width="1"/>
+<rect x="297.83" y="182.34" width="13.81" height="7.66" fill="#BDBDBD" opacity="0.85"><title>Control: 0.464 ×10⁻³</title></rect>
+<line x1="304.74" y1="183.99" x2="304.74" y2="180.29" stroke="#333" stroke-width="1"/>
+<line x1="302.74" y1="183.99" x2="306.74" y2="183.99" stroke="#333" stroke-width="1"/>
+<line x1="302.74" y1="180.29" x2="306.74" y2="180.29" stroke="#333" stroke-width="1"/>
+<text x="297.8" y="204" text-anchor="end" font-size="9" fill="#2196F3" transform="rotate(-45,297.8,204)">Prediction</text>
+<rect x="321.47" y="183.34" width="13.81" height="6.66" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.403 ×10⁻³</title></rect>
+<line x1="328.38" y1="184.33" x2="328.38" y2="182.56" stroke="#333" stroke-width="1"/>
+<line x1="326.38" y1="184.33" x2="330.38" y2="184.33" stroke="#333" stroke-width="1"/>
+<line x1="326.38" y1="182.56" x2="330.38" y2="182.56" stroke="#333" stroke-width="1"/>
+<rect x="337.28" y="181.33" width="13.81" height="8.67" fill="#BDBDBD" opacity="0.85"><title>Control: 0.525 ×10⁻³</title></rect>
+<line x1="344.18" y1="182.84" x2="344.18" y2="180.44" stroke="#333" stroke-width="1"/>
+<line x1="342.18" y1="182.84" x2="346.18" y2="182.84" stroke="#333" stroke-width="1"/>
+<line x1="342.18" y1="180.44" x2="346.18" y2="180.44" stroke="#333" stroke-width="1"/>
+<text x="337.3" y="204" text-anchor="end" font-size="9" fill="#2196F3" transform="rotate(-45,337.3,204)">Cognitive</text>
+<rect x="360.92" y="181.86" width="13.81" height="8.14" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.493 ×10⁻³</title></rect>
+<line x1="367.82" y1="183.69" x2="367.82" y2="180.41" stroke="#333" stroke-width="1"/>
+<line x1="365.82" y1="183.69" x2="369.82" y2="183.69" stroke="#333" stroke-width="1"/>
+<line x1="365.82" y1="180.41" x2="369.82" y2="180.41" stroke="#333" stroke-width="1"/>
+<rect x="376.72" y="180.68" width="13.81" height="9.32" fill="#BDBDBD" opacity="0.85"><title>Control: 0.564 ×10⁻³</title></rect>
+<line x1="383.62" y1="182.58" x2="383.62" y2="178.93" stroke="#333" stroke-width="1"/>
+<line x1="381.62" y1="182.58" x2="385.62" y2="182.58" stroke="#333" stroke-width="1"/>
+<line x1="381.62" y1="178.93" x2="385.62" y2="178.93" stroke="#333" stroke-width="1"/>
+<text x="376.7" y="204" text-anchor="end" font-size="9" fill="#2196F3" transform="rotate(-45,376.7,204)">Social</text>
+<rect x="400.36" y="183.37" width="13.81" height="6.63" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.401 ×10⁻³</title></rect>
+<line x1="407.26" y1="184.53" x2="407.26" y2="182.43" stroke="#333" stroke-width="1"/>
+<line x1="405.26" y1="184.53" x2="409.26" y2="184.53" stroke="#333" stroke-width="1"/>
+<line x1="405.26" y1="182.43" x2="409.26" y2="182.43" stroke="#333" stroke-width="1"/>
+<rect x="416.17" y="181.80" width="13.81" height="8.20" fill="#BDBDBD" opacity="0.85"><title>Control: 0.497 ×10⁻³</title></rect>
+<line x1="423.07" y1="183.20" x2="423.07" y2="180.79" stroke="#333" stroke-width="1"/>
+<line x1="421.07" y1="183.20" x2="425.07" y2="183.20" stroke="#333" stroke-width="1"/>
+<line x1="421.07" y1="180.79" x2="425.07" y2="180.79" stroke="#333" stroke-width="1"/>
+<text x="416.2" y="204" text-anchor="end" font-size="9" fill="#2196F3" transform="rotate(-45,416.2,204)">Attention</text>
+<rect x="439.81" y="185.88" width="13.81" height="4.12" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.250 ×10⁻³</title></rect>
+<line x1="446.71" y1="186.48" x2="446.71" y2="185.25" stroke="#333" stroke-width="1"/>
+<line x1="444.71" y1="186.48" x2="448.71" y2="186.48" stroke="#333" stroke-width="1"/>
+<line x1="444.71" y1="185.25" x2="448.71" y2="185.25" stroke="#333" stroke-width="1"/>
+<rect x="455.61" y="184.23" width="13.81" height="5.77" fill="#BDBDBD" opacity="0.85"><title>Control: 0.350 ×10⁻³</title></rect>
+<line x1="462.51" y1="185.12" x2="462.51" y2="183.31" stroke="#333" stroke-width="1"/>
+<line x1="460.51" y1="185.12" x2="464.51" y2="185.12" stroke="#333" stroke-width="1"/>
+<line x1="460.51" y1="183.31" x2="464.51" y2="183.31" stroke="#333" stroke-width="1"/>
+<text x="455.6" y="204" text-anchor="end" font-size="9" fill="#4CAF50" transform="rotate(-45,455.6,204)">Embodiment</text>
+<rect x="479.25" y="185.34" width="13.81" height="4.66" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.282 ×10⁻³</title></rect>
+<line x1="486.15" y1="185.98" x2="486.15" y2="184.47" stroke="#333" stroke-width="1"/>
+<line x1="484.15" y1="185.98" x2="488.15" y2="185.98" stroke="#333" stroke-width="1"/>
+<line x1="484.15" y1="184.47" x2="488.15" y2="184.47" stroke="#333" stroke-width="1"/>
+<rect x="495.06" y="182.41" width="13.81" height="7.59" fill="#BDBDBD" opacity="0.85"><title>Control: 0.459 ×10⁻³</title></rect>
+<line x1="501.96" y1="183.68" x2="501.96" y2="181.19" stroke="#333" stroke-width="1"/>
+<line x1="499.96" y1="183.68" x2="503.96" y2="183.68" stroke="#333" stroke-width="1"/>
+<line x1="499.96" y1="181.19" x2="503.96" y2="181.19" stroke="#333" stroke-width="1"/>
+<text x="495.1" y="204" text-anchor="end" font-size="9" fill="#4CAF50" transform="rotate(-45,495.1,204)">Roles</text>
+<rect x="518.69" y="184.95" width="13.81" height="5.05" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.306 ×10⁻³</title></rect>
+<line x1="525.60" y1="185.75" x2="525.60" y2="184.25" stroke="#333" stroke-width="1"/>
+<line x1="523.60" y1="185.75" x2="527.60" y2="185.75" stroke="#333" stroke-width="1"/>
+<line x1="523.60" y1="184.25" x2="527.60" y2="184.25" stroke="#333" stroke-width="1"/>
+<rect x="534.50" y="182.72" width="13.81" height="7.28" fill="#BDBDBD" opacity="0.85"><title>Control: 0.441 ×10⁻³</title></rect>
+<line x1="541.40" y1="184.00" x2="541.40" y2="181.73" stroke="#333" stroke-width="1"/>
+<line x1="539.40" y1="184.00" x2="543.40" y2="184.00" stroke="#333" stroke-width="1"/>
+<line x1="539.40" y1="181.73" x2="543.40" y2="181.73" stroke="#333" stroke-width="1"/>
+<text x="534.5" y="204" text-anchor="end" font-size="9" fill="#4CAF50" transform="rotate(-45,534.5,204)">Animacy</text>
+<rect x="558.14" y="184.68" width="13.81" height="5.32" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.322 ×10⁻³</title></rect>
+<line x1="565.04" y1="186.21" x2="565.04" y2="183.46" stroke="#333" stroke-width="1"/>
+<line x1="563.04" y1="186.21" x2="567.04" y2="186.21" stroke="#333" stroke-width="1"/>
+<line x1="563.04" y1="183.46" x2="567.04" y2="183.46" stroke="#333" stroke-width="1"/>
+<rect x="573.94" y="186.05" width="13.81" height="3.95" fill="#BDBDBD" opacity="0.85"><title>Control: 0.239 ×10⁻³</title></rect>
+<line x1="580.85" y1="187.16" x2="580.85" y2="184.57" stroke="#333" stroke-width="1"/>
+<line x1="578.85" y1="187.16" x2="582.85" y2="187.16" stroke="#333" stroke-width="1"/>
+<line x1="578.85" y1="184.57" x2="582.85" y2="184.57" stroke="#333" stroke-width="1"/>
+<text x="573.9" y="204" text-anchor="end" font-size="9" fill="#FF9800" transform="rotate(-45,573.9,204)">Formality</text>
+<rect x="597.58" y="184.55" width="13.81" height="5.45" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.330 ×10⁻³</title></rect>
+<line x1="604.49" y1="185.28" x2="604.49" y2="183.58" stroke="#333" stroke-width="1"/>
+<line x1="602.49" y1="185.28" x2="606.49" y2="185.28" stroke="#333" stroke-width="1"/>
+<line x1="602.49" y1="183.58" x2="606.49" y2="183.58" stroke="#333" stroke-width="1"/>
+<rect x="613.39" y="182.74" width="13.81" height="7.26" fill="#BDBDBD" opacity="0.85"><title>Control: 0.439 ×10⁻³</title></rect>
+<line x1="620.29" y1="183.63" x2="620.29" y2="181.90" stroke="#333" stroke-width="1"/>
+<line x1="618.29" y1="183.63" x2="622.29" y2="183.63" stroke="#333" stroke-width="1"/>
+<line x1="618.29" y1="181.90" x2="622.29" y2="181.90" stroke="#333" stroke-width="1"/>
+<text x="613.4" y="204" text-anchor="end" font-size="9" fill="#FF9800" transform="rotate(-45,613.4,204)">Expertise</text>
+<rect x="637.03" y="183.80" width="13.81" height="6.20" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.375 ×10⁻³</title></rect>
+<line x1="643.93" y1="185.97" x2="643.93" y2="182.67" stroke="#333" stroke-width="1"/>
+<line x1="641.93" y1="185.97" x2="645.93" y2="185.97" stroke="#333" stroke-width="1"/>
+<line x1="641.93" y1="182.67" x2="645.93" y2="182.67" stroke="#333" stroke-width="1"/>
+<rect x="652.83" y="182.78" width="13.81" height="7.22" fill="#BDBDBD" opacity="0.85"><title>Control: 0.437 ×10⁻³</title></rect>
+<line x1="659.74" y1="185.68" x2="659.74" y2="181.50" stroke="#333" stroke-width="1"/>
+<line x1="657.74" y1="185.68" x2="661.74" y2="185.68" stroke="#333" stroke-width="1"/>
+<line x1="657.74" y1="181.50" x2="661.74" y2="181.50" stroke="#333" stroke-width="1"/>
+<text x="652.8" y="204" text-anchor="end" font-size="9" fill="#FF9800" transform="rotate(-45,652.8,204)">Helpfulness</text>
+<rect x="676.47" y="179.45" width="13.81" height="10.55" fill="#81C784" opacity="0.85"><title>Partner Identity: 0.638 ×10⁻³</title></rect>
+<line x1="683.38" y1="180.94" x2="683.38" y2="177.73" stroke="#333" stroke-width="1"/>
+<line x1="681.38" y1="180.94" x2="685.38" y2="180.94" stroke="#333" stroke-width="1"/>
+<line x1="681.38" y1="177.73" x2="685.38" y2="177.73" stroke="#333" stroke-width="1"/>
+<rect x="692.28" y="180.61" width="13.81" height="9.39" fill="#BDBDBD" opacity="0.85"><title>Control: 0.569 ×10⁻³</title></rect>
+<line x1="699.18" y1="181.47" x2="699.18" y2="179.86" stroke="#333" stroke-width="1"/>
+<line x1="697.18" y1="181.47" x2="701.18" y2="181.47" stroke="#333" stroke-width="1"/>
+<line x1="697.18" y1="179.86" x2="701.18" y2="179.86" stroke="#333" stroke-width="1"/>
+<text x="692.3" y="204" text-anchor="end" font-size="9" fill="#00BCD4" transform="rotate(-45,692.3,204)">SysPrompt</text>
+<line x1="0" y1="190" x2="710" y2="190" stroke="#333"/>
+<line x1="0" y1="0" x2="0" y2="190" stroke="#333"/>
+</g>
+<rect x="70" y="320" width="10" height="10" fill="#81C784"/>
+<text x="84" y="328" font-size="9" fill="#333">Partner Identity</text>
+<rect x="210" y="320" width="10" height="10" fill="#BDBDBD"/>
+<text x="224" y="328" font-size="9" fill="#333">Control</text>
+</svg>

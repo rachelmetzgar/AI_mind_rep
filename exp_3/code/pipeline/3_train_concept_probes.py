@@ -51,7 +51,7 @@ from tqdm import tqdm
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from src.probes import LinearProbeClassification, TrainerConfig
 from src.train_test_utils import train, test
-from config import config, set_version, add_version_argument
+from config import config, set_version, add_version_argument, add_turn_argument
 
 
 # ========================== CONFIG ========================== #
@@ -77,8 +77,8 @@ def _init_paths():
     """Initialize version-dependent paths after set_version() has been called."""
     global EXP2_PROBE_DIRS
     EXP2_PROBE_DIRS = {
-        "control_probe": str(config.PATHS.exp2_control_probe),
-        "reading_probe": str(config.PATHS.exp2_reading_probe),
+        "operational": str(config.PATHS.exp2_operational),
+        "metacognitive": str(config.PATHS.exp2_metacognitive),
     }
 
 
@@ -329,6 +329,7 @@ def main():
         description="Exp 3: Train concept probes for one dimension"
     )
     add_version_argument(parser)
+    add_turn_argument(parser)
     parser.add_argument("--dim_id", type=int, required=True,
                         help="Dimension ID")
     parser.add_argument("--skip_alignment", action="store_true",
@@ -336,9 +337,10 @@ def main():
     args = parser.parse_args()
 
     # Set version and initialize version-dependent paths
-    set_version(args.version)
+    set_version(args.version, turn=args.turn)
     _init_paths()
     print(f"Version: {args.version}")
+    print(f"Turn: {args.turn}")
 
     # Discover available dimensions from extracted activations
     available_dims = discover_contrast_dimensions()

@@ -113,7 +113,7 @@ STANDALONE_DIM_NAMES = {
     22: "22_sysprompt_bare_human", 23: "23_sysprompt_bare_ai",
 }
 
-PROBE_TYPES = ["control_probe", "reading_probe"]
+PROBE_TYPES = ["operational", "metacognitive"]
 LAYER_RANGES = {
     "all_layers": None,
     "layers_6plus": slice(RESTRICTED_LAYER_START, None),

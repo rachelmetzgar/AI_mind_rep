@@ -1,0 +1,433 @@
+================================================================================
+  LAYER-WISE ALIGNMENT PROFILE ANALYSIS: STANDALONE
+  Generated: 2026-03-04 03:53:05
+================================================================================
+
+--------------------------------------------------------------------------------
+SECTION 1: OVERVIEW — Peak layers, onset, and profile types
+--------------------------------------------------------------------------------
+
+Dimension                        │ Probe    │ Peak Lyr │ Peak |cos| │ Onset Lyr │  Mean R² │ Profile Type        
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+1_phenomenology                  │ reading  │       40 │     0.0363 │         — │   0.0003 │ negligible          
+1_phenomenology                  │ control  │       19 │     0.0354 │         — │   0.0003 │ negligible          
+
+2_emotions                       │ reading  │        6 │     0.0363 │         — │   0.0003 │ negligible          
+2_emotions                       │ control  │       19 │     0.0333 │         — │   0.0003 │ negligible          
+
+3_agency                         │ reading  │        6 │     0.0369 │         — │   0.0003 │ negligible          
+3_agency                         │ control  │       37 │     0.0378 │         — │   0.0003 │ negligible          
+
+4_intentions                     │ reading  │        6 │     0.0373 │         — │   0.0003 │ negligible          
+4_intentions                     │ control  │       37 │     0.0359 │         — │   0.0003 │ negligible          
+
+5_prediction                     │ reading  │        6 │     0.0368 │         — │   0.0003 │ negligible          
+5_prediction                     │ control  │       37 │     0.0387 │         — │   0.0004 │ negligible          
+
+6_cognitive                      │ reading  │        6 │     0.0372 │         — │   0.0003 │ negligible          
+6_cognitive                      │ control  │       37 │     0.0395 │         — │   0.0004 │ negligible          
+
+7_social                         │ reading  │       36 │     0.0381 │         — │   0.0003 │ negligible          
+7_social                         │ control  │       37 │     0.0399 │         — │   0.0005 │ negligible          
+
+8_embodiment                     │ reading  │       40 │     0.0371 │         — │   0.0003 │ negligible          
+8_embodiment                     │ control  │       37 │     0.0372 │         — │   0.0003 │ negligible          
+
+9_roles                          │ reading  │        6 │     0.0362 │         — │   0.0003 │ negligible          
+9_roles                          │ control  │       37 │     0.0399 │         — │   0.0004 │ negligible          
+
+10_animacy                       │ reading  │       40 │     0.0353 │         — │   0.0003 │ negligible          
+10_animacy                       │ control  │       37 │     0.0345 │         — │   0.0003 │ negligible          
+
+11_formality                     │ reading  │        6 │     0.0365 │         — │   0.0003 │ negligible          
+11_formality                     │ control  │       19 │     0.0380 │         — │   0.0004 │ negligible          
+
+12_expertise                     │ reading  │        6 │     0.0366 │         — │   0.0003 │ negligible          
+12_expertise                     │ control  │       37 │     0.0395 │         — │   0.0005 │ negligible          
+
+13_helpfulness                   │ reading  │        6 │     0.0358 │         — │   0.0003 │ negligible          
+13_helpfulness                   │ control  │       37 │     0.0400 │         — │   0.0005 │ negligible          
+
+14_biological                    │ reading  │       40 │     0.0341 │         — │   0.0003 │ negligible          
+14_biological                    │ control  │       37 │     0.0374 │         — │   0.0003 │ negligible          
+
+15_shapes                        │ reading  │       33 │     0.0353 │         — │   0.0003 │ negligible          
+15_shapes                        │ control  │       20 │     0.0338 │         — │   0.0003 │ negligible          
+
+16_human                         │ reading  │        6 │     0.0380 │         — │   0.0003 │ negligible          
+16_human                         │ control  │       19 │     0.0438 │         — │   0.0004 │ negligible          
+
+17_ai                            │ reading  │        6 │     0.0334 │         — │   0.0003 │ negligible          
+17_ai                            │ control  │        8 │     0.0439 │         — │   0.0006 │ negligible          
+
+18_attention                     │ reading  │        6 │     0.0364 │         — │   0.0003 │ negligible          
+18_attention                     │ control  │       37 │     0.0367 │         — │   0.0003 │ negligible          
+
+20_sysprompt_talkto_human        │ reading  │        6 │     0.0456 │         — │   0.0004 │ negligible          
+20_sysprompt_talkto_human        │ control  │       19 │     0.0423 │         — │   0.0005 │ negligible          
+
+21_sysprompt_talkto_ai           │ reading  │        6 │     0.0435 │         — │   0.0004 │ negligible          
+21_sysprompt_talkto_ai           │ control  │       37 │     0.0363 │         — │   0.0005 │ negligible          
+
+22_sysprompt_bare_human          │ reading  │        6 │     0.0417 │         — │   0.0003 │ negligible          
+22_sysprompt_bare_human          │ control  │       31 │     0.0393 │         — │   0.0005 │ negligible          
+
+23_sysprompt_bare_ai             │ reading  │        6 │     0.0410 │         — │   0.0003 │ negligible          
+23_sysprompt_bare_ai             │ control  │       31 │     0.0376 │         — │   0.0005 │ negligible          
+
+
+--------------------------------------------------------------------------------
+SECTION 2: LAYER-BAND R² CONCENTRATION (fraction of total R² per band)
+  Early: layers (1, 10), Middle: layers (11, 25), Late: layers (26, 40)
+--------------------------------------------------------------------------------
+
+Dimension                        │ Probe    │    Early │   Middle │     Late │ Dominant Band  
+──────────────────────────────────────────────────────────────────────────────────────────────
+1_phenomenology                  │ reading  │    0.195 │    0.281 │    0.524 │ late           
+1_phenomenology                  │ control  │    0.098 │    0.462 │    0.439 │ middle         
+
+2_emotions                       │ reading  │    0.206 │    0.272 │    0.522 │ late           
+2_emotions                       │ control  │    0.103 │    0.450 │    0.447 │ middle         
+
+3_agency                         │ reading  │    0.207 │    0.256 │    0.536 │ late           
+3_agency                         │ control  │    0.090 │    0.446 │    0.463 │ late           
+
+4_intentions                     │ reading  │    0.225 │    0.268 │    0.506 │ late           
+4_intentions                     │ control  │    0.103 │    0.441 │    0.457 │ late           
+
+5_prediction                     │ reading  │    0.206 │    0.267 │    0.527 │ late           
+5_prediction                     │ control  │    0.082 │    0.459 │    0.459 │ middle         
+
+6_cognitive                      │ reading  │    0.218 │    0.264 │    0.517 │ late           
+6_cognitive                      │ control  │    0.074 │    0.487 │    0.439 │ middle         
+
+7_social                         │ reading  │    0.213 │    0.250 │    0.537 │ late           
+7_social                         │ control  │    0.064 │    0.516 │    0.420 │ middle         
+
+8_embodiment                     │ reading  │    0.193 │    0.275 │    0.532 │ late           
+8_embodiment                     │ control  │    0.096 │    0.434 │    0.471 │ late           
+
+9_roles                          │ reading  │    0.225 │    0.263 │    0.512 │ late           
+9_roles                          │ control  │    0.080 │    0.462 │    0.458 │ middle         
+
+10_animacy                       │ reading  │    0.189 │    0.271 │    0.540 │ late           
+10_animacy                       │ control  │    0.111 │    0.412 │    0.477 │ late           
+
+11_formality                     │ reading  │    0.203 │    0.254 │    0.542 │ late           
+11_formality                     │ control  │    0.070 │    0.514 │    0.417 │ middle         
+
+12_expertise                     │ reading  │    0.212 │    0.258 │    0.531 │ late           
+12_expertise                     │ control  │    0.073 │    0.509 │    0.417 │ middle         
+
+13_helpfulness                   │ reading  │    0.198 │    0.254 │    0.547 │ late           
+13_helpfulness                   │ control  │    0.078 │    0.519 │    0.403 │ middle         
+
+14_biological                    │ reading  │    0.184 │    0.268 │    0.548 │ late           
+14_biological                    │ control  │    0.065 │    0.400 │    0.535 │ late           
+
+15_shapes                        │ reading  │    0.183 │    0.264 │    0.553 │ late           
+15_shapes                        │ control  │    0.074 │    0.459 │    0.466 │ late           
+
+16_human                         │ reading  │    0.249 │    0.253 │    0.497 │ late           
+16_human                         │ control  │    0.070 │    0.458 │    0.472 │ late           
+
+17_ai                            │ reading  │    0.253 │    0.253 │    0.495 │ late           
+17_ai                            │ control  │    0.272 │    0.433 │    0.296 │ middle         
+
+18_attention                     │ reading  │    0.218 │    0.280 │    0.503 │ late           
+18_attention                     │ control  │    0.104 │    0.452 │    0.444 │ middle         
+
+20_sysprompt_talkto_human        │ reading  │    0.300 │    0.199 │    0.501 │ late           
+20_sysprompt_talkto_human        │ control  │    0.027 │    0.462 │    0.510 │ late           
+
+21_sysprompt_talkto_ai           │ reading  │    0.290 │    0.252 │    0.458 │ late           
+21_sysprompt_talkto_ai           │ control  │    0.092 │    0.481 │    0.428 │ middle         
+
+22_sysprompt_bare_human          │ reading  │    0.290 │    0.180 │    0.530 │ late           
+22_sysprompt_bare_human          │ control  │    0.051 │    0.468 │    0.481 │ late           
+
+23_sysprompt_bare_ai             │ reading  │    0.263 │    0.238 │    0.500 │ late           
+23_sysprompt_bare_ai             │ control  │    0.090 │    0.503 │    0.407 │ middle         
+
+
+--------------------------------------------------------------------------------
+SECTION 3: READING vs CONTROL PROBE DIVERGENCE
+--------------------------------------------------------------------------------
+
+Dimension                        │  R Peak │  C Peak │  Offset │ Profile r │ Crossover │ R Type             │ C Type            
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+1_phenomenology                  │      40 │      19 │     -21 │    -0.182 │         6 │ negligible         │ negligible        
+2_emotions                       │       6 │      19 │     +13 │    -0.200 │         6 │ negligible         │ negligible        
+3_agency                         │       6 │      37 │     +31 │    -0.206 │         6 │ negligible         │ negligible        
+4_intentions                     │       6 │      37 │     +31 │    -0.201 │         6 │ negligible         │ negligible        
+5_prediction                     │       6 │      37 │     +31 │    -0.215 │         6 │ negligible         │ negligible        
+6_cognitive                      │       6 │      37 │     +31 │    -0.241 │         6 │ negligible         │ negligible        
+7_social                         │      36 │      37 │      +1 │    -0.270 │         6 │ negligible         │ negligible        
+8_embodiment                     │      40 │      37 │      -3 │    -0.206 │         6 │ negligible         │ negligible        
+9_roles                          │       6 │      37 │     +31 │    -0.222 │         6 │ negligible         │ negligible        
+10_animacy                       │      40 │      37 │      -3 │    -0.199 │         6 │ negligible         │ negligible        
+11_formality                     │       6 │      19 │     +13 │    -0.199 │         6 │ negligible         │ negligible        
+12_expertise                     │       6 │      37 │     +31 │    -0.249 │         6 │ negligible         │ negligible        
+13_helpfulness                   │       6 │      37 │     +31 │    -0.278 │         6 │ negligible         │ negligible        
+14_biological                    │      40 │      37 │      -3 │    -0.189 │         6 │ negligible         │ negligible        
+15_shapes                        │      33 │      20 │     -13 │    -0.131 │         6 │ negligible         │ negligible        
+16_human                         │       6 │      19 │     +13 │    -0.140 │         6 │ negligible         │ negligible        
+17_ai                            │       6 │       8 │      +2 │    -0.145 │         6 │ negligible         │ negligible        
+18_attention                     │       6 │      37 │     +31 │    -0.198 │         6 │ negligible         │ negligible        
+20_sysprompt_talkto_human        │       6 │      19 │     +13 │    -0.205 │         6 │ negligible         │ negligible        
+21_sysprompt_talkto_ai           │       6 │      37 │     +31 │    -0.326 │         6 │ negligible         │ negligible        
+22_sysprompt_bare_human          │       6 │      31 │     +25 │    -0.265 │         6 │ negligible         │ negligible        
+23_sysprompt_bare_ai             │       6 │      31 │     +25 │    -0.332 │         6 │ negligible         │ negligible        
+
+--------------------------------------------------------------------------------
+SECTION 4: KEY FINDINGS AND INTERPRETATIONS
+--------------------------------------------------------------------------------
+
+  Finding 1: Dimensions where reading and control probes diverge in layer profile
+    22 dimension(s) show low reading-control profile correlation (r < 0.5), suggesting the two probe types interface with conceptual knowledge at different network depths.
+    Evidence: 23_sysprompt_bare_ai (r=-0.33, peak offset=+25), 21_sysprompt_talkto_ai (r=-0.33, peak offset=+31), 13_helpfulness (r=-0.28, peak offset=+31), 7_social (r=-0.27, peak offset=+1), 22_sysprompt_bare_human (r=-0.26, peak offset=+25)
+    Implication: Divergent profiles imply that reading probes (reflective token positions) and control probes (generation boundaries) access different processing stages for the same conceptual content. This is mechanistically informative.
+
+  Finding 2: Distribution of layer profile types (reading probes)
+    negligible: 22
+    Evidence: Most common: 'negligible' (22 dims): 1_phenomenology, 2_emotions, 3_agency, 4_intentions, 5_prediction
+    Implication: A predominance of late-concentrated profiles would suggest alignment emerges from abstract semantic processing. Distributed profiles suggest concept-probe overlap at multiple representational levels.
+
+  Finding 3: Dimensions with inconsistent alignment direction across layers
+    14 dimension(s) show sign consistency < 0.7, meaning the concept vector flips direction relative to the probe across layers.
+    Evidence: 3_agency (0.69), 4_intentions (0.69), 5_prediction (0.66), 6_cognitive (0.66), 7_social (0.66)
+    Implication: Sign flips suggest the concept is encoded in opposing directions at different depths — potentially reflecting different computational roles (e.g., input encoding vs. output preparation).
+
+  Finding 4: Control dimension check: 15_shapes
+    Peak |cos| = 0.0353, mean R² = 0.0003
+    Evidence: Profile type: negligible
+    Implication: If the shapes control shows meaningful alignment, it suggests pipeline artifacts. Negligible alignment validates the pipeline.
+
+
+--------------------------------------------------------------------------------
+SECTION 5: FULL PER-LAYER DATA (top 5 dimensions by peak reading R²)
+--------------------------------------------------------------------------------
+
+  --- 20_sysprompt_talkto_human ---
+   Layer │   Read cos │    Read R² │   Ctrl cos │    Ctrl R² │ R²  Diff (R-C)
+  ────── │ ────────── │ ────────── │ ────────── │ ────────── │ ──────────────
+       6 │    +0.0456 │     0.0021 │    +0.0012 │     0.0000 │        +0.0021
+       7 │    -0.0005 │     0.0000 │    -0.0134 │     0.0002 │        -0.0002
+       8 │    -0.0099 │     0.0001 │    -0.0097 │     0.0001 │        +0.0000
+       9 │    -0.0236 │     0.0006 │    -0.0077 │     0.0001 │        +0.0005
+      10 │    -0.0308 │     0.0010 │    -0.0123 │     0.0002 │        +0.0008
+      11 │    +0.0003 │     0.0000 │    -0.0161 │     0.0003 │        -0.0003
+      12 │    -0.0227 │     0.0005 │    -0.0086 │     0.0001 │        +0.0004
+      13 │    -0.0022 │     0.0000 │    -0.0160 │     0.0003 │        -0.0003
+      14 │    +0.0093 │     0.0001 │    -0.0143 │     0.0002 │        -0.0001
+      15 │    +0.0083 │     0.0001 │    -0.0201 │     0.0004 │        -0.0003
+      16 │    -0.0191 │     0.0004 │    +0.0092 │     0.0001 │        +0.0003
+      17 │    -0.0096 │     0.0001 │    +0.0136 │     0.0002 │        -0.0001
+      18 │    -0.0058 │     0.0000 │    +0.0071 │     0.0001 │        -0.0000
+      19 │    -0.0213 │     0.0005 │    +0.0423 │     0.0018 │        -0.0013
+      20 │    -0.0161 │     0.0003 │    +0.0301 │     0.0009 │        -0.0006
+      21 │    +0.0040 │     0.0000 │    +0.0284 │     0.0008 │        -0.0008
+      22 │    -0.0138 │     0.0002 │    +0.0336 │     0.0011 │        -0.0009
+      23 │    +0.0152 │     0.0002 │    +0.0341 │     0.0012 │        -0.0009
+      24 │    -0.0056 │     0.0000 │    +0.0260 │     0.0007 │        -0.0006
+      25 │    +0.0100 │     0.0001 │    +0.0151 │     0.0002 │        -0.0001
+      26 │    +0.0061 │     0.0000 │    +0.0312 │     0.0010 │        -0.0009
+      27 │    +0.0166 │     0.0003 │    +0.0249 │     0.0006 │        -0.0003
+      28 │    -0.0047 │     0.0000 │    +0.0314 │     0.0010 │        -0.0010
+      29 │    -0.0201 │     0.0004 │    +0.0329 │     0.0011 │        -0.0007
+      30 │    -0.0270 │     0.0007 │    +0.0134 │     0.0002 │        +0.0005
+      31 │    +0.0167 │     0.0003 │    +0.0321 │     0.0010 │        -0.0008
+      32 │    -0.0069 │     0.0000 │    +0.0152 │     0.0002 │        -0.0002
+      33 │    -0.0249 │     0.0006 │    +0.0213 │     0.0005 │        +0.0002
+      34 │    -0.0194 │     0.0004 │    +0.0075 │     0.0001 │        +0.0003
+      35 │    -0.0187 │     0.0003 │    +0.0069 │     0.0000 │        +0.0003
+      36 │    -0.0300 │     0.0009 │    +0.0260 │     0.0007 │        +0.0002
+      37 │    -0.0134 │     0.0002 │    +0.0369 │     0.0014 │        -0.0012
+      38 │    -0.0308 │     0.0009 │    +0.0221 │     0.0005 │        +0.0005
+      39 │    +0.0016 │     0.0000 │    +0.0255 │     0.0006 │        -0.0006
+      40 │    -0.0314 │     0.0010 │    +0.0152 │     0.0002 │        +0.0008
+
+  --- 21_sysprompt_talkto_ai ---
+   Layer │   Read cos │    Read R² │   Ctrl cos │    Ctrl R² │ R²  Diff (R-C)
+  ────── │ ────────── │ ────────── │ ────────── │ ────────── │ ──────────────
+       6 │    +0.0435 │     0.0019 │    -0.0055 │     0.0000 │        +0.0019
+       7 │    -0.0040 │     0.0000 │    -0.0203 │     0.0004 │        -0.0004
+       8 │    -0.0125 │     0.0002 │    -0.0216 │     0.0005 │        -0.0003
+       9 │    -0.0236 │     0.0006 │    -0.0222 │     0.0005 │        +0.0001
+      10 │    -0.0318 │     0.0010 │    -0.0179 │     0.0003 │        +0.0007
+      11 │    -0.0004 │     0.0000 │    -0.0306 │     0.0009 │        -0.0009
+      12 │    -0.0242 │     0.0006 │    -0.0202 │     0.0004 │        +0.0002
+      13 │    -0.0018 │     0.0000 │    -0.0248 │     0.0006 │        -0.0006
+      14 │    +0.0073 │     0.0001 │    -0.0212 │     0.0005 │        -0.0004
+      15 │    +0.0043 │     0.0000 │    -0.0262 │     0.0007 │        -0.0007
+      16 │    -0.0247 │     0.0006 │    +0.0005 │     0.0000 │        +0.0006
+      17 │    -0.0113 │     0.0001 │    +0.0106 │     0.0001 │        +0.0000
+      18 │    -0.0106 │     0.0001 │    +0.0027 │     0.0000 │        +0.0001
+      19 │    -0.0275 │     0.0008 │    +0.0362 │     0.0013 │        -0.0006
+      20 │    -0.0191 │     0.0004 │    +0.0288 │     0.0008 │        -0.0005
+      21 │    +0.0037 │     0.0000 │    +0.0279 │     0.0008 │        -0.0008
+      22 │    -0.0150 │     0.0002 │    +0.0312 │     0.0010 │        -0.0007
+      23 │    +0.0109 │     0.0001 │    +0.0324 │     0.0011 │        -0.0009
+      24 │    -0.0096 │     0.0001 │    +0.0258 │     0.0007 │        -0.0006
+      25 │    +0.0079 │     0.0001 │    +0.0134 │     0.0002 │        -0.0001
+      26 │    +0.0035 │     0.0000 │    +0.0311 │     0.0010 │        -0.0010
+      27 │    +0.0120 │     0.0001 │    +0.0231 │     0.0005 │        -0.0004
+      28 │    -0.0075 │     0.0001 │    +0.0297 │     0.0009 │        -0.0008
+      29 │    -0.0194 │     0.0004 │    +0.0300 │     0.0009 │        -0.0005
+      30 │    -0.0243 │     0.0006 │    +0.0120 │     0.0001 │        +0.0004
+      31 │    +0.0142 │     0.0002 │    +0.0304 │     0.0009 │        -0.0007
+      32 │    -0.0102 │     0.0001 │    +0.0121 │     0.0001 │        -0.0000
+      33 │    -0.0266 │     0.0007 │    +0.0189 │     0.0004 │        +0.0003
+      34 │    -0.0207 │     0.0004 │    +0.0083 │     0.0001 │        +0.0004
+      35 │    -0.0213 │     0.0005 │    +0.0038 │     0.0000 │        +0.0004
+      36 │    -0.0306 │     0.0009 │    +0.0225 │     0.0005 │        +0.0004
+      37 │    -0.0124 │     0.0002 │    +0.0363 │     0.0013 │        -0.0012
+      38 │    -0.0270 │     0.0007 │    +0.0215 │     0.0005 │        +0.0003
+      39 │    +0.0040 │     0.0000 │    +0.0235 │     0.0006 │        -0.0005
+      40 │    -0.0285 │     0.0008 │    +0.0154 │     0.0002 │        +0.0006
+
+  --- 22_sysprompt_bare_human ---
+   Layer │   Read cos │    Read R² │   Ctrl cos │    Ctrl R² │ R²  Diff (R-C)
+  ────── │ ────────── │ ────────── │ ────────── │ ────────── │ ──────────────
+       6 │    +0.0417 │     0.0017 │    +0.0022 │     0.0000 │        +0.0017
+       7 │    +0.0040 │     0.0000 │    -0.0162 │     0.0003 │        -0.0002
+       8 │    -0.0023 │     0.0000 │    -0.0196 │     0.0004 │        -0.0004
+       9 │    -0.0182 │     0.0003 │    -0.0100 │     0.0001 │        +0.0002
+      10 │    -0.0317 │     0.0010 │    -0.0117 │     0.0001 │        +0.0009
+      11 │    +0.0038 │     0.0000 │    -0.0173 │     0.0003 │        -0.0003
+      12 │    -0.0210 │     0.0004 │    -0.0055 │     0.0000 │        +0.0004
+      13 │    -0.0021 │     0.0000 │    -0.0168 │     0.0003 │        -0.0003
+      14 │    +0.0109 │     0.0001 │    -0.0118 │     0.0001 │        -0.0000
+      15 │    +0.0135 │     0.0002 │    -0.0192 │     0.0004 │        -0.0002
+      16 │    -0.0107 │     0.0001 │    +0.0089 │     0.0001 │        +0.0000
+      17 │    -0.0014 │     0.0000 │    +0.0207 │     0.0004 │        -0.0004
+      18 │    -0.0003 │     0.0000 │    +0.0077 │     0.0001 │        -0.0001
+      19 │    -0.0199 │     0.0004 │    +0.0383 │     0.0015 │        -0.0011
+      20 │    -0.0149 │     0.0002 │    +0.0310 │     0.0010 │        -0.0007
+      21 │    +0.0050 │     0.0000 │    +0.0238 │     0.0006 │        -0.0005
+      22 │    -0.0146 │     0.0002 │    +0.0348 │     0.0012 │        -0.0010
+      23 │    +0.0134 │     0.0002 │    +0.0299 │     0.0009 │        -0.0007
+      24 │    -0.0026 │     0.0000 │    +0.0319 │     0.0010 │        -0.0010
+      25 │    -0.0015 │     0.0000 │    +0.0161 │     0.0003 │        -0.0003
+      26 │    +0.0023 │     0.0000 │    +0.0338 │     0.0011 │        -0.0011
+      27 │    +0.0108 │     0.0001 │    +0.0244 │     0.0006 │        -0.0005
+      28 │    -0.0026 │     0.0000 │    +0.0257 │     0.0007 │        -0.0007
+      29 │    -0.0184 │     0.0003 │    +0.0262 │     0.0007 │        -0.0004
+      30 │    -0.0208 │     0.0004 │    +0.0127 │     0.0002 │        +0.0003
+      31 │    +0.0101 │     0.0001 │    +0.0393 │     0.0015 │        -0.0014
+      32 │    -0.0037 │     0.0000 │    +0.0162 │     0.0003 │        -0.0002
+      33 │    -0.0296 │     0.0009 │    +0.0199 │     0.0004 │        +0.0005
+      34 │    -0.0200 │     0.0004 │    +0.0008 │     0.0000 │        +0.0004
+      35 │    -0.0166 │     0.0003 │    +0.0050 │     0.0000 │        +0.0002
+      36 │    -0.0278 │     0.0008 │    +0.0218 │     0.0005 │        +0.0003
+      37 │    -0.0166 │     0.0003 │    +0.0311 │     0.0010 │        -0.0007
+      38 │    -0.0294 │     0.0009 │    +0.0255 │     0.0006 │        +0.0002
+      39 │    +0.0099 │     0.0001 │    +0.0263 │     0.0007 │        -0.0006
+      40 │    -0.0330 │     0.0011 │    +0.0050 │     0.0000 │        +0.0011
+
+  --- 23_sysprompt_bare_ai ---
+   Layer │   Read cos │    Read R² │   Ctrl cos │    Ctrl R² │ R²  Diff (R-C)
+  ────── │ ────────── │ ────────── │ ────────── │ ────────── │ ──────────────
+       6 │    +0.0410 │     0.0017 │    -0.0027 │     0.0000 │        +0.0017
+       7 │    +0.0004 │     0.0000 │    -0.0212 │     0.0005 │        -0.0004
+       8 │    -0.0041 │     0.0000 │    -0.0266 │     0.0007 │        -0.0007
+       9 │    -0.0174 │     0.0003 │    -0.0176 │     0.0003 │        -0.0000
+      10 │    -0.0306 │     0.0009 │    -0.0157 │     0.0002 │        +0.0007
+      11 │    +0.0040 │     0.0000 │    -0.0282 │     0.0008 │        -0.0008
+      12 │    -0.0219 │     0.0005 │    -0.0165 │     0.0003 │        +0.0002
+      13 │    -0.0009 │     0.0000 │    -0.0262 │     0.0007 │        -0.0007
+      14 │    +0.0113 │     0.0001 │    -0.0167 │     0.0003 │        -0.0002
+      15 │    +0.0103 │     0.0001 │    -0.0254 │     0.0006 │        -0.0005
+      16 │    -0.0177 │     0.0003 │    +0.0009 │     0.0000 │        +0.0003
+      17 │    -0.0080 │     0.0001 │    +0.0169 │     0.0003 │        -0.0002
+      18 │    -0.0062 │     0.0000 │    +0.0046 │     0.0000 │        +0.0000
+      19 │    -0.0268 │     0.0007 │    +0.0369 │     0.0014 │        -0.0006
+      20 │    -0.0183 │     0.0003 │    +0.0309 │     0.0010 │        -0.0006
+      21 │    +0.0030 │     0.0000 │    +0.0275 │     0.0008 │        -0.0007
+      22 │    -0.0179 │     0.0003 │    +0.0351 │     0.0012 │        -0.0009
+      23 │    +0.0087 │     0.0001 │    +0.0302 │     0.0009 │        -0.0008
+      24 │    -0.0072 │     0.0001 │    +0.0344 │     0.0012 │        -0.0011
+      25 │    +0.0017 │     0.0000 │    +0.0155 │     0.0002 │        -0.0002
+      26 │    +0.0005 │     0.0000 │    +0.0324 │     0.0011 │        -0.0011
+      27 │    +0.0066 │     0.0000 │    +0.0238 │     0.0006 │        -0.0005
+      28 │    -0.0045 │     0.0000 │    +0.0261 │     0.0007 │        -0.0007
+      29 │    -0.0198 │     0.0004 │    +0.0251 │     0.0006 │        -0.0002
+      30 │    -0.0191 │     0.0004 │    +0.0116 │     0.0001 │        +0.0002
+      31 │    +0.0098 │     0.0001 │    +0.0376 │     0.0014 │        -0.0013
+      32 │    -0.0085 │     0.0001 │    +0.0137 │     0.0002 │        -0.0001
+      33 │    -0.0310 │     0.0010 │    +0.0168 │     0.0003 │        +0.0007
+      34 │    -0.0222 │     0.0005 │    +0.0039 │     0.0000 │        +0.0005
+      35 │    -0.0205 │     0.0004 │    +0.0012 │     0.0000 │        +0.0004
+      36 │    -0.0290 │     0.0008 │    +0.0200 │     0.0004 │        +0.0004
+      37 │    -0.0152 │     0.0002 │    +0.0337 │     0.0011 │        -0.0009
+      38 │    -0.0258 │     0.0007 │    +0.0244 │     0.0006 │        +0.0001
+      39 │    +0.0080 │     0.0001 │    +0.0253 │     0.0006 │        -0.0006
+      40 │    -0.0302 │     0.0009 │    +0.0076 │     0.0001 │        +0.0009
+
+  --- 7_social ---
+   Layer │   Read cos │    Read R² │   Ctrl cos │    Ctrl R² │ R²  Diff (R-C)
+  ────── │ ────────── │ ────────── │ ────────── │ ────────── │ ──────────────
+       6 │    +0.0369 │     0.0014 │    -0.0050 │     0.0000 │        +0.0013
+       7 │    +0.0011 │     0.0000 │    -0.0159 │     0.0003 │        -0.0003
+       8 │    -0.0060 │     0.0000 │    -0.0166 │     0.0003 │        -0.0002
+       9 │    -0.0170 │     0.0003 │    -0.0189 │     0.0004 │        -0.0001
+      10 │    -0.0243 │     0.0006 │    -0.0123 │     0.0002 │        +0.0004
+      11 │    +0.0058 │     0.0000 │    -0.0257 │     0.0007 │        -0.0006
+      12 │    -0.0221 │     0.0005 │    -0.0128 │     0.0002 │        +0.0003
+      13 │    -0.0036 │     0.0000 │    -0.0227 │     0.0005 │        -0.0005
+      14 │    +0.0101 │     0.0001 │    -0.0287 │     0.0008 │        -0.0007
+      15 │    +0.0056 │     0.0000 │    -0.0285 │     0.0008 │        -0.0008
+      16 │    -0.0202 │     0.0004 │    -0.0069 │     0.0000 │        +0.0004
+      17 │    -0.0126 │     0.0002 │    +0.0145 │     0.0002 │        -0.0001
+      18 │    -0.0011 │     0.0000 │    +0.0047 │     0.0000 │        -0.0000
+      19 │    -0.0241 │     0.0006 │    +0.0385 │     0.0015 │        -0.0009
+      20 │    -0.0160 │     0.0003 │    +0.0315 │     0.0010 │        -0.0007
+      21 │    +0.0046 │     0.0000 │    +0.0161 │     0.0003 │        -0.0002
+      22 │    -0.0149 │     0.0002 │    +0.0297 │     0.0009 │        -0.0007
+      23 │    +0.0116 │     0.0001 │    +0.0294 │     0.0009 │        -0.0007
+      24 │    -0.0107 │     0.0001 │    +0.0284 │     0.0008 │        -0.0007
+      25 │    +0.0100 │     0.0001 │    +0.0070 │     0.0000 │        +0.0001
+      26 │    +0.0003 │     0.0000 │    +0.0291 │     0.0008 │        -0.0008
+      27 │    +0.0043 │     0.0000 │    +0.0178 │     0.0003 │        -0.0003
+      28 │    -0.0063 │     0.0000 │    +0.0237 │     0.0006 │        -0.0005
+      29 │    -0.0231 │     0.0005 │    +0.0244 │     0.0006 │        -0.0001
+      30 │    -0.0207 │     0.0004 │    +0.0059 │     0.0000 │        +0.0004
+      31 │    +0.0047 │     0.0000 │    +0.0305 │     0.0009 │        -0.0009
+      32 │    -0.0071 │     0.0001 │    +0.0144 │     0.0002 │        -0.0002
+      33 │    -0.0274 │     0.0007 │    +0.0200 │     0.0004 │        +0.0003
+      34 │    -0.0169 │     0.0003 │    +0.0041 │     0.0000 │        +0.0003
+      35 │    -0.0223 │     0.0005 │    +0.0016 │     0.0000 │        +0.0005
+      36 │    -0.0381 │     0.0014 │    +0.0162 │     0.0003 │        +0.0012
+      37 │    -0.0090 │     0.0001 │    +0.0399 │     0.0016 │        -0.0015
+      38 │    -0.0218 │     0.0005 │    +0.0258 │     0.0007 │        -0.0002
+      39 │    +0.0078 │     0.0001 │    +0.0221 │     0.0005 │        -0.0004
+      40 │    -0.0322 │     0.0010 │    +0.0082 │     0.0001 │        +0.0010
+
+--------------------------------------------------------------------------------
+SECTION 6: CROSS-DIMENSION PROFILE CORRELATIONS (reading probes)
+  High correlation → dimensions share similar layer-wise alignment patterns
+  (suggesting shared mechanisms)
+--------------------------------------------------------------------------------
+
+  Top correlated dimension pairs:
+    r = +0.996  :  1_phenomenology  ↔  2_emotions
+    r = +0.995  :  11_formality  ↔  13_helpfulness
+    r = +0.995  :  18_attention  ↔  4_intentions
+    r = +0.995  :  3_agency  ↔  9_roles
+    r = +0.994  :  12_expertise  ↔  6_cognitive
+    r = +0.994  :  1_phenomenology  ↔  8_embodiment
+    r = +0.994  :  12_expertise  ↔  13_helpfulness
+    r = +0.993  :  11_formality  ↔  12_expertise
+    r = +0.993  :  4_intentions  ↔  9_roles
+    r = +0.993  :  3_agency  ↔  5_prediction
+
+  Least correlated dimension pairs:
+    r = +0.787  :  14_biological  ↔  22_sysprompt_bare_human
+    r = +0.784  :  15_shapes  ↔  21_sysprompt_talkto_ai
+    r = +0.774  :  10_animacy  ↔  20_sysprompt_talkto_human
+    r = +0.773  :  14_biological  ↔  20_sysprompt_talkto_human
+    r = +0.761  :  15_shapes  ↔  20_sysprompt_talkto_human
+
+================================================================================
+  END OF REPORT
+================================================================================

@@ -269,7 +269,7 @@ def generate_figures_for_mode(mode):
     os.makedirs(out_dir, exist_ok=True)
 
     # Generate figures for each probe type and layer range
-    probe_types = ["control_probe", "reading_probe"]
+    probe_types = ["operational", "metacognitive"]
     layer_ranges = ["all_layers", "layers_6plus"]
 
     for probe_type in probe_types:
