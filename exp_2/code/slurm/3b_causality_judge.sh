@@ -4,8 +4,6 @@
 #SBATCH --mem=8G
 #SBATCH --time=4:00:00
 #SBATCH --array=0-99
-#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2/logs/judge_V2_%A_%a.out
-#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2/logs/judge_V2_%A_%a.err
 
 # ---------------------------------------------------------------------------
 # V2 Judge: parallelized by subject x strength.
@@ -14,6 +12,7 @@
 # ---------------------------------------------------------------------------
 
 VERSION=${VERSION:?"ERROR: VERSION env var required (e.g. labels)"}
+MODEL=${MODEL:-llama2_13b_chat}
 
 STRENGTHS=(4 5)
 N_STRENGTHS=${#STRENGTHS[@]}
@@ -51,25 +50,28 @@ elif [ "$JUDGE_BACKEND" = "gpt" ] && [ -z "${OPENAI_API_KEY:-}" ]; then
     echo "[ERROR] OPENAI_API_KEY not set"; exit 1
 fi
 
-PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2"
-mkdir -p "$PROJECT_ROOT/logs/$VERSION"
-cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
+EXP2_DIR="/mnt/cup/labs/graziano/rachel/mind_rep/exp_2"
+LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}"
+mkdir -p "$LOG_DIR"
+exec > "${LOG_DIR}/judge_v2_${SLURM_ARRAY_TASK_ID}_${SLURM_JOB_ID}.out" 2> "${LOG_DIR}/judge_v2_${SLURM_ARRAY_TASK_ID}_${SLURM_JOB_ID}.err"
+cd "$EXP2_DIR" || { echo "FATAL: Cannot cd to $EXP2_DIR"; exit 1; }
 
 echo "[$(date)] V2 judge | version=$VERSION | subject=$SUBJECT_ID | strength=$N | backend=$JUDGE_BACKEND | host=$HOSTNAME"
 
 STRATEGY="peak_15"
 
 for PROBE_TYPE in operational metacognitive_peak; do
-    RESULT_DIR="$PROJECT_ROOT/data/$VERSION/intervention_results/V2/${STRATEGY}/${PROBE_TYPE}/is_${N}"
+    RESULT_DIR="$EXP2_DIR/data/$VERSION/intervention_results/V2/${STRATEGY}/${PROBE_TYPE}/is_${N}"
     if [ -d "$RESULT_DIR/per_subject" ] && [ -f "$RESULT_DIR/per_subject/${SUBJECT_ID}.csv" ]; then
         echo "[$(date)] Judging ${STRATEGY}/$PROBE_TYPE/is_$N/$SUBJECT_ID ..."
-        python code/pipeline/3_causality_judge.py \
+        python code/3_causality_judge.py \
             --version "$VERSION" \
             --mode V2 \
             --layer_strategy "$STRATEGY" \
             --result_dir "$RESULT_DIR" \
             --subject "$SUBJECT_ID" \
-            --judge_backend "$JUDGE_BACKEND"
+            --judge_backend "$JUDGE_BACKEND" \
+            --model "$MODEL"
     else
         echo "[SKIP] $RESULT_DIR/per_subject/${SUBJECT_ID}.csv does not exist"
     fi

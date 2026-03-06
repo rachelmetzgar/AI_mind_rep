@@ -5,8 +5,6 @@
 #SBATCH --mem=64G
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2/logs/deg_probe_corr_%j.out
-#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2/logs/deg_probe_corr_%j.err
 
 # ----------------------------------------------------------------
 # Degradation-Probe Correlation: Extract per-conversation probe
@@ -15,6 +13,7 @@
 # ----------------------------------------------------------------
 
 VERSION=${VERSION:?"ERROR: VERSION env var required (e.g. labels)"}
+MODEL=${MODEL:-llama2_13b_chat}
 
 export PS1=${PS1:-}
 set -euo pipefail
@@ -28,13 +27,15 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2"
-mkdir -p "$PROJECT_ROOT/logs/$VERSION"
-cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
+EXP2_DIR="/mnt/cup/labs/graziano/rachel/mind_rep/exp_2"
+LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}"
+mkdir -p "$LOG_DIR"
+exec > "${LOG_DIR}/deg_probe_corr_${SLURM_JOB_ID}.out" 2> "${LOG_DIR}/deg_probe_corr_${SLURM_JOB_ID}.err"
+cd "$EXP2_DIR" || { echo "FATAL: Cannot cd to $EXP2_DIR"; exit 1; }
 
 echo "[$(date)] Degradation-probe correlation | version=$VERSION | host=$HOSTNAME"
 echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader | head -1)"
 
-python code/pipeline/1d_degradation_probe_correlation.py --version "$VERSION"
+python code/1d_degradation_probe_correlation.py --version "$VERSION" --model "$MODEL"
 
 echo "[$(date)] Finished. Run 1e_analyze_degradation_results.py --version $VERSION for analysis."

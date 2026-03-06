@@ -6,8 +6,6 @@
 #SBATCH --time=12:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --array=0-14
-#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2/logs/alt_new_sfx_%a_%A.out
-#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2/logs/alt_new_sfx_%a_%A.err
 
 # ----------------------------------------------------------------
 # ADDITIONAL IRRELEVANT SUFFIX PROBES — ALL 5 TURNS
@@ -20,6 +18,7 @@
 # ----------------------------------------------------------------
 
 VERSION=${VERSION:?"ERROR: VERSION env var required (e.g. labels)"}
+MODEL=${MODEL:-llama2_13b_chat}
 
 export PS1=${PS1:-}
 set -euo pipefail
@@ -43,16 +42,19 @@ TURN_INDEX=${TURN_INDICES[$TURN_IDX_POS]}
 CONDITION=${CONDITIONS[$COND_IDX]}
 TURN_LABEL=$(( TURN_IDX_POS + 1 ))
 
-PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2"
-mkdir -p "$PROJECT_ROOT/logs/$VERSION"
-cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
+EXP2_DIR="/mnt/cup/labs/graziano/rachel/mind_rep/exp_2"
+LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}"
+mkdir -p "$LOG_DIR"
+exec > "${LOG_DIR}/alt_new_sfx_${SLURM_ARRAY_TASK_ID}_${SLURM_JOB_ID}.out" 2> "${LOG_DIR}/alt_new_sfx_${SLURM_ARRAY_TASK_ID}_${SLURM_JOB_ID}.err"
+cd "$EXP2_DIR" || { echo "FATAL: Cannot cd to $EXP2_DIR"; exit 1; }
 
 echo "[$(date)] New suffix probe: version=$VERSION condition=$CONDITION turn=$TURN_LABEL (index=$TURN_INDEX) host=$HOSTNAME"
 echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader | head -1)"
 
-python code/pipeline/1f_alternative_position_probes.py \
+python code/1f_alternative_position_probes.py \
     --version "$VERSION" \
     --condition "$CONDITION" \
-    --turn_index "$TURN_INDEX"
+    --turn_index "$TURN_INDEX" \
+    --model "$MODEL"
 
 echo "[$(date)] Finished: version=$VERSION condition=$CONDITION turn=$TURN_LABEL"

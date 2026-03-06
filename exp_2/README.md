@@ -2,151 +2,186 @@
 
 Linear probes trained on LLaMA-2-13B-Chat hidden states to classify whether the model's conversation partner is human or AI, followed by causal intervention to test whether these representations drive behavior.
 
+## Quick Start
+
+```bash
+# Train probes (turn 5)
+VERSION=balanced_gpt sbatch code/slurm/1_train_and_read_controlling_probes.sh
+
+# Generate V1 causal interventions
+VERSION=balanced_gpt sbatch code/slurm/2a_causality_generate.sh
+
+# Judge with GPT-4
+VERSION=balanced_gpt sbatch code/slurm/3a_causality_judge.sh
+
+# Behavioral analysis
+VERSION=balanced_gpt sbatch code/slurm/4a_behavior_analysis.sh
+```
+
+All scripts accept `MODEL` env var (default: `llama2_13b_chat`).
+
 ## Results
 
-### Cross-variant (start here)
+### Cross-version comparisons (start here)
 
-- [**Probe training comparison**](results/comparisons/probe_training/probe_training_comparison.html) — All 6 versions on the same scale, makes the labels vs named-partners vs nonsense distinction clear.
-- [**Turn comparison layerwise**](results/comparisons/probe_training/turn_comparison_layerwise.html) — Prompt dilution story: perfect at turn 1, degrades monotonically. Includes token position examples.
-- [**Alt position comparison**](results/comparisons/probe_training/alt_position_comparison.html) — Where in the token sequence does the signal live? Cross-version x cross-turn.
-- [**V1 causal intervention (labels)**](results/labels/v1_analysis_summary.html) — Causal intervention results: does steering the model with probe directions actually change behavior?
+- [**Probe training comparison**](results/comparisons/llama2_13b_chat/probe_training/probe_training_comparison.html) — All versions on the same scale
+- [**Turn comparison layerwise**](results/comparisons/llama2_13b_chat/probe_training/turn_comparison_layerwise.html) — Prompt dilution story: perfect at turn 1, degrades monotonically
+- [**Alt position comparison**](results/comparisons/llama2_13b_chat/probe_training/alt_tokens/combined.html) — Where in the token sequence does the signal live?
+- [**V1 QC summary**](results/comparisons/llama2_13b_chat/causality_qc/v1_qc_summary_all_variants.html) — Cross-version causal intervention quality check
+- [**Judge comparison**](results/comparisons/llama2_13b_chat/v1_causality/judge/judge_comparison.html) — Cross-version judge accuracy
 
-### Data degradation
+### Per-version reports
 
-- [Labels](results/labels/degradation_analysis/degradation_probe_report.html) · [Nonsense Codeword](results/nonsense_codeword/degradation_analysis/degradation_probe_report.html) · [Nonsense Ignore](results/nonsense_ignore/degradation_analysis/degradation_probe_report.html) — Text quality metrics + probe confidence across turns.
+For each active version (`balanced_gpt`, `nonsense_codeword`):
 
-### Per-version (deep dives)
-
-- V1 causal intervention: [labels](results/labels/v1_analysis_summary.html) · [balanced_names](results/balanced_names/v1_analysis_summary.html) · [balanced_gpt](results/balanced_gpt/v1_analysis_summary.html) · [names](results/names/v1_analysis_summary.html)
-- Probe training: `results/{version}/probe_training/probe_training_report.html`
-- Degradation: `results/{version}/degradation_analysis/degradation_probe_report.html`
+- Probe training: `results/llama2_13b_chat/{version}/probe_training/probe_training_report.html`
+- Degradation: `results/llama2_13b_chat/{version}/probe_training/degradation/degradation_probe_report.html`
+- V1 judge: `results/llama2_13b_chat/{version}/V1_causality/judge/judge_report.html`
+- V1 behavioral: `results/llama2_13b_chat/{version}/V1_causality/behavioral/peak_15/behavioral_summary.html`
+- V1 summary: `results/llama2_13b_chat/{version}/v1_analysis_summary.html`
+- Steered samples: `results/llama2_13b_chat/{version}/steered_samples_v1.html`
 
 ## Data Versions
 
-Each version uses a different system prompt strategy from Experiment 1:
-
 | Version | Description |
 |---------|-------------|
-| `labels` | Partner labeled as "a Human" / "an AI" (primary version) |
+| `labels` | Partner labeled as "a Human" / "an AI" |
 | `balanced_names` | Gender-balanced names instead of labels |
 | `balanced_gpt` | Like balanced_names but with GPT-4 replacing Copilot |
 | `names` | Original Sam/Casey/Copilot names (deprecated: name confound) |
 | `nonsense_codeword` | Token-matched control: "Your session code word is {a Human/an AI}" |
 | `nonsense_ignore` | Token-present with ignore instruction |
+| `labels_turnwise` | Labels version with turn-wise probe extraction |
+| `you_are_labels` | "You are talking to a Human/an AI" framing |
+| `you_are_labels_turnwise` | You-are framing with turn-wise extraction |
+| `you_are_balanced_gpt` | You-are framing with GPT-4 |
+
+Active versions being rerun: `balanced_gpt`, `nonsense_codeword`.
 
 ## Directory Structure
 
 ```
 exp_2/
 ├── code/
-│   ├── config.py              # Central config with set_version()
-│   ├── pipeline/              # Numbered pipeline scripts
-│   │   ├── 1_*.py             # Probe training (turn 5 + turn comparison)
-│   │   ├── 2_*.py             # Causal intervention generation
-│   │   ├── 3_*.py             # GPT judge evaluation
-│   │   └── 4_*.py             # Behavioral analysis
-│   ├── src/                   # Shared modules (dataset, probes, losses, etc.)
-│   ├── slurm/                 # SLURM job scripts (a=V1, b=V2)
-│   └── analysis/              # Cross-variant analysis scripts
-├── data/
-│   ├── {version}/
-│   │   ├── probe_checkpoints/ # Trained probe weights (turn_1 through turn_5)
-│   │   └── intervention_results/ # V1 and V2 generation outputs
-│   └── shared/                # Version-independent data (topics, questions)
+│   ├── config.py                               # Central config (--model, --version)
+│   ├── src/                                    # Shared modules
+│   ├── shared/                                 # Version-independent input files
+│   │   ├── conds/topics.csv
+│   │   └── causality_test_questions/human_ai.txt
+│   ├── 1_train_probes.py                       # Probe training (turn 5)
+│   ├── 1a_probe_training_summary_generator.py  # Per-version probe report
+│   ├── 1b_train_probes_turn_comparison.py      # Turns 1-4
+│   ├── 1c_compare_turn_probes.py               # Turn comparison analysis
+│   ├── 1c_turn_comparison_summary_generator.py # Turn comparison report
+│   ├── 1d_degradation_probe_correlation.py     # Degradation analysis
+│   ├── 1e_analyze_degradation_results.py       # Degradation report
+│   ├── 1f_alternative_position_probes.py       # Alt token positions
+│   ├── 1f_alt_position_summary_generator.py    # Alt position report
+│   ├── 1f_investigate_weather_suffix.py        # Weather suffix investigation
+│   ├── 1g_vocab_asymmetry_check.py             # Vocab asymmetry check
+│   ├── 1g_operational_summary_generator.py     # Operational probe comparison
+│   ├── 1h_probe_training_comparison_summary_generator.py  # Cross-version comparison
+│   ├── 2_causality_generate.py                 # Causal intervention generation
+│   ├── 2b_steered_samples_generator.py         # Steered sample viewer
+│   ├── 3_causality_judge.py                    # GPT judge evaluation
+│   ├── 3b_judge_summary_generator.py           # Per-version judge report
+│   ├── 3c_judge_comparison_summary_generator.py # Cross-version judge comparison
+│   ├── 4_behavior_analysis.py                  # Behavioral analysis
+│   ├── 4b_behavioral_summary_generator.py      # Per-version behavioral report
+│   ├── 4c_v1_qc_summary_generator.py           # Cross-version QC summary
+│   └── slurm/                                  # SLURM wrappers (15 scripts)
 ├── results/
-│   ├── {version}/             # Per-version analysis outputs
-│   └── comparisons/           # Cross-variant comparison HTML reports
-│       ├── probe_training/    # Probe accuracy, turn layerwise, alt token positions
-│       └── causality_qc/      # V1 causal intervention QC summary
-├── archive/                   # Old self-contained variant directories
-└── logs/                      # SLURM logs by version
+│   ├── {model}/{version}/                      # e.g., llama2_13b_chat/balanced_gpt/
+│   │   ├── probe_training/
+│   │   │   ├── data/                           # Probe checkpoints (gitignored)
+│   │   │   ├── degradation/                    # Degradation analysis
+│   │   │   │   └── data/                       # Degradation CSVs
+│   │   │   ├── figures/
+│   │   │   └── probe_training_report.html/.md
+│   │   ├── V1_causality/
+│   │   │   ├── data/                           # Generated CSVs (gitignored)
+│   │   │   ├── judge/                          # Judge reports + figures
+│   │   │   └── behavioral/                     # Behavioral analysis reports
+│   │   ├── V2_causality/
+│   │   │   └── data/                           # Generated CSVs (gitignored)
+│   │   └── v1_analysis_summary.html/.md
+│   └── comparisons/{model}/                    # Cross-version comparisons
+│       ├── probe_training/
+│       ├── v1_causality/
+│       └── causality_qc/
+├── logs/{model}/{version}/                     # SLURM logs (gitignored)
+└── write_up/
 ```
 
 ## Pipeline
 
-All scripts require `--version {version}`. Run from `exp_2/` root.
+All scripts accept `--version` (required) and `--model` (default: `llama2_13b_chat`).
 
 ### 1. Probe Training
 ```bash
-# Turn 5 (full conversation) — reading + control probes
-VERSION=labels sbatch code/slurm/1_train_and_read_controlling_probes.sh
+# Turn 5 (full conversation) — metacognitive + operational probes
+VERSION=balanced_gpt sbatch code/slurm/1_train_and_read_controlling_probes.sh
 
 # Turns 1-4 (array job, 4 tasks)
-VERSION=labels sbatch code/slurm/1b_train_probes_turn_comparison.sh
+VERSION=balanced_gpt sbatch code/slurm/1b_train_probes_turn_comparison.sh
 
 # Compare across turns
-python code/pipeline/1c_compare_turn_probes.py --version labels
+python code/1c_compare_turn_probes.py --version balanced_gpt
 
 # Degradation correlation (requires GPU)
-VERSION=labels sbatch code/slurm/1d_degradation_probe_correlation.sh
-python code/pipeline/1e_analyze_degradation_results.py --version labels
+VERSION=balanced_gpt sbatch code/slurm/1d_degradation_probe_correlation.sh
+python code/1e_analyze_degradation_results.py --version balanced_gpt
 
 # Alternative token position probes
-VERSION=labels sbatch code/slurm/1f_alternative_position_probes.sh
+VERSION=balanced_gpt sbatch code/slurm/1f_alternative_position_probes.sh
 ```
 
 ### 2. Causal Intervention
 ```bash
-# V1: Single-prompt generation (a = V1)
-VERSION=labels sbatch code/slurm/2a_causality_generate.sh
+# V1: Single-prompt generation
+VERSION=balanced_gpt sbatch code/slurm/2a_causality_generate.sh
 
-# V2: Multi-turn recreation (b = V2)
-VERSION=labels sbatch code/slurm/2b_causality_generate.sh
+# V2: Multi-turn recreation
+VERSION=balanced_gpt sbatch code/slurm/2b_causality_generate.sh
 ```
 
 ### 3. GPT Judge Evaluation
 ```bash
-# V1 judge (a = V1)
-VERSION=labels sbatch code/slurm/3a_causality_judge.sh
+# V1 judge
+VERSION=balanced_gpt sbatch code/slurm/3a_causality_judge.sh
 
-# V2 judge (b = V2)
-VERSION=labels sbatch code/slurm/3b_causality_judge.sh
+# V2 judge
+VERSION=balanced_gpt sbatch code/slurm/3b_causality_judge.sh
 ```
 
 ### 4. Behavioral Analysis
 ```bash
-# V1 behavioral analysis (a = V1)
-VERSION=labels sbatch code/slurm/4a_behavior_analysis.sh
+# V1
+VERSION=balanced_gpt sbatch code/slurm/4a_behavior_analysis.sh
 
-# V2 behavioral analysis (b = V2)
-VERSION=labels sbatch code/slurm/4b_behavior_analysis.sh
+# V2
+VERSION=balanced_gpt sbatch code/slurm/4b_behavior_analysis.sh
 ```
 
 ## Config
 
-Central configuration in `code/config.py`. All paths, hyperparameters, and version management:
+Central configuration in `code/config.py`:
 
 ```python
-from config import config, set_version, add_version_argument
+from config import config, set_version, set_model, add_version_argument, add_model_argument
 
-set_version("labels")
-csv_dir = config.PATHS.csv_dir           # -> exp_1/versions/labels/data/...
-probes  = config.PATHS.probe_checkpoints # -> exp_2/data/labels/probe_checkpoints/
-```
-
-## Analysis Scripts
-
-Cross-variant reports in `code/analysis/`. Run from `exp_2/` root:
-
-```bash
-# Probe training comparison (all 6 versions, unified scale)
-python code/analysis/gen_probe_training_comparison.py
-
-# Turn comparison layerwise (all 6 versions, turns 1-5, + alt position probes)
-python code/analysis/gen_turn_layerwise_html.py
-
-# Alternative token position comparison (labels, balanced_gpt, nonsense_codeword × 5 turns)
-python code/analysis/gen_alt_position_comparison.py
-
-# V1 causality QC summary (4 main versions side by side)
-python code/analysis/create_v1_qc_summary.py
+set_model("llama2_13b_chat")
+set_version("balanced_gpt")
+csv_dir = config.PATHS.csv_dir                  # -> exp_1/results/llama2_13b_chat/balanced_gpt/data/
+probes  = config.PATHS.probe_checkpoints        # -> exp_2/results/llama2_13b_chat/balanced_gpt/probe_training/data/
+v1_data = config.PATHS.intervention_results_v1  # -> exp_2/results/llama2_13b_chat/balanced_gpt/V1_causality/data/
 ```
 
 ## Key Findings
 
 **Probe training (turn 5)**
-- Named-partner versions (names, balanced_names, balanced_gpt) achieve 75-79% peak accuracy, but control probes match reading probes — the signal comes from partner name tokens, not abstract identity.
-- Labels version shows a reading > control advantage (65% vs 60%, d=0.76), indicating probes detect abstract "human vs AI" beyond lexical cues.
+- Named-partner versions (names, balanced_names, balanced_gpt) achieve 75-79% peak accuracy, but operational probes match metacognitive probes — the signal comes from partner name tokens, not abstract identity.
+- Labels version shows a metacognitive > operational advantage (65% vs 60%, d=0.76), indicating probes detect abstract "human vs AI" beyond lexical cues.
 - Nonsense controls are at chance (~55%), confirming the signal requires semantic identity framing.
 
 **Turn comparison**
@@ -157,12 +192,12 @@ python code/analysis/create_v1_qc_summary.py
 **Alternative token positions**
 - BOS token: at chance (negative control).
 - Random mid-sequence: at chance for turns 2+ (partner identity is not broadcast to arbitrary tokens). Elevated at turn 1 due to short sequence length.
-- First `</s>` token: perfect accuracy, but this is a causal attention artifact — the preceding context is identical regardless of conversation length.
+- First `</s>` token: perfect accuracy, but this is a causal attention artifact.
 - Irrelevant (weather) suffix: nearly matches partner-relevant suffix, indicating the representation is accessible from any continuation token.
 
 ## Key Design Decisions
 
-- **Probe types**: Reading probe (appends "I think the conversation partner of this user is") vs control probe (probes at pre-generation position with no suffix).
+- **Probe types**: Metacognitive probe (appends "I think my partner is") vs operational probe (probes at pre-generation position with no suffix).
 - **Layer strategies**: `peak_15` (top 15 layers), `narrow` (10-layer window), `wide` (all above threshold), `all_70` (all >= 0.70).
 - **`--mode V1/V2`**: V1 = single-prompt causality test. V2 = multi-turn conversation recreation. Not to be confused with `--version` (data variant).
-- **Conversation data**: Raw conversations are stored in `exp_1/versions/{version}/data/` and referenced via `config.py`. Exp 2 stores only trained probes and intervention outputs.
+- **Conversation data**: Raw conversations are stored in `exp_1/results/llama2_13b_chat/{version}/data/` and referenced via `config.py`. Exp 2 stores only trained probes and intervention outputs.

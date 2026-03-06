@@ -5,8 +5,6 @@
 #SBATCH --mem=48G
 #SBATCH --time=6:00:00
 #SBATCH --gres=gpu:1
-#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2/logs/weather_inv_%j.out
-#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2/logs/weather_inv_%j.err
 
 # ----------------------------------------------------------------
 # WEATHER SUFFIX INVESTIGATION
@@ -17,6 +15,7 @@
 # ----------------------------------------------------------------
 
 VERSION=${VERSION:?"ERROR: VERSION env var required (e.g. labels)"}
+MODEL=${MODEL:-llama2_13b_chat}
 
 export PS1=${PS1:-}
 set -euo pipefail
@@ -30,13 +29,16 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2"
-cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
+EXP2_DIR="/mnt/cup/labs/graziano/rachel/mind_rep/exp_2"
+LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}"
+mkdir -p "$LOG_DIR"
+exec > "${LOG_DIR}/weather_inv_${SLURM_JOB_ID}.out" 2> "${LOG_DIR}/weather_inv_${SLURM_JOB_ID}.err"
+cd "$EXP2_DIR" || { echo "FATAL: Cannot cd to $EXP2_DIR"; exit 1; }
 
 echo "[$(date)] Weather suffix investigation: version=$VERSION host=$HOSTNAME"
 echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader | head -1)"
 
-python code/analysis/investigate_weather_suffix.py \
+python code/1f_investigate_weather_suffix.py \
     --run-c1 \
     --version "$VERSION" \
     --n-samples 50

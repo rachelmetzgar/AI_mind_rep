@@ -3,8 +3,6 @@
 #SBATCH --partition=all
 #SBATCH --mem=8G
 #SBATCH --time=4:00:00
-#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2/logs/judge_V1_%j.out
-#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2/logs/judge_V1_%j.err
 
 # ---------------------------------------------------------------------------
 # V1 Judge: peak_15 strategy, operational + metacognitive_peak.
@@ -12,6 +10,7 @@
 # ---------------------------------------------------------------------------
 
 VERSION=${VERSION:?"ERROR: VERSION env var required (e.g. labels)"}
+MODEL=${MODEL:-llama2_13b_chat}
 
 export PS1=${PS1:-}
 set -euo pipefail
@@ -41,13 +40,15 @@ elif [ "$JUDGE_BACKEND" = "gpt" ] && [ -z "${OPENAI_API_KEY:-}" ]; then
     echo "[ERROR] OPENAI_API_KEY not set"; exit 1
 fi
 
-PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2"
-mkdir -p "$PROJECT_ROOT/logs/$VERSION"
-cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
+EXP2_DIR="/mnt/cup/labs/graziano/rachel/mind_rep/exp_2"
+LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}"
+mkdir -p "$LOG_DIR"
+exec > "${LOG_DIR}/judge_v1_${SLURM_JOB_ID}.out" 2> "${LOG_DIR}/judge_v1_${SLURM_JOB_ID}.err"
+cd "$EXP2_DIR" || { echo "FATAL: Cannot cd to $EXP2_DIR"; exit 1; }
 
 STRATEGY="peak_15"
 N=4
-RESULT_BASE="$PROJECT_ROOT/data/$VERSION/intervention_results/V1/${STRATEGY}"
+RESULT_BASE="$EXP2_DIR/data/$VERSION/intervention_results/V1/${STRATEGY}"
 
 echo "[$(date)] V1 judge | version=$VERSION | strategy=$STRATEGY | N=$N | backend=$JUDGE_BACKEND | host=$HOSTNAME"
 
@@ -56,12 +57,13 @@ for PROBE_TYPE in operational metacognitive_peak; do
     PROBE_DIR="${RESULT_BASE}/${PROBE_TYPE}/is_${N}"
     if [ -d "$PROBE_DIR" ]; then
         echo "[$(date)] Judging ${STRATEGY}/${PROBE_TYPE}/is_${N} ..."
-        python code/pipeline/3_causality_judge.py \
+        python code/3_causality_judge.py \
             --version "$VERSION" \
             --mode V1 \
             --layer_strategy "$STRATEGY" \
             --result_dir "$PROBE_DIR" \
-            --judge_backend "$JUDGE_BACKEND"
+            --judge_backend "$JUDGE_BACKEND" \
+            --model "$MODEL"
         FOUND=$((FOUND + 1))
     else
         echo "[WARNING] Directory not found: $PROBE_DIR"

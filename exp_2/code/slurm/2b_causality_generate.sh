@@ -5,8 +5,6 @@
 #SBATCH --mem=64G
 #SBATCH --time=12:00:00
 #SBATCH --array=0-99
-#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2/logs/causality_V2_%A_%a.out
-#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2/logs/causality_V2_%A_%a.err
 
 # ---------------------------------------------------------------------------
 # V2: Multi-turn Exp1 recreation — peak_15 strategy, N=4 and N=5.
@@ -18,6 +16,7 @@
 # ---------------------------------------------------------------------------
 
 VERSION=${VERSION:?"ERROR: VERSION env var required (e.g. labels)"}
+MODEL=${MODEL:-llama2_13b_chat}
 
 STRENGTHS=(4 5)
 N_STRENGTHS=${#STRENGTHS[@]}
@@ -38,15 +37,17 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2"
-mkdir -p "$PROJECT_ROOT/logs/$VERSION"
-cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
+EXP2_DIR="/mnt/cup/labs/graziano/rachel/mind_rep/exp_2"
+LOG_DIR="${EXP2_DIR}/logs/${MODEL}/${VERSION}"
+mkdir -p "$LOG_DIR"
+exec > "${LOG_DIR}/causality_generate_v2_${SLURM_ARRAY_TASK_ID}_${SLURM_JOB_ID}.out" 2> "${LOG_DIR}/causality_generate_v2_${SLURM_ARRAY_TASK_ID}_${SLURM_JOB_ID}.err"
+cd "$EXP2_DIR" || { echo "FATAL: Cannot cd to $EXP2_DIR"; exit 1; }
 
 SUBJECT_ID=$(printf "s%03d" $((SUBJECT_IDX + 1)))
 
 echo "[$(date)] V2 generation | version=$VERSION | subject=$SUBJECT_ID | strength=$N | host=$HOSTNAME"
 echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader | head -1)"
 
-python code/pipeline/2_causality_generate.py --version "$VERSION" --mode V2 --subject_idx $SUBJECT_IDX --strength $N --layer_strategy peak_15
+python code/2_causality_generate.py --version "$VERSION" --mode V2 --subject_idx $SUBJECT_IDX --strength $N --layer_strategy peak_15 --model "$MODEL"
 
 echo "[$(date)] V2 generation finished | version=$VERSION | subject=$SUBJECT_ID | strength=$N"

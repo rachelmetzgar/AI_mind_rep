@@ -7,11 +7,11 @@ Update this file instead of editing individual scripts.
 
 Usage:
     import sys
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "code"))
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
     from config import config, set_version, add_version_argument
 
     # Set data version (required before accessing version-dependent paths)
-    set_version("labels")
+    set_version("balanced_gpt")
     csv_dir = config.PATHS.csv_dir
     probe_dir = config.PATHS.probe_checkpoints
 
@@ -46,102 +46,54 @@ VALID_VERSIONS = (
     "you_are_balanced_gpt",
 )
 
-# Internal tracking of active version
+# Valid models
+VALID_MODELS = ("llama2_13b_chat",)
+
+# Internal tracking
 _active_version = None
+_active_model = None
 
 
 # ============================================================================
 # MODEL
 # ============================================================================
 
-MODEL_NAME = (
-    "/jukebox/graziano/rachel/ai_percep_clean/.cache/huggingface/hub/"
-    "models--meta-llama--Llama-2-13b-chat-hf/snapshots/"
-    "a2cb7a712bb6e5e736ca7f8cd98167f81a0b5bd8"
-)
+# Model weight paths (keyed by model short name)
+_MODEL_PATHS = {
+    "llama2_13b_chat": (
+        "/mnt/cup/labs/graziano/rachel/ai_percep_clean/.cache/huggingface/hub/"
+        "models--meta-llama--Llama-2-13b-chat-hf/snapshots/"
+        "a2cb7a712bb6e5e736ca7f8cd98167f81a0b5bd8"
+    ),
+}
 
+_MODEL_CONFIGS = {
+    "llama2_13b_chat": {"input_dim": 5120, "n_layers": 41},
+}
+
+# Default model
+MODEL_NAME = _MODEL_PATHS["llama2_13b_chat"]
 INPUT_DIM = 5120   # LLaMA-2-13B hidden size
 N_LAYERS = 41      # Embedding layer + 40 transformer layers
 
 
 # ============================================================================
-# CSV_DIR MAPPING: version → path to per-subject CSV files
+# EXP 1 PATH FORMULAS
 # ============================================================================
 
-_CSV_DIR_MAP = {
-    "labels": (
-        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/labels/"
-        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
-    ),
-    "balanced_names": (
-        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/balanced_names/"
-        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
-    ),
-    "balanced_gpt": (
-        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/balanced_gpt/"
-        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
-    ),
-    "names": (
-        "/jukebox/graziano/rachel/mind_rep/exp_2/archive/names/"
-        "llama_exp_2b-13B-chat/data/meta-llama-Llama-2-13b-chat-hf/0.8"
-    ),
-    "nonsense_codeword": (
-        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/nonsense_codeword/"
-        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
-    ),
-    "nonsense_ignore": (
-        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/nonsense_ignore/"
-        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
-    ),
-    "labels_turnwise": (
-        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/labels_turnwise/"
-        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
-    ),
-    "you_are_labels": (
-        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/you_are_labels/"
-        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
-    ),
-    "you_are_labels_turnwise": (
-        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/you_are_labels_turnwise/"
-        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
-    ),
-    "you_are_balanced_gpt": (
-        "/jukebox/graziano/rachel/mind_rep/exp_1/versions/you_are_balanced_gpt/"
-        "data/meta-llama-Llama-2-13b-chat-hf/0.8"
-    ),
-}
+def _exp1_data_dir(version, model="llama2_13b_chat"):
+    """Exp 1 per-subject CSV directory for a given version and model."""
+    return PROJECT_ROOT / "exp_1" / "results" / model / version / "data"
 
-# EXP1 root mapping: version → exp_1 data_gen root (for V2 causality prompts/configs)
-_EXP1_DATA_GEN_MAP = {
-    "labels":            PROJECT_ROOT / "exp_1" / "versions" / "labels" / "code" / "data_gen",
-    "balanced_names":    PROJECT_ROOT / "exp_1" / "versions" / "balanced_names" / "code" / "data_gen",
-    "balanced_gpt":      PROJECT_ROOT / "exp_1" / "versions" / "balanced_gpt" / "code" / "data_gen",
-    "names":             PROJECT_ROOT / "exp_1" / "versions" / "names" / "code" / "data_gen",
-    "nonsense_codeword": PROJECT_ROOT / "exp_1" / "versions" / "nonsense_codeword" / "code" / "data_gen",
-    "nonsense_ignore":        PROJECT_ROOT / "exp_1" / "versions" / "nonsense_ignore" / "code" / "data_gen",
-    "labels_turnwise":        PROJECT_ROOT / "exp_1" / "versions" / "labels_turnwise" / "code" / "data_gen",
-    "you_are_labels":         PROJECT_ROOT / "exp_1" / "versions" / "you_are_labels" / "code" / "data_gen",
-    "you_are_labels_turnwise": PROJECT_ROOT / "exp_1" / "versions" / "you_are_labels_turnwise" / "code" / "data_gen",
-    "you_are_balanced_gpt":   PROJECT_ROOT / "exp_1" / "versions" / "you_are_balanced_gpt" / "code" / "data_gen",
-}
-
-# EXP1 analysis utils mapping (for behavioral analysis feature imports)
-_EXP1_UTILS_MAP = {
-    "labels":                  PROJECT_ROOT / "exp_1" / "versions" / "labels" / "code" / "analysis" / "utils",
-    "balanced_names":          PROJECT_ROOT / "exp_1" / "versions" / "balanced_names" / "code" / "analysis" / "utils",
-    "balanced_gpt":            PROJECT_ROOT / "exp_1" / "versions" / "balanced_gpt" / "code" / "analysis" / "utils",
-    "names":                   PROJECT_ROOT / "exp_1" / "versions" / "labels" / "code" / "analysis" / "utils",
-    "nonsense_codeword":       PROJECT_ROOT / "exp_1" / "versions" / "nonsense_codeword" / "code" / "analysis" / "utils",
-    "nonsense_ignore":         PROJECT_ROOT / "exp_1" / "versions" / "nonsense_ignore" / "code" / "analysis" / "utils",
-    "labels_turnwise":         PROJECT_ROOT / "exp_1" / "versions" / "labels_turnwise" / "code" / "analysis" / "utils",
-    "you_are_labels":          PROJECT_ROOT / "exp_1" / "versions" / "you_are_labels" / "code" / "analysis" / "utils",
-    "you_are_labels_turnwise": PROJECT_ROOT / "exp_1" / "versions" / "you_are_labels_turnwise" / "code" / "analysis" / "utils",
-    "you_are_balanced_gpt":    PROJECT_ROOT / "exp_1" / "versions" / "you_are_balanced_gpt" / "code" / "analysis" / "utils",
-}
+# Exp 1 shared code paths (not per-version after exp_1 refactoring)
+EXP1_DATA_GEN = PROJECT_ROOT / "exp_1" / "code" / "data_gen"
+EXP1_PROMPTS = EXP1_DATA_GEN / "prompts"
+EXP1_CONDITIONS = EXP1_DATA_GEN / "conditions"
+EXP1_UTILS = PROJECT_ROOT / "exp_1" / "code" / "utils"
 
 
 # ============================================================================
-# PATHS: Inputs (data/)
+# PATHS: Inputs
 # ============================================================================
 
 @dataclass
@@ -151,23 +103,22 @@ class InputPaths:
     # Per-subject CSV directory (set by set_version)
     csv_dir: Path = None
 
-    # Probe checkpoints: data/{version}/probe_checkpoints/
+    # Probe checkpoints: results/{model}/{version}/probe_training/data/
     probe_checkpoints: Path = None
 
-    # Intervention results: data/{version}/intervention_results/
-    intervention_results: Path = None
+    # Intervention data: results/{model}/{version}/V{1,2}_causality/data/
+    intervention_results_v1: Path = None
+    intervention_results_v2: Path = None
 
-    # Exp 1 data_gen root (for V2 causality prompts/configs)
-    exp1_data_gen: Path = None
-    exp1_prompts: Path = None
-    exp1_configs: Path = None
+    # Exp 1 shared paths
+    exp1_data_gen: Path = EXP1_DATA_GEN
+    exp1_prompts: Path = EXP1_PROMPTS
+    exp1_configs: Path = EXP1_DATA_GEN / "conditions"
+    exp1_utils: Path = EXP1_UTILS
 
-    # Exp 1 analysis utils (for behavioral markers)
-    exp1_utils: Path = None
-
-    # Shared data (version-independent)
-    topics_csv: Path = ROOT_DIR / "data" / "shared" / "conds" / "topics.csv"
-    causality_questions: Path = ROOT_DIR / "data" / "shared" / "causality_test_questions" / "human_ai.txt"
+    # Shared data (version-independent, tracked by git)
+    topics_csv: Path = ROOT_DIR / "code" / "shared" / "conds" / "topics.csv"
+    causality_questions: Path = ROOT_DIR / "code" / "shared" / "causality_test_questions" / "human_ai.txt"
 
 
 # ============================================================================
@@ -182,18 +133,22 @@ class OutputPaths:
     root: Path = ROOT_DIR / "results"
 
     # Version-specific results (set by set_version)
-    version_root: Path = None      # results/versions/{version}/
-    probe_training: Path = None    # results/versions/{version}/probe_training/
-    degradation: Path = None       # results/versions/{version}/degradation_analysis/
+    version_root: Path = None      # results/{model}/{version}/
+    probe_training: Path = None    # results/{model}/{version}/probe_training/
+    degradation: Path = None       # results/{model}/{version}/probe_training/degradation/
 
-    # Cross-variant comparison results
-    comparisons: Path = ROOT_DIR / "results" / "comparisons"
-    probe_training_comparison: Path = ROOT_DIR / "results" / "comparisons" / "probe_training"
-    causality_qc_comparison: Path = ROOT_DIR / "results" / "comparisons" / "causality_qc"
+    # V1/V2 behavioral output
+    v1_behavioral: Path = None
+    v2_behavioral: Path = None
+
+    # Cross-variant comparison results (set by set_version or set_model)
+    comparisons: Path = None
+    probe_training_comparison: Path = None
+    causality_qc_comparison: Path = None
 
     # Logs
     logs: Path = ROOT_DIR / "logs"
-    version_logs: Path = None      # logs/{version}/
+    version_logs: Path = None      # logs/{model}/{version}/
 
 
 # ============================================================================
@@ -368,10 +323,40 @@ validate_config()
 
 
 # ============================================================================
+# MODEL MANAGEMENT
+# ============================================================================
+
+def set_model(model):
+    """Set the active model. Updates MODEL_NAME, INPUT_DIM, N_LAYERS."""
+    global _active_model
+    if model not in VALID_MODELS:
+        raise ValueError(f"Invalid model '{model}'. Must be one of: {VALID_MODELS}")
+    _active_model = model
+    config.MODEL_NAME = _MODEL_PATHS[model]
+    mc = _MODEL_CONFIGS[model]
+    config.INPUT_DIM = mc["input_dim"]
+    config.N_LAYERS = mc["n_layers"]
+
+
+def get_model():
+    """Return the active model short name (default: llama2_13b_chat)."""
+    return _active_model or "llama2_13b_chat"
+
+
+def add_model_argument(parser):
+    """Add an optional --model argument to an argparse parser."""
+    parser.add_argument(
+        "--model", type=str, default="llama2_13b_chat",
+        choices=VALID_MODELS,
+        help=f"Model to use. Choices: {', '.join(VALID_MODELS)} (default: llama2_13b_chat)"
+    )
+
+
+# ============================================================================
 # VERSION MANAGEMENT
 # ============================================================================
 
-def set_version(version):
+def set_version(version, model=None):
     """
     Set the active data version.
 
@@ -380,6 +365,7 @@ def set_version(version):
 
     Args:
         version: One of VALID_VERSIONS
+        model: Model short name (default: current model or llama2_13b_chat)
     """
     global _active_version
 
@@ -389,26 +375,28 @@ def set_version(version):
         )
 
     _active_version = version
+    m = model or get_model()
 
     # --- Input paths ---
-    config.PATHS.csv_dir = Path(_CSV_DIR_MAP[version])
-    config.PATHS.probe_checkpoints = ROOT_DIR / "data" / version / "probe_checkpoints"
-    config.PATHS.intervention_results = ROOT_DIR / "data" / version / "intervention_results"
-
-    # Exp 1 paths
-    data_gen = _EXP1_DATA_GEN_MAP[version]
-    config.PATHS.exp1_data_gen = data_gen
-    config.PATHS.exp1_prompts = data_gen / "utils" / "prompts"
-    config.PATHS.exp1_configs = data_gen / "utils" / "config"
-    config.PATHS.exp1_utils = _EXP1_UTILS_MAP[version]
+    config.PATHS.csv_dir = _exp1_data_dir(version, m)
+    config.PATHS.probe_checkpoints = ROOT_DIR / "results" / m / version / "probe_training" / "data"
+    config.PATHS.intervention_results_v1 = ROOT_DIR / "results" / m / version / "V1_causality" / "data"
+    config.PATHS.intervention_results_v2 = ROOT_DIR / "results" / m / version / "V2_causality" / "data"
 
     # --- Output paths ---
-    config.RESULTS.version_root = ROOT_DIR / "results" / "versions" / version
-    config.RESULTS.probe_training = ROOT_DIR / "results" / "versions" / version / "probe_training"
-    config.RESULTS.degradation = ROOT_DIR / "results" / "versions" / version / "degradation_analysis"
-    config.RESULTS.v1_behavioral = ROOT_DIR / "results" / "versions" / version / "V1_causality" / "behavioral"
-    config.RESULTS.v2_behavioral = ROOT_DIR / "results" / "versions" / version / "V2_causality" / "behavioral"
-    config.RESULTS.version_logs = ROOT_DIR / "logs" / version
+    config.RESULTS.version_root = ROOT_DIR / "results" / m / version
+    config.RESULTS.probe_training = ROOT_DIR / "results" / m / version / "probe_training"
+    config.RESULTS.degradation = ROOT_DIR / "results" / m / version / "probe_training" / "degradation"
+    config.RESULTS.v1_behavioral = ROOT_DIR / "results" / m / version / "V1_causality" / "behavioral"
+    config.RESULTS.v2_behavioral = ROOT_DIR / "results" / m / version / "V2_causality" / "behavioral"
+
+    # Comparisons
+    config.RESULTS.comparisons = ROOT_DIR / "results" / "comparisons" / m
+    config.RESULTS.probe_training_comparison = ROOT_DIR / "results" / "comparisons" / m / "probe_training"
+    config.RESULTS.causality_qc_comparison = ROOT_DIR / "results" / "comparisons" / m / "causality_qc"
+
+    # Logs
+    config.RESULTS.version_logs = ROOT_DIR / "logs" / m / version
 
     # Validate key paths
     if not config.PATHS.csv_dir.exists():
@@ -423,12 +411,7 @@ def get_active_version():
 
 
 def add_version_argument(parser):
-    """
-    Add a required --version argument to an argparse parser.
-
-    Args:
-        parser: argparse.ArgumentParser instance
-    """
+    """Add a required --version argument to an argparse parser."""
     parser.add_argument(
         "--version", type=str, required=True,
         choices=VALID_VERSIONS,
@@ -437,15 +420,7 @@ def add_version_argument(parser):
 
 
 def get_version_results_dir(base_path=None):
-    """
-    Return a version-specific subdirectory under base_path.
-
-    Args:
-        base_path: Path to the base results directory (default: config.RESULTS.root)
-
-    Returns:
-        Path: base_path / _active_version
-    """
+    """Return a version-specific subdirectory under base_path."""
     if _active_version is None:
         raise RuntimeError(
             "No version set. Call set_version() before get_version_results_dir()."
@@ -467,7 +442,9 @@ if __name__ == "__main__":
     print(f"\nROOT DIR: {config.ROOT_DIR}")
     print(f"PROJECT ROOT: {config.PROJECT_ROOT}")
     print(f"\nVALID VERSIONS: {VALID_VERSIONS}")
+    print(f"VALID MODELS: {VALID_MODELS}")
     print(f"Active version: {_active_version or '(not set)'}")
+    print(f"Active model: {get_model()}")
 
     print(f"\nMODEL: {Path(config.MODEL_NAME).name}")
     print(f"  Hidden dim: {config.INPUT_DIM}")
@@ -479,13 +456,15 @@ if __name__ == "__main__":
     print(f"  Batch size (test): {config.TRAINING.batch_size_test}")
 
     # Demo: set a version
-    for v in VALID_VERSIONS:
+    for v in ("balanced_gpt", "nonsense_codeword"):
         set_version(v)
         print(f"\n--- {v} ---")
-        print(f"  csv_dir:          {config.PATHS.csv_dir}")
+        print(f"  csv_dir:           {config.PATHS.csv_dir}")
         print(f"  probe_checkpoints: {config.PATHS.probe_checkpoints}")
-        print(f"  intervention:     {config.PATHS.intervention_results}")
-        print(f"  exp1_utils:       {config.PATHS.exp1_utils}")
-        print(f"  results:          {config.RESULTS.version_root}")
+        print(f"  intervention_v1:   {config.PATHS.intervention_results_v1}")
+        print(f"  exp1_utils:        {config.PATHS.exp1_utils}")
+        print(f"  results:           {config.RESULTS.version_root}")
+        print(f"  comparisons:       {config.RESULTS.comparisons}")
+        print(f"  logs:              {config.RESULTS.version_logs}")
 
     print(f"\nConfig loaded successfully!")
