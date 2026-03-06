@@ -1,1 +1,14 @@
+# Old per-version structure (preserved but not tracked)
+archive/
 old_approach/
+
+# Runtime logs
+logs/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+.nfs*

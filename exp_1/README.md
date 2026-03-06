@@ -14,7 +14,27 @@ This experiment was run ten times with different partner labeling strategies:
 three named-partner versions, three "you believe" label versions, three
 "you are" framing versions, and two nonsense control versions.
 
+## Quick Start
+
+```bash
+# Generate conversations for one version
+VERSION=balanced_gpt MODEL=llama2_13b_chat sbatch code/data_gen/slurm/1_generate_conversations.sh
+
+# Run analysis pipeline (combine + extract features + identity breakdown)
+VERSION=balanced_gpt MODEL=llama2_13b_chat sbatch code/analysis/slurm/run_analysis.sh
+
+# Generate cross-version comparison reports
+cd /mnt/cup/labs/graziano/rachel/mind_rep/exp_1
+module load pyger && conda activate behavior_env
+python code/comparisons/1_behavioral_by_condition_summary_generator.py --model llama2_13b_chat
+python code/comparisons/2_behavioral_by_turn_summary_generator.py --model llama2_13b_chat
+python code/comparisons/3_identity_summary_generator.py --model llama2_13b_chat
+python code/comparisons/4_conversation_viewer_summary_generator.py --model llama2_13b_chat
+```
+
 ## Results
+
+Results are organized by model and version: `results/{model}/{version}/`.
 
 ### Data samples (what the LLM sees)
 
@@ -22,238 +42,176 @@ Raw Turn 5 prompts and responses for each version — click to see the exact
 system prompt, conversation history, and model output for all 4 partner
 conditions:
 
-- [Names](comparisons/data_samples/names.html)
-- [Balanced Names](comparisons/data_samples/balanced_names.html)
-- [Balanced GPT](comparisons/data_samples/balanced_gpt.html)
-- [Labels](comparisons/data_samples/labels.html)
-- [Labels Turnwise](comparisons/data_samples/labels_turnwise.html)
-- [You Are Balanced GPT](comparisons/data_samples/you_are_balanced_gpt.html)
-- [You Are Labels](comparisons/data_samples/you_are_labels.html)
-- [You Are Labels Turnwise](comparisons/data_samples/you_are_labels_turnwise.html)
-- [Nonsense Codeword](comparisons/data_samples/nonsense_codeword.html)
-- [Nonsense Ignore](comparisons/data_samples/nonsense_ignore.html)
+- [Names](results/comparisons/llama2_13b_chat/data_samples/names.html)
+- [Balanced Names](results/comparisons/llama2_13b_chat/data_samples/balanced_names.html)
+- [Balanced GPT](results/comparisons/llama2_13b_chat/data_samples/balanced_gpt.html)
+- [Labels](results/comparisons/llama2_13b_chat/data_samples/labels.html)
+- [Labels Turnwise](results/comparisons/llama2_13b_chat/data_samples/labels_turnwise.html)
+- [You Are Balanced GPT](results/comparisons/llama2_13b_chat/data_samples/you_are_balanced_gpt.html)
+- [You Are Labels](results/comparisons/llama2_13b_chat/data_samples/you_are_labels.html)
+- [You Are Labels Turnwise](results/comparisons/llama2_13b_chat/data_samples/you_are_labels_turnwise.html)
+- [Nonsense Codeword](results/comparisons/llama2_13b_chat/data_samples/nonsense_codeword.html)
+- [Nonsense Ignore](results/comparisons/llama2_13b_chat/data_samples/nonsense_ignore.html)
 
 ### Cross-version behavioral analysis
 
-- **Overall results:** [HTML](comparisons/behavioral_measures_by_condition.html) · [Markdown](comparisons/behavioral_measures_by_condition.md) — 23 measures x 10 versions, full-conversation aggregate
-- **Results by turn:** [HTML](comparisons/behavioral_by_turn.html) · [Markdown](comparisons/behavioral_by_turn.md) — 21 per-turn measures x 10 versions x 5 turns
-- **Identity breakdown:** [HTML](comparisons/identity_summary.html) — per-identity effects (ChatGPT vs Copilot, Gregory vs Rebecca, etc.)
-
-### Data degradation analysis
-
-Text quality metrics (TTR, trigram repetition, ALL-CAPS, exclamation rate,
-self-reference) and probe confidence trajectories across the 5 turns of each
-conversation, testing whether conversation quality degrades differently by
-condition:
-
-- [Labels](../exp_2/results/labels/degradation_analysis/degradation_probe_report.html)
-- [Nonsense Codeword](../exp_2/results/nonsense_codeword/degradation_analysis/degradation_probe_report.html)
-- [Nonsense Ignore](../exp_2/results/nonsense_ignore/degradation_analysis/degradation_probe_report.html)
+- **Overall results:** [HTML](results/comparisons/llama2_13b_chat/behavioral_by_condition.html) · [Markdown](results/comparisons/llama2_13b_chat/behavioral_by_condition.md) — 23 measures x 10 versions, full-conversation aggregate
+- **Results by turn:** [HTML](results/comparisons/llama2_13b_chat/behavioral_by_turn.html) · [Markdown](results/comparisons/llama2_13b_chat/behavioral_by_turn.md) — 21 per-turn measures x 10 versions x 5 turns
+- **Identity breakdown:** [HTML](results/comparisons/llama2_13b_chat/identity_summary.html) — per-identity effects (ChatGPT vs GPT-4, Gregory vs Rebecca, etc.)
 
 ## Versions
 
-### `versions/names/` — Named Partners (original)
+### `balanced_gpt` — Gender-Balanced Names with GPT-4
 
-Partners are identified by specific names in the system prompt:
-- **Human-labeled:** Sam, Casey
-- **AI-labeled:** ChatGPT, Copilot
-
-This version produced significant behavioral effects (16 of 23 measures).
-However, the specific names introduce confounds for downstream probing
-experiments (Exps 2-4):
-- LLaMA-2 associates "Sam" and "Casey" with female identity, so probes
-  trained on these conversations conflate gender with partner type
-- The token "Copilot" appears directly in AI-steered probe outputs
-  (e.g., "cop" repetition loops), showing probes encode the literal
-  partner name rather than abstract AI identity
-
-Exp 1 behavioral results remain valid (the name-conditioned effects are real
-and interesting). The confound only matters when these conversations are used
-as training data for linear probes in subsequent experiments.
-
-### `versions/balanced_names/` — Gender-Balanced Names
-
-Partners are identified by gender-balanced names in the system prompt:
-- **Human-labeled:** Gregory (male), Rebecca (female)
-- **AI-labeled:** ChatGPT, Copilot
-
-This addresses the gender confound from `names/` by using one explicitly male
-and one explicitly female human partner name (10 of 23 measures significant).
-
-### `versions/balanced_gpt/` — Gender-Balanced Names with GPT-4
-
-Same gender-balanced human names, but replaces Copilot with GPT-4:
+Gender-balanced human names with both AI partners from the GPT family:
 - **Human-labeled:** Gregory, Rebecca
 - **AI-labeled:** ChatGPT, GPT-4
 
-Both AI partners are now members of the same model family (OpenAI), controlling
+Both AI partners are members of the same model family (OpenAI), controlling
 for potential brand-specific associations. This version produced the most
 significant effects (17 of 23 measures).
 
-### `versions/labels/` — Generic Type Labels
+### `balanced_names` — Gender-Balanced Names
 
-Partners are identified only by category in the system prompt:
+Partners identified by gender-balanced names:
+- **Human-labeled:** Gregory (male), Rebecca (female)
+- **AI-labeled:** ChatGPT, Copilot
+
+Addresses the gender confound from `names` by using one explicitly male
+and one explicitly female human partner name (10 of 23 measures significant).
+
+### `names` — Named Partners (original)
+
+Partners identified by specific names in the system prompt:
+- **Human-labeled:** Sam, Casey
+- **AI-labeled:** ChatGPT, Copilot
+
+Produced significant behavioral effects (16 of 23 measures). However, the
+specific names introduce confounds for downstream probing experiments.
+
+### `labels` — Generic Type Labels
+
+Partners identified only by category:
 - **Human-labeled:** "a Human"
 - **AI-labeled:** "an AI"
 
-This removes the name and gender confound entirely (5 of 23 measures
-significant). The resulting conversations are the cleanest for probe training
-in Exps 2-4 because any differences in the model's internal representations
-must reflect the human/AI type distinction itself, not name-specific or
-gender-specific associations. All 5 significant effects are in the core set:
-interpersonal DMs, cognitive DMs, DM total, discourse "like", and politeness.
+Removes the name and gender confound entirely (5 of 23 measures significant).
+Cleanest version for probe training in Exps 2-4.
 
-### `versions/labels_turnwise/` — Labels with Turn-Level Identity Prefix
+### `labels_turnwise` — Labels with Turn-Level Identity Prefix
 
-Like `labels/`, the system prompt uses only type labels ("a Human" / "an AI").
-Unlike `labels/`, each partner turn is prefixed with "Human:" or "AI:" instead
-of the generic "Partner:", reinforcing the identity label at every turn.
-- **System prompt:** "You believe you are speaking with a Human/an AI"
-- **Turn prefix:** "Human:" or "AI:" (not "Partner:")
+Like `labels`, but each partner turn is prefixed with "Human:" or "AI:"
+instead of the generic "Partner:", reinforcing identity at every turn.
 
-This tests whether reinforcing the identity label at every turn strengthens the
-behavioral effects seen in `labels/`.
+### `you_are_balanced_gpt` — "You Are" Framing with GPT-4
 
-### `versions/you_are_balanced_gpt/` — "You Are" Framing with GPT-4
+Same as `balanced_gpt` but uses "You are talking to" instead of
+"You believe you are speaking with" in the system prompt.
 
-Same as `balanced_gpt/` but replaces "You believe you are speaking with" with
-"You are talking to" in the system prompt:
-- **Human-labeled:** Gregory, Rebecca
-- **AI-labeled:** ChatGPT, GPT-4
-- **Key sentence:** "You are talking to Gregory (a Human)."
+### `you_are_labels` — "You Are" Framing with Labels
 
-### `versions/you_are_labels/` — "You Are" Framing with Labels
+Same as `labels` but uses "You are talking to" framing.
 
-Same as `labels/` but replaces "You believe you are speaking with" with
-"You are talking to" in the system prompt:
-- **Human-labeled:** "a Human"
-- **AI-labeled:** "an AI"
-- **Key sentence:** "You are talking to a Human."
+### `you_are_labels_turnwise` — "You Are" + Turn-Level Prefix
 
-### `versions/you_are_labels_turnwise/` — "You Are" Framing with Turn-Level Prefix
-
-Combines `you_are_labels/` and `labels_turnwise/`: uses "You are talking to"
+Combines `you_are_labels` and `labels_turnwise`: "You are talking to"
 framing plus "Human:"/"AI:" turn prefixes.
-- **System prompt:** "You are talking to a Human/an AI"
-- **Turn prefix:** "Human:" or "AI:" (not "Partner:")
 
-### `versions/nonsense_codeword/` — Nonsense Control: Codeword
+### `nonsense_codeword` — Nonsense Control: Codeword
 
-Token-matched control for `labels/`. The critical instruction sentence is
-replaced with a semantically inert one:
-- **labels:** "You believe you are speaking with {a Human / an AI}."
-- **codeword:** "Your assigned session code word is {a Human / an AI}."
+Token-matched control. The critical instruction is replaced with:
+"Your assigned session code word is {a Human / an AI}."
+Result: **0 of 23 measures significant**.
 
-The "Human"/"AI" tokens are still present but embedded in a nonsensical
-context. Result: **0 of 23 measures significant** — the strongest evidence
-that behavioral effects require the model to semantically process the identity
-instruction, not merely encounter the tokens.
+### `nonsense_ignore` — Nonsense Control: Ignore
 
-### `versions/nonsense_ignore/` — Nonsense Control: Ignore
-
-Token-matched control for `labels/`. The critical instruction sentence
-explicitly tells the model to ignore the label:
-- **labels:** "You believe you are speaking with {a Human / an AI}."
-- **ignore:** "Ignore the following phrase: {a Human / an AI}."
-
-Result: **14 of 23 measures significant** — the model processes the
-human/AI tokens despite being told to ignore them. This demonstrates that
-LLaMA-2 cannot suppress semantic processing of identity labels, consistent
-with the view that these tokens activate deep representational pathways.
+Token-matched control with explicit ignore instruction:
+"Ignore the following phrase: {a Human / an AI}."
+Result: **14 of 23 measures significant** — the model cannot suppress
+semantic processing of identity labels.
 
 ## Shared Design
 
-All six versions use the same:
+All ten versions use the same:
 - 50 independent LLaMA-2-Chat-13B participant agents (temperature 0.8)
 - 40 conversations each (2 partner types x 2 partners x 10 topics)
 - 5-turn exchanges per conversation
 - Partner LLM receives a generic system prompt with no identity information
 - 20 social topics + 20 nonsocial topics
-- Linguistic analysis pipeline (sentiment, politeness, hedging, ToM,
-  discourse markers, questions, word count, etc.)
-- Statistical framework: paired t-test with BH-FDR correction
+- 23 linguistic measures (sentiment, politeness, hedging, ToM, discourse
+  markers, questions, word count, etc.)
+- Statistical framework: one-way RM-ANOVA + pairwise t-tests with BH-FDR
 - Environments: `behavior_env` (analysis), `llama2_env` (data generation)
-
-## Key Differences
-
-### Original 6 versions
-
-| | `names` | `bal_names` | `bal_gpt` | `labels` | `non_code` | `non_ignore` |
-|---|---|---|---|---|---|---|
-| Human partners | Sam, Casey | Gregory, Rebecca | Gregory, Rebecca | "a Human" | "a Human" | "a Human" |
-| AI partners | ChatGPT, Copilot | ChatGPT, Copilot | ChatGPT, GPT-4 | "an AI" | "an AI" | "an AI" |
-| Key sentence | "believe...speaking with {name} ({type})" | same | same | "believe...speaking with {type}" | "code word is {type}" | "Ignore: {type}" |
-| Turn prefix | "{name}:" | "{name}:" | "{name}:" | "Partner:" | "Partner:" | "Partner:" |
-| Sig. measures | 16 / 23 | 10 / 23 | 17 / 23 | 5 / 23 | 0 / 23 | 14 / 23 |
-
-### New versions (turnwise + "you are" framing)
-
-| | `labels_tw` | `ya_bal_gpt` | `ya_labels` | `ya_labels_tw` |
-|---|---|---|---|---|
-| Human partners | "a Human" | Gregory, Rebecca | "a Human" | "a Human" |
-| AI partners | "an AI" | ChatGPT, GPT-4 | "an AI" | "an AI" |
-| Key sentence | "believe...speaking with {type}" | "talking to {name} ({type})" | "talking to {type}" | "talking to {type}" |
-| Turn prefix | "Human:"/"AI:" | "{name}:" | "Partner:" | "Human:"/"AI:" |
-
-## Cross-Version Comparisons (`comparisons/`)
-
-The `comparisons/` directory contains cross-version analyses and data viewers:
-
-| File | Description |
-|---|---|
-| `behavioral_measures_by_condition.html` | 23 measures x 6 versions, full-conversation aggregate |
-| `behavioral_by_turn.html` | 21 per-turn measures x 6 versions x 5 turns |
-| `identity_summary.html` | Per-identity breakdown (ChatGPT vs Copilot, Gregory vs Rebecca, etc.) |
-| `data_samples/{version}.html` | Raw conversation viewer: Turn 5 prompts + responses for each version |
-
-**Key scripts:**
-- `gen_behavioral_comparison.py` — generates `behavioral_measures_by_condition.html`
-- `gen_behavioral_by_turn.py` — generates `behavioral_by_turn.html`
-- `gen_identity_summary.py` — generates `identity_summary.html`
-- `gen_conversation_viewer.py` — generates `data_samples/*.html`
 
 ## Directory Structure
 
 ```
 exp_1/
-├── README.md                          # This file
-├── comparisons/                       # Cross-version analysis
-│   ├── gen_*.py                       # Generator scripts
-│   ├── behavioral_measures_by_condition.html
-│   ├── behavioral_by_turn.html
-│   ├── identity_summary.html
-│   └── data_samples/                  # Per-version conversation viewers
-│
-└── versions/                          # All data versions
-    ├── names/                         # Named partners (original)
-    ├── balanced_names/                # Gender-balanced names
-    ├── balanced_gpt/                  # Gender-balanced + GPT-4
-    ├── labels/                        # Generic type labels
-    ├── labels_turnwise/               # Labels + turn-level Human:/AI: prefix
-    ├── you_are_balanced_gpt/          # "You are talking to" + GPT-4
-    ├── you_are_labels/                # "You are talking to" + labels
-    ├── you_are_labels_turnwise/       # "You are talking to" + turn prefix
-    ├── nonsense_codeword/             # Control: codeword
-    └── nonsense_ignore/               # Control: ignore
-        │
-        ├── code/
-        │   ├── data_gen/              # Conversation generation
-        │   │   ├── llm_data_generation.py
-        │   │   └── utils/
-        │   │       ├── config/        # Per-subject condition CSVs
-        │   │       ├── prompts/       # Topic text files
-        │   │       └── prompts_config.py  # Version-specific partner names
-        │   └── analysis/
-        │       ├── combine_text_data.py   # Aggregate per-subject CSVs
-        │       ├── identity_breakdown.py  # Behavioral stats + HTML report
-        │       └── utils/             # Feature extraction (shared)
-        │
-        ├── data/
-        │   └── meta-llama-Llama-2-13b-chat-hf/0.8/  # s001.csv ... s050.csv
-        │
-        └── results/
-            └── meta-llama-Llama-2-13b-chat-hf/0.8/  # Analysis outputs
+├── README.md
+├── archive/                                # Old per-version structure (preserved)
+│   └── versions/{version}/
+├── code/
+│   ├── config.py                           # All version/model configs + path helpers
+│   ├── data_gen/
+│   │   ├── 1_generate_conversations.py     # --version X --model Y [--subject N]
+│   │   ├── 1a_combine_text_data.py         # Merge per-subject CSVs
+│   │   ├── prompts/                        # 20 topic text files (shared)
+│   │   ├── conditions/                     # 50 per-subject condition CSVs (shared)
+│   │   └── slurm/
+│   │       └── 1_generate_conversations.sh # Array job (50 subjects)
+│   ├── analysis/
+│   │   ├── 0_clean_transcripts.py          # Optional transcript cleaning (--clean)
+│   │   ├── 1_extract_features.py           # Extract 23 linguistic measures
+│   │   ├── 2_identity_breakdown.py         # Per-agent ANOVA + post-hoc tests
+│   │   └── slurm/
+│   │       └── run_analysis.sh             # Chains combine → features → breakdown
+│   ├── comparisons/
+│   │   ├── 1_behavioral_by_condition_summary_generator.py
+│   │   ├── 2_behavioral_by_turn_summary_generator.py
+│   │   ├── 3_identity_summary_generator.py
+│   │   └── 4_conversation_viewer_summary_generator.py
+│   └── utils/                              # Shared utilities (deduplicated)
+│       ├── conversation_helpers.py         # Dialogue runner
+│       ├── gpt_client.py                   # OpenAI API client
+│       ├── llama_client.py                 # Local LLaMA client
+│       ├── discourse_markers_fung.py       # Fung's 23 discourse markers
+│       ├── hedges_demir.py                 # Demir's hedge categories
+│       ├── misc_text_markers.py            # LIWC fillers, ToM, politeness
+│       ├── generic_analysis.py             # Statistical framework
+│       ├── data_helpers.py                 # CSV/file I/O
+│       ├── plot_helpers.py                 # Figure generation
+│       ├── stats_helpers.py                # t-tests, ANOVA, FDR
+│       ├── subject_utils.py                # Subject filtering
+│       └── print_helpers.py                # Console output formatting
+├── results/
+│   ├── llama2_13b_chat/                    # Per-model results
+│   │   ├── {version}/                      # Per-version
+│   │   │   ├── identity_breakdown.html     # Reports (top level)
+│   │   │   ├── identity_breakdown_stats.txt
+│   │   │   ├── per_trial_results.html
+│   │   │   ├── data/                       # Raw + computed CSVs
+│   │   │   │   ├── s001.csv ... s050.csv
+│   │   │   │   ├── combined_text_data.csv
+│   │   │   │   ├── combined_trial_level_data.csv
+│   │   │   │   ├── combined_utterance_level_data.csv
+│   │   │   │   ├── identity_breakdown_summary.csv
+│   │   │   │   └── per_trial_results_summary.csv
+│   │   │   └── figures/
+│   │   └── ... (10 versions)
+│   └── comparisons/
+│       └── llama2_13b_chat/                # Cross-version comparisons
+│           ├── behavioral_by_condition.html/.md
+│           ├── behavioral_by_turn.html/.md
+│           ├── identity_summary.html
+│           └── data_samples/*.html
+├── logs/
+│   └── llama2_13b_chat/{version}/
+└── writeup/
 ```
 
-Each version directory follows this structure. The nonsense versions share
-config, prompts, and analysis utils via symlinks to `versions/labels/`.
+## Adding a New Model
+
+1. Add an entry to `MODELS` in `code/config.py`
+2. Run generation: `VERSION=balanced_gpt MODEL=new_model sbatch code/data_gen/slurm/1_generate_conversations.sh`
+3. Run analysis: `VERSION=balanced_gpt MODEL=new_model sbatch code/analysis/slurm/run_analysis.sh`
+4. Results appear in `results/new_model/{version}/`
