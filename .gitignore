@@ -1,5 +1,8 @@
 # === Core ignore rules for AI_mind_rep ===
 
+# Claude Code local config
+.claude/
+
 # Data and logs
 **/data/
 **/logs/
