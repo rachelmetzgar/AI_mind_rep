@@ -6,7 +6,7 @@ Purpose: Compute linguistic feature profiles on Experiment 2b steered conversati
 data and compare across conditions (baseline, human-steered, AI-steered).
 
 Handles the directory structure from 2_causality_generate.py:
-    intervention_results/V{1,2}/{control,reading}_probes/is_{N}/...
+    intervention_results/V{1,2}/{operational,metacognitive_peak}/is_{N}/...
 
 V1: auto-walks probe types × strengths under the result root.
 V2: auto-walks probe types × strengths, loads per-subject CSVs.
@@ -145,7 +145,7 @@ def parse_args():
     parser.add_argument(
         "--input", default=None,
         help=(
-            "Root dir containing {control,reading}_probes/is_{N}/ subdirs. "
+            "Root dir containing {operational,metacognitive_peak}/is_{N}/ subdirs. "
             "Default: cfg.PATHS.intervention_results / V1 or V2 (set by --version)."
         ),
     )
@@ -154,6 +154,10 @@ def parse_args():
         help="V1 = single-turn test questions; V2 = multi-turn Exp 1 recreation.",
     )
     add_version_argument(parser)
+    parser.add_argument(
+        "--layer_strategy", default="peak_15",
+        help="Layer strategy subdirectory (e.g. peak_15, wide, all_70). Default: peak_15.",
+    )
     parser.add_argument(
         "--strength", type=int, default=None,
         help="Only analyze a specific intervention strength (e.g., 16). Default: all.",
@@ -164,7 +168,7 @@ def parse_args():
     )
     parser.add_argument(
         "--output", default=None,
-        help="Output directory. Default: {input}/behavioral_results/",
+        help="Output directory. Default: results/versions/{version}/V{1,2}_causality/behavioral/{layer_strategy}/",
     )
     return parser.parse_args()
 
@@ -175,22 +179,18 @@ def parse_args():
 
 def discover_probe_strength_dirs(base_dir, strength_filter=None):
     """
-    Walk base_dir/{control,reading}_probes/is_{N}/ and return list of
+    Walk base_dir/{operational,metacognitive_peak}/is_{N}/ and return list of
     (probe_label, strength, dir_path) tuples.
+
+    Also supports legacy names (*_probes*) for backward compatibility.
     """
+    KNOWN_PROBE_DIRS = {"operational", "metacognitive_peak", "metacognitive_matched"}
     results = []
     for probe_dir_name in sorted(os.listdir(base_dir)):
         probe_path = os.path.join(base_dir, probe_dir_name)
-        #if not os.path.isdir(probe_path):
-        #    continue
-        #if not probe_dir_name.endswith("_probes"):
-        #    continue
-        ## Derive label: "control_probes" -> "control_probe"
-        #probe_label = probe_dir_name.rstrip("s")
-        
-        if "_probes" not in probe_dir_name:
+
+        if probe_dir_name not in KNOWN_PROBE_DIRS and "_probes" not in probe_dir_name:
             continue
-        # Keep full dir name as label (e.g., "reading_probes_matched")
         probe_label = probe_dir_name
 
         for is_dir_name in sorted(os.listdir(probe_path)):
@@ -208,7 +208,7 @@ def discover_probe_strength_dirs(base_dir, strength_filter=None):
     if not results:
         raise FileNotFoundError(
             f"No probe/strength dirs found under {base_dir}.\n"
-            f"Expected structure: {base_dir}/{{control,reading}}_probes/is_{{N}}/"
+            f"Expected structure: {base_dir}/{{operational,metacognitive_peak}}/is_{{N}}/"
         )
     print(f"[INFO] Discovered {len(results)} probe×strength combinations in {base_dir}")
     for label, N, path in results:
@@ -712,13 +712,13 @@ def format_cross_probe_comparison(all_results):
         lines.append("=" * 100)
         lines.append(
             f"\n{'Metric':<28} "
-            f"{'Ctrl BL':<10} {'Ctrl Hum':<10} {'Ctrl AI':<10} {'Ctrl p':<10} "
-            f"{'Read BL':<10} {'Read Hum':<10} {'Read AI':<10} {'Read p':<10}"
+            f"{'Oper BL':<10} {'Oper Hum':<10} {'Oper AI':<10} {'Oper p':<10} "
+            f"{'Meta BL':<10} {'Meta Hum':<10} {'Meta AI':<10} {'Meta p':<10}"
         )
         lines.append("-" * 100)
 
-        ctrl = {r["metric"]: r for r in probe_results.get("control_probe", [])}
-        read = {r["metric"]: r for r in probe_results.get("reading_probe", [])}
+        ctrl = {r["metric"]: r for r in probe_results.get("operational", [])}
+        read = {r["metric"]: r for r in probe_results.get("metacognitive_peak", [])}
 
         for metric in sorted(set(list(ctrl.keys()) + list(read.keys()))):
             def _v(r, k):
@@ -755,7 +755,7 @@ ALL_METRICS = [
 
 def run_v1_pipeline(args):
     base_dir = args.input
-    out_dir = args.output or os.path.join(base_dir, "behavioral_results")
+    out_dir = args.output or str(cfg.RESULTS.v1_behavioral / args.layer_strategy)
     os.makedirs(out_dir, exist_ok=True)
 
     probe_dfs = load_v1_data(base_dir, strength_filter=args.strength)
@@ -805,7 +805,7 @@ def run_v1_pipeline(args):
 
 def run_v2_pipeline(args):
     base_dir = args.input
-    out_dir = args.output or os.path.join(base_dir, "behavioral_results")
+    out_dir = args.output or str(cfg.RESULTS.v2_behavioral / args.layer_strategy)
     os.makedirs(out_dir, exist_ok=True)
 
     probe_dfs = load_v2_data(base_dir, strength_filter=args.strength)
@@ -880,7 +880,7 @@ def main():
     # Default input dir from config if not provided
     if args.input is None:
         mode_tag = "V1" if args.mode == "v1" else "V2"
-        args.input = str(cfg.PATHS.intervention_results / mode_tag)
+        args.input = str(cfg.PATHS.intervention_results / mode_tag / args.layer_strategy)
 
     if args.mode == "v1":
         run_v1_pipeline(args)

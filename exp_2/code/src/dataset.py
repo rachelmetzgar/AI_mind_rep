@@ -223,10 +223,7 @@ class TextDatasetCSV(Dataset):
                 # Append probe-specific suffix
                 if not self.control_probe:
                     # Reading probe: reflective prompt
-                    text += (
-                        f" I think the {prompt_translator[self.label_idf]}"
-                        f" of this user is"
-                    )
+                    text += " I think my partner is"
                 # Control probe: no suffix.
                 # Text already ends with [/INST] after partner's last message.
                 # Model at last token is about to generate participant's response.

@@ -406,6 +406,8 @@ def set_version(version):
     config.RESULTS.version_root = ROOT_DIR / "results" / "versions" / version
     config.RESULTS.probe_training = ROOT_DIR / "results" / "versions" / version / "probe_training"
     config.RESULTS.degradation = ROOT_DIR / "results" / "versions" / version / "degradation_analysis"
+    config.RESULTS.v1_behavioral = ROOT_DIR / "results" / "versions" / version / "V1_causality" / "behavioral"
+    config.RESULTS.v2_behavioral = ROOT_DIR / "results" / "versions" / version / "V2_causality" / "behavioral"
     config.RESULTS.version_logs = ROOT_DIR / "logs" / version
 
     # Validate key paths

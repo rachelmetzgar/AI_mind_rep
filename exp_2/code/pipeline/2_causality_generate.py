@@ -29,12 +29,12 @@ Multiple strategies can be run in one invocation:
     --layer_strategy narrow wide
 
 Output directory structure:
-    intervention_results/V{1,2}/{layer_strategy}/{control,reading}_probes/is_{N}/...
+    intervention_results/V{1,2}/{layer_strategy}/{operational,metacognitive_peak}/is_{N}/...
 
 Probe configurations (applied within each layer strategy):
-  - control_probes:          control probes, layers selected by strategy
-  - reading_probes_matched:  reading probes, restricted to control probe layers
-  - reading_probes_peak:     reading probes, only layers where control probes fail
+  - operational:             operational probes, layers selected by strategy
+  - metacognitive_matched:   metacognitive probes, restricted to operational probe layers
+  - metacognitive_peak:      metacognitive probes, only layers where operational probes fail
 
 Judging is done separately via 3_causality_judge.py.
 
@@ -132,8 +132,8 @@ def _init_paths():
     global RESULT_DIR_V1, RESULT_DIR_V2, PROMPTS_DIR, CONFIG_DIR
     global LOG_DIR, LOG_FILE, PROBE_CONFIGS
 
-    CONTROL_PROBE_DIR = str(cfg.PATHS.probe_checkpoints / "turn_5" / "control_probe")
-    READING_PROBE_DIR = str(cfg.PATHS.probe_checkpoints / "turn_5" / "reading_probe")
+    CONTROL_PROBE_DIR = str(cfg.PATHS.probe_checkpoints / "turn_5" / "operational")
+    READING_PROBE_DIR = str(cfg.PATHS.probe_checkpoints / "turn_5" / "metacognitive")
 
     CAUSAL_QUESTION_PATH = str(cfg.PATHS.causality_questions)
     RESULT_DIR_V1 = str(cfg.PATHS.intervention_results / "V1")
@@ -146,9 +146,9 @@ def _init_paths():
     LOG_FILE = LOG_DIR / "steering_generation_progress.log"
 
     PROBE_CONFIGS = [
-        {"label": "control_probes",         "probe_dir": CONTROL_PROBE_DIR, "layer_mode": "all"},
-    #    {"label": "reading_probes_matched", "probe_dir": READING_PROBE_DIR, "layer_mode": "matched"},
-        {"label": "reading_probes_peak",    "probe_dir": READING_PROBE_DIR, "layer_mode": "all"},
+        {"label": "operational",             "probe_dir": CONTROL_PROBE_DIR, "layer_mode": "all"},
+    #    {"label": "metacognitive_matched",  "probe_dir": READING_PROBE_DIR, "layer_mode": "matched"},
+        {"label": "metacognitive_peak",      "probe_dir": READING_PROBE_DIR, "layer_mode": "all"},
     ]
 
 
@@ -422,10 +422,10 @@ def resolve_probe_configs_for_strategy(strategy_name: str, print_fn=print):
     control_probes = load_probes(
         CONTROL_PROBE_DIR, DEVICE,
         allowed_layers=ctrl_strategy_layers,
-        label="control_probes"
+        label="operational"
     )
     control_layers = set(control_probes.keys()) if control_probes else set()
-    print_fn(f"\n  Control probe layers for '{strategy_name}': {sorted(control_layers)}")
+    print_fn(f"\n  Operational probe layers for '{strategy_name}': {sorted(control_layers)}")
 
     resolved = []
     for pcfg in PROBE_CONFIGS:
@@ -635,11 +635,13 @@ def main_v1(strengths, layer_strategies):
 #                     V2: EXP1 RECREATION GENERATION                           #
 # ============================================================================ #
 
-def log_message(msg, log_file=LOG_FILE):
+def log_message(msg, log_file=None):
     line = f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {msg}"
     print(line)
-    with open(log_file, "a") as f:
-        f.write(line + "\n")
+    lf = log_file or LOG_FILE
+    if lf is not None:
+        with open(lf, "a") as f:
+            f.write(line + "\n")
 
 
 def load_prompt_text(prompts_dir, topic):

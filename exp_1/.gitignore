@@ -1,7 +1,3 @@
-# Old per-version structure (preserved but not tracked)
-archive/
-old_approach/
-
 # Runtime logs
 logs/
 

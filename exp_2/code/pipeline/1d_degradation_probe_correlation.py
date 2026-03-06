@@ -34,7 +34,7 @@ from config import config, set_version, add_version_argument, ensure_dir
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 TURNS = [1, 2, 3, 4, 5]
-PROBE_TYPES = ["reading_probe", "control_probe"]
+PROBE_TYPES = ["metacognitive", "operational"]
 
 
 # ========================== TEXT METRICS ========================== #
@@ -168,7 +168,7 @@ def main():
         print(f"  Turn {turn} {pt}: peak layer {layer}")
 
     # Also define a fixed reference layer (turn 5 reading peak)
-    fixed_layer = peak_layers.get((5, "reading_probe"), 33)
+    fixed_layer = peak_layers.get((5, "metacognitive"), 33)
     print(f"\nFixed reference layer: {fixed_layer}")
 
     print("\nLoading probes...")
@@ -255,7 +255,7 @@ def main():
                 # Control probe text (no suffix, ends at [/INST])
                 control_text = base_text
                 # Reading probe text (with reflective suffix)
-                reading_text = base_text + " I think the conversation partner of this user is"
+                reading_text = base_text + " I think my partner is"
 
                 # Extract activations for both probe types
                 result_row = {

@@ -36,9 +36,12 @@ cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 
 echo "[$(date)] V1 behavioral analysis | version=$VERSION | strength=$N | host=$HOSTNAME"
 
+STRATEGY="${STRATEGY:-peak_15}"
+
 python code/pipeline/4_behavior_analysis.py \
     --version "$VERSION" \
     --mode v1 \
+    --layer_strategy "$STRATEGY" \
     --strength "$N"
 
 echo "[$(date)] V1 behavioral analysis finished | version=$VERSION | strength=$N"

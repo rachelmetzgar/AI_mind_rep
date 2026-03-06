@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import config, set_version, add_version_argument
 
 TURNS = [1, 2, 3, 4, 5]
-PROBE_TYPES = ["reading_probe", "control_probe"]
+PROBE_TYPES = ["metacognitive", "operational"]
 
 
 def load_accuracy(turn, probe_type):

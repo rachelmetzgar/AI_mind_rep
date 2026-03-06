@@ -35,9 +35,19 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
+# API keys
+if [ -f "$HOME/.anthropic_key" ]; then
+    export ANTHROPIC_API_KEY="$(cat "$HOME/.anthropic_key")"
+fi
 if [ -f "$HOME/.openai_key" ]; then
     export OPENAI_API_KEY="$(cat "$HOME/.openai_key")"
-elif [ -z "${OPENAI_API_KEY:-}" ]; then
+fi
+
+# Validate based on backend
+JUDGE_BACKEND="${JUDGE_BACKEND:-claude}"
+if [ "$JUDGE_BACKEND" = "claude" ] && [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+    echo "[ERROR] ANTHROPIC_API_KEY not set"; exit 1
+elif [ "$JUDGE_BACKEND" = "gpt" ] && [ -z "${OPENAI_API_KEY:-}" ]; then
     echo "[ERROR] OPENAI_API_KEY not set"; exit 1
 fi
 
@@ -45,11 +55,11 @@ PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_2"
 mkdir -p "$PROJECT_ROOT/logs/$VERSION"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 
-echo "[$(date)] V2 judge | version=$VERSION | subject=$SUBJECT_ID | strength=$N | host=$HOSTNAME"
+echo "[$(date)] V2 judge | version=$VERSION | subject=$SUBJECT_ID | strength=$N | backend=$JUDGE_BACKEND | host=$HOSTNAME"
 
 STRATEGY="peak_15"
 
-for PROBE_TYPE in control_probes reading_probes_peak; do
+for PROBE_TYPE in operational metacognitive_peak; do
     RESULT_DIR="$PROJECT_ROOT/data/$VERSION/intervention_results/V2/${STRATEGY}/${PROBE_TYPE}/is_${N}"
     if [ -d "$RESULT_DIR/per_subject" ] && [ -f "$RESULT_DIR/per_subject/${SUBJECT_ID}.csv" ]; then
         echo "[$(date)] Judging ${STRATEGY}/$PROBE_TYPE/is_$N/$SUBJECT_ID ..."
@@ -58,7 +68,8 @@ for PROBE_TYPE in control_probes reading_probes_peak; do
             --mode V2 \
             --layer_strategy "$STRATEGY" \
             --result_dir "$RESULT_DIR" \
-            --subject "$SUBJECT_ID"
+            --subject "$SUBJECT_ID" \
+            --judge_backend "$JUDGE_BACKEND"
     else
         echo "[SKIP] $RESULT_DIR/per_subject/${SUBJECT_ID}.csv does not exist"
     fi

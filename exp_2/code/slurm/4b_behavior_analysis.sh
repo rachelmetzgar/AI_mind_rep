@@ -3,7 +3,7 @@
 #SBATCH --partition=all
 #SBATCH --mem=32G
 #SBATCH --time=4:00:00
-#SBATCH --array=0
+#SBATCH --array=0-1
 #SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_2/logs/behavior_V2_%A_%a.out
 #SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_2/logs/behavior_V2_%A_%a.err
 
@@ -14,7 +14,7 @@
 
 VERSION=${VERSION:?"ERROR: VERSION env var required (e.g. labels)"}
 
-STRENGTHS=(6)
+STRENGTHS=(4 5)
 N=${STRENGTHS[$SLURM_ARRAY_TASK_ID]}
 
 export PS1=${PS1:-}
@@ -35,9 +35,12 @@ cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 
 echo "[$(date)] V2 behavioral analysis | version=$VERSION | strength=$N | host=$HOSTNAME"
 
+STRATEGY="${STRATEGY:-peak_15}"
+
 python code/pipeline/4_behavior_analysis.py \
     --version "$VERSION" \
     --mode v2 \
+    --layer_strategy "$STRATEGY" \
     --strength "$N"
 
 echo "[$(date)] V2 behavioral analysis finished | version=$VERSION | strength=$N"

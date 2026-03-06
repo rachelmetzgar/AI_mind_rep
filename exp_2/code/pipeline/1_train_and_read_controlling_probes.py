@@ -5,9 +5,9 @@ Updated to read directly from per-subject CSV files (sub_input column),
 which contain the exact message lists fed to the participant LLM.
 
 Probe types:
-  - Reading probe: appends "I think the conversation partner of this user is"
+  - Metacognitive probe: appends "I think my partner is"
     after the LLaMA-2-formatted conversation. Probes at last token.
-  - Control probe: no suffix. The conversation ends with [/INST] after the
+  - Operational probe: no suffix. The conversation ends with [/INST] after the
     partner's last message, so the model at the last token is about to
     generate the participant's next response. This is a pre-generation
     probe position.
@@ -42,7 +42,7 @@ from src.losses import edl_mse_loss
 def run_probe_train(
     model, tokenizer,
     control_probe=False,
-    out_subdir="reading_probe",
+    out_subdir="metacognitive",
     turn_index=-1,
 ):
     """Train probes across all layers for a given probe type.
@@ -100,7 +100,7 @@ def run_probe_train(
     loss_func = edl_mse_loss if config.TRAINING.uncertainty else nn.BCELoss()
 
     acc_summary = {"acc": [], "final": [], "train": []}
-    print(f"\n=== Training {'control' if control_probe else 'reading'} probe ===")
+    print(f"\n=== Training {'operational' if control_probe else 'metacognitive'} probe ===")
 
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
     for layer_num in range(n_layers):
@@ -152,7 +152,7 @@ def run_probe_train(
         cm = confusion_matrix(te_truths, te_preds)
         ConfusionMatrixDisplay(cm, display_labels=["AI", "Human"]).plot()
         plt.title(
-            f"{'Control' if control_probe else 'Reading'} Layer {layer_num} "
+            f"{'Operational' if control_probe else 'Metacognitive'} Layer {layer_num} "
             f"Acc {best_acc:.3f}"
         )
         plt.savefig(f"{PROBE_DIR}/{out_subdir}/cm_layer_{layer_num}.png", dpi=200)
@@ -190,18 +190,18 @@ if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained(config.MODEL_NAME, local_files_only=True)
     model.half().cuda().eval()
 
-    # -- Reading probe --
+    # -- Metacognitive probe --
     run_probe_train(
         model, tokenizer,
         control_probe=False,
-        out_subdir="reading_probe",
+        out_subdir="metacognitive",
         turn_index=-1,
     )
 
-    # -- Control probe (pre-generation) --
+    # -- Operational probe (pre-generation) --
     run_probe_train(
         model, tokenizer,
         control_probe=True,
-        out_subdir="control_probe",
+        out_subdir="operational",
         turn_index=-1,
     )

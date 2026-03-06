@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V1 Behavioral Summary — balanced_gpt / peak_15</title>
+<style>
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    max-width: 2000px; margin: 2rem auto; padding: 0 2rem;
+    background: #fafafa; color: #333; line-height: 1.4;
+}
+h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 0.5rem; }
+h2 { color: #2c3e50; margin-top: 2.5rem; }
+.info { background: white; padding: 1rem 1.5rem; border-left: 4px solid #3498db;
+         margin: 1rem 0; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.info p { margin: 0.3rem 0; }
+table {
+    border-collapse: collapse; width: 100%; margin: 1rem 0;
+    background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    font-size: 0.82em;
+}
+th, td { padding: 5px 8px; border: 1px solid #ddd; text-align: left; }
+th { background: #34495e; color: white; font-weight: 600; font-size: 0.85em;
+      position: sticky; top: 0; z-index: 2; white-space: nowrap; }
+.strength-header { background: #2c3e50; text-align: center; font-size: 1em; }
+.group-row td {
+    background: #ecf0f1; font-weight: 700; font-size: 0.9em;
+    color: #2c3e50; padding: 6px 8px; border-top: 2px solid #bdc3c7;
+}
+.num { font-family: 'Courier New', monospace; font-size: 0.95em; white-space: nowrap; text-align: right; }
+.pw { font-size: 0.8em; line-height: 1.5; white-space: nowrap; }
+tr:nth-child(even) { background: #f8f9fa; }
+tr:hover { background: #eef3f7; }
+.legend { margin-top: 0.5rem; font-size: 0.85em; color: #555; }
+.sig-summary { display: flex; gap: 1.5rem; flex-wrap: wrap; margin: 1rem 0; }
+.sig-card {
+    background: white; border-radius: 6px; padding: 0.8rem 1.2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); min-width: 140px; text-align: center;
+}
+.sig-card .count { font-size: 1.8em; font-weight: 700; color: #2c3e50; }
+.sig-card .label { font-size: 0.8em; color: #666; }
+</style>
+</head>
+<body>
+
+<h1>V1 Behavioral Summary — balanced_gpt</h1>
+
+<div class="info">
+    <p><strong>Strategy:</strong> peak_15</p>
+    <p><strong>Strengths:</strong> 4, 5</p>
+    <p><strong>Probe types:</strong> Metacognitive (peak layers), Operational (pre-generation position)</p>
+    <p><strong>Generated:</strong> 2026-03-05 00:25:49</p>
+</div>
+
+<h2>Significance Overview</h2>
+<div class="sig-summary">
+<div class="sig-card">
+    <div class="count">16/21</div>
+    <div class="label">Metacognitive<br>strength 4</div>
+</div>
+<div class="sig-card">
+    <div class="count">15/21</div>
+    <div class="label">Metacognitive<br>strength 5</div>
+</div>
+<div class="sig-card">
+    <div class="count">13/21</div>
+    <div class="label">Operational<br>strength 4</div>
+</div>
+<div class="sig-card">
+    <div class="count">14/21</div>
+    <div class="label">Operational<br>strength 5</div>
+</div>
+</div>
+
+<h2>Metacognitive (peak layers)</h2>
+<table>
+<thead>
+<tr>
+<th rowspan="2" style="min-width:180px;">Metric</th>
+<th colspan="6" class="strength-header">Strength 4</th>
+<th colspan="6" class="strength-header">Strength 5</th>
+</tr>
+<tr>
+<th>Baseline</th><th>Human</th><th>AI</th><th>F</th><th>p</th><th>Pairwise</th>
+<th>Baseline</th><th>Human</th><th>AI</th><th>F</th><th>p</th><th>Pairwise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="group-row"><td colspan="13">Word-level</td></tr>
+<tr>
+<td><strong>word_count</strong></td>
+<td class="num">305.7</td>
+<td class="num">471.4</td>
+<td class="num">470.1</td>
+<td class="num">38.397</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: +164.3 (p=0.0000***)</span><br><span style="">AI–Hum: -1.4 (p=0.9535)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -165.7 (p=0.0000***)</span></td>
+<td class="num">301.2</td>
+<td class="num">312.1</td>
+<td class="num">488.3</td>
+<td class="num">36.542</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: +187.1 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +176.2 (p=0.0000***)</span><br><span style="">BL–Hum: -10.9 (p=0.5819)</span></td>
+</tr>
+<tr>
+<td><strong>question_count</strong></td>
+<td class="num">1.1</td>
+<td class="num">9.8</td>
+<td class="num">0.0</td>
+<td class="num">15.232</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -1.0 (p=0.0009***)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -9.7 (p=0.0001***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -8.7 (p=0.0004***)</span></td>
+<td class="num">0.7</td>
+<td class="num">0.0</td>
+<td class="num">0.0</td>
+<td class="num">18.336</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.7 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.7 (p=0.0000***)</span></td>
+</tr>
+<tr class="group-row"><td colspan="13">Hedge markers</td></tr>
+<tr>
+<td><strong>demir_modal_rate</strong></td>
+<td class="num">0.0223</td>
+<td class="num">0.0189</td>
+<td class="num">0.0197</td>
+<td class="num">0.267</td>
+<td class="num" style="">0.7661</td>
+<td class="pw"><span style="">AI–BL: -0.0026 (p=0.3950)</span><br><span style="">AI–Hum: +0.0008 (p=0.8925)</span><br><span style="">BL–Hum: +0.0033 (p=0.5290)</span></td>
+<td class="num">0.0199</td>
+<td class="num">0.0002</td>
+<td class="num">0.0098</td>
+<td class="num">9.693</td>
+<td class="num" style="background:#c0392b;color:white;">0.0001***</td>
+<td class="pw"><span style="">AI–BL: -0.0100 (p=0.0689)</span><br><span style="">AI–Hum: +0.0096 (p=0.0674)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0196 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>demir_verb_rate</strong></td>
+<td class="num">0.0189</td>
+<td class="num">0.0189</td>
+<td class="num">0.0199</td>
+<td class="num">0.028</td>
+<td class="num" style="">0.9725</td>
+<td class="pw"><span style="">AI–BL: +0.0011 (p=0.8068)</span><br><span style="">AI–Hum: +0.0010 (p=0.8671)</span><br><span style="">BL–Hum: -0.0001 (p=0.9882)</span></td>
+<td class="num">0.0179</td>
+<td class="num">0.0003</td>
+<td class="num">0.0375</td>
+<td class="num">2.986</td>
+<td class="num" style="">0.0531</td>
+<td class="pw"><span style="">AI–BL: +0.0197 (p=0.2944)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0372 (p=0.0476*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0176 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>demir_adverb_rate</strong></td>
+<td class="num">0.0077</td>
+<td class="num">0.0033</td>
+<td class="num">0.0021</td>
+<td class="num">7.588</td>
+<td class="num" style="background:#c0392b;color:white;">0.0007***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0056 (p=0.0002***)</span><br><span style="">AI–Hum: -0.0011 (p=0.4672)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0044 (p=0.0054**)</span></td>
+<td class="num">0.0070</td>
+<td class="num">0.0000</td>
+<td class="num">0.0000</td>
+<td class="num">43.944</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0069 (p=0.0000***)</span><br><span style="">AI–Hum: 0.0000 (p=0.3194)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0070 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>demir_adjective_rate</strong></td>
+<td class="num">0.0014</td>
+<td class="num">0.0001</td>
+<td class="num">0.0008</td>
+<td class="num">2.153</td>
+<td class="num" style="">0.1191</td>
+<td class="pw"><span style="">AI–BL: -0.0005 (p=0.5008)</span><br><span style="">AI–Hum: +0.0008 (p=0.2576)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0013 (p=0.0005***)</span></td>
+<td class="num">0.0009</td>
+<td class="num">0.0001</td>
+<td class="num">0.0000</td>
+<td class="num">8.074</td>
+<td class="num" style="background:#c0392b;color:white;">0.0004***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0009 (p=0.0029**)</span><br><span style="">AI–Hum: -0.0001 (p=0.5047)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0008 (p=0.0069**)</span></td>
+</tr>
+<tr>
+<td><strong>demir_quantifier_rate</strong></td>
+<td class="num">0.0040</td>
+<td class="num">0.0004</td>
+<td class="num">0.0008</td>
+<td class="num">23.299</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0032 (p=0.0000***)</span><br><span style="">AI–Hum: +0.0004 (p=0.1781)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0036 (p=0.0000***)</span></td>
+<td class="num">0.0046</td>
+<td class="num">0.0000</td>
+<td class="num">0.0004</td>
+<td class="num">27.135</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0042 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0004 (p=0.0048**)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0046 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>demir_noun_rate</strong></td>
+<td class="num">0.0023</td>
+<td class="num">0.0002</td>
+<td class="num">0.0046</td>
+<td class="num">3.339</td>
+<td class="num" style="background:#f39c12;color:white;">0.0377*</td>
+<td class="pw"><span style="">AI–BL: +0.0023 (p=0.2785)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0045 (p=0.0337*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0022 (p=0.0000***)</span></td>
+<td class="num">0.0023</td>
+<td class="num">0.0000</td>
+<td class="num">0.0000</td>
+<td class="num">35.660</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0023 (p=0.0000***)</span><br><span style="">AI–Hum: 0.0000 (p=0.3194)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0023 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>demir_total_rate</strong></td>
+<td class="num">0.0565</td>
+<td class="num">0.0417</td>
+<td class="num">0.0480</td>
+<td class="num">1.640</td>
+<td class="num" style="">0.1969</td>
+<td class="pw"><span style="">AI–BL: -0.0085 (p=0.2189)</span><br><span style="">AI–Hum: +0.0063 (p=0.5070)</span><br><span style="">BL–Hum: +0.0148 (p=0.0693)</span></td>
+<td class="num">0.0525</td>
+<td class="num">0.0006</td>
+<td class="num">0.0478</td>
+<td class="num">6.613</td>
+<td class="num" style="background:#e74c3c;color:white;">0.0017**</td>
+<td class="pw"><span style="">AI–BL: -0.0047 (p=0.8085)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0472 (p=0.0143*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0519 (p=0.0000***)</span></td>
+</tr>
+<tr class="group-row"><td colspan="13">Discourse markers</td></tr>
+<tr>
+<td><strong>fung_interpersonal_rate</strong></td>
+<td class="num">0.0111</td>
+<td class="num">0.0558</td>
+<td class="num">0.0064</td>
+<td class="num">24.270</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: -0.0047 (p=0.0530)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0494 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0447 (p=0.0000***)</span></td>
+<td class="num">0.0103</td>
+<td class="num">0.0011</td>
+<td class="num">0.0143</td>
+<td class="num">1.793</td>
+<td class="num" style="">0.1695</td>
+<td class="pw"><span style="">AI–BL: +0.0040 (p=0.6461)</span><br><span style="">AI–Hum: +0.0132 (p=0.1306)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0092 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>fung_referential_rate</strong></td>
+<td class="num">0.0636</td>
+<td class="num">0.0992</td>
+<td class="num">0.0713</td>
+<td class="num">9.078</td>
+<td class="num" style="background:#c0392b;color:white;">0.0002***</td>
+<td class="pw"><span style="">AI–BL: +0.0077 (p=0.1264)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0279 (p=0.0093**)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0356 (p=0.0004***)</span></td>
+<td class="num">0.0633</td>
+<td class="num">0.0106</td>
+<td class="num">0.0472</td>
+<td class="num">8.362</td>
+<td class="num" style="background:#c0392b;color:white;">0.0003***</td>
+<td class="pw"><span style="">AI–BL: -0.0161 (p=0.2862)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0366 (p=0.0241*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0527 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>fung_structural_rate</strong></td>
+<td class="num">0.0504</td>
+<td class="num">0.1092</td>
+<td class="num">0.0533</td>
+<td class="num">27.024</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: +0.0030 (p=0.5231)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0558 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0588 (p=0.0000***)</span></td>
+<td class="num">0.0508</td>
+<td class="num">0.0111</td>
+<td class="num">0.0488</td>
+<td class="num">5.667</td>
+<td class="num" style="background:#e74c3c;color:white;">0.0041**</td>
+<td class="pw"><span style="">AI–BL: -0.0020 (p=0.8962)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0377 (p=0.0211*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0397 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>fung_cognitive_rate</strong></td>
+<td class="num">0.0055</td>
+<td class="num">0.0451</td>
+<td class="num">0.0057</td>
+<td class="num">21.358</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: +0.0002 (p=0.8811)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0394 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0396 (p=0.0000***)</span></td>
+<td class="num">0.0053</td>
+<td class="num">0.0005</td>
+<td class="num">0.0100</td>
+<td class="num">1.112</td>
+<td class="num" style="">0.3313</td>
+<td class="pw"><span style="">AI–BL: +0.0046 (p=0.5514)</span><br><span style="">AI–Hum: +0.0095 (p=0.2239)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0048 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>fung_total_rate</strong></td>
+<td class="num">0.0721</td>
+<td class="num">0.1557</td>
+<td class="num">0.0740</td>
+<td class="num">37.358</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: +0.0019 (p=0.7235)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0817 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0837 (p=0.0000***)</span></td>
+<td class="num">0.0712</td>
+<td class="num">0.0118</td>
+<td class="num">0.0573</td>
+<td class="num">9.357</td>
+<td class="num" style="background:#c0392b;color:white;">0.0001***</td>
+<td class="pw"><span style="">AI–BL: -0.0139 (p=0.4027)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0455 (p=0.0103*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0593 (p=0.0000***)</span></td>
+</tr>
+<tr class="group-row"><td colspan="13">Fluency</td></tr>
+<tr>
+<td><strong>nonfluency_rate</strong></td>
+<td class="num">0.0006</td>
+<td class="num">0.0008</td>
+<td class="num">0.0021</td>
+<td class="num">2.873</td>
+<td class="num" style="">0.0592</td>
+<td class="pw"><span style="">AI–BL: +0.0015 (p=0.0718)</span><br><span style="">AI–Hum: +0.0013 (p=0.1035)</span><br><span style="">BL–Hum: -0.0002 (p=0.5550)</span></td>
+<td class="num">0.0005</td>
+<td class="num">0.0002</td>
+<td class="num">0.0000</td>
+<td class="num">4.662</td>
+<td class="num" style="background:#f39c12;color:white;">0.0106*</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0005 (p=0.0047**)</span><br><span style="">AI–Hum: -0.0002 (p=0.0955)</span><br><span style="">BL–Hum: +0.0003 (p=0.1160)</span></td>
+</tr>
+<tr>
+<td><strong>liwc_filler_rate</strong></td>
+<td class="num">0.0000</td>
+<td class="num">0.0197</td>
+<td class="num">0.0001</td>
+<td class="num">13.132</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: 0.0000 (p=0.7933)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0196 (p=0.0004***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0196 (p=0.0004***)</span></td>
+<td class="num">0.0003</td>
+<td class="num">0.0001</td>
+<td class="num">0.0000</td>
+<td class="num">1.726</td>
+<td class="num" style="">0.1809</td>
+<td class="pw"><span style="">AI–BL: -0.0003 (p=0.1024)</span><br><span style="">AI–Hum: -0.0001 (p=0.1761)</span><br><span style="">BL–Hum: +0.0002 (p=0.3480)</span></td>
+</tr>
+<tr>
+<td><strong>disfluency_rate</strong></td>
+<td class="num">0.0006</td>
+<td class="num">0.0204</td>
+<td class="num">0.0022</td>
+<td class="num">12.083</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: +0.0015 (p=0.0697)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0183 (p=0.0011**)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0198 (p=0.0004***)</span></td>
+<td class="num">0.0008</td>
+<td class="num">0.0003</td>
+<td class="num">0.0000</td>
+<td class="num">6.069</td>
+<td class="num" style="background:#e74c3c;color:white;">0.0028**</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0008 (p=0.0019**)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0003 (p=0.0304*)</span><br><span style="">BL–Hum: +0.0005 (p=0.0755)</span></td>
+</tr>
+<tr class="group-row"><td colspan="13">Social / style</td></tr>
+<tr>
+<td><strong>like_rate</strong></td>
+<td class="num">0.0036</td>
+<td class="num">0.0100</td>
+<td class="num">0.0013</td>
+<td class="num">5.426</td>
+<td class="num" style="background:#e74c3c;color:white;">0.0052**</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0023 (p=0.0278*)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0087 (p=0.0089**)</span><br><span style="">BL–Hum: -0.0064 (p=0.0528)</span></td>
+<td class="num">0.0035</td>
+<td class="num">0.0000</td>
+<td class="num">0.0100</td>
+<td class="num">1.278</td>
+<td class="num" style="">0.2812</td>
+<td class="pw"><span style="">AI–BL: +0.0065 (p=0.4032)</span><br><span style="">AI–Hum: +0.0100 (p=0.1994)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0035 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>tom_rate</strong></td>
+<td class="num">0.0016</td>
+<td class="num">0.0262</td>
+<td class="num">0.0002</td>
+<td class="num">18.735</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0014 (p=0.0003***)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0260 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0246 (p=0.0001***)</span></td>
+<td class="num">0.0014</td>
+<td class="num">0.0001</td>
+<td class="num">0.0000</td>
+<td class="num">15.087</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0014 (p=0.0001***)</span><br><span style="">AI–Hum: -0.0001 (p=0.1761)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0013 (p=0.0003***)</span></td>
+</tr>
+<tr>
+<td><strong>politeness_rate</strong></td>
+<td class="num">0.0046</td>
+<td class="num">0.0010</td>
+<td class="num">0.0060</td>
+<td class="num">3.929</td>
+<td class="num" style="background:#f39c12;color:white;">0.0214*</td>
+<td class="pw"><span style="">AI–BL: +0.0014 (p=0.5286)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0049 (p=0.0209*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0035 (p=0.0000***)</span></td>
+<td class="num">0.0046</td>
+<td class="num">0.0004</td>
+<td class="num">0.0042</td>
+<td class="num">0.978</td>
+<td class="num" style="">0.3780</td>
+<td class="pw"><span style="">AI–BL: -0.0004 (p=0.9153)</span><br><span style="">AI–Hum: +0.0038 (p=0.3468)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0043 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>sentiment</strong></td>
+<td class="num">0.9541</td>
+<td class="num">0.7075</td>
+<td class="num">0.8966</td>
+<td class="num">6.258</td>
+<td class="num" style="background:#e74c3c;color:white;">0.0024**</td>
+<td class="pw"><span style="">AI–BL: -0.0575 (p=0.2713)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.1891 (p=0.0314*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.2466 (p=0.0014**)</span></td>
+<td class="num">0.9757</td>
+<td class="num">0.8169</td>
+<td class="num">0.4554</td>
+<td class="num">33.390</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.5202 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.3615 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.1588 (p=0.0003***)</span></td>
+</tr>
+</tbody>
+</table><p class="legend">* p &lt; .05 &nbsp; ** p &lt; .01 &nbsp; *** p &lt; .001</p>
+
+<h2>Operational (pre-generation position)</h2>
+<table>
+<thead>
+<tr>
+<th rowspan="2" style="min-width:180px;">Metric</th>
+<th colspan="6" class="strength-header">Strength 4</th>
+<th colspan="6" class="strength-header">Strength 5</th>
+</tr>
+<tr>
+<th>Baseline</th><th>Human</th><th>AI</th><th>F</th><th>p</th><th>Pairwise</th>
+<th>Baseline</th><th>Human</th><th>AI</th><th>F</th><th>p</th><th>Pairwise</th>
+</tr>
+</thead>
+<tbody>
+<tr class="group-row"><td colspan="13">Word-level</td></tr>
+<tr>
+<td><strong>word_count</strong></td>
+<td class="num">305.7</td>
+<td class="num">316.0</td>
+<td class="num">308.9</td>
+<td class="num">0.153</td>
+<td class="num" style="">0.8580</td>
+<td class="pw"><span style="">AI–BL: +3.2 (p=0.8644)</span><br><span style="">AI–Hum: -7.0 (p=0.7168)</span><br><span style="">BL–Hum: -10.2 (p=0.5855)</span></td>
+<td class="num">301.2</td>
+<td class="num">351.3</td>
+<td class="num">479.0</td>
+<td class="num">34.184</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: +177.8 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +127.8 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -50.0 (p=0.0212*)</span></td>
+</tr>
+<tr>
+<td><strong>question_count</strong></td>
+<td class="num">1.1</td>
+<td class="num">3.3</td>
+<td class="num">0.5</td>
+<td class="num">15.084</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: -0.5 (p=0.1399)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -2.8 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -2.2 (p=0.0005***)</span></td>
+<td class="num">0.7</td>
+<td class="num">2.9</td>
+<td class="num">0.4</td>
+<td class="num">7.981</td>
+<td class="num" style="background:#c0392b;color:white;">0.0005***</td>
+<td class="pw"><span style="">AI–BL: -0.3 (p=0.2571)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -2.5 (p=0.0029**)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -2.2 (p=0.0078**)</span></td>
+</tr>
+<tr class="group-row"><td colspan="13">Hedge markers</td></tr>
+<tr>
+<td><strong>demir_modal_rate</strong></td>
+<td class="num">0.0223</td>
+<td class="num">0.0215</td>
+<td class="num">0.0215</td>
+<td class="num">0.066</td>
+<td class="num" style="">0.9362</td>
+<td class="pw"><span style="">AI–BL: -0.0007 (p=0.7595)</span><br><span style="">AI–Hum: 0.0000 (p=0.9843)</span><br><span style="">BL–Hum: +0.0008 (p=0.7430)</span></td>
+<td class="num">0.0199</td>
+<td class="num">0.0146</td>
+<td class="num">0.0173</td>
+<td class="num">0.661</td>
+<td class="num" style="">0.5175</td>
+<td class="pw"><span style="">AI–BL: -0.0026 (p=0.3186)</span><br><span style="">AI–Hum: +0.0027 (p=0.6168)</span><br><span style="">BL–Hum: +0.0053 (p=0.3178)</span></td>
+</tr>
+<tr>
+<td><strong>demir_verb_rate</strong></td>
+<td class="num">0.0189</td>
+<td class="num">0.0141</td>
+<td class="num">0.0220</td>
+<td class="num">3.618</td>
+<td class="num" style="background:#f39c12;color:white;">0.0288*</td>
+<td class="pw"><span style="">AI–BL: +0.0032 (p=0.3361)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0079 (p=0.0141*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0047 (p=0.0428*)</span></td>
+<td class="num">0.0179</td>
+<td class="num">0.0131</td>
+<td class="num">0.0304</td>
+<td class="num">1.827</td>
+<td class="num" style="">0.1638</td>
+<td class="pw"><span style="">AI–BL: +0.0125 (p=0.2431)</span><br><span style="">AI–Hum: +0.0173 (p=0.1296)</span><br><span style="">BL–Hum: +0.0048 (p=0.2835)</span></td>
+</tr>
+<tr>
+<td><strong>demir_adverb_rate</strong></td>
+<td class="num">0.0077</td>
+<td class="num">0.0091</td>
+<td class="num">0.0046</td>
+<td class="num">5.399</td>
+<td class="num" style="background:#e74c3c;color:white;">0.0053**</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0031 (p=0.0225*)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0045 (p=0.0013**)</span><br><span style="">BL–Hum: -0.0014 (p=0.3456)</span></td>
+<td class="num">0.0070</td>
+<td class="num">0.0037</td>
+<td class="num">0.0028</td>
+<td class="num">2.518</td>
+<td class="num" style="">0.0835</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0042 (p=0.0007***)</span><br><span style="">AI–Hum: -0.0009 (p=0.6725)</span><br><span style="">BL–Hum: +0.0033 (p=0.1624)</span></td>
+</tr>
+<tr>
+<td><strong>demir_adjective_rate</strong></td>
+<td class="num">0.0014</td>
+<td class="num">0.0003</td>
+<td class="num">0.0011</td>
+<td class="num">3.338</td>
+<td class="num" style="background:#f39c12;color:white;">0.0377*</td>
+<td class="pw"><span style="">AI–BL: -0.0003 (p=0.5694)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0008 (p=0.0428*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0010 (p=0.0078**)</span></td>
+<td class="num">0.0009</td>
+<td class="num">0.0003</td>
+<td class="num">0.0011</td>
+<td class="num">1.510</td>
+<td class="num" style="">0.2238</td>
+<td class="pw"><span style="">AI–BL: +0.0002 (p=0.7472)</span><br><span style="">AI–Hum: +0.0007 (p=0.1121)</span><br><span style="">BL–Hum: +0.0006 (p=0.1031)</span></td>
+</tr>
+<tr>
+<td><strong>demir_quantifier_rate</strong></td>
+<td class="num">0.0040</td>
+<td class="num">0.0062</td>
+<td class="num">0.0028</td>
+<td class="num">4.429</td>
+<td class="num" style="background:#f39c12;color:white;">0.0133*</td>
+<td class="pw"><span style="">AI–BL: -0.0012 (p=0.1730)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0034 (p=0.0081**)</span><br><span style="">BL–Hum: -0.0022 (p=0.0914)</span></td>
+<td class="num">0.0046</td>
+<td class="num">0.0019</td>
+<td class="num">0.0013</td>
+<td class="num">6.460</td>
+<td class="num" style="background:#e74c3c;color:white;">0.0020**</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0033 (p=0.0005***)</span><br><span style="">AI–Hum: -0.0005 (p=0.5273)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0028 (p=0.0178*)</span></td>
+</tr>
+<tr>
+<td><strong>demir_noun_rate</strong></td>
+<td class="num">0.0023</td>
+<td class="num">0.0013</td>
+<td class="num">0.0019</td>
+<td class="num">1.992</td>
+<td class="num" style="">0.1395</td>
+<td class="pw"><span style="">AI–BL: -0.0004 (p=0.4118)</span><br><span style="">AI–Hum: +0.0005 (p=0.2304)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0010 (p=0.0477*)</span></td>
+<td class="num">0.0023</td>
+<td class="num">0.0001</td>
+<td class="num">0.0056</td>
+<td class="num">17.456</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: +0.0033 (p=0.0045**)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0055 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0022 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>demir_total_rate</strong></td>
+<td class="num">0.0565</td>
+<td class="num">0.0526</td>
+<td class="num">0.0539</td>
+<td class="num">0.329</td>
+<td class="num" style="">0.7198</td>
+<td class="pw"><span style="">AI–BL: -0.0026 (p=0.6237)</span><br><span style="">AI–Hum: +0.0013 (p=0.7914)</span><br><span style="">BL–Hum: +0.0039 (p=0.3824)</span></td>
+<td class="num">0.0525</td>
+<td class="num">0.0337</td>
+<td class="num">0.0584</td>
+<td class="num">2.833</td>
+<td class="num" style="">0.0615</td>
+<td class="pw"><span style="">AI–BL: +0.0059 (p=0.6043)</span><br><span style="">AI–Hum: +0.0247 (p=0.0554)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0188 (p=0.0189*)</span></td>
+</tr>
+<tr class="group-row"><td colspan="13">Discourse markers</td></tr>
+<tr>
+<td><strong>fung_interpersonal_rate</strong></td>
+<td class="num">0.0111</td>
+<td class="num">0.0444</td>
+<td class="num">0.0064</td>
+<td class="num">50.179</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0047 (p=0.0063**)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0380 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0333 (p=0.0000***)</span></td>
+<td class="num">0.0103</td>
+<td class="num">0.1141</td>
+<td class="num">0.0057</td>
+<td class="num">25.449</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0046 (p=0.0054**)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.1083 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.1038 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>fung_referential_rate</strong></td>
+<td class="num">0.0636</td>
+<td class="num">0.0675</td>
+<td class="num">0.0643</td>
+<td class="num">0.671</td>
+<td class="num" style="">0.5126</td>
+<td class="pw"><span style="">AI–BL: +0.0007 (p=0.8438)</span><br><span style="">AI–Hum: -0.0032 (p=0.3992)</span><br><span style="">BL–Hum: -0.0039 (p=0.2694)</span></td>
+<td class="num">0.0633</td>
+<td class="num">0.0364</td>
+<td class="num">0.0641</td>
+<td class="num">15.831</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: +0.0007 (p=0.8579)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0276 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.0269 (p=0.0000***)</span></td>
+</tr>
+<tr>
+<td><strong>fung_structural_rate</strong></td>
+<td class="num">0.0504</td>
+<td class="num">0.0619</td>
+<td class="num">0.0503</td>
+<td class="num">7.509</td>
+<td class="num" style="background:#c0392b;color:white;">0.0007***</td>
+<td class="pw"><span style="">AI–BL: -0.0000 (p=0.9937)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0115 (p=0.0018**)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0115 (p=0.0012**)</span></td>
+<td class="num">0.0508</td>
+<td class="num">0.0500</td>
+<td class="num">0.0510</td>
+<td class="num">0.009</td>
+<td class="num" style="">0.9915</td>
+<td class="pw"><span style="">AI–BL: +0.0002 (p=0.9554)</span><br><span style="">AI–Hum: +0.0010 (p=0.9175)</span><br><span style="">BL–Hum: +0.0008 (p=0.9332)</span></td>
+</tr>
+<tr>
+<td><strong>fung_cognitive_rate</strong></td>
+<td class="num">0.0055</td>
+<td class="num">0.0218</td>
+<td class="num">0.0052</td>
+<td class="num">17.812</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: -0.0003 (p=0.8264)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0165 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0163 (p=0.0000***)</span></td>
+<td class="num">0.0053</td>
+<td class="num">0.0682</td>
+<td class="num">0.0066</td>
+<td class="num">11.944</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: +0.0012 (p=0.3687)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0616 (p=0.0008***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0628 (p=0.0007***)</span></td>
+</tr>
+<tr>
+<td><strong>fung_total_rate</strong></td>
+<td class="num">0.0721</td>
+<td class="num">0.1085</td>
+<td class="num">0.0678</td>
+<td class="num">32.564</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: -0.0042 (p=0.2623)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0407 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0364 (p=0.0000***)</span></td>
+<td class="num">0.0712</td>
+<td class="num">0.1544</td>
+<td class="num">0.0672</td>
+<td class="num">14.956</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: -0.0039 (p=0.3666)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0872 (p=0.0001***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0832 (p=0.0002***)</span></td>
+</tr>
+<tr class="group-row"><td colspan="13">Fluency</td></tr>
+<tr>
+<td><strong>nonfluency_rate</strong></td>
+<td class="num">0.0006</td>
+<td class="num">0.0014</td>
+<td class="num">0.0011</td>
+<td class="num">1.460</td>
+<td class="num" style="">0.2350</td>
+<td class="pw"><span style="">AI–BL: +0.0005 (p=0.1793)</span><br><span style="">AI–Hum: -0.0002 (p=0.6555)</span><br><span style="">BL–Hum: -0.0008 (p=0.0885)</span></td>
+<td class="num">0.0005</td>
+<td class="num">0.0002</td>
+<td class="num">0.0019</td>
+<td class="num">3.987</td>
+<td class="num" style="background:#f39c12;color:white;">0.0202*</td>
+<td class="pw"><span style="">AI–BL: +0.0014 (p=0.0765)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.0017 (p=0.0284*)</span><br><span style="">BL–Hum: +0.0003 (p=0.1310)</span></td>
+</tr>
+<tr>
+<td><strong>liwc_filler_rate</strong></td>
+<td class="num">0.0000</td>
+<td class="num">0.0041</td>
+<td class="num">0.0003</td>
+<td class="num">7.034</td>
+<td class="num" style="background:#e74c3c;color:white;">0.0011**</td>
+<td class="pw"><span style="">AI–BL: +0.0003 (p=0.3993)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0038 (p=0.0116*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0041 (p=0.0061**)</span></td>
+<td class="num">0.0003</td>
+<td class="num">0.0069</td>
+<td class="num">0.0000</td>
+<td class="num">7.638</td>
+<td class="num" style="background:#c0392b;color:white;">0.0007***</td>
+<td class="pw"><span style="">AI–BL: -0.0003 (p=0.1024)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0069 (p=0.0056**)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0067 (p=0.0077**)</span></td>
+</tr>
+<tr>
+<td><strong>disfluency_rate</strong></td>
+<td class="num">0.0006</td>
+<td class="num">0.0055</td>
+<td class="num">0.0014</td>
+<td class="num">6.484</td>
+<td class="num" style="background:#e74c3c;color:white;">0.0019**</td>
+<td class="pw"><span style="">AI–BL: +0.0008 (p=0.1120)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0041 (p=0.0226*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0049 (p=0.0055**)</span></td>
+<td class="num">0.0008</td>
+<td class="num">0.0071</td>
+<td class="num">0.0019</td>
+<td class="num">5.237</td>
+<td class="num" style="background:#e74c3c;color:white;">0.0062**</td>
+<td class="pw"><span style="">AI–BL: +0.0011 (p=0.1566)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0053 (p=0.0428*)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0064 (p=0.0109*)</span></td>
+</tr>
+<tr class="group-row"><td colspan="13">Social / style</td></tr>
+<tr>
+<td><strong>like_rate</strong></td>
+<td class="num">0.0036</td>
+<td class="num">0.0129</td>
+<td class="num">0.0021</td>
+<td class="num">16.860</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: -0.0015 (p=0.0928)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0108 (p=0.0000***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0093 (p=0.0002***)</span></td>
+<td class="num">0.0035</td>
+<td class="num">0.0522</td>
+<td class="num">0.0016</td>
+<td class="num">9.246</td>
+<td class="num" style="background:#c0392b;color:white;">0.0002***</td>
+<td class="pw"><span style="color:#c0392b;font-weight:bold;">AI–BL: -0.0019 (p=0.0239*)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0506 (p=0.0024**)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0487 (p=0.0035**)</span></td>
+</tr>
+<tr>
+<td><strong>tom_rate</strong></td>
+<td class="num">0.0016</td>
+<td class="num">0.0057</td>
+<td class="num">0.0010</td>
+<td class="num">8.142</td>
+<td class="num" style="background:#c0392b;color:white;">0.0004***</td>
+<td class="pw"><span style="">AI–BL: -0.0006 (p=0.2454)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0047 (p=0.0023**)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0041 (p=0.0075**)</span></td>
+<td class="num">0.0014</td>
+<td class="num">0.0082</td>
+<td class="num">0.0012</td>
+<td class="num">7.394</td>
+<td class="num" style="background:#c0392b;color:white;">0.0008***</td>
+<td class="pw"><span style="">AI–BL: -0.0002 (p=0.7570)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: -0.0070 (p=0.0062**)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: -0.0068 (p=0.0069**)</span></td>
+</tr>
+<tr>
+<td><strong>politeness_rate</strong></td>
+<td class="num">0.0046</td>
+<td class="num">0.0044</td>
+<td class="num">0.0054</td>
+<td class="num">0.378</td>
+<td class="num" style="">0.6859</td>
+<td class="pw"><span style="">AI–BL: +0.0009 (p=0.5470)</span><br><span style="">AI–Hum: +0.0010 (p=0.4608)</span><br><span style="">BL–Hum: +0.0002 (p=0.8564)</span></td>
+<td class="num">0.0046</td>
+<td class="num">0.0066</td>
+<td class="num">0.0052</td>
+<td class="num">0.458</td>
+<td class="num" style="">0.6334</td>
+<td class="pw"><span style="">AI–BL: +0.0006 (p=0.6256)</span><br><span style="">AI–Hum: -0.0013 (p=0.5937)</span><br><span style="">BL–Hum: -0.0020 (p=0.3960)</span></td>
+</tr>
+<tr>
+<td><strong>sentiment</strong></td>
+<td class="num">0.9541</td>
+<td class="num">0.9860</td>
+<td class="num">0.9572</td>
+<td class="num">1.078</td>
+<td class="num" style="">0.3424</td>
+<td class="pw"><span style="">AI–BL: +0.0031 (p=0.9167)</span><br><span style="">AI–Hum: -0.0288 (p=0.1604)</span><br><span style="">BL–Hum: -0.0319 (p=0.1372)</span></td>
+<td class="num">0.9757</td>
+<td class="num">0.7098</td>
+<td class="num">0.9805</td>
+<td class="num">12.549</td>
+<td class="num" style="background:#c0392b;color:white;">0.0000***</td>
+<td class="pw"><span style="">AI–BL: +0.0048 (p=0.6839)</span><br><span style="color:#c0392b;font-weight:bold;">AI–Hum: +0.2707 (p=0.0005***)</span><br><span style="color:#c0392b;font-weight:bold;">BL–Hum: +0.2658 (p=0.0006***)</span></td>
+</tr>
+</tbody>
+</table><p class="legend">* p &lt; .05 &nbsp; ** p &lt; .01 &nbsp; *** p &lt; .001</p>
+
+</body>
+</html>

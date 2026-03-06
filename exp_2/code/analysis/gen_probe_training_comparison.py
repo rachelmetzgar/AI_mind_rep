@@ -66,7 +66,7 @@ def fig_to_b64(fig):
 
 
 def load_version_data(version):
-    csv_path = RESULTS_ROOT / version / "probe_training" / "layerwise_probe_stats.csv"
+    csv_path = RESULTS_ROOT / "versions" / version / "probe_training" / "layerwise_probe_stats.csv"
     if not csv_path.exists():
         print(f"WARNING: {csv_path} not found, skipping {version}")
         return None
@@ -79,7 +79,7 @@ def load_accuracy_summary(version):
     set_version(version)
     probe_dir = config.PATHS.probe_checkpoints / "turn_5"
     data = {}
-    for pt in ["reading_probe", "control_probe"]:
+    for pt in ["metacognitive", "operational"]:
         pkl_path = probe_dir / pt / "accuracy_summary.pkl"
         if pkl_path.exists():
             with open(pkl_path, "rb") as f:
@@ -96,8 +96,8 @@ def make_best_test_acc_figure(df, label, y_min, y_max):
     c_acc = df["control_best_acc"].values
 
     fig, ax = plt.subplots(figsize=(12, 5))
-    ax.plot(layers, r_acc, "o-", color="#2166ac", markersize=4, linewidth=1.5, label="Reading probe")
-    ax.plot(layers, c_acc, "s-", color="#b2182b", markersize=4, linewidth=1.5, label="Control probe")
+    ax.plot(layers, r_acc, "o-", color="#2166ac", markersize=4, linewidth=1.5, label="Metacognitive probe")
+    ax.plot(layers, c_acc, "s-", color="#b2182b", markersize=4, linewidth=1.5, label="Operational probe")
     ax.axhline(0.5, color="gray", linestyle="--", linewidth=0.8, label="Chance")
     ax.set_xlabel("Layer", fontsize=12)
     ax.set_ylabel("Best Test Accuracy", fontsize=12)
@@ -135,9 +135,9 @@ def make_layer_group_figure(df, label, y_min, y_max):
             c_sems.append(np.std(c_vals, ddof=1) / np.sqrt(len(c_vals)))
 
         ax.bar(x - width/2, r_means, width, yerr=r_sems, color="#2166ac",
-               alpha=0.8, capsize=4, label="Reading")
+               alpha=0.8, capsize=4, label="Metacognitive")
         ax.bar(x + width/2, c_means, width, yerr=c_sems, color="#b2182b",
-               alpha=0.8, capsize=4, label="Control")
+               alpha=0.8, capsize=4, label="Operational")
         ax.axhline(0.5, color="gray", linestyle="--", linewidth=0.8)
         ax.set_xlabel("Layer Group", fontsize=12)
         ax.set_ylabel("Mean Accuracy", fontsize=12)
@@ -263,14 +263,14 @@ def main():
 
 <p>Linear probes trained on LLaMA-2-13B-Chat hidden states (turn 5, full conversation) to classify
 whether the conversation partner is human or AI. Each version uses a different system prompt strategy.
-Reading probes append a reflective suffix; control probes probe at the natural generation position.</p>
+Metacognitive probes append a reflective suffix; operational probes probe at the natural generation position.</p>
 
 <div class="scale-note">All figures use a unified y-axis scale [{Y_MIN:.2f}, {Y_MAX:.2f}] for direct visual comparison across versions.</div>
 
 <h2>Summary Table</h2>
 
 <table class="summary-table">
-<tr><th>Version</th><th>Reading Peak</th><th>Control Peak</th><th>Reading M</th><th>Control M</th><th>Diff (R&minus;C)</th><th>Paired t</th><th>p</th><th>Cohen&rsquo;s d</th></tr>''')
+<tr><th>Version</th><th>Metacog. Peak</th><th>Oper. Peak</th><th>Metacog. M</th><th>Oper. M</th><th>Diff (M&minus;O)</th><th>Paired t</th><th>p</th><th>Cohen&rsquo;s d</th></tr>''')
 
     for key, label, desc in VERSIONS:
         if key not in summaries:
@@ -306,7 +306,7 @@ Reading probes append a reflective suffix; control probes probe at the natural g
 
     # Section 2: best_test_acc_by_layer
     html_parts.append("<h2>Layerwise Best Test Accuracy</h2>")
-    html_parts.append("<p>Best test accuracy (across 50 training epochs) for reading and control probes at each of 41 transformer layers. Dashed line = chance (50%).</p>")
+    html_parts.append("<p>Best test accuracy (across 50 training epochs) for metacognitive and operational probes at each of 41 transformer layers. Dashed line = chance (50%).</p>")
 
     for key, label, desc in VERSIONS:
         if key not in layer_figs_b64:
@@ -345,11 +345,11 @@ Reading probes append a reflective suffix; control probes probe at the natural g
     # ========================== MD ========================== #
     md_parts = []
     md_parts.append("# Probe Training Comparison — All 6 Data Versions\n")
-    md_parts.append("Linear probes trained on LLaMA-2-13B-Chat hidden states (turn 5, full conversation) to classify whether the conversation partner is human or AI. Each version uses a different system prompt strategy. Reading probes append a reflective suffix; control probes probe at the natural generation position.\n")
+    md_parts.append("Linear probes trained on LLaMA-2-13B-Chat hidden states (turn 5, full conversation) to classify whether the conversation partner is human or AI. Each version uses a different system prompt strategy. Metacognitive probes append a reflective suffix; operational probes probe at the natural generation position.\n")
     md_parts.append(f"> All figures use a unified y-axis scale [{Y_MIN:.2f}, {Y_MAX:.2f}] for direct visual comparison across versions.\n")
 
     md_parts.append("## Summary Table\n")
-    md_parts.append("| Version | Reading Peak | Control Peak | Reading M | Control M | Diff (R-C) | Paired t | p | Cohen's d |")
+    md_parts.append("| Version | Metacog. Peak | Oper. Peak | Metacog. M | Oper. M | Diff (M-O) | Paired t | p | Cohen's d |")
     md_parts.append("|---------|-------------|-------------|-----------|-----------|------------|----------|---|-----------|")
     for key, label, desc in VERSIONS:
         if key not in summaries:
@@ -370,7 +370,7 @@ Reading probes append a reflective suffix; control probes probe at the natural g
 
     md_parts.append("---\n")
     md_parts.append("## Layerwise Best Test Accuracy\n")
-    md_parts.append("Best test accuracy (across 50 training epochs) for reading and control probes at each of 41 transformer layers. Dashed line = chance (50%).\n")
+    md_parts.append("Best test accuracy (across 50 training epochs) for metacognitive and operational probes at each of 41 transformer layers. Dashed line = chance (50%).\n")
 
     for i, (key, label, desc) in enumerate(VERSIONS):
         if key not in all_data:

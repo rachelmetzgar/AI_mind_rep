@@ -83,7 +83,7 @@ def run_probe_train(model, tokenizer, control_probe, out_subdir, turn_index, pro
 
     loss_func = edl_mse_loss if config.TRAINING.uncertainty else nn.BCELoss()
     acc_summary = {"acc": [], "final": [], "train": []}
-    probe_label = "control" if control_probe else "reading"
+    probe_label = "operational" if control_probe else "metacognitive"
     print(f"\n=== Training {probe_label} probe (turn_index={turn_index}) ===")
 
     for layer_num in range(n_layers):
@@ -164,18 +164,18 @@ if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained(config.MODEL_NAME, local_files_only=True)
     model.half().cuda().eval()
 
-    reading_summary = run_probe_train(
+    metacognitive_summary = run_probe_train(
         model, tokenizer,
         control_probe=False,
-        out_subdir="reading_probe",
+        out_subdir="metacognitive",
         turn_index=ti,
         probe_dir=probe_dir,
     )
 
-    control_summary = run_probe_train(
+    operational_summary = run_probe_train(
         model, tokenizer,
         control_probe=True,
-        out_subdir="control_probe",
+        out_subdir="operational",
         turn_index=ti,
         probe_dir=probe_dir,
     )
@@ -183,7 +183,7 @@ if __name__ == "__main__":
     print("\n" + "=" * 60)
     print(f"PROBE TRAINING SUMMARY — {turn_label}")
     print("=" * 60)
-    print(f"  Reading probe: Mean best acc = {np.mean(reading_summary['acc']):.3f}")
-    print(f"                 Peak acc = {np.max(reading_summary['acc']):.3f} (layer {np.argmax(reading_summary['acc'])})")
-    print(f"  Control probe: Mean best acc = {np.mean(control_summary['acc']):.3f}")
-    print(f"                 Peak acc = {np.max(control_summary['acc']):.3f} (layer {np.argmax(control_summary['acc'])})")
+    print(f"  Metacognitive probe: Mean best acc = {np.mean(metacognitive_summary['acc']):.3f}")
+    print(f"                       Peak acc = {np.max(metacognitive_summary['acc']):.3f} (layer {np.argmax(metacognitive_summary['acc'])})")
+    print(f"  Operational probe:   Mean best acc = {np.mean(operational_summary['acc']):.3f}")
+    print(f"                       Peak acc = {np.max(operational_summary['acc']):.3f} (layer {np.argmax(operational_summary['acc'])})")

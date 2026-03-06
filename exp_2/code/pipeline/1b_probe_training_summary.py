@@ -93,10 +93,12 @@ def main():
     PROBE_DIR = config.PATHS.probe_checkpoints / "turn_5"
     OUT_DIR = config.RESULTS.probe_training
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    FIG_DIR = OUT_DIR / "figures"
+    FIG_DIR.mkdir(parents=True, exist_ok=True)
 
     # ========================== LOAD DATA ========================== #
-    reading = load_pkl("reading_probe", PROBE_DIR)
-    control = load_pkl("control_probe", PROBE_DIR)
+    reading = load_pkl("metacognitive", PROBE_DIR)
+    control = load_pkl("operational", PROBE_DIR)
 
     layers = np.arange(N_LAYERS)
 
@@ -258,7 +260,7 @@ def main():
     ax.legend(fontsize=10)
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
-    fig.savefig(OUT_DIR / "best_test_acc_by_layer.png", dpi=200)
+    fig.savefig(FIG_DIR / "best_test_acc_by_layer.png", dpi=200)
     plt.close(fig)
     print(f"  Saved: best_test_acc_by_layer.png")
 
@@ -277,7 +279,7 @@ def main():
     ax.legend(fontsize=10)
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
-    fig.savefig(OUT_DIR / "final_test_acc_by_layer.png", dpi=200)
+    fig.savefig(FIG_DIR / "final_test_acc_by_layer.png", dpi=200)
     plt.close(fig)
     print(f"  Saved: final_test_acc_by_layer.png")
 
@@ -300,7 +302,7 @@ def main():
     ax.set_xticks(range(0, N_LAYERS, 5))
     ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
-    fig.savefig(OUT_DIR / "acc_difference_by_layer.png", dpi=200)
+    fig.savefig(FIG_DIR / "acc_difference_by_layer.png", dpi=200)
     plt.close(fig)
     print(f"  Saved: acc_difference_by_layer.png")
 
@@ -339,7 +341,7 @@ def main():
 
     fig.suptitle("Probe Accuracy by Layer Group", fontsize=14, y=1.02)
     fig.tight_layout()
-    fig.savefig(OUT_DIR / "acc_by_layer_group.png", dpi=200, bbox_inches="tight")
+    fig.savefig(FIG_DIR / "acc_by_layer_group.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
     print(f"  Saved: acc_by_layer_group.png")
 
@@ -369,7 +371,7 @@ def main():
 
     fig.suptitle("Train vs Test Accuracy by Layer (Overfitting Check)", fontsize=14, y=1.02)
     fig.tight_layout()
-    fig.savefig(OUT_DIR / "train_vs_test_by_layer.png", dpi=200, bbox_inches="tight")
+    fig.savefig(FIG_DIR / "train_vs_test_by_layer.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
     print(f"  Saved: train_vs_test_by_layer.png")
 
@@ -506,11 +508,11 @@ def main():
             )
 
     # --- Embed figures ---
-    fig_best = img_to_b64(OUT_DIR / "best_test_acc_by_layer.png")
-    fig_final = img_to_b64(OUT_DIR / "final_test_acc_by_layer.png")
-    fig_diff = img_to_b64(OUT_DIR / "acc_difference_by_layer.png")
-    fig_group = img_to_b64(OUT_DIR / "acc_by_layer_group.png")
-    fig_overfit = img_to_b64(OUT_DIR / "train_vs_test_by_layer.png")
+    fig_best = img_to_b64(FIG_DIR / "best_test_acc_by_layer.png")
+    fig_final = img_to_b64(FIG_DIR / "final_test_acc_by_layer.png")
+    fig_diff = img_to_b64(FIG_DIR / "acc_difference_by_layer.png")
+    fig_group = img_to_b64(FIG_DIR / "acc_by_layer_group.png")
+    fig_overfit = img_to_b64(FIG_DIR / "train_vs_test_by_layer.png")
 
     # --- Assemble HTML ---
     html = f"""<!DOCTYPE html>

@@ -4,16 +4,16 @@ N layers: 41
 N test samples (per layer): ~400
 
 --- Best Test Acc ---
-  Reading: M=0.5196, SD=0.0166, range=[0.490, 0.562], peak layer=19 (0.562)
-  Control: M=0.5167, SD=0.0140, range=[0.487, 0.550], peak layer=35 (0.550)
+  Reading: M=0.5222, SD=0.0189, range=[0.492, 0.565], peak layer=30 (0.565)
+  Control: M=0.5170, SD=0.0141, range=[0.487, 0.550], peak layer=35 (0.550)
 
 --- Final Test Acc ---
-  Reading: M=0.5021, SD=0.0161, range=[0.472, 0.537], peak layer=37 (0.537)
-  Control: M=0.4985, SD=0.0162, range=[0.472, 0.532], peak layer=0 (0.532)
+  Reading: M=0.5049, SD=0.0204, range=[0.458, 0.550], peak layer=28 (0.550)
+  Control: M=0.4985, SD=0.0160, range=[0.475, 0.535], peak layer=13 (0.535)
 
 --- Final Train Acc ---
-  Reading: M=0.7934, SD=0.0752, range=[0.615, 0.896], peak layer=35 (0.896)
-  Control: M=0.8031, SD=0.0925, range=[0.565, 0.917], peak layer=37 (0.917)
+  Reading: M=0.8004, SD=0.0804, range=[0.597, 0.918], peak layer=35 (0.918)
+  Control: M=0.8031, SD=0.0925, range=[0.565, 0.916], peak layer=37 (0.916)
 
 
 ============================================================
@@ -22,45 +22,45 @@ LAYER GROUP STATISTICS
 
 --- Best Test Acc ---
   EARLY (layers 0–13, n=14):
-    Reading: M=0.5182, SD=0.0137
-    Control: M=0.5173, SD=0.0101
-    Paired t(13)=0.207, p=0.8394
+    Reading: M=0.5212, SD=0.0140
+    Control: M=0.5177, SD=0.0104
+    Paired t(13)=0.701, p=0.4955
   MIDDLE (layers 14–27, n=14):
-    Reading: M=0.5204, SD=0.0202
-    Control: M=0.5114, SD=0.0139
-    Paired t(13)=1.151, p=0.2706
+    Reading: M=0.5198, SD=0.0228
+    Control: M=0.5112, SD=0.0132
+    Paired t(13)=1.133, p=0.2778
   LATE (layers 28–40, n=13):
-    Reading: M=0.5202, SD=0.0162
-    Control: M=0.5217, SD=0.0165
-    Paired t(12)=-0.311, p=0.7608
+    Reading: M=0.5258, SD=0.0199
+    Control: M=0.5225, SD=0.0168
+    Paired t(12)=0.495, p=0.6299
 
 --- Final Test Acc ---
   EARLY (layers 0–13, n=14):
-    Reading: M=0.5012, SD=0.0140
-    Control: M=0.4991, SD=0.0177
-    Paired t(13)=0.440, p=0.6674
+    Reading: M=0.5020, SD=0.0122
+    Control: M=0.4993, SD=0.0180
+    Paired t(13)=0.541, p=0.5979
   MIDDLE (layers 14–27, n=14):
-    Reading: M=0.5009, SD=0.0171
-    Control: M=0.4941, SD=0.0142
-    Paired t(13)=1.102, p=0.2906
+    Reading: M=0.5018, SD=0.0256
+    Control: M=0.4943, SD=0.0149
+    Paired t(13)=0.923, p=0.3727
   LATE (layers 28–40, n=13):
-    Reading: M=0.5042, SD=0.0179
-    Control: M=0.5025, SD=0.0167
-    Paired t(12)=0.246, p=0.8101
+    Reading: M=0.5113, SD=0.0212
+    Control: M=0.5021, SD=0.0150
+    Paired t(12)=1.338, p=0.2058
 
 ============================================================
 OVERALL READING vs CONTROL (paired t-test across 41 layers)
 ============================================================
 
   Best Test Acc:
-    Reading M=0.5196, Control M=0.5167
-    Mean diff = 0.0029
-    t(40)=0.842, p=0.4046, d=0.132
+    Reading M=0.5222, Control M=0.5170
+    Mean diff = 0.0052
+    t(40)=1.409, p=0.1667, d=0.220
 
   Final Test Acc:
-    Reading M=0.5021, Control M=0.4985
-    Mean diff = 0.0036
-    t(40)=1.052, p=0.2992, d=0.164
+    Reading M=0.5049, Control M=0.4985
+    Mean diff = 0.0064
+    t(40)=1.666, p=0.1036, d=0.260
 
 ============================================================
 PER-LAYER TWO-PROPORTIONS Z-TESTS (FDR corrected)

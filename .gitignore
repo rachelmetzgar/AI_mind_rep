@@ -4,6 +4,9 @@
 **/data/
 **/logs/
 
+# Archived old code/results (preserved locally, not tracked)
+**/archive/
+
 # Python caches and compiled files
 __pycache__/
 *.py[cod]

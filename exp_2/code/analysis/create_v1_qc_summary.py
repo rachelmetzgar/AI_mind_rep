@@ -40,96 +40,33 @@ except ImportError:
 EXP2_ROOT = Path(__file__).resolve().parent.parent.parent  # exp_2/code/analysis -> exp_2/
 
 VARIANTS = {
-    "names": {
-        "label": "Names (Sam/Casey)",
-        "color": "#e74c3c",
-        "path": EXP2_ROOT / "data" / "names",
-        "strategies": ["narrow", "peak_15", "wide", "all_70"],
-        "strengths": [1, 2, 3, 4, 5, 6, 8],
-        "reading_probe": "reading_probes_matched",
-        "note": "DEPRECATED: name confound (probes learned partner names)",
-    },
-    "balanced_names": {
-        "label": "Balanced Names (Gregory/Rebecca)",
-        "color": "#3498db",
-        "path": EXP2_ROOT / "data" / "balanced_names",
-        "strategies": ["peak_15", "wide", "all_70"],
-        "strengths": [1, 2, 4, 8],
-        "reading_probe": "reading_probes_peak",
-        "note": "Gender-balanced human names, same AI names",
-    },
     "balanced_gpt": {
         "label": "Balanced GPT (Gregory/Rebecca + GPT partner)",
         "color": "#2ecc71",
-        "path": EXP2_ROOT / "data" / "balanced_gpt",
-        "strategies": ["peak_15", "wide", "all_70"],
-        "strengths": [1, 2, 4, 5, 6, 8],
-        "reading_probe": "reading_probes_peak",
+        "path": EXP2_ROOT / "results" / "versions" / "balanced_gpt",
+        "data_path": EXP2_ROOT / "data" / "balanced_gpt",
+        "strategies": ["peak_15"],
+        "strengths": [2, 4, 5, 8, 16],
+        "reading_probe": "metacognitive_peak",
         "note": "Cross-model generalization: AI partner was GPT, not LLaMA",
-    },
-    "labels": {
-        "label": "Labels ('a human' / 'an AI')",
-        "color": "#9b59b6",
-        "path": EXP2_ROOT / "data" / "labels",
-        "strategies": ["peak_15", "wide", "all_70"],
-        "strengths": [2, 4, 5, 6],
-        "reading_probe": "reading_probes_peak",
-        "note": "PRIMARY: no name cues, pure identity labels",
-    },
-    "labels_turnwise": {
-        "label": "Labels Turnwise (Human:/AI: prefix)",
-        "color": "#5c6bc0",
-        "path": EXP2_ROOT / "data" / "labels_turnwise",
-        "strategies": ["peak_15"],
-        "strengths": [2, 4, 8, 16],
-        "reading_probe": "reading_probes_peak",
-        "note": "Same as Labels but partner messages prefixed 'Human:' / 'AI:'",
-    },
-    "you_are_labels": {
-        "label": "You Are Labels ('you are talking to')",
-        "color": "#00897b",
-        "path": EXP2_ROOT / "data" / "you_are_labels",
-        "strategies": ["peak_15"],
-        "strengths": [2, 4, 8, 16],
-        "reading_probe": "reading_probes_peak",
-        "note": "'You are talking to {type}.' Direct framing with abstract labels",
-    },
-    "you_are_labels_turnwise": {
-        "label": "You Are Labels Turnwise",
-        "color": "#00acc1",
-        "path": EXP2_ROOT / "data" / "you_are_labels_turnwise",
-        "strategies": ["peak_15"],
-        "strengths": [2, 4, 8, 16],
-        "reading_probe": "reading_probes_peak",
-        "note": "'You are talking to {type}' + 'Human:'/'AI:' turn prefix",
-    },
-    "you_are_balanced_gpt": {
-        "label": "You Are Balanced GPT",
-        "color": "#d81b60",
-        "path": EXP2_ROOT / "data" / "you_are_balanced_gpt",
-        "strategies": ["peak_15"],
-        "strengths": [2, 4, 8, 16],
-        "reading_probe": "reading_probes_peak",
-        "note": "'You are talking to {name} ({type}).' Direct framing with names",
     },
     "nonsense_codeword": {
         "label": "Nonsense Codeword (control)",
         "color": "#ff9800",
-        "path": EXP2_ROOT / "data" / "nonsense_codeword",
+        "path": EXP2_ROOT / "results" / "versions" / "nonsense_codeword",
+        "data_path": EXP2_ROOT / "data" / "nonsense_codeword",
         "strategies": ["peak_15"],
-        "strengths": [2, 4, 8, 16],
-        "reading_probe": "reading_probes_peak",
+        "strengths": [2, 4, 5, 8, 16],
+        "reading_probe": "metacognitive_peak",
         "note": "CONTROL: nonsense codeword labels, near-chance probes",
     },
-    "nonsense_ignore": {
-        "label": "Nonsense Ignore (control)",
-        "color": "#795548",
-        "path": EXP2_ROOT / "data" / "nonsense_ignore",
-        "strategies": ["peak_15"],
-        "strengths": [2, 4, 8, 16],
-        "reading_probe": "reading_probes_peak",
-        "note": "CONTROL: nonsense ignore labels, near-chance probes",
-    },
+}
+
+# Human-readable probe type labels for display
+PROBE_TYPE_LABELS = {
+    "operational": "Operational (pre-generation probe)",
+    "metacognitive_peak": "Metacognitive (peak layers)",
+    "metacognitive_matched": "Metacognitive (matched layers)",
 }
 
 # Key metrics to highlight
@@ -223,17 +160,13 @@ def load_all_stats():
     all_data = {}
 
     for vname, vconf in VARIANTS.items():
-        v1_dir = vconf["path"] / "intervention_results" / "V1"
-        if not v1_dir.exists():
-            print(f"[SKIP] {vname}: {v1_dir} not found")
+        v1_beh_dir = vconf["path"] / "V1_causality" / "behavioral"
+        if not v1_beh_dir.exists():
+            print(f"[SKIP] {vname}: {v1_beh_dir} not found")
             continue
 
         for strategy in vconf["strategies"]:
-            strat_dir = v1_dir / strategy
-            if not strat_dir.exists():
-                continue
-
-            beh_dir = strat_dir / "behavioral_results"
+            beh_dir = v1_beh_dir / strategy
             if not beh_dir.exists():
                 continue
 
@@ -255,10 +188,10 @@ def load_all_stats():
     return all_data
 
 
-def load_sample_generations(variant_name, strategy, strength, probe_type="control_probes", n_samples=1):
+def load_sample_generations(variant_name, strategy, strength, probe_type="operational", n_samples=1):
     """Load sample generations from intervention_responses.csv."""
     vconf = VARIANTS[variant_name]
-    csv_path = (vconf["path"] / "intervention_results" / "V1" /
+    csv_path = (vconf["data_path"] / "intervention_results" / "V1" /
                 strategy / probe_type / f"is_{strength}" / "intervention_responses.csv")
 
     if not csv_path.exists():
@@ -268,8 +201,8 @@ def load_sample_generations(variant_name, strategy, strength, probe_type="contro
     samples = []
     for cond in ["baseline", "human", "ai"]:
         subset = df[df["condition"] == cond]
-        if len(subset) > 0:
-            row = subset.iloc[min(n_samples - 1, len(subset) - 1)]
+        for i in range(min(n_samples, len(subset))):
+            row = subset.iloc[i]
             resp = str(row["response"])
             samples.append({
                 "condition": cond,
@@ -336,7 +269,7 @@ def make_condition_bar_chart(all_data, variant, strategy, strength, probe_type, 
     for j in range(len(available), len(axes)):
         axes[j].set_visible(False)
 
-    fig.suptitle(f"{VARIANTS[variant]['label']} — {strategy} / {probe_type} / strength={strength}",
+    fig.suptitle(f"{VARIANTS[variant]['label']} — {strategy} / {PROBE_TYPE_LABELS.get(probe_type, probe_type)} / strength={strength}",
                  fontsize=11, fontweight="bold")
     fig.tight_layout()
     return fig_to_base64(fig)
@@ -384,7 +317,7 @@ def make_pvalue_heatmap(all_data, variant, strategy, probe_type):
                 ax.text(j, i, f"{p:.3f}{stars}", ha="center", va="center", fontsize=6.5, color=color)
 
     ax.set_xlabel("Intervention Strength", fontsize=10)
-    ax.set_title(f"{VARIANTS[variant]['label']} — {strategy} / {probe_type}\np-value heatmap (log scale)",
+    ax.set_title(f"{VARIANTS[variant]['label']} — {strategy} / {PROBE_TYPE_LABELS.get(probe_type, probe_type)}\np-value heatmap (log scale)",
                  fontsize=11, fontweight="bold")
 
     cbar = fig.colorbar(im, ax=ax, shrink=0.6)
@@ -394,7 +327,7 @@ def make_pvalue_heatmap(all_data, variant, strategy, probe_type):
     return fig_to_base64(fig)
 
 
-def make_cross_variant_comparison(all_data, strategy="peak_15", probe_type_default="control_probes"):
+def make_cross_variant_comparison(all_data, strategy="peak_15", probe_type_default="operational"):
     """Compare key metrics across variants at a common strength (2 or 4)."""
     # Find a strength common to multiple variants
     common_strengths = set()
@@ -447,7 +380,7 @@ def make_cross_variant_comparison(all_data, strategy="peak_15", probe_type_defau
         if idx == 0:
             ax.legend(fontsize=7)
 
-    fig.suptitle(f"Cross-Variant Comparison — {strategy} / {probe_type_default} / strength={target_strength}",
+    fig.suptitle(f"Cross-Variant Comparison — {strategy} / {PROBE_TYPE_LABELS.get(probe_type_default, probe_type_default)} / strength={target_strength}",
                  fontsize=12, fontweight="bold")
     fig.tight_layout()
     return fig_to_base64(fig)
@@ -489,7 +422,7 @@ def make_dose_response_plot(all_data, variant, strategy, probe_type, metrics=Non
         if idx == 0:
             ax.legend(fontsize=7)
 
-    fig.suptitle(f"{VARIANTS[variant]['label']} — {strategy} / {probe_type}\nDose-Response",
+    fig.suptitle(f"{VARIANTS[variant]['label']} — {strategy} / {PROBE_TYPE_LABELS.get(probe_type, probe_type)}\nDose-Response",
                  fontsize=11, fontweight="bold")
     fig.tight_layout()
     return fig_to_base64(fig)
@@ -499,43 +432,98 @@ def make_dose_response_plot(all_data, variant, strategy, probe_type, metrics=Non
 #  QUALITY ASSESSMENT
 # ============================================================
 
-def assess_quality(all_data, variant, strategy, strength, probe_type="control_probes"):
-    """Assess output quality based on metrics."""
+def check_text_degradation(variant_name, strategy, strength, probe_type="operational",
+                           ttr_threshold=0.3):
+    """Check for degenerate text by computing type-token ratio (TTR).
+
+    Loads intervention_responses.csv and computes per-response TTR
+    (unique words / total words). Degenerate token loops (e.g. '*smgee*'
+    repeated 60 times) yield TTR near 0, while normal text is 0.4–0.6.
+
+    Returns:
+        dict with keys:
+            degraded (bool): True if any condition's mean TTR < threshold
+            per_condition (dict): {condition: mean_ttr}
+            message (str): human-readable summary
+    """
+    vconf = VARIANTS[variant_name]
+    csv_path = (vconf["data_path"] / "intervention_results" / "V1" /
+                strategy / probe_type / f"is_{strength}" / "intervention_responses.csv")
+
+    result = {"degraded": False, "per_condition": {}, "message": ""}
+
+    if not csv_path.exists():
+        result["message"] = "No response CSV found"
+        return result
+
+    df = pd.read_csv(csv_path)
+
+    degraded_conditions = []
+    for cond in ["baseline", "human", "ai"]:
+        subset = df[df["condition"] == cond]
+        if len(subset) == 0:
+            continue
+        ttrs = []
+        for resp in subset["response"]:
+            words = str(resp).lower().split()
+            n_words = len(words)
+            if n_words == 0:
+                ttrs.append(0.0)
+            else:
+                ttrs.append(len(set(words)) / n_words)
+        mean_ttr = float(np.mean(ttrs))
+        result["per_condition"][cond] = mean_ttr
+        if mean_ttr < ttr_threshold:
+            degraded_conditions.append(f"{cond}={mean_ttr:.2f}")
+
+    if degraded_conditions:
+        result["degraded"] = True
+        result["message"] = f"Low TTR (degenerate text): {', '.join(degraded_conditions)}"
+
+    return result
+
+
+def assess_quality(all_data, variant, strategy, strength, probe_type="operational"):
+    """Assess output quality combining text coherence (TTR) and behavioral metrics.
+
+    Ratings:
+        DEGRADED — TTR check fails (degenerate text detected)
+        GOOD     — no degradation AND >= 3 significant behavioral metrics
+        MARGINAL — no degradation AND 1-2 significant metrics
+        WEAK     — no degradation AND 0 significant metrics
+        UNKNOWN  — no stats available
+    """
     key = (variant, strategy, probe_type, strength)
     data = all_data.get(key)
     if not data:
-        return "UNKNOWN", "No stats available", "#6c757d"
+        return "UNKNOWN", "No stats available", "#6c757d", {}
 
-    issues = []
+    # --- Text coherence: TTR-based degradation check ---
+    ttr_info = check_text_degradation(variant, strategy, strength, probe_type)
+
+    # --- Behavioral effects: count significant metrics (excl. word_count) ---
     n_sig = 0
-
-    wc = data.get("word_count", {})
-    ai_wc = wc.get("ai", 0)
-    bl_wc = wc.get("baseline", 1)
-
-    if ai_wc > 500:
-        issues.append(f"Very verbose (AI={ai_wc:.0f} words)")
-    elif ai_wc > 350 and ai_wc > bl_wc * 1.5:
-        issues.append(f"Verbose (AI={ai_wc:.0f}, {ai_wc/bl_wc:.1f}x baseline)")
-
-    if strength >= 6:
-        issues.append("High strength — likely degradation")
-
-    # Count significant metrics (excluding word_count which may just indicate verbosity)
+    sig_metrics = []
     for metric in ALL_METRICS:
         if metric == "word_count":
             continue
         if metric in data and data[metric].get("p", 1) < 0.05:
             n_sig += 1
+            sig_metrics.append(metric)
 
-    if issues:
-        return "DEGRADED", "; ".join(issues), "#f8d7da"
-    elif n_sig >= 3:
-        return "GOOD", f"{n_sig} significant metrics (excl. word_count)", "#d4edda"
+    # --- Combined rating ---
+    if ttr_info["degraded"]:
+        notes = ttr_info["message"]
+        if n_sig > 0:
+            notes += f" ({n_sig} sig. metrics but text broken)"
+        return "DEGRADED", notes, "#f8d7da", ttr_info
+
+    if n_sig >= 3:
+        return "GOOD", f"{n_sig} significant metrics (excl. word_count)", "#d4edda", ttr_info
     elif n_sig >= 1:
-        return "MARGINAL", f"{n_sig} significant metric(s)", "#fff3cd"
+        return "MARGINAL", f"{n_sig} significant metric(s)", "#fff3cd", ttr_info
     else:
-        return "WEAK", "No significant behavioral effects", "#f8f9fa"
+        return "WEAK", "No significant behavioral effects", "#f8f9fa", ttr_info
 
 
 # ============================================================
@@ -573,6 +561,7 @@ def generate_variant_section(all_data, variant_name):
     # Overview table: quality assessment across strategies × strengths
     html.append("""
     <h3>Quality Assessment Overview</h3>
+    <p class="note">Results shown for <strong>Operational probe</strong> (pre-generation position, tests implicit representation).</p>
     <table>
         <thead>
             <tr>
@@ -580,6 +569,7 @@ def generate_variant_section(all_data, variant_name):
                 <th>Strength</th>
                 <th>Assessment</th>
                 <th># Sig Metrics</th>
+                <th>TTR (B/H/AI)</th>
                 <th>Word Count (B/H/AI)</th>
                 <th>Fung Interp. (B/H/AI)</th>
                 <th>Like rate (B/H/AI)</th>
@@ -592,12 +582,12 @@ def generate_variant_section(all_data, variant_name):
     for strategy in vconf["strategies"]:
         for strength in vconf["strengths"]:
             # Try control probes first
-            key = (variant_name, strategy, "control_probes", strength)
+            key = (variant_name, strategy, "operational", strength)
             data = all_data.get(key)
             if not data:
                 continue
 
-            quality, notes, bg = assess_quality(all_data, variant_name, strategy, strength)
+            quality, notes, bg, ttr_info = assess_quality(all_data, variant_name, strategy, strength)
 
             wc = data.get("word_count", {})
             fi = data.get("fung_interpersonal_rate", {})
@@ -606,12 +596,25 @@ def generate_variant_section(all_data, variant_name):
             n_sig = sum(1 for m in ALL_METRICS if m != "word_count"
                        and m in data and data[m].get("p", 1) < 0.05)
 
+            # Format TTR values with color coding
+            ttr_pc = ttr_info.get("per_condition", {})
+            ttr_parts = []
+            for cond in ["baseline", "human", "ai"]:
+                ttr_val = ttr_pc.get(cond, float('nan'))
+                if np.isnan(ttr_val):
+                    ttr_parts.append("—")
+                else:
+                    color = "color: #c0392b; font-weight: bold;" if ttr_val < 0.3 else ""
+                    ttr_parts.append(f'<span style="{color}">{ttr_val:.2f}</span>')
+            ttr_cell = " / ".join(ttr_parts)
+
             html.append(f"""
             <tr style="background: {bg};">
                 <td><strong>{strategy}</strong></td>
                 <td>{strength}</td>
                 <td><strong>{quality}</strong></td>
                 <td>{n_sig}</td>
+                <td class="metric">{ttr_cell}</td>
                 <td class="metric">{wc.get('baseline',0):.0f} / {wc.get('human',0):.0f} / {wc.get('ai',0):.0f}
                     <span style="{_cell_color(wc.get('p',1))}">{_sig(wc.get('p',1))}</span></td>
                 <td class="metric">{fi.get('baseline',0):.4f} / {fi.get('human',0):.4f} / {fi.get('ai',0):.4f}
@@ -627,21 +630,21 @@ def generate_variant_section(all_data, variant_name):
     # Per-strategy detailed sections with figures
     for strategy in vconf["strategies"]:
         available_strengths = sorted([s for (v, st, pt, s) in all_data
-                                      if v == variant_name and st == strategy and pt == "control_probes"])
+                                      if v == variant_name and st == strategy and pt == "operational"])
         if not available_strengths:
             continue
 
-        html.append(f"<h3>Strategy: {strategy}</h3>")
+        html.append(f"<h3>Strategy: {strategy} — Operational Probe</h3>")
 
         # P-value heatmap
         if HAS_MPL:
-            heatmap_b64 = make_pvalue_heatmap(all_data, variant_name, strategy, "control_probes")
+            heatmap_b64 = make_pvalue_heatmap(all_data, variant_name, strategy, "operational")
             if heatmap_b64:
                 html.append(f'<img src="data:image/png;base64,{heatmap_b64}" '
                            f'style="max-width:100%; margin: 1rem 0;">')
 
             # Dose-response plots
-            dose_b64 = make_dose_response_plot(all_data, variant_name, strategy, "control_probes")
+            dose_b64 = make_dose_response_plot(all_data, variant_name, strategy, "operational")
             if dose_b64:
                 html.append(f'<img src="data:image/png;base64,{dose_b64}" '
                            f'style="max-width:100%; margin: 1rem 0;">')
@@ -663,7 +666,7 @@ def generate_variant_section(all_data, variant_name):
         for metric in ALL_METRICS:
             html.append(f"<tr><td><strong>{metric}</strong></td>")
             for s in available_strengths:
-                key = (variant_name, strategy, "control_probes", s)
+                key = (variant_name, strategy, "operational", s)
                 data = all_data.get(key, {})
                 mdata = data.get(metric, {})
                 if mdata:
@@ -680,22 +683,27 @@ def generate_variant_section(all_data, variant_name):
             html.append("</tr>")
         html.append("</tbody></table>")
 
-        # Sample generations for the best-looking strength
-        best_strength = None
-        for s in [2, 4, 1, 8]:
-            if s in available_strengths:
-                best_strength = s
-                break
-        if best_strength is None and available_strengths:
-            best_strength = available_strengths[0]
+        # Sample generations — for peak_15 use strength 5 with 5 examples
+        if strategy == "peak_15" and 5 in available_strengths:
+            best_strength = 5
+            n_samples = 5
+        else:
+            best_strength = None
+            n_samples = 1
+            for s in [2, 4, 1, 8]:
+                if s in available_strengths:
+                    best_strength = s
+                    break
+            if best_strength is None and available_strengths:
+                best_strength = available_strengths[0]
 
         if best_strength:
-            samples = load_sample_generations(variant_name, strategy, best_strength)
+            samples = load_sample_generations(variant_name, strategy, best_strength, n_samples=n_samples)
             if samples:
-                html.append(f"<h4>Sample Generations ({strategy}, strength={best_strength})</h4>")
+                html.append(f"<h4>Sample Generations ({strategy}, strength={best_strength}, n={n_samples})</h4>")
+                cond_colors = {"baseline": "#6c757d", "human": "#3498db", "ai": "#2ecc71"}
                 for sample in samples:
                     cond = sample["condition"]
-                    cond_colors = {"baseline": "#6c757d", "human": "#3498db", "ai": "#2ecc71"}
                     html.append(f"""
                     <div class="example">
                         <span class="condition-label" style="background: {cond_colors.get(cond, '#999')}; color: white;">
@@ -717,7 +725,7 @@ def generate_full_html(all_data):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exp 2 — V1 QC Summary (All Variants)</title>
+    <title>Exp 2 — V1 QC Summary (All Variants) — Operational Probe</title>
     <style>
         body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
                max-width: 1600px; margin: 2rem auto; padding: 0 2rem; line-height: 1.5;
@@ -751,13 +759,14 @@ def generate_full_html(all_data):
     </style>
 </head>
 <body>
-    <h1>Experiment 2 — V1 QC Summary (All Variants)</h1>
+    <h1>Experiment 2 — V1 QC Summary (All Variants) — Operational Probe</h1>
 
     <div class="summary-box">
         <p><strong>Generated:</strong> <span class="timestamp">{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</span></p>
-        <p><strong>Purpose:</strong> Compare causal intervention results across 4 dataset variants to assess
+        <p><strong>Probe type:</strong> Operational (pre-generation position, tests implicit partner-type representation)</p>
+        <p><strong>Purpose:</strong> Compare causal intervention results across dataset variants to assess
         whether partner-identity steering persists regardless of how partners are labeled.</p>
-        <p><strong>Variants:</strong> names (deprecated), balanced_names, balanced_gpt, labels (primary)</p>
+        <p><strong>Variants:</strong> {', '.join(VARIANTS.keys())}</p>
     </div>
 
     <div class="toc">
@@ -803,7 +812,7 @@ def generate_full_html(all_data):
         for metric in KEY_METRICS:
             html.append(f"<tr><td><strong>{metric}</strong></td>")
             for vname in VARIANTS:
-                key = (vname, "peak_15", "control_probes", target_strength)
+                key = (vname, "peak_15", "operational", target_strength)
                 data = all_data.get(key, {})
                 mdata = data.get(metric, {})
                 if mdata:
@@ -852,8 +861,11 @@ def main():
     output_path = EXP2_ROOT / "results" / "comparisons" / "causality_qc" / "v1_qc_summary_all_variants.html"
     save_report(html, output_path)
 
-    # Also save per-variant HTML summaries
+    # Also save per-variant HTML summaries (only for variants with data)
     for vname, vconf in VARIANTS.items():
+        has_data = any(k[0] == vname for k in all_data)
+        if not has_data:
+            continue
         results_dir = EXP2_ROOT / "results" / "versions" / vname
         results_dir.mkdir(parents=True, exist_ok=True)
         variant_html = f"""<!DOCTYPE html>

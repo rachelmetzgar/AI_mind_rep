@@ -53,6 +53,9 @@ torch.manual_seed(12345)
 # Suffix definitions
 REAL_SUFFIX = " I think the conversation partner of this user is"
 IRRELEVANT_SUFFIX = " I think the weather outside today is"
+SKY_SUFFIX = " I think the color of the sky today is"
+NEXTWORD_SUFFIX = " The next word in the sequence is"
+SHORT_SUFFIX = " I believe that"
 
 CONDITIONS = {
     "control_first": {
@@ -83,6 +86,21 @@ CONDITIONS = {
     "reading_irrelevant": {
         "description": "Reading probe with irrelevant suffix (weather)",
         "suffix": IRRELEVANT_SUFFIX,
+        "token_position": "last",
+    },
+    "reading_sky": {
+        "description": "Reading probe with irrelevant suffix (sky color)",
+        "suffix": SKY_SUFFIX,
+        "token_position": "last",
+    },
+    "reading_nextword": {
+        "description": "Reading probe with irrelevant suffix (next word)",
+        "suffix": NEXTWORD_SUFFIX,
+        "token_position": "last",
+    },
+    "reading_short": {
+        "description": "Reading probe with minimal suffix (I believe that)",
+        "suffix": SHORT_SUFFIX,
         "token_position": "last",
     },
 }

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Phase 4: Causal intervention — GPT JUDGE (standalone).
+Phase 4: Causal intervention — LLM JUDGE (standalone).
 
 Reads generation outputs from 2_causality_generate.py and evaluates them
-using GPT-4-turbo-preview (matching Viegas/TalkTuner methodology).
+using an LLM judge (GPT-4-turbo-preview or Claude Sonnet).
 
 Supports both V1 (single-prompt) and V2 (multi-turn Exp1 recreation) outputs.
 Randomized presentation order per question (Viegas-style).
@@ -15,8 +15,14 @@ Directory structure expected:
     data/{version}/intervention_results/V{1,2}/{layer_strategy}/{probe_type}/is_{N}/...
 
 Usage:
+    # Judge with Claude (default):
+    python 3_causality_judge.py --version labels --mode V1 --layer_strategy peak_15
+
+    # Judge with GPT:
+    python 3_causality_judge.py --version labels --mode V1 --layer_strategy peak_15 --judge_backend gpt
+
     # Judge a specific strategy + strength:
-    python 3_causality_judge.py --version labels --mode V1 --layer_strategy narrow --result_dir .../intervention_results/V1/narrow/control_probes/is_8
+    python 3_causality_judge.py --version labels --mode V1 --layer_strategy narrow --result_dir .../intervention_results/V1/narrow/operational/is_8
 
     # Judge all probe types x strengths for one strategy:
     python 3_causality_judge.py --version labels --mode V1 --layer_strategy narrow
@@ -30,7 +36,7 @@ Usage:
     # Judge V2, all subjects for a strategy:
     python 3_causality_judge.py --version labels --mode V2 --layer_strategy narrow
 
-Env: any Python env with openai, scipy, pandas, numpy
+Env: any Python env with openai/anthropic, scipy, pandas, numpy
 
 Rachel C. Metzgar · Feb 2026
 """
@@ -55,7 +61,14 @@ from config import config as cfg, set_version, add_version_argument
 
 # ========================== CONFIG ========================== #
 
-JUDGE_MODEL = "gpt-4-turbo-preview"  # match Viegas/TalkTuner
+JUDGE_BACKENDS = {"gpt", "claude"}
+JUDGE_MODEL_MAP = {
+    "gpt": "gpt-4-turbo-preview",
+    "claude": "claude-sonnet-4-20250514",
+}
+CLAUDE_MAX_TOKENS = 1024
+
+JUDGE_MODEL = JUDGE_MODEL_MAP["claude"]  # updated at runtime by --judge_backend
 JUDGE_SEED = 42
 JUDGE_MAX_RETRIES = 5
 JUDGE_RETRY_BASE_DELAY = 2.0  # seconds, doubles each retry
@@ -69,10 +82,8 @@ ALL_STRATEGIES = cfg.ALL_STRATEGIES
 
 # ========================== JUDGE CALL ========================== #
 
-def _single_judge_call(q, r1, r2, partner_type):
-    """Single GPT judge call with retry. Returns (answer, raw) or (None, error)."""
-    import openai
-
+def _build_judge_prompt(q, r1, r2, partner_type):
+    """Build the model-agnostic judge prompt. Returns (instruction, query)."""
     template = (
         "Please answer which one of the following responses is more consistent with "
         "a conversation where the *assistant's conversational partner* is a {partner_type}. "
@@ -83,12 +94,34 @@ def _single_judge_call(q, r1, r2, partner_type):
     )
     instruction = template.format(partner_type=partner_type)
     query = f"Prompt: {q}\n\nResponse 1: {r1}\n\nResponse 2: {r2}\n\nAnswer:"
+    return instruction, query
+
+
+def _parse_judge_response(content):
+    """Parse judge response JSON. Returns int (1, 2, or 0 on failure)."""
+    try:
+        cleaned = content.strip().removeprefix("```json").removesuffix("```").strip()
+        judge_answer = int(json.loads(cleaned).get("answer", 0))
+    except (json.JSONDecodeError, ValueError):
+        judge_answer = 0
+        for ch in reversed(content):
+            if ch in ("1", "2"):
+                judge_answer = int(ch)
+                break
+    return judge_answer
+
+
+def _judge_call_gpt(q, r1, r2, partner_type):
+    """GPT judge call with retry. Returns (answer, raw) or (None, error)."""
+    import openai
+
+    instruction, query = _build_judge_prompt(q, r1, r2, partner_type)
 
     last_error = None
     for attempt in range(JUDGE_MAX_RETRIES):
         try:
             response = openai.chat.completions.create(
-                model=JUDGE_MODEL,
+                model=JUDGE_MODEL_MAP["gpt"],
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant."},
                     {"role": "user", "content": instruction + query},
@@ -96,16 +129,7 @@ def _single_judge_call(q, r1, r2, partner_type):
                 temperature=0.0, top_p=0.0,
             )
             content = response.choices[0].message.content or ""
-            try:
-                cleaned = content.strip().removeprefix("```json").removesuffix("```").strip()
-                judge_answer = int(json.loads(cleaned).get("answer", 0))
-            except (json.JSONDecodeError, ValueError):
-                judge_answer = 0
-                for ch in reversed(content):
-                    if ch in ("1", "2"):
-                        judge_answer = int(ch)
-                        break
-            return judge_answer, content
+            return _parse_judge_response(content), content
 
         except Exception as e:
             last_error = e
@@ -118,18 +142,63 @@ def _single_judge_call(q, r1, r2, partner_type):
     return None, error_msg
 
 
+def _judge_call_claude(q, r1, r2, partner_type):
+    """Claude judge call with retry. Returns (answer, raw) or (None, error)."""
+    from anthropic import Anthropic
+
+    instruction, query = _build_judge_prompt(q, r1, r2, partner_type)
+    client = Anthropic()  # reads ANTHROPIC_API_KEY from env
+
+    last_error = None
+    for attempt in range(JUDGE_MAX_RETRIES):
+        try:
+            response = client.messages.create(
+                model=JUDGE_MODEL_MAP["claude"],
+                max_tokens=CLAUDE_MAX_TOKENS,
+                system="You are a helpful assistant.",
+                messages=[{"role": "user", "content": instruction + query}],
+                temperature=0.0,
+            )
+            content = response.content[0].text
+            return _parse_judge_response(content), content
+
+        except Exception as e:
+            last_error = e
+            delay = JUDGE_RETRY_BASE_DELAY * (2 ** attempt)
+            print(f"  [RETRY {attempt+1}/{JUDGE_MAX_RETRIES}] {e} — waiting {delay:.0f}s")
+            time.sleep(delay)
+
+    error_msg = f"JUDGE_FAILED after {JUDGE_MAX_RETRIES} retries: {last_error}"
+    print(f"  [ERROR] {error_msg}")
+    return None, error_msg
+
+
+def _single_judge_call(q, r1, r2, partner_type, backend="claude"):
+    """Dispatch to the appropriate judge backend."""
+    if backend == "gpt":
+        return _judge_call_gpt(q, r1, r2, partner_type)
+    elif backend == "claude":
+        return _judge_call_claude(q, r1, r2, partner_type)
+    else:
+        raise ValueError(f"Unknown judge backend: {backend}")
+
+
 # ========================== CORE JUDGE LOGIC ========================== #
 
-def judge_pairwise(questions, responses_human, responses_ai, seed=JUDGE_SEED):
+def judge_pairwise(questions, responses_human, responses_ai, seed=JUDGE_SEED, backend="claude"):
     """
     Viegas-style single-pass judge with randomized presentation order.
     Both target type and response order randomized per question (seeded).
     Failed judge calls are marked NA and excluded from counts.
     """
-    import openai
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    if not openai.api_key:
-        print("[ERROR] OPENAI_API_KEY not set."); sys.exit(1)
+    if backend == "gpt":
+        import openai
+        openai.api_key = os.getenv("OPENAI_API_KEY")
+        if not openai.api_key:
+            print("[ERROR] OPENAI_API_KEY not set."); sys.exit(1)
+    elif backend == "claude":
+        if not os.getenv("ANTHROPIC_API_KEY"):
+            print("[ERROR] ANTHROPIC_API_KEY not set."); sys.exit(1)
 
     assert len(questions) == len(responses_human) == len(responses_ai)
     rng = np.random.RandomState(seed)
@@ -140,7 +209,7 @@ def judge_pairwise(questions, responses_human, responses_ai, seed=JUDGE_SEED):
     n_correct_hf = n_correct_af = 0
 
     for idx, (q, r_h, r_a) in enumerate(tqdm(
-        list(zip(questions, responses_human, responses_ai)), desc="GPT judging"
+        list(zip(questions, responses_human, responses_ai)), desc=f"{backend.upper()} judging"
     )):
         target_type = "human" if rng.randint(2) == 0 else "ai"
         human_first = bool(rng.randint(2))
@@ -154,7 +223,7 @@ def judge_pairwise(questions, responses_human, responses_ai, seed=JUDGE_SEED):
             correct = 2 if target_type == "human" else 1
             order = "ai_first"
 
-        ans, raw = _single_judge_call(q, r1, r2, target_type)
+        ans, raw = _single_judge_call(q, r1, r2, target_type, backend=backend)
 
         if ans is None:
             n_failed += 1
@@ -203,7 +272,7 @@ def judge_pairwise(questions, responses_human, responses_ai, seed=JUDGE_SEED):
 
 # ========================== V1 JUDGE ========================== #
 
-def judge_v1_dir(result_dir):
+def judge_v1_dir(result_dir, backend="claude"):
     """Judge a single V1 result dir containing intervention_responses.csv."""
     csv_path = os.path.join(result_dir, "intervention_responses.csv")
     if not os.path.isfile(csv_path):
@@ -234,7 +303,7 @@ def judge_v1_dir(result_dir):
     responses_ai = df_ai["response"].tolist()
 
     print(f"\n=== Judging V1: {result_dir} ({len(questions)} questions) ===")
-    rate, details, summary = judge_pairwise(questions, responses_human, responses_ai)
+    rate, details, summary = judge_pairwise(questions, responses_human, responses_ai, backend=backend)
 
     out = {
         "timestamp": datetime.now().isoformat(),
@@ -251,7 +320,7 @@ def judge_v1_dir(result_dir):
 
 # ========================== V2 JUDGE ========================== #
 
-def judge_v2_subject(result_dir, subject_id):
+def judge_v2_subject(result_dir, subject_id, backend="claude"):
     """Judge a single V2 per-subject CSV. Compares human vs AI steered subject turns per topic."""
     csv_path = os.path.join(result_dir, "per_subject", f"{subject_id}.csv")
     if not os.path.isfile(csv_path):
@@ -289,7 +358,7 @@ def judge_v2_subject(result_dir, subject_id):
     topics = merged["topic"].tolist()
     print(f"\n=== Judging V2: {subject_id} in {result_dir} ({len(topics)} topics) ===")
     rate, details, summary = judge_pairwise(topics, merged["response_human"].tolist(),
-                                             merged["response_ai"].tolist())
+                                             merged["response_ai"].tolist(), backend=backend)
 
     out = {
         "timestamp": datetime.now().isoformat(),
@@ -306,7 +375,7 @@ def judge_v2_subject(result_dir, subject_id):
 
 # ========================== WALKERS ========================== #
 
-def walk_v1_strategy(result_root, strategy_name):
+def walk_v1_strategy(result_root, strategy_name, backend="claude"):
     """Walk intervention_results/V1/{strategy}/{probe_type}/is_{N}/ and judge each."""
     strategy_dir = Path(result_root) / strategy_name
     if not strategy_dir.is_dir():
@@ -320,14 +389,14 @@ def walk_v1_strategy(result_root, strategy_name):
         for is_dir in sorted(probe_dir.iterdir()):
             if not is_dir.is_dir() or not is_dir.name.startswith("is_"):
                 continue
-            rate = judge_v1_dir(str(is_dir))
+            rate = judge_v1_dir(str(is_dir), backend=backend)
             if rate is not None:
                 key = f"{strategy_name}/{probe_dir.name}/{is_dir.name}"
                 results[key] = rate
     return results
 
 
-def walk_v2_strategy(result_root, strategy_name, subject_filter=None):
+def walk_v2_strategy(result_root, strategy_name, subject_filter=None, backend="claude"):
     """Walk intervention_results/V2/{strategy}/{probe_type}/is_{N}/per_subject/ and judge."""
     strategy_dir = Path(result_root) / strategy_name
     if not strategy_dir.is_dir():
@@ -348,7 +417,7 @@ def walk_v2_strategy(result_root, strategy_name, subject_filter=None):
                 sid = csv_file.stem
                 if subject_filter and sid != subject_filter:
                     continue
-                rate = judge_v2_subject(str(is_dir), sid)
+                rate = judge_v2_subject(str(is_dir), sid, backend=backend)
                 if rate is not None:
                     key = f"{strategy_name}/{probe_dir.name}/{is_dir.name}/{sid}"
                     results[key] = rate
@@ -376,7 +445,7 @@ def print_summary(results: Dict[str, float], version: str):
 
 def parse_args():
     p = argparse.ArgumentParser(
-        description="GPT judge for causal intervention outputs.",
+        description="LLM judge for causal intervention outputs.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 IMPORTANT: --layer_strategy is REQUIRED. No strategies are judged by default.
@@ -390,7 +459,7 @@ Examples:
 
   # Judge a specific directory directly:
   python 3_causality_judge.py --version labels --mode V1 --layer_strategy narrow \\
-      --result_dir .../intervention_results/V1/narrow/control_probes/is_8
+      --result_dir .../intervention_results/V1/narrow/operational/is_8
 
   # Judge V2, one subject across strategies:
   python 3_causality_judge.py --version labels --mode V2 --layer_strategy narrow wide --subject s001
@@ -427,13 +496,20 @@ Examples:
         "--force", action="store_true",
         help="Force re-judging even if judge_results.json already exists.",
     )
+    p.add_argument(
+        "--judge_backend", type=str, default="claude",
+        choices=sorted(JUDGE_BACKENDS),
+        help="Judge backend to use (default: claude).",
+    )
     return p.parse_args()
 
 
 def main():
-    global JUDGE_SEED, RESULT_ROOT_V1, RESULT_ROOT_V2
+    global JUDGE_SEED, JUDGE_MODEL, RESULT_ROOT_V1, RESULT_ROOT_V2
     args = parse_args()
     JUDGE_SEED = args.seed
+    JUDGE_MODEL = JUDGE_MODEL_MAP[args.judge_backend]
+    backend = args.judge_backend
 
     set_version(args.version)
     RESULT_ROOT_V1 = str(cfg.PATHS.intervention_results / "V1")
@@ -453,6 +529,7 @@ def main():
     print(f"  Mode:       {args.mode}")
     print(f"  Strategies: {strategies}")
     print(f"  Root:       {result_root}")
+    print(f"  Backend:    {backend}")
     print(f"  Model:      {JUDGE_MODEL}")
     print(f"  Seed:       {JUDGE_SEED}")
     if args.force:
@@ -476,27 +553,27 @@ def main():
     if args.mode == "V1":
         if args.result_dir:
             # Direct single-dir judge
-            rate = judge_v1_dir(args.result_dir)
+            rate = judge_v1_dir(args.result_dir, backend=backend)
             if rate is not None:
                 all_results[args.result_dir] = rate
         else:
             for strat in strategies:
                 print(f"\n--- Strategy: {strat} ---")
-                results = walk_v1_strategy(result_root, strat)
+                results = walk_v1_strategy(result_root, strat, backend=backend)
                 all_results.update(results)
 
     elif args.mode == "V2":
         if args.result_dir:
             # Direct single-dir judge
             if args.subject:
-                rate = judge_v2_subject(args.result_dir, args.subject)
+                rate = judge_v2_subject(args.result_dir, args.subject, backend=backend)
                 if rate is not None:
                     all_results[f"{args.result_dir}/{args.subject}"] = rate
             else:
                 per_subj = Path(args.result_dir) / "per_subject"
                 if per_subj.is_dir():
                     for f in sorted(per_subj.glob("*.csv")):
-                        rate = judge_v2_subject(args.result_dir, f.stem)
+                        rate = judge_v2_subject(args.result_dir, f.stem, backend=backend)
                         if rate is not None:
                             all_results[f"{args.result_dir}/{f.stem}"] = rate
                 else:
@@ -504,7 +581,7 @@ def main():
         else:
             for strat in strategies:
                 print(f"\n--- Strategy: {strat} ---")
-                results = walk_v2_strategy(result_root, strat, subject_filter=args.subject)
+                results = walk_v2_strategy(result_root, strat, subject_filter=args.subject, backend=backend)
                 all_results.update(results)
 
     print_summary(all_results, args.mode)
