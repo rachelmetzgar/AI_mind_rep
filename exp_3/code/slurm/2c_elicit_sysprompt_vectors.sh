@@ -4,8 +4,8 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=64G
 #SBATCH --time=01:00:00
-#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_3/logs/elicit/sysprompt_%A.out
-#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_3/logs/elicit/sysprompt_%A.err
+#SBATCH --output=/mnt/cup/graziano/rachel/mind_rep/exp_3/logs/elicit/sysprompt_%A.out
+#SBATCH --error=/mnt/cup/graziano/rachel/mind_rep/exp_3/logs/elicit/sysprompt_%A.err
 # -------------------------------------------------------------
 # System prompt partner identity elicitation (Phase 2c)
 #
@@ -18,11 +18,11 @@
 # there are only 28 prompts total — should complete in <30 min.
 #
 # Output:
-#   data/concept_activations/contrasts/18_sysprompt_labeled/
-#   data/concept_activations/standalone/20_sysprompt_talkto_human/
-#   data/concept_activations/standalone/21_sysprompt_talkto_ai/
-#   data/concept_activations/standalone/22_sysprompt_bare_human/
-#   data/concept_activations/standalone/23_sysprompt_bare_ai/
+#   results/{model}/concept_activations/contrasts/18_sysprompt_labeled/
+#   results/{model}/concept_activations/standalone/20_sysprompt_talkto_human/
+#   results/{model}/concept_activations/standalone/21_sysprompt_talkto_ai/
+#   results/{model}/concept_activations/standalone/22_sysprompt_bare_human/
+#   results/{model}/concept_activations/standalone/23_sysprompt_bare_ai/
 #
 # These integrate with the existing 2a alignment analysis pipeline.
 # After running, re-run 2a_alignment_analysis.py to include dim 19.
@@ -38,7 +38,7 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_3"
+PROJECT_ROOT="/mnt/cup/graziano/rachel/mind_rep/exp_3"
 mkdir -p "$PROJECT_ROOT/logs/elicit"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 
@@ -49,12 +49,12 @@ echo "  GPU:  $(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null ||
 # Contrast mode: human names vs AI names
 echo ""
 echo "[$(date)] Running contrasts mode..."
-python code/analysis/alignment/2c_elicit_sysprompt_vectors.py --only contrasts
+python code/2c_elicit_sysprompt_vectors.py --only contrasts
 
 # Standalone mode: all prompts pooled
 echo ""
 echo "[$(date)] Running standalone mode..."
-python code/analysis/alignment/2c_elicit_sysprompt_vectors.py --only standalone
+python code/2c_elicit_sysprompt_vectors.py --only standalone
 
 echo ""
 echo "[$(date)] System prompt elicitation complete"

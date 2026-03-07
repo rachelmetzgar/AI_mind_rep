@@ -3,8 +3,8 @@
 #SBATCH --partition=all
 #SBATCH --mem=16G
 #SBATCH --time=01:00:00
-#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_3/logs/alignment/%j_concept_overlap.out
-#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_3/logs/alignment/%j_concept_overlap.err
+#SBATCH --output=/mnt/cup/graziano/rachel/mind_rep/exp_3/logs/alignment/%j_concept_overlap.out
+#SBATCH --error=/mnt/cup/graziano/rachel/mind_rep/exp_3/logs/alignment/%j_concept_overlap.err
 # -------------------------------------------------------------
 # Contrast concept overlap analysis + report generation
 # CPU only — loads contrast activations, runs 1000-iter bootstrap,
@@ -21,17 +21,17 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_3"
+PROJECT_ROOT="/mnt/cup/graziano/rachel/mind_rep/exp_3"
 mkdir -p "$PROJECT_ROOT/logs/alignment"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 
 echo "[$(date)] Starting contrast concept overlap analysis"
 echo "  Node: $(hostname)"
 
-python code/analysis/alignment/2f_concept_overlap.py --exclude-dims 10 16
+python code/2f_concept_overlap.py --exclude-dims 10 16
 
 echo "[$(date)] Generating contrast overlap report"
 
-python code/analysis/alignment/2f_concept_overlap_report.py
+python code/2f_concept_overlap_summary_generator.py
 
 echo "[$(date)] Done — contrast concept overlap"

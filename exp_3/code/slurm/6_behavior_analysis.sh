@@ -4,8 +4,8 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
 #SBATCH --time=01:00:00
-#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_3/logs/behav_%A.out
-#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_3/logs/behav_%A.err
+#SBATCH --output=/mnt/cup/graziano/rachel/mind_rep/exp_3/logs/behav_%A.out
+#SBATCH --error=/mnt/cup/graziano/rachel/mind_rep/exp_3/logs/behav_%A.err
 # -------------------------------------------------------------
 # Behavioral analysis on concept injection outputs (Experiment 3)
 # Runs all dimensions × all strengths (1, 2, 4, 8).
@@ -26,11 +26,11 @@ source "$CONDA_BASE/etc/profile.d/conda.sh"
 conda activate behavior_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
-PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_3"
+PROJECT_ROOT="/mnt/cup/graziano/rachel/mind_rep/exp_3"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 echo "[$(date)] Starting Exp 3 behavioral analysis | host=$HOSTNAME"
 # Run all dimensions, all strengths (1, 2, 4, 8), V1
-python code/pipeline/6_behavior_analysis.py \
+python code/6_behavior_analysis.py \
     --version v1 \
     --all \
     --strengths 1 2 4 8

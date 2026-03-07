@@ -21,9 +21,14 @@ After making significant changes, update MEMORY.md with the relevant tag:
 - ONLY access files within `/mnt/cup/labs/graziano/rachel/mind_rep/`
 - When editing scripts, preserve existing file structure and imports
 - Use absolute paths (this dir = `/mnt/cup/labs/graziano/rachel/mind_rep/`)
+- **Reports require regeneration code.** When producing an HTML/MD report, always create a standalone Python script that can regenerate it from saved data (`.npz`/`.csv`). Place it in the relevant `comparisons/code/` directory. Exception: user says "quick analysis" or explicitly says not to.
 
 ### Running Scripts
 - **Check for a SLURM script first.** Before running any Python script directly, look in the relevant `slurm/` directory for an existing SLURM wrapper.
+- **ALWAYS use SLURM for heavy computation.** Any script expected to run longer than ~5 minutes MUST be submitted via SLURM, not run directly on the login node. This includes bootstrapping, loading/processing large activation files, training probes, generation, judging, and any iterative analysis over many layers/dimensions. If no SLURM wrapper exists, **create one** in the relevant `slurm/` directory before running.
+  - **OK to run directly on login node:** Quick analysis scripts (<5 min), report/figure generation from pre-computed CSVs, file I/O utilities, small data inspection.
+  - **Must go through SLURM:** Probe training, activation extraction, bootstrap analyses, causality generation/judging, behavioral analysis, alignment analysis over activations, anything loading model weights or large `.npz`/`.pkl` activation files.
+  - When creating a new SLURM script, use the boilerplate from the "SLURM Boilerplate" section below. For CPU-only jobs (no GPU), use `--mem=16G --time=2:00:00` as a starting point (adjust as needed).
 - **Environment setup for non-SLURM runs:** You must `module load pyger` before you can `conda activate` any environment. Think about what packages the script needs and which env to activate (`llama2_env` or `behavior_env`).
 - **Installing new packages:** Do NOT use `pip install` — it can overwrite dependencies and break existing packages. Use `micromamba install` instead whenever possible.
 

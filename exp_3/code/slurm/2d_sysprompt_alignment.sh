@@ -4,13 +4,13 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
 #SBATCH --time=02:00:00
-#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_3/logs/align/sysprompt_%A.out
-#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_3/logs/align/sysprompt_%A.err
+#SBATCH --output=/mnt/cup/graziano/rachel/mind_rep/exp_3/logs/align/sysprompt_%A.out
+#SBATCH --error=/mnt/cup/graziano/rachel/mind_rep/exp_3/logs/align/sysprompt_%A.err
 # -------------------------------------------------------------
 # Phase 2d: System prompt ↔ concept alignment analysis
 #
 # CPU only — no GPU needed (just cosine similarities + bootstrap).
-# Requires 2c outputs in data/concept_activations/.
+# Requires 2c outputs in results/{model}/concept_activations/.
 #
 # Output: data/alignment_results/sysprompt/
 # -------------------------------------------------------------
@@ -25,13 +25,13 @@ conda activate llama2_env
 set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
-PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_3"
+PROJECT_ROOT="/mnt/cup/graziano/rachel/mind_rep/exp_3"
 mkdir -p "$PROJECT_ROOT/logs/align"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 
 echo "[$(date)] Starting system prompt ↔ concept alignment"
 echo "  Node: $(hostname)"
 
-python code/analysis/alignment/2d_sysprompt_alignment.py --analysis all
+python code/2d_sysprompt_alignment.py --analysis all
 
 echo "[$(date)] Phase 2d complete"

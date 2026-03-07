@@ -10,7 +10,7 @@ Usage:
 
     # Access paths (version-independent)
     model = config.MODEL_NAME
-    probe_dir = config.PATHS.concept_probes
+    probe_dir = config.RESULTS.concept_probes_data
 
     # Set Exp 2 / Exp 1 version (required before accessing exp2/exp1 paths)
     set_version("labels")
@@ -53,21 +53,31 @@ EXP1_ROOT = None
 # Valid turn numbers for Exp 2 conversational probes
 VALID_TURNS = (1, 2, 3, 4, 5)
 
-# Internal tracking of active version and turn
+# Internal tracking of active version, turn, and model
 _active_version = None
 _active_turn = None
+_active_model = None
 
 
 # ============================================================================
 # MODEL
 # ============================================================================
 
-MODEL_NAME = (
-    "/jukebox/graziano/rachel/ai_percep_clean/.cache/huggingface/hub/"
-    "models--meta-llama--Llama-2-13b-chat-hf/snapshots/"
-    "a2cb7a712bb6e5e736ca7f8cd98167f81a0b5bd8"
-)
+VALID_MODELS = ("llama2_13b_chat",)
 
+_MODEL_PATHS = {
+    "llama2_13b_chat": (
+        "/mnt/cup/labs/graziano/rachel/ai_percep_clean/.cache/huggingface/hub/"
+        "models--meta-llama--Llama-2-13b-chat-hf/snapshots/"
+        "a2cb7a712bb6e5e736ca7f8cd98167f81a0b5bd8"
+    ),
+}
+
+_MODEL_CONFIGS = {
+    "llama2_13b_chat": {"input_dim": 5120, "n_layers": 41},
+}
+
+MODEL_NAME = _MODEL_PATHS["llama2_13b_chat"]
 INPUT_DIM = 5120  # LLaMA-2-13B hidden size
 N_LAYERS = 41     # Embedding layer + 40 transformer layers
 
@@ -85,6 +95,9 @@ class InputPaths:
     concepts_contrasts: Path = ROOT_DIR / "concepts" / "contrasts"
     concepts_standalone: Path = ROOT_DIR / "concepts" / "standalone"
 
+    # Experiment 1 shared utils (linguistic markers)
+    exp1_utils: Path = PROJECT_ROOT / "exp_1" / "code"
+
     # Experiment 1 prompts and configs (for V2 multi-turn generation)
     # Set dynamically by set_version(); None until then.
     exp1_prompts: Path = None
@@ -97,68 +110,105 @@ class InputPaths:
     exp2_metacognitive: Path = None
     exp2_conversations: Path = None
 
-    # Concept activations (extracted in Phase 1)
-    concept_activations: Path = ROOT_DIR / "data" / "concept_activations"
-    concept_activations_contrasts: Path = ROOT_DIR / "data" / "concept_activations" / "contrasts"
-    concept_activations_standalone: Path = ROOT_DIR / "data" / "concept_activations" / "standalone"
-
-    # Concept probes (trained in Phase 2)
-    concept_probes: Path = ROOT_DIR / "data" / "concept_probes"
-
     # Causality test questions (for V1 single-turn generation)
-    causality_questions: Path = ROOT_DIR / "data" / "causality_test_questions" / "human_ai.txt"
+    causality_questions: Path = ROOT_DIR / "code" / "causality_questions.txt"
 
 
 # ============================================================================
 # PATHS: Outputs (results/)
 # ============================================================================
 
+def _model_dir():
+    """Return the active model directory name."""
+    return _active_model or "llama2_13b_chat"
+
+
 @dataclass
 class OutputPaths:
-    """Paths to output results (all go in results/, not data/)"""
+    """Paths to output results.
+
+    Version-independent paths are model-scoped: results/{model}/...
+    Version-dependent paths are set by set_version(): results/{model}/{version}/...
+    """
 
     # Root results directory
     root: Path = ROOT_DIR / "results"
 
-    # Phase 1: Concept activation extraction
-    concept_activations: Path = ROOT_DIR / "results" / "concept_activations"
+    # --- Version-independent, model-scoped ---
+    # These are set at init and updated by set_model()
+    concept_activations: Path = None
+    concept_activations_contrasts: Path = None
+    concept_activations_standalone: Path = None
+    concept_probes_data: Path = None
+    concept_overlap: Path = None
+    sysprompt: Path = None
+    lexical: Path = None
+    comparisons: Path = None
 
-    # Phase 1b: Alignment analysis
-    alignment: Path = ROOT_DIR / "results" / "alignment"
-    alignment_versions: Path = ROOT_DIR / "results" / "alignment" / "versions"
-    alignment_contrasts: Path = ROOT_DIR / "results" / "alignment" / "contrasts"
-    alignment_contrasts_raw: Path = ROOT_DIR / "results" / "alignment" / "contrasts" / "raw"
-    alignment_contrasts_residual: Path = ROOT_DIR / "results" / "alignment" / "contrasts" / "residual"
-    alignment_standalone: Path = ROOT_DIR / "results" / "alignment" / "standalone"
-    alignment_layer_profiles: Path = ROOT_DIR / "results" / "alignment" / "layer_profiles"
-    alignment_sysprompt: Path = ROOT_DIR / "results" / "alignment" / "sysprompt"
+    # --- Version-dependent ---
+    # These are None until set_version() is called
+    alignment: Path = None
+    alignment_versions: Path = None
+    alignment_contrasts: Path = None
+    alignment_contrasts_raw: Path = None
+    alignment_contrasts_residual: Path = None
+    alignment_standalone: Path = None
+    alignment_layer_profiles: Path = None
+    alignment_sysprompt: Path = None
+    concept_steering: Path = None
+    interventions: Path = None
+    interventions_v1: Path = None
+    interventions_v2: Path = None
+    behavioral: Path = None
+    behavioral_v1: Path = None
+    behavioral_v2: Path = None
+    cross_prediction: Path = None
 
-    # Phase 2: Concept probe training
-    concept_probes: Path = ROOT_DIR / "results" / "concept_probes"
-    concept_probe_summaries: Path = ROOT_DIR / "results" / "concept_probes" / "summaries"
-
-    # Phase 3: Concept intervention (generation)
-    interventions: Path = ROOT_DIR / "results" / "interventions"
-    interventions_v1: Path = ROOT_DIR / "results" / "interventions" / "V1"
-    interventions_v2: Path = ROOT_DIR / "results" / "interventions" / "V2"
-
-    # Phase 4: Behavioral analysis
-    behavioral: Path = ROOT_DIR / "results" / "behavioral"
-    behavioral_v1: Path = ROOT_DIR / "results" / "behavioral" / "V1"
-    behavioral_v2: Path = ROOT_DIR / "results" / "behavioral" / "V2"
-
-    # Phase 5: Cross-prediction
-    cross_prediction: Path = ROOT_DIR / "results" / "cross_prediction"
-
-    # Lexical distinctiveness analysis
-    lexical: Path = ROOT_DIR / "results" / "lexical"
-
-    # Publication figures
-    figures: Path = ROOT_DIR / "results" / "figures"
-    figures_pub: Path = ROOT_DIR / "results" / "figures" / "publication"
+    # Publication figures (model-scoped)
+    figures: Path = None
+    figures_pub: Path = None
 
     # Logs
     logs: Path = ROOT_DIR / "logs"
+
+    def __post_init__(self):
+        self._update_model_paths()
+
+    def _update_model_paths(self):
+        """Update model-scoped paths (version-independent)."""
+        model = _model_dir()
+        model_root = self.root / model
+        self.concept_activations = model_root / "concept_activations"
+        self.concept_activations_contrasts = model_root / "concept_activations" / "contrasts"
+        self.concept_activations_standalone = model_root / "concept_activations" / "standalone"
+        self.concept_probes_data = model_root / "concept_probes"
+        self.concept_overlap = model_root / "concept_overlap"
+        self.sysprompt = model_root / "sysprompt"
+        self.lexical = model_root / "lexical"
+        self.comparisons = model_root / "comparisons"
+        self.figures = model_root / "figures"
+        self.figures_pub = model_root / "figures" / "publication"
+
+    def _update_version_paths(self, version):
+        """Update version-dependent paths under results/{model}/{version}/."""
+        model = _model_dir()
+        ver_root = self.root / model / version
+        self.alignment = ver_root / "alignment"
+        self.alignment_versions = ver_root / "alignment"  # use with f"turn_{N}" directly
+        self.alignment_contrasts = ver_root / "alignment" / "contrasts"
+        self.alignment_contrasts_raw = ver_root / "alignment" / "contrasts" / "raw"
+        self.alignment_contrasts_residual = ver_root / "alignment" / "contrasts" / "residual"
+        self.alignment_standalone = ver_root / "alignment" / "standalone"
+        self.alignment_layer_profiles = ver_root / "alignment" / "layer_profiles"
+        self.alignment_sysprompt = ver_root / "alignment" / "sysprompt"
+        self.concept_steering = ver_root / "concept_steering"
+        self.interventions = ver_root / "interventions"
+        self.interventions_v1 = ver_root / "interventions" / "V1"
+        self.interventions_v2 = ver_root / "interventions" / "V2"
+        self.behavioral = ver_root / "behavioral"
+        self.behavioral_v1 = ver_root / "behavioral" / "V1"
+        self.behavioral_v2 = ver_root / "behavioral" / "V2"
+        self.cross_prediction = ver_root / "cross_prediction"
 
 
 # ============================================================================
@@ -376,7 +426,7 @@ def validate_config():
         errors.append(f"Concepts directory not found: {config.PATHS.concepts_root}")
 
     if errors:
-        print("⚠️  Config validation warnings:")
+        print("Config validation warnings:")
         for err in errors:
             print(f"  - {err}")
         print("Some features may not work until these paths are available.")
@@ -387,6 +437,37 @@ validate_config()
 
 
 # ============================================================================
+# MODEL MANAGEMENT
+# ============================================================================
+
+def set_model(model):
+    """Set the active model. Updates MODEL_NAME, INPUT_DIM, N_LAYERS, and output paths."""
+    global _active_model
+    if model not in VALID_MODELS:
+        raise ValueError(f"Invalid model '{model}'. Must be one of: {VALID_MODELS}")
+    _active_model = model
+    config.MODEL_NAME = _MODEL_PATHS[model]
+    mc = _MODEL_CONFIGS[model]
+    config.INPUT_DIM = mc["input_dim"]
+    config.N_LAYERS = mc["n_layers"]
+    config.RESULTS._update_model_paths()
+
+
+def get_model():
+    """Return the active model name (default: llama2_13b_chat)."""
+    return _active_model or "llama2_13b_chat"
+
+
+def add_model_argument(parser):
+    """Add an optional --model argument to an argparse parser."""
+    parser.add_argument(
+        "--model", type=str, default="llama2_13b_chat",
+        choices=VALID_MODELS,
+        help=f"Model to use. Choices: {', '.join(VALID_MODELS)} (default: llama2_13b_chat)"
+    )
+
+
+# ============================================================================
 # VERSION MANAGEMENT (for multi-version Exp 2/Exp 1 support)
 # ============================================================================
 
@@ -394,7 +475,8 @@ def set_version(version: str, turn: int = 5):
     """
     Set the active Exp 2 / Exp 1 data version and conversation turn.
 
-    Updates config.EXP2_ROOT, config.EXP1_ROOT, and all derived input paths.
+    Updates config.EXP2_ROOT, config.EXP1_ROOT, all derived input paths,
+    and version-dependent output paths.
     Must be called before accessing any Exp 2 or Exp 1 paths.
 
     Args:
@@ -421,27 +503,28 @@ def set_version(version: str, turn: int = 5):
     config.EXP2_ROOT = EXP2_ROOT
     config.EXP1_ROOT = EXP1_ROOT
 
-    # Update all derived input paths (new exp_2 structure: data/{version}/...)
+    # Update Exp 2 input paths (post-refactor structure)
+    model = get_model()
     turn_dir = f"turn_{turn}"
-    config.PATHS.exp2_probes = EXP2_ROOT / "data" / version / "probe_checkpoints"
-    config.PATHS.exp2_operational = EXP2_ROOT / "data" / version / "probe_checkpoints" / turn_dir / "operational"
-    config.PATHS.exp2_metacognitive = EXP2_ROOT / "data" / version / "probe_checkpoints" / turn_dir / "metacognitive"
+    config.PATHS.exp2_probes = EXP2_ROOT / "results" / model / version / "probe_training" / "data"
+    config.PATHS.exp2_operational = config.PATHS.exp2_probes / turn_dir / "operational"
+    config.PATHS.exp2_metacognitive = config.PATHS.exp2_probes / turn_dir / "metacognitive"
     config.PATHS.exp2_conversations = EXP2_ROOT / "data" / version / "human_ai_conversations"
+
+    # Update Exp 1 input paths
     config.PATHS.exp1_prompts = EXP1_ROOT / "code" / "data_gen" / "utils" / "prompts"
     config.PATHS.exp1_configs = EXP1_ROOT / "code" / "data_gen" / "utils" / "config"
 
+    # Update version-dependent output paths
+    config.RESULTS._update_version_paths(version)
+
     # Validate that key Exp 2 paths exist
     if not config.PATHS.exp2_probes.exists():
-        print(f"⚠️  Exp 2 probes not found for version '{version}': {config.PATHS.exp2_probes}")
+        print(f"Exp 2 probes not found for version '{version}': {config.PATHS.exp2_probes}")
 
 
 def add_version_argument(parser):
-    """
-    Add a required --version argument to an argparse parser.
-
-    Args:
-        parser: argparse.ArgumentParser instance
-    """
+    """Add a required --version argument to an argparse parser."""
     parser.add_argument(
         "--version", type=str, required=True,
         choices=VALID_VERSIONS,
@@ -450,15 +533,7 @@ def add_version_argument(parser):
 
 
 def get_version_results_dir(base_path):
-    """
-    Return a version-specific subdirectory under base_path.
-
-    Args:
-        base_path: Path to the base results directory
-
-    Returns:
-        Path: base_path / _active_version
-    """
+    """Return a version-specific subdirectory under base_path."""
     if _active_version is None:
         raise RuntimeError(
             "No version set. Call set_version() before get_version_results_dir()."
@@ -467,12 +542,7 @@ def get_version_results_dir(base_path):
 
 
 def add_turn_argument(parser):
-    """
-    Add an optional --turn argument to an argparse parser.
-
-    Args:
-        parser: argparse.ArgumentParser instance
-    """
+    """Add an optional --turn argument to an argparse parser."""
     parser.add_argument(
         "--turn", type=int, default=5,
         choices=list(VALID_TURNS),
@@ -481,15 +551,7 @@ def add_turn_argument(parser):
 
 
 def get_turn_results_dir(base_path):
-    """
-    Return a version- and turn-specific subdirectory under base_path.
-
-    Args:
-        base_path: Path to the base results directory
-
-    Returns:
-        Path: base_path / _active_version / turn_{_active_turn}
-    """
+    """Return a version- and turn-specific subdirectory under base_path."""
     if _active_version is None:
         raise RuntimeError(
             "No version set. Call set_version() before get_turn_results_dir()."
@@ -510,46 +572,54 @@ if __name__ == "__main__":
     print("EXPERIMENT 3 CONFIGURATION")
     print("="*70)
 
-    print(f"\n📁 ROOT DIR: {config.ROOT_DIR}")
-    print(f"📁 PROJECT ROOT: {config.PROJECT_ROOT}")
-    print(f"\n📦 VALID VERSIONS: {VALID_VERSIONS}")
-    print(f"   Active version: {_active_version or '(not set — call set_version())'}")
+    print(f"\nROOT DIR: {config.ROOT_DIR}")
+    print(f"PROJECT ROOT: {config.PROJECT_ROOT}")
+    print(f"\nVALID VERSIONS: {VALID_VERSIONS}")
+    print(f"   Active version: {_active_version or '(not set)'}")
+    print(f"   Active model: {get_model()}")
 
     # Demo: set a version to show derived paths
-    print(f"\n--- Setting version='balanced_names' for demo ---")
-    set_version("balanced_names")
+    print(f"\n--- Setting version='balanced_gpt' for demo ---")
+    set_version("balanced_gpt")
     print(f"   EXP2_ROOT: {config.EXP2_ROOT}")
     print(f"   EXP1_ROOT: {config.EXP1_ROOT}")
     print(f"   Exp 2 probes: {config.PATHS.exp2_probes}")
     print(f"   Exp 2 conversations: {config.PATHS.exp2_conversations}")
 
-    print(f"\n🤖 MODEL: {Path(config.MODEL_NAME).name}")
+    print(f"\nMODEL: {Path(config.MODEL_NAME).name}")
     print(f"   Hidden dim: {config.INPUT_DIM}")
     print(f"   Layers: {config.N_LAYERS}")
 
-    print(f"\n📂 KEY INPUT PATHS:")
+    print(f"\nKEY INPUT PATHS:")
     print(f"   Concepts (contrasts): {config.PATHS.concepts_contrasts}")
     print(f"   Concepts (standalone): {config.PATHS.concepts_standalone}")
+    print(f"   Exp 1 utils: {config.PATHS.exp1_utils}")
+    print(f"   Causality questions: {config.PATHS.causality_questions}")
 
-    print(f"\n📂 KEY OUTPUT PATHS:")
+    print(f"\nKEY OUTPUT PATHS (model-scoped):")
     print(f"   Results root: {config.RESULTS.root}")
-    print(f"   Concept activations: {config.RESULTS.concept_activations}")
-    print(f"   Alignment: {config.RESULTS.alignment}")
-    print(f"   Interventions: {config.RESULTS.interventions}")
-    print(f"   Behavioral: {config.RESULTS.behavioral}")
+    print(f"   Concept overlap: {config.RESULTS.concept_overlap}")
+    print(f"   Comparisons: {config.RESULTS.comparisons}")
 
-    print(f"\n⚙️  TRAINING CONFIG:")
+    print(f"\nKEY OUTPUT PATHS (version-dependent):")
+    print(f"   Alignment: {config.RESULTS.alignment}")
+    print(f"   Concept steering: {config.RESULTS.concept_steering}")
+    print(f"   Interventions V1: {config.RESULTS.interventions_v1}")
+    print(f"   Behavioral: {config.RESULTS.behavioral}")
+    print(f"   Cross-prediction: {config.RESULTS.cross_prediction}")
+
+    print(f"\nTRAINING CONFIG:")
     print(f"   Epochs: {config.TRAINING.epochs}")
     print(f"   Batch size: {config.TRAINING.batch_size_train}")
     print(f"   Min probe accuracy: {config.TRAINING.min_probe_accuracy}")
 
-    print(f"\n⚙️  ANALYSIS CONFIG:")
+    print(f"\nANALYSIS CONFIG:")
     print(f"   Bootstrap iterations: {config.ANALYSIS.n_bootstrap}")
     print(f"   Permutation tests: {config.ANALYSIS.n_permutations}")
     print(f"   Random seed: {config.ANALYSIS.seed}")
 
-    print(f"\n📊 DIMENSION CATEGORIES:")
+    print(f"\nDIMENSION CATEGORIES:")
     for cat, dims in config.DIMENSION_CATEGORIES.items():
         print(f"   {cat}: {dims}")
 
-    print(f"\n✅ Config loaded successfully!")
+    print(f"\nConfig loaded successfully!")

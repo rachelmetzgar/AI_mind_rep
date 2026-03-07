@@ -3,8 +3,8 @@
 #SBATCH --partition=all
 #SBATCH --mem=16G
 #SBATCH --time=01:00:00
-#SBATCH --output=/jukebox/graziano/rachel/mind_rep/exp_3/logs/alignment/%j.out
-#SBATCH --error=/jukebox/graziano/rachel/mind_rep/exp_3/logs/alignment/%j.err
+#SBATCH --output=/mnt/cup/graziano/rachel/mind_rep/exp_3/logs/alignment/%j.out
+#SBATCH --error=/mnt/cup/graziano/rachel/mind_rep/exp_3/logs/alignment/%j.err
 # -------------------------------------------------------------
 # Layer profile analysis: per-layer alignment patterns from 2a output
 # No GPU needed — reads .npz files and computes summary statistics.
@@ -29,7 +29,7 @@ set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 VERSION=${VERSION:?ERROR: VERSION is required. Use --export=VERSION=labels}
-PROJECT_ROOT="/jukebox/graziano/rachel/mind_rep/exp_3"
+PROJECT_ROOT="/mnt/cup/graziano/rachel/mind_rep/exp_3"
 mkdir -p "$PROJECT_ROOT/logs/alignment"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 
@@ -39,6 +39,6 @@ TURN=${TURN:-5}
 echo "[$(date)] Starting layer profile analysis — version=${VERSION}, turn=${TURN}, mode=${ANALYSIS}"
 echo "  Node: $(hostname)"
 
-python code/analysis/alignment/2b_layer_profile_analysis.py --version "${VERSION}" --turn "${TURN}" --analysis "${ANALYSIS}"
+python code/2b_layer_profile_analysis.py --version "${VERSION}" --turn "${TURN}" --analysis "${ANALYSIS}"
 
 echo "[$(date)] Finished layer profile analysis — version=${VERSION}, turn=${TURN}, mode=${ANALYSIS}"
