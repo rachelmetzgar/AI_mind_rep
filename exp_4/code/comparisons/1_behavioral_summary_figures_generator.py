@@ -6,13 +6,13 @@ Figures cover both the base model (pairwise + individual ratings) and
 the chat model (RSA of entity activations). All figures saved to a
 shared comparisons/figures/ directory.
 
-Reads data from the new results structure:
-  - Base pairwise: results/behavior/base/{cond}/data/
-  - Base individual: results/behavior/base/{cond}/data/
-  - Chat RSA/RDM: results/internals/chat/{cond}/data/
+Reads data from model-first results structure:
+  - Base pairwise: results/llama2_13b_base/behavior/{cond}/data/
+  - Base individual: results/llama2_13b_base/behavior/{cond}/data/
+  - Chat RSA/RDM: results/llama2_13b_chat/internals/{cond}/data/
 
 Usage:
-    python comparisons/1_behavioral_summary_figures.py
+    python comparisons/1_behavioral_summary_figures_generator.py
 
 Rachel C. Metzgar · Mar 2026
 """
@@ -31,11 +31,9 @@ from scipy import stats
 
 # -- Imports from project ------------------------------------------------
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from config import config, set_model, data_dir, figures_dir, results_phase_dir, ensure_dir, ROOT_DIR
+from config import config, set_model, data_dir, figures_dir, results_phase_dir, ensure_dir, ROOT_DIR, COMPARISONS_DIR
 
-from src.utils import nice_entity, nice_capacity
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from utils.utils import nice_entity, nice_capacity
 from entities.gray_entities import (
     GRAY_ET_AL_SCORES, CAPACITY_NAMES, ENTITY_NAMES,
     CHARACTER_NAMES, CAPACITY_PROMPTS, N_ENTITIES, N_CAPACITIES,
@@ -43,7 +41,7 @@ from entities.gray_entities import (
 
 
 # -- Output directory -----------------------------------------------------
-FIG_DIR = ensure_dir(ROOT_DIR / "results" / "comparisons" / "figures")
+FIG_DIR = ensure_dir(COMPARISONS_DIR / "figures")
 
 
 # -- Style ----------------------------------------------------------------
@@ -93,7 +91,7 @@ def fig1_scree_plot():
     """Compare eigenvalue structure: pairwise model vs Gray et al. humans."""
     print("Fig 1: Scree plot (eigenvalue comparison)")
 
-    set_model("base")
+    set_model("llama2_13b_base")
     pca = np.load(data_dir("behavior", "with_self") / "pairwise_pca_results.npz")
     model_eig = pca["eigenvalues"]
 
@@ -135,7 +133,7 @@ def fig2_loading_comparison():
     """Side-by-side loadings: model F1/F2 vs human Experience/Agency."""
     print("Fig 2: Factor loading comparison")
 
-    set_model("base")
+    set_model("llama2_13b_base")
     pca = np.load(data_dir("behavior", "with_self") / "pairwise_pca_results.npz",
                   allow_pickle=True)
     loadings = pca["rotated_loadings"]  # (18, 2)
@@ -187,7 +185,7 @@ def fig3_entity_scatter():
     """Scatter: model factor scores vs human Experience/Agency."""
     print("Fig 3: Entity scatter (model vs human)")
 
-    set_model("base")
+    set_model("llama2_13b_base")
     pca = np.load(data_dir("behavior", "with_self") / "pairwise_pca_results.npz",
                   allow_pickle=True)
     scores_01 = pca["factor_scores_01"]  # (13, 2)
@@ -254,7 +252,7 @@ def fig4_mind_space():
     """Side-by-side 2D entity maps: human vs model."""
     print("Fig 4: Mind perception space (2D entity map)")
 
-    set_model("base")
+    set_model("llama2_13b_base")
     pca = np.load(data_dir("behavior", "with_self") / "pairwise_pca_results.npz",
                   allow_pickle=True)
     scores_01 = pca["factor_scores_01"]  # (13, 2)
@@ -304,7 +302,7 @@ def fig5_rating_heatmap():
     """Heatmap of individual Likert ratings (entities x capacities)."""
     print("Fig 5: Individual rating heatmap")
 
-    set_model("base")
+    set_model("llama2_13b_base")
     d = np.load(data_dir("behavior", "with_self") / "individual_rating_matrix.npz",
                 allow_pickle=True)
     matrix = d["rating_matrix"]        # (18, 13)
@@ -351,7 +349,7 @@ def fig6_individual_scatter():
     """Scatter for individual ratings: F1 vs human Agency (significant result)."""
     print("Fig 6: Individual ratings entity scatter")
 
-    set_model("base")
+    set_model("llama2_13b_base")
 
     # Use without_self data (stronger result, matches Gray et al.)
     pca_ws = np.load(data_dir("behavior", "without_self") / "individual_pca_results.npz",
@@ -418,7 +416,7 @@ def fig7_rsa_layerwise():
     """RSA correlation (model RDM vs human RDM) across transformer layers."""
     print("Fig 7: RSA across layers (chat model)")
 
-    set_model("chat")
+    set_model("llama2_13b_chat")
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
 
     for idx, cond in enumerate(["without_self", "with_self"]):
@@ -482,7 +480,7 @@ def fig8_correlation_summary():
     results = []
 
     # Pairwise with_self
-    set_model("base")
+    set_model("llama2_13b_base")
     pca = np.load(data_dir("behavior", "with_self") / "pairwise_pca_results.npz",
                   allow_pickle=True)
     ek = list(pca["entity_keys"])
@@ -513,7 +511,7 @@ def fig8_correlation_summary():
             })
 
     # RSA (peak layer, with_self) -- use combined variant
-    set_model("chat")
+    set_model("llama2_13b_chat")
     rsa_path = data_dir("internals", "with_self") / "rsa_results.json"
     with open(rsa_path) as f:
         rsa_data = json.load(f)
@@ -570,7 +568,7 @@ def fig9_pairwise_heatmap():
     """Heatmap of pairwise-derived character means (capacities x entities)."""
     print("Fig 9: Pairwise character means heatmap")
 
-    set_model("base")
+    set_model("llama2_13b_base")
     d = np.load(data_dir("behavior", "with_self") / "pairwise_character_means.npz",
                 allow_pickle=True)
     means = d["means"]              # (18, 13)
@@ -606,7 +604,7 @@ def fig10_rdm_comparison():
     """Side-by-side RDM matrices: model (peak RSA layer) vs human."""
     print("Fig 10: RDM comparison (model vs human)")
 
-    set_model("chat")
+    set_model("llama2_13b_chat")
     cond = "with_self"
 
     # Find peak RSA layer (skip NaN) -- use combined variant

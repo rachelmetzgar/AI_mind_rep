@@ -19,9 +19,9 @@ Output:
         debiasing_reanalysis.npz
 
 Usage:
-    python 2_debiasing_reanalysis.py --model base
-    python 2_debiasing_reanalysis.py --model base --include_self
-    python 2_debiasing_reanalysis.py --model base --both
+    python 2_debiasing_reanalysis.py --model llama2_13b_base
+    python 2_debiasing_reanalysis.py --model llama2_13b_base --include_self
+    python 2_debiasing_reanalysis.py --model llama2_13b_base --both
 
 Env: llama2_env
 Rachel C. Metzgar / Mar 2026
@@ -41,8 +41,7 @@ from config import (
     config, set_model, add_model_argument,
     data_dir, results_phase_dir, get_condition_tag,
 )
-from src.utils import varimax_rotation, run_pca_varimax, correlate_with_humans
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+from utils.utils import varimax_rotation, run_pca_varimax, correlate_with_humans
 from entities.gray_entities import (
     GRAY_ET_AL_SCORES, CAPACITY_PROMPTS, CAPACITY_NAMES, ENTITY_NAMES,
 )
@@ -386,8 +385,8 @@ def main():
     )
     args = parser.parse_args()
 
-    if args.model != "base":
-        parser.error("Debiasing reanalysis requires --model base "
+    if args.model != "llama2_13b_base":
+        parser.error("Debiasing reanalysis requires --model llama2_13b_base "
                       "(needs probability distributions in responses)")
 
     set_model(args.model)

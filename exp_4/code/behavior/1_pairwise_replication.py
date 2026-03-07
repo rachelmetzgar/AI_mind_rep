@@ -49,11 +49,11 @@ Output (all with pairwise_ prefix):
         pairwise_results_summary.md
 
 Usage:
-    python 1_pairwise_replication.py --model chat
-    python 1_pairwise_replication.py --model base
-    python 1_pairwise_replication.py --model chat --include_self
-    python 1_pairwise_replication.py --model chat --both
-    python 1_pairwise_replication.py --model base --single_order --seed 42
+    python 1_pairwise_replication.py --model llama2_13b_chat
+    python 1_pairwise_replication.py --model llama2_13b_base
+    python 1_pairwise_replication.py --model llama2_13b_chat --include_self
+    python 1_pairwise_replication.py --model llama2_13b_chat --both
+    python 1_pairwise_replication.py --model llama2_13b_base --single_order --seed 42
 
 Env: llama2_env
 Rachel C. Metzgar · Mar 2026
@@ -75,8 +75,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from scipy.stats import spearmanr
 
 # ── Path setup ──
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))          # for config
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))   # for entities
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from config import (
     config, set_model, add_model_argument,
@@ -90,7 +89,7 @@ from entities.gray_entities import (
     CHARACTER_NAMES,
     CHARACTER_DESCRIPTIONS,
 )
-from src.utils import (
+from utils.utils import (
     varimax_rotation,
     run_pca_varimax,
     compute_character_means_pairwise,
@@ -587,7 +586,7 @@ def main():
     args = parser.parse_args()
 
     if args.both:
-        models_to_run = ["chat", "base"]
+        models_to_run = ["llama2_13b_chat", "llama2_13b_base"]
     else:
         models_to_run = [args.model]
 

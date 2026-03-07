@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=exp4_pairwise_base
-#SBATCH --output=/mnt/cup/labs/graziano/rachel/mind_rep/exp_4/logs/1_pairwise_base_%j.out
-#SBATCH --error=/mnt/cup/labs/graziano/rachel/mind_rep/exp_4/logs/1_pairwise_base_%j.err
+#SBATCH --output=/mnt/cup/labs/graziano/rachel/mind_rep/exp_4/logs/behavior/1_pairwise_base_%j.out
+#SBATCH --error=/mnt/cup/labs/graziano/rachel/mind_rep/exp_4/logs/behavior/1_pairwise_base_%j.err
 #SBATCH --gres=gpu:1 --mem=48G --time=4:00:00 --cpus-per-task=4
 
 export HF_HOME="/mnt/cup/labs/graziano/rachel/.cache_huggingface"
@@ -21,4 +21,4 @@ trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 cd /mnt/cup/labs/graziano/rachel/mind_rep/exp_4/code
 
-python behavior/1_pairwise_replication.py --model base --both
+python behavior/1_pairwise_replication.py --model llama2_13b_base --both

@@ -3,14 +3,14 @@
 Experiment 4: Central Configuration
 
 All paths, model names, and constants in one place.
-Supports two model variants (chat, base) via set_model().
+Supports two model variants (llama2_13b_chat, llama2_13b_base) via set_model().
 
 Usage:
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from config import config, set_model, add_model_argument
 
-    set_model("chat")
+    set_model("llama2_13b_chat")
     data = config.data_dir("internals", "without_self")
 
 Rachel C. Metzgar · Mar 2026
@@ -28,12 +28,12 @@ from dataclasses import dataclass
 ROOT_DIR = Path(__file__).resolve().parent.parent  # exp_4/
 PROJECT_ROOT = ROOT_DIR.parent  # mind_rep/
 
-VALID_MODELS = ("chat", "base")
+VALID_MODELS = ("llama2_13b_chat", "llama2_13b_base")
 
 MODELS = {
-    "chat": {
+    "llama2_13b_chat": {
         "path": (
-            "/jukebox/graziano/rachel/ai_percep_clean/.cache/huggingface/hub/"
+            "/mnt/cup/labs/graziano/rachel/ai_percep_clean/.cache/huggingface/hub/"
             "models--meta-llama--Llama-2-13b-chat-hf/snapshots/"
             "a2cb7a712bb6e5e736ca7f8cd98167f81a0b5bd8"
         ),
@@ -41,7 +41,7 @@ MODELS = {
         "is_chat": True,
         "local_files_only": True,
     },
-    "base": {
+    "llama2_13b_base": {
         "path": "meta-llama/Llama-2-13b-hf",
         "label": "LLaMA-2-13B (Base)",
         "is_chat": False,
@@ -107,26 +107,29 @@ def get_condition_tag(include_self: bool) -> str:
 
 
 def data_dir(phase, condition):
-    """Return path to data directory: results/{phase}/{model}/{condition}/data/"""
+    """Return path to data directory: results/{model}/{phase}/{condition}/data/"""
     if _active_model is None:
         raise RuntimeError("Call set_model() before data_dir()")
-    return ensure_dir(ROOT_DIR / "results" / phase / _active_model / condition / "data")
+    return ensure_dir(ROOT_DIR / "results" / _active_model / phase / condition / "data")
 
 
 def figures_dir(phase, condition):
-    """Return path to figures directory: results/{phase}/{model}/{condition}/figures/"""
+    """Return path to figures directory: results/{model}/{phase}/{condition}/figures/"""
     if _active_model is None:
         raise RuntimeError("Call set_model() before figures_dir()")
-    return ensure_dir(ROOT_DIR / "results" / phase / _active_model / condition / "figures")
+    return ensure_dir(ROOT_DIR / "results" / _active_model / phase / condition / "figures")
 
 
 def results_phase_dir(phase, condition=None):
-    """Return path to results/{phase}/{model}/ or results/{phase}/{model}/{condition}/"""
+    """Return path to results/{model}/{phase}/ or results/{model}/{phase}/{condition}/"""
     if _active_model is None:
         raise RuntimeError("Call set_model() before results_phase_dir()")
     if condition:
-        return ensure_dir(ROOT_DIR / "results" / phase / _active_model / condition)
-    return ensure_dir(ROOT_DIR / "results" / phase / _active_model)
+        return ensure_dir(ROOT_DIR / "results" / _active_model / phase / condition)
+    return ensure_dir(ROOT_DIR / "results" / _active_model / phase)
+
+
+COMPARISONS_DIR = ROOT_DIR / "results" / "comparisons"
 
 
 # ============================================================================
@@ -138,7 +141,7 @@ def set_model(model):
     Set the active model variant.
 
     Args:
-        model: One of VALID_MODELS ("chat" or "base")
+        model: One of VALID_MODELS ("llama2_13b_chat" or "llama2_13b_base")
     """
     global _active_model
 
@@ -182,6 +185,7 @@ if __name__ == "__main__":
     print(f"PROJECT ROOT: {config.PROJECT_ROOT}")
     print(f"Hidden dim: {config.INPUT_DIM}")
     print(f"Layers: {config.N_LAYERS}")
+    print(f"COMPARISONS_DIR: {COMPARISONS_DIR}")
 
     for m in VALID_MODELS:
         set_model(m)

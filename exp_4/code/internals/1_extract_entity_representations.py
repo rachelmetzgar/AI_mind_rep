@@ -22,9 +22,9 @@ Output:
         internals_results_summary.md # documented methodology + results
 
 Usage:
-    python 1_extract_entity_representations.py --model chat
-    python 1_extract_entity_representations.py --model base --include_self
-    python 1_extract_entity_representations.py --model chat --both
+    python 1_extract_entity_representations.py --model llama2_13b_chat
+    python 1_extract_entity_representations.py --model llama2_13b_base --include_self
+    python 1_extract_entity_representations.py --model llama2_13b_chat --both
 
 SLURM:
     sbatch slurm/1_extract_entities.sh
@@ -50,12 +50,10 @@ from config import (
     config, set_model, add_model_argument,
     data_dir, results_phase_dir, get_device, get_condition_tag,
 )
-from src.utils import (
+from utils.utils import (
     compute_rdm_cosine, compute_all_human_rdms,
     compute_rsa_all_layers, llama_v2_prompt,
 )
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from entities.gray_entities import GRAY_ET_AL_SCORES, ENTITY_PROMPTS, ENTITY_NAMES
 
 
