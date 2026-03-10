@@ -29,7 +29,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from config import (
     config, set_version, set_model,
     add_version_argument, add_model_argument, add_turn_argument,
-    add_variant_argument, set_variant,
+    add_variant_argument, set_variant, variant_filename, get_variant_suffix, data_subdir,
     get_model, DIMENSION_CATEGORIES, CATEGORY_COLORS,
 )
 
@@ -54,8 +54,8 @@ def parse_args():
 # ============================================================
 
 def load_stats(approach_dir):
-    """Load stats.csv from an approach directory."""
-    path = os.path.join(approach_dir, "stats.csv")
+    """Load stats.csv from an approach directory's data/ subfolder."""
+    path = os.path.join(approach_dir, "data", variant_filename("stats", ".csv"))
     if not os.path.exists(path):
         return None
     try:
@@ -67,7 +67,7 @@ def load_stats(approach_dir):
 
 def load_prompt_stats(approach_dir):
     """Load prompt_stats.csv (approach D only)."""
-    path = os.path.join(approach_dir, "prompt_stats.csv")
+    path = os.path.join(approach_dir, "data", variant_filename("prompt_stats", ".csv"))
     if not os.path.exists(path):
         return None
     try:
@@ -79,7 +79,7 @@ def load_prompt_stats(approach_dir):
 
 def load_cross_summary(root_dir):
     """Load cross_approach_summary.csv."""
-    path = os.path.join(root_dir, "cross_approach_summary.csv")
+    path = os.path.join(root_dir, "data", variant_filename("cross_approach_summary", ".csv"))
     if not os.path.exists(path):
         return None
     return pd.read_csv(path)
@@ -260,7 +260,7 @@ def generate_html(version, turn, root_dir, stats_a, stats_c, stats_d,
         lines.append(_stats_table(stats_df, label))
 
         # Embed figure
-        fig_path = os.path.join(approach_dir, "figures", "alignment_by_concept.png")
+        fig_path = os.path.join(approach_dir, f"figures{get_variant_suffix()}", "alignment_by_concept.png")
         img_data = embed_png(fig_path)
         if img_data:
             lines.append(f'<img src="{img_data}" alt="Approach {label} alignment">')
@@ -650,10 +650,9 @@ def main():
     set_version(args.version, turn=args.turn)
     model_name = get_model()
 
-    variant_suffix = args.variant if args.variant else ""
     root_dir = os.path.join(
         str(config.RESULTS.root), model_name, args.version,
-        f"concept_conversation{variant_suffix}", f"turn_{args.turn}",
+        "concept_conversation", f"turn_{args.turn}",
     )
 
     if not os.path.isdir(root_dir):
@@ -682,7 +681,7 @@ def main():
         args.version, args.turn, root_dir,
         stats_a, stats_c, stats_d, prompt_stats_d, cross_summary,
     )
-    html_path = os.path.join(root_dir, "concept_conversation_report.html")
+    html_path = os.path.join(root_dir, variant_filename("concept_conversation_report", ".html"))
     with open(html_path, "w") as f:
         f.write(html)
     print(f"Saved: {html_path}")
@@ -692,7 +691,7 @@ def main():
         args.version, args.turn,
         stats_a, stats_c, stats_d, prompt_stats_d, cross_summary,
     )
-    md_path = os.path.join(root_dir, "concept_conversation_report.md")
+    md_path = os.path.join(root_dir, variant_filename("concept_conversation_report", ".md"))
     with open(md_path, "w") as f:
         f.write(md)
     print(f"Saved: {md_path}")

@@ -51,7 +51,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 # --- Local imports ---
 from utils.dataset import llama_v2_prompt
-from config import config, set_version, add_version_argument, ensure_dir, add_variant_argument, set_variant
+from config import config, set_version, add_version_argument, ensure_dir, add_variant_argument, set_variant, variant_filename
 
 
 # ========================== INLINE TRACEDICT ========================== #
@@ -366,7 +366,7 @@ def v1_save(result_dir, dim_name, strategy, N, questions, baseline,
     os.makedirs(result_dir, exist_ok=True)
 
     # CSV — same format as exp2 V1
-    csv_path = os.path.join(result_dir, f"N_{N}_results.csv")
+    csv_path = os.path.join(result_dir, variant_filename(f"N_{N}_results", ".csv"))
     with open(csv_path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=[
             "question_idx", "question", "condition", "response",
@@ -384,7 +384,7 @@ def v1_save(result_dir, dim_name, strategy, N, questions, baseline,
                 })
 
     # TXT examples
-    txt_path = os.path.join(result_dir, f"N_{N}_results.txt")
+    txt_path = os.path.join(result_dir, variant_filename(f"N_{N}_results", ".txt"))
     with open(txt_path, "w", encoding="utf-8") as f:
         f.write(f"Concept vector steering: {dim_name}\n")
         f.write(f"Strategy: {strategy} | N = {N} (unit-normalized direction)\n")
@@ -402,7 +402,7 @@ def v1_save(result_dir, dim_name, strategy, N, questions, baseline,
             f.write("=" * 80 + "\n\n")
 
     # Config JSON
-    cfg_path = os.path.join(result_dir, f"N_{N}_config.json")
+    cfg_path = os.path.join(result_dir, variant_filename(f"N_{N}_config", ".json"))
     gen_config = {
         "timestamp": datetime.now().isoformat(),
         "experiment": "exp3_concept_vector_steering",
@@ -543,7 +543,7 @@ def main():
             result_dir = str(RESULT_DIR / dim_name / strategy)
 
             # Skip if already done
-            csv_path = os.path.join(result_dir, f"N_{N}_results.csv")
+            csv_path = os.path.join(result_dir, variant_filename(f"N_{N}_results", ".csv"))
             if os.path.isfile(csv_path):
                 print(f"  [SKIP] Already exists: {csv_path}")
                 continue

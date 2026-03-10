@@ -35,7 +35,7 @@ import argparse
 import numpy as np
 import csv
 
-from config import config, add_variant_argument, set_variant
+from config import config, add_variant_argument, set_variant, variant_filename, data_subdir
 
 # ========================== CONFIG ========================== #
 
@@ -433,33 +433,34 @@ def main():
     )
     if boot_overlap is not None:
         save_kwargs["boot_overlap"] = boot_overlap
-    np.savez_compressed(os.path.join(OUTPUT_DIR, "overlap_matrix.npz"), **save_kwargs)
-    print("  overlap_matrix.npz")
+    out_data = str(data_subdir(OUTPUT_DIR))
+    np.savez_compressed(os.path.join(out_data, variant_filename("overlap_matrix", ".npz")), **save_kwargs)
+    print(f"  {variant_filename('overlap_matrix', '.npz')}")
 
     # overlap_matrix.csv
-    csv_path = os.path.join(OUTPUT_DIR, "overlap_matrix.csv")
+    csv_path = os.path.join(out_data, variant_filename("overlap_matrix", ".csv"))
     save_overlap_matrix_csv(overlap, dim_ids, csv_path)
-    print("  overlap_matrix.csv")
+    print(f"  {variant_filename('overlap_matrix', '.csv')}")
 
     # layer_profiles.npz
     np.savez_compressed(
-        os.path.join(OUTPUT_DIR, "layer_profiles.npz"),
+        os.path.join(out_data, variant_filename("layer_profiles", ".npz")),
         layer_profiles=layer_profiles,
         dim_ids=np.array(dim_ids),
         dim_names=np.array([DIM_NAMES.get(d, f"dim_{d}") for d in dim_ids]),
     )
-    print("  layer_profiles.npz")
+    print(f"  {variant_filename('layer_profiles', '.npz')}")
 
     # Baseline overlap CSVs (only if bootstrap was run)
     if baseline_results_0 is not None and boot_overlap is not None:
-        path = os.path.join(OUTPUT_DIR, "baseline_overlap.csv")
+        path = os.path.join(out_data, variant_filename("baseline_overlap", ".csv"))
         save_baseline_overlap_csv(baseline_results_0, boot_overlap, dim_ids, 0, path)
-        print("  baseline_overlap.csv")
+        print(f"  {variant_filename('baseline_overlap', '.csv')}")
 
     if baseline_results_18 is not None and boot_overlap is not None:
-        path = os.path.join(OUTPUT_DIR, "sysprompt_baseline_overlap.csv")
+        path = os.path.join(out_data, variant_filename("sysprompt_baseline_overlap", ".csv"))
         save_baseline_overlap_csv(baseline_results_18, boot_overlap, dim_ids, 18, path)
-        print("  sysprompt_baseline_overlap.csv")
+        print(f"  {variant_filename('sysprompt_baseline_overlap', '.csv')}")
 
     print("\nDone.")
 

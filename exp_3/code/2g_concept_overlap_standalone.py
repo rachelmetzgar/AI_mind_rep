@@ -42,7 +42,7 @@ import argparse
 import csv
 import numpy as np
 
-from config import config, add_variant_argument, set_variant
+from config import config, add_variant_argument, set_variant, variant_filename, data_subdir
 
 # ========================== CONFIG ========================== #
 
@@ -521,8 +521,9 @@ def main():
     print(f"\nSaving results to {OUTPUT_DIR}/")
 
     # --- Raw outputs ---
+    out_data = str(data_subdir(OUTPUT_DIR))
     np.savez_compressed(
-        os.path.join(OUTPUT_DIR, "overlap_matrix.npz"),
+        os.path.join(out_data, variant_filename("overlap_matrix", ".npz")),
         overlap=overlap,
         boot_overlap=boot_overlap,
         dim_ids=np.array(dim_ids),
@@ -532,23 +533,23 @@ def main():
         layer_range_end=N_LAYERS,
         n_bootstrap=args.n_bootstrap,
     )
-    print("  overlap_matrix.npz (raw)")
+    print(f"  {variant_filename('overlap_matrix', '.npz')} (raw)")
 
-    csv_path = os.path.join(OUTPUT_DIR, "overlap_matrix.csv")
+    csv_path = os.path.join(out_data, variant_filename("overlap_matrix", ".csv"))
     save_overlap_matrix_csv(overlap, dim_ids, csv_path)
-    print("  overlap_matrix.csv (raw)")
+    print(f"  {variant_filename('overlap_matrix', '.csv')} (raw)")
 
     np.savez_compressed(
-        os.path.join(OUTPUT_DIR, "layer_profiles.npz"),
+        os.path.join(out_data, variant_filename("layer_profiles", ".npz")),
         layer_profiles=layer_profiles,
         dim_ids=np.array(dim_ids),
         dim_names=np.array([DIM_NAMES.get(d, f"dim_{d}") for d in dim_ids]),
     )
-    print("  layer_profiles.npz (raw)")
+    print(f"  {variant_filename('layer_profiles', '.npz')} (raw)")
 
     # --- Centered outputs ---
     np.savez_compressed(
-        os.path.join(OUTPUT_DIR, "overlap_matrix_centered.npz"),
+        os.path.join(out_data, variant_filename("overlap_matrix_centered", ".npz")),
         overlap=overlap_centered,
         boot_overlap=boot_overlap_centered,
         dim_ids=np.array(dim_ids),
@@ -558,28 +559,28 @@ def main():
         layer_range_end=N_LAYERS,
         n_bootstrap=args.n_bootstrap,
     )
-    print("  overlap_matrix_centered.npz")
+    print(f"  {variant_filename('overlap_matrix_centered', '.npz')}")
 
-    csv_path_c = os.path.join(OUTPUT_DIR, "overlap_matrix_centered.csv")
+    csv_path_c = os.path.join(out_data, variant_filename("overlap_matrix_centered", ".csv"))
     save_overlap_matrix_csv(overlap_centered, dim_ids, csv_path_c)
-    print("  overlap_matrix_centered.csv")
+    print(f"  {variant_filename('overlap_matrix_centered', '.csv')}")
 
     np.savez_compressed(
-        os.path.join(OUTPUT_DIR, "layer_profiles_centered.npz"),
+        os.path.join(out_data, variant_filename("layer_profiles_centered", ".npz")),
         layer_profiles=layer_profiles_centered,
         dim_ids=np.array(dim_ids),
         dim_names=np.array([DIM_NAMES.get(d, f"dim_{d}") for d in dim_ids]),
     )
-    print("  layer_profiles_centered.npz")
+    print(f"  {variant_filename('layer_profiles_centered', '.npz')}")
 
     # Entity overlap CSV (from centered vectors with centered bootstrap CIs)
     if entity_results_16 is not None or entity_results_17 is not None:
-        path = os.path.join(OUTPUT_DIR, "entity_overlap.csv")
+        path = os.path.join(out_data, variant_filename("entity_overlap", ".csv"))
         save_entity_overlap_csv(
             entity_results_16, entity_results_17,
             boot_overlap_centered, dim_ids, path
         )
-        print("  entity_overlap.csv (centered)")
+        print(f"  {variant_filename('entity_overlap', '.csv')} (centered)")
 
     print("\nDone.")
 

@@ -42,7 +42,7 @@ warnings.filterwarnings('ignore')
 # Import Experiment 1 utils (shared linguistic markers)
 # ============================================================
 
-from config import config, set_version, add_variant_argument, set_variant
+from config import config, set_version, add_variant_argument, set_variant, variant_filename, get_variant_suffix
 
 EXP1_UTILS_DIR = str(config.PATHS.exp1_utils)
 if EXP1_UTILS_DIR not in sys.path:
@@ -132,16 +132,17 @@ def discover_cells(v1_root, dim_filter=None, strategy_filter=None, strength_filt
     Returns list of dicts: {dim, strategy, N, csv_path}
     """
     cells = []
-    csv_pattern = os.path.join(v1_root, "*", "*", "N_*_results.csv")
+    suffix = get_variant_suffix()
+    csv_pattern = os.path.join(v1_root, "*", "*", f"N_*_results{suffix}.csv")
     for csv_path in sorted(glob.glob(csv_pattern)):
-        # Parse path: .../v1/{dim}/{strategy}/N_{N}_results.csv
+        # Parse path: .../v1/{dim}/{strategy}/N_{N}_results{suffix}.csv
         parts = csv_path.split(os.sep)
-        filename = parts[-1]           # N_{N}_results.csv
+        filename = parts[-1]
         strategy = parts[-2]
         dim = parts[-3]
 
         # Extract N from filename
-        m = re.match(r"N_(\d+)_results\.csv", filename)
+        m = re.match(rf"N_(\d+)_results{re.escape(suffix)}\.csv", filename)
         if not m:
             continue
         N = int(m.group(1))
@@ -463,12 +464,12 @@ def main():
         out_dir = os.path.dirname(csv_path)
 
         # Utterance-level metrics
-        utt_path = os.path.join(out_dir, f"N_{N}_utterances.csv")
+        utt_path = os.path.join(out_dir, variant_filename(f"N_{N}_utterances", ".csv"))
         df.to_csv(utt_path, index=False)
 
         # Report
         report = format_single_report(dim, strategy, N, condition_results)
-        report_path = os.path.join(out_dir, f"N_{N}_behavioral.txt")
+        report_path = os.path.join(out_dir, variant_filename(f"N_{N}_behavioral", ".txt"))
         with open(report_path, "w") as f:
             f.write(report)
         print(f"  Saved: {report_path}")
@@ -494,7 +495,7 @@ def main():
 
     if summary_rows:
         summary_df = pd.DataFrame(summary_rows)
-        summary_path = os.path.join(v1_root, "behavioral_summary.csv")
+        summary_path = os.path.join(v1_root, variant_filename("behavioral_summary", ".csv"))
         summary_df.to_csv(summary_path, index=False)
         print(f"\n[SAVED] Cross-cell summary: {summary_path}")
 

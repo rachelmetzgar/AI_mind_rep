@@ -35,10 +35,9 @@ import numpy as np
 # CONFIG
 # ============================================================================
 
-from config import config, get_model, add_variant_argument
+from config import config, get_model, add_variant_argument, set_variant, variant_filename, get_variant_suffix
 _MODEL_RESULTS = config.RESULTS.root / get_model()
 ALIGNMENT_ROOT = _MODEL_RESULTS
-_VARIANT_SUFFIX = ""  # set by main() if --variant provided
 VERSIONS = ["balanced_gpt", "nonsense_codeword"]
 
 VERSION_LABELS = {
@@ -179,7 +178,7 @@ def load_all_summaries(analysis_type, turn=5):
     subpath = ANALYSIS_TYPES[analysis_type]["path"]
     data = {}
     for v in VERSIONS:
-        path = ALIGNMENT_ROOT / v / f"alignment{_VARIANT_SUFFIX}" / f"turn_{turn}" / subpath / "summary.json"
+        path = ALIGNMENT_ROOT / v / "alignment" / f"turn_{turn}" / subpath / "data" / variant_filename("summary", ".json")
         if not path.exists():
             print(f"  WARNING: {path} not found, skipping {v}")
             continue
@@ -1110,7 +1109,6 @@ def generate_markdown(dim_data, analysis_type):
 # ============================================================================
 
 def main():
-    global _VARIANT_SUFFIX
     parser = argparse.ArgumentParser(description="Generate alignment comparison reports")
     parser.add_argument("--type", choices=["raw", "residual", "standalone", "all"],
                         default="all", help="Which analysis type (default: all)")
@@ -1120,10 +1118,10 @@ def main():
     args = parser.parse_args()
 
     if args.variant:
-        _VARIANT_SUFFIX = args.variant
+        set_variant(args.variant)
 
     types = ["raw", "residual", "standalone"] if args.type == "all" else [args.type]
-    comparisons_root = config.RESULTS.comparisons / f"alignment{_VARIANT_SUFFIX}"
+    comparisons_root = config.RESULTS.comparisons / "alignment"
 
     for atype in types:
         print(f"\n{'='*60}")
@@ -1144,7 +1142,7 @@ def main():
 
         # Generate SVG figures and save individually
         figures, global_max = generate_figures(dim_data, atype)
-        fig_dir = out_dir / "figures"
+        fig_dir = out_dir / f"figures{get_variant_suffix()}"
         fig_dir.mkdir(parents=True, exist_ok=True)
         for fig_name, svg_str in figures.items():
             fig_path = fig_dir / f"{fig_name}.svg"
@@ -1162,13 +1160,13 @@ def main():
 
         html = generate_html(dim_data, atype, figures=figures, global_max=global_max,
                              png_figures=png_figures)
-        html_path = out_dir / f"{atype}_comparison.html"
+        html_path = out_dir / variant_filename(f"{atype}_comparison", ".html")
         with open(html_path, "w") as f:
             f.write(html)
         print(f"  HTML: {html_path}")
 
         md = generate_markdown(dim_data, atype)
-        md_path = out_dir / f"{atype}_comparison.md"
+        md_path = out_dir / variant_filename(f"{atype}_comparison", ".md")
         with open(md_path, "w") as f:
             f.write(md)
         print(f"  MD:   {md_path}")

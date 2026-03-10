@@ -36,7 +36,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import numpy as np
 
-from config import config, add_variant_argument, set_variant
+from config import config, add_variant_argument, set_variant, variant_filename, get_variant_suffix, data_subdir
 
 # ============================================================================
 # CONFIG
@@ -115,7 +115,7 @@ def load_overlap_data():
     data = {}
 
     # Main overlap matrix
-    npz_path = OVERLAP_DIR / "overlap_matrix.npz"
+    npz_path = data_subdir(OVERLAP_DIR) / variant_filename("overlap_matrix", ".npz")
     if npz_path.exists():
         f = np.load(npz_path, allow_pickle=True)
         data["overlap"] = f["overlap"]
@@ -135,15 +135,15 @@ def load_overlap_data():
         sys.exit(1)
 
     # Layer profiles
-    lp_path = OVERLAP_DIR / "layer_profiles.npz"
+    lp_path = data_subdir(OVERLAP_DIR) / variant_filename("layer_profiles", ".npz")
     if lp_path.exists():
         f = np.load(lp_path)
         data["layer_profiles"] = f["layer_profiles"]
 
     # Baseline overlap CSVs
-    for key, fname in [("baseline_0", "baseline_overlap.csv"),
-                       ("baseline_18", "sysprompt_baseline_overlap.csv")]:
-        csv_path = OVERLAP_DIR / fname
+    for key, fname in [("baseline_0", "baseline_overlap"),
+                       ("baseline_18", "sysprompt_baseline_overlap")]:
+        csv_path = data_subdir(OVERLAP_DIR) / variant_filename(fname, ".csv")
         if csv_path.exists():
             rows = []
             with open(csv_path) as f:
@@ -1081,9 +1081,6 @@ def main():
 
     if args.variant:
         set_variant(args.variant)
-        global OVERLAP_DIR, OUTPUT_DIR
-        OVERLAP_DIR = Path(str(config.RESULTS.concept_overlap)) / "contrasts"
-        OUTPUT_DIR = OVERLAP_DIR
 
     print("Loading concept overlap data...")
     data = load_overlap_data()
@@ -1159,8 +1156,8 @@ def main():
     fig2 = make_category_summary(data)
     png_data["category_summary"] = fig_to_png_bytes(fig2)
 
-    # Save figure PNGs to figures/ subdir
-    fig_dir = OUTPUT_DIR / "figures"
+    # Save figure PNGs to figures/ subdir (variant suffix on dir name)
+    fig_dir = OUTPUT_DIR / f"figures{get_variant_suffix()}"
     fig_dir.mkdir(parents=True, exist_ok=True)
     for name, data_bytes in png_data.items():
         path = fig_dir / f"{name}.png"
@@ -1171,7 +1168,7 @@ def main():
     # Generate HTML
     print("Generating HTML report...")
     html = generate_html(figures_b64, data)
-    html_path = OUTPUT_DIR / "concept_overlap_report.html"
+    html_path = OUTPUT_DIR / variant_filename("concept_overlap_report", ".html")
     with open(html_path, "w") as f:
         f.write(html)
     print(f"  {html_path}")
@@ -1179,7 +1176,7 @@ def main():
     # Generate MD
     print("Generating markdown report...")
     md = generate_markdown(data)
-    md_path = OUTPUT_DIR / "concept_overlap_report.md"
+    md_path = OUTPUT_DIR / variant_filename("concept_overlap_report", ".md")
     with open(md_path, "w") as f:
         f.write(md)
     print(f"  {md_path}")

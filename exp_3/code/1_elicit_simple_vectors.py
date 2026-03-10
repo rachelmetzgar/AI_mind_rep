@@ -10,11 +10,11 @@ Each category becomes a "dimension" for downstream alignment analysis.
 Output format matches the existing standalone pipeline for compatibility.
 
 Output:
-    results/{model}/concept_activations_simple/standalone/{dim_name}/
-        concept_activations.npz   (activations, n_prompts)
-        concept_prompts.json      (prompt metadata)
-        mean_vectors_per_layer.npz (mean_concept)
-        split_half_stability.json
+    results/{model}/concept_activations/standalone/{dim_name}/
+        concept_activations_simple.npz   (activations, n_prompts)
+        concept_prompts_simple.json      (prompt metadata)
+        mean_vectors_per_layer_simple.npz (mean_concept)
+        split_half_stability_simple.json
 
 Usage:
     python 1_elicit_simple_vectors.py
@@ -37,7 +37,7 @@ from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 from utils.dataset import llama_v2_prompt
-from config import config, get_device, set_variant
+from config import config, get_device, set_variant, variant_filename
 
 # Add concepts directory to path for import
 sys.path.insert(0, os.path.join(str(config.ROOT_DIR), "concepts"))
@@ -189,17 +189,17 @@ def main():
 
         # Save
         np.savez_compressed(
-            os.path.join(dim_dir, "concept_activations.npz"),
+            os.path.join(dim_dir, variant_filename("concept_activations", ".npz")),
             activations=cat_acts,
             n_prompts=cat_acts.shape[0],
         )
         np.savez_compressed(
-            os.path.join(dim_dir, "mean_vectors_per_layer.npz"),
+            os.path.join(dim_dir, variant_filename("mean_vectors_per_layer", ".npz")),
             mean_concept=mean_concept,
         )
-        with open(os.path.join(dim_dir, "concept_prompts.json"), "w") as f:
+        with open(os.path.join(dim_dir, variant_filename("concept_prompts", ".json")), "w") as f:
             json.dump(prompt_metadata, f, indent=2)
-        with open(os.path.join(dim_dir, "split_half_stability.json"), "w") as f:
+        with open(os.path.join(dim_dir, variant_filename("split_half_stability", ".json")), "w") as f:
             json.dump({str(k): v for k, v in split_half.items()}, f, indent=2)
 
         # Print summary

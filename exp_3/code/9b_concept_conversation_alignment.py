@@ -40,6 +40,7 @@ from config import (
     add_version_argument, add_model_argument, add_turn_argument,
     add_variant_argument, set_variant,
     ensure_dir, get_model, DIMENSION_CATEGORIES,
+    variant_filename, get_variant_suffix, data_subdir,
 )
 
 
@@ -288,11 +289,11 @@ def run_approach_a(dims, conv_acts, metadata, out_dir, n_bootstrap, rng):
 
     # Save stats
     stats_df = pd.DataFrame(rows)
-    stats_df.to_csv(os.path.join(out_dir, "stats.csv"), index=False)
+    stats_df.to_csv(os.path.join(str(data_subdir(out_dir)), variant_filename("stats", ".csv")), index=False)
 
     # Save alignment scores
     np.savez_compressed(
-        os.path.join(out_dir, "alignment_scores.npz"),
+        os.path.join(str(data_subdir(out_dir)), variant_filename("alignment_scores", ".npz")),
         **{f"{name}_alignment": data["alignment"] for name, data in all_scores.items()},
         **{f"{name}_per_layer": data["per_layer"] for name, data in all_scores.items()},
         conditions=metadata["condition"].values,
@@ -374,10 +375,10 @@ def run_approach_c(dims, conv_acts, metadata, out_dir, n_bootstrap, rng):
         r["p_fdr"] = p_fdr[i]
 
     stats_df = pd.DataFrame(rows)
-    stats_df.to_csv(os.path.join(out_dir, "stats.csv"), index=False)
+    stats_df.to_csv(os.path.join(str(data_subdir(out_dir)), variant_filename("stats", ".csv")), index=False)
 
     np.savez_compressed(
-        os.path.join(out_dir, "alignment_scores.npz"),
+        os.path.join(str(data_subdir(out_dir)), variant_filename("alignment_scores", ".npz")),
         **{f"{name}_alignment": data["alignment"] for name, data in all_scores.items()},
         **{f"{name}_per_layer": data["per_layer"] for name, data in all_scores.items()},
         conditions=metadata["condition"].values,
@@ -475,10 +476,10 @@ def run_approach_d(dims, conv_acts, metadata, out_dir, n_bootstrap, rng):
             r["p_fdr"] = p_fdr[i]
 
     stats_df = pd.DataFrame(all_concept_rows)
-    stats_df.to_csv(os.path.join(out_dir, "stats.csv"), index=False)
+    stats_df.to_csv(os.path.join(str(data_subdir(out_dir)), variant_filename("stats", ".csv")), index=False)
 
     prompt_df = pd.DataFrame(all_prompt_rows)
-    prompt_df.to_csv(os.path.join(out_dir, "prompt_stats.csv"), index=False)
+    prompt_df.to_csv(os.path.join(str(data_subdir(out_dir)), variant_filename("prompt_stats", ".csv")), index=False)
 
     n_sig = sum(1 for r in all_concept_rows if r["p"] < 0.05)
     n_sig_fdr = sum(1 for r in all_concept_rows if r["p_fdr"] < 0.05)
@@ -509,7 +510,7 @@ def make_cross_summary(results, out_dir):
             })
 
     summary_df = pd.DataFrame(rows)
-    summary_path = os.path.join(out_dir, "cross_approach_summary.csv")
+    summary_path = os.path.join(str(data_subdir(out_dir)), variant_filename("cross_approach_summary", ".csv"))
     summary_df.to_csv(summary_path, index=False)
     print(f"\n[SAVED] Cross-approach summary: {summary_path}")
 
@@ -617,10 +618,9 @@ def main():
     print(f"\nFound {len(dims)} concept dimensions")
 
     # Output root
-    variant_suffix = args.variant if args.variant else ""
     out_root = os.path.join(
         str(config.RESULTS.root), model_name, args.version,
-        f"concept_conversation{variant_suffix}", f"turn_{args.turn}",
+        "concept_conversation", f"turn_{args.turn}",
     )
 
     # Run approaches

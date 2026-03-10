@@ -32,7 +32,7 @@ from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
 
-from config import config, set_version, add_variant_argument, set_variant
+from config import config, set_version, add_variant_argument, set_variant, variant_filename, get_variant_suffix
 
 # ============================================================
 # Import Exp 1 linguistic marker utils
@@ -137,13 +137,15 @@ def parse_args():
 def discover_cells(v1_root):
     """Discover all (dim, strategy, N) cells with results CSVs."""
     cells = []
-    csv_pattern = os.path.join(v1_root, "*", "*", "N_*_results.csv")
+    suffix = get_variant_suffix()
+    csv_pattern = os.path.join(v1_root, "*", "*", f"N_*_results{suffix}.csv")
+    suffix_re = re.escape(suffix)
     for csv_path in sorted(glob.glob(csv_pattern)):
         parts = csv_path.split(os.sep)
         filename = parts[-1]
         strategy = parts[-2]
         dim = parts[-3]
-        m = re.match(r"N_(\d+)_results\.csv", filename)
+        m = re.match(rf"N_(\d+)_results{suffix_re}\.csv", filename)
         if not m:
             continue
         N = int(m.group(1))
@@ -157,7 +159,7 @@ def discover_cells(v1_root):
 
 def load_config_json(cell_dir, N):
     """Load generation config JSON if available."""
-    cfg_path = os.path.join(cell_dir, f"N_{N}_config.json")
+    cfg_path = os.path.join(cell_dir, variant_filename(f"N_{N}_config", ".json"))
     if os.path.isfile(cfg_path):
         with open(cfg_path) as f:
             return json.load(f)
@@ -676,7 +678,7 @@ def main():
 
     # Generate HTML
     html = generate_html(all_results, args.version, v1_root)
-    out_path = os.path.join(v1_root, "concept_steering_summary.html")
+    out_path = os.path.join(v1_root, variant_filename("concept_steering_summary", ".html"))
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(html)
 

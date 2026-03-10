@@ -2,7 +2,7 @@
 
 ---
 
-## Experiment 1: Behavioral Analysis
+## General
 
 ### Data Generation
 

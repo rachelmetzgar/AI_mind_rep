@@ -622,8 +622,9 @@ def generate_markdown(version, pairwise_results, summary_data, analysis_type, tu
 def process_version(version, analysis_type, turn, out_base):
     """Generate report for one version."""
     in_dir = out_base / version
-    pairwise_json = in_dir / "pairwise_dimensions.json"
-    summary_json = in_dir / "pairwise_summary.json"
+    data_dir = in_dir / "data"
+    pairwise_json = data_dir / "pairwise_dimensions.json"
+    summary_json = data_dir / "pairwise_summary.json"
 
     if not pairwise_json.exists():
         print(f"  WARNING: {pairwise_json} not found, skipping")

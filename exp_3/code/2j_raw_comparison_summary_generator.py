@@ -125,7 +125,7 @@ def load_all_summaries(turn=5):
     """Load summary.json for each version. Returns dict[version] = summary."""
     data = {}
     for v in VERSIONS:
-        path = ALIGNMENT_ROOT / v / "alignment" / f"turn_{turn}" / "contrasts" / "raw" / "summary.json"
+        path = ALIGNMENT_ROOT / v / "alignment" / f"turn_{turn}" / "contrasts" / "raw" / "data" / "summary.json"
         if not path.exists():
             print(f"WARNING: {path} not found, skipping {v}")
             continue

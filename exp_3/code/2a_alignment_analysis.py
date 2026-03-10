@@ -51,7 +51,7 @@ import torch
 import torch.nn.functional as F
 
 from utils.probes import LinearProbeClassification
-from config import config, set_version, add_version_argument, add_turn_argument, add_variant_argument, set_variant
+from config import config, set_version, add_version_argument, add_turn_argument, add_variant_argument, set_variant, variant_filename, data_subdir
 
 
 # ========================== CONFIG ========================== #
@@ -368,11 +368,20 @@ def run_raw_alignment(metacognitive_weights, operational_weights, dim_filter=Non
         dims = {k: v for k, v in dims.items() if k in dim_filter}
 
     # Load existing summary to merge with new results
-    summary_path = os.path.join(out_dir, "summary.json")
-    if dim_filter and os.path.exists(summary_path):
-        with open(summary_path) as f:
-            summary = json.load(f)
-        print(f"  Loaded existing summary ({len(summary)} dims), will merge new results")
+    summary_path = os.path.join(str(data_subdir(out_dir)), variant_filename("summary", ".json"))
+    # Also check legacy location (no data/ subfolder, no variant suffix)
+    legacy_summary_path = os.path.join(out_dir, "summary.json")
+    if dim_filter:
+        if os.path.exists(summary_path):
+            with open(summary_path) as f:
+                summary = json.load(f)
+            print(f"  Loaded existing summary ({len(summary)} dims), will merge new results")
+        elif os.path.exists(legacy_summary_path):
+            with open(legacy_summary_path) as f:
+                summary = json.load(f)
+            print(f"  Loaded existing legacy summary ({len(summary)} dims), will merge new results")
+        else:
+            summary = {}
     else:
         summary = {}
 
@@ -419,7 +428,7 @@ def run_raw_alignment(metacognitive_weights, operational_weights, dim_filter=Non
         # Save per-dimension
         dim_out = os.path.join(out_dir, dim_name)
         os.makedirs(dim_out, exist_ok=True)
-        np.savez_compressed(os.path.join(dim_out, "alignment.npz"), **save_kwargs)
+        np.savez_compressed(os.path.join(dim_out, variant_filename("alignment", ".npz")), **save_kwargs)
 
         summary[dim_name] = {
             "dim_id": dim_id,
@@ -430,7 +439,7 @@ def run_raw_alignment(metacognitive_weights, operational_weights, dim_filter=Non
         }
 
     # Save summary
-    with open(os.path.join(out_dir, "summary.json"), "w") as f:
+    with open(os.path.join(str(data_subdir(out_dir)), variant_filename("summary", ".json")), "w") as f:
         json.dump(summary, f, indent=2)
 
     print_summary_table("RAW ALIGNMENT", summary)
@@ -477,11 +486,19 @@ def run_residual_alignment(metacognitive_weights, operational_weights, dim_filte
         dims = {k: v for k, v in dims.items() if k in dim_filter}
 
     # Load existing summary to merge
-    summary_path = os.path.join(out_dir, "summary.json")
-    if dim_filter and os.path.exists(summary_path):
-        with open(summary_path) as f:
-            summary = json.load(f)
-        print(f"  Loaded existing summary ({len(summary)} dims), will merge new results")
+    summary_path = os.path.join(str(data_subdir(out_dir)), variant_filename("summary", ".json"))
+    legacy_summary_path = os.path.join(out_dir, "summary.json")
+    if dim_filter:
+        if os.path.exists(summary_path):
+            with open(summary_path) as f:
+                summary = json.load(f)
+            print(f"  Loaded existing summary ({len(summary)} dims), will merge new results")
+        elif os.path.exists(legacy_summary_path):
+            with open(legacy_summary_path) as f:
+                summary = json.load(f)
+            print(f"  Loaded existing legacy summary ({len(summary)} dims), will merge new results")
+        else:
+            summary = {}
     else:
         summary = {}
 
@@ -556,7 +573,7 @@ def run_residual_alignment(metacognitive_weights, operational_weights, dim_filte
         # Save per-dimension
         dim_out = os.path.join(out_dir, dim_name)
         os.makedirs(dim_out, exist_ok=True)
-        np.savez_compressed(os.path.join(dim_out, "alignment.npz"), **save_kwargs)
+        np.savez_compressed(os.path.join(dim_out, variant_filename("alignment", ".npz")), **save_kwargs)
 
         summary[dim_name] = {
             "dim_id": dim_id,
@@ -567,7 +584,7 @@ def run_residual_alignment(metacognitive_weights, operational_weights, dim_filte
             "control_boot_ci95": boot_ci_control,
         }
 
-    with open(os.path.join(out_dir, "summary.json"), "w") as f:
+    with open(os.path.join(str(data_subdir(out_dir)), variant_filename("summary", ".json")), "w") as f:
         json.dump(summary, f, indent=2)
 
     print_summary_table("RESIDUAL ALIGNMENT", summary)
@@ -588,11 +605,19 @@ def run_standalone_alignment(metacognitive_weights, operational_weights, dim_fil
         dims = {k: v for k, v in dims.items() if k in dim_filter}
 
     # Load existing summary to merge
-    summary_path = os.path.join(out_dir, "summary.json")
-    if dim_filter and os.path.exists(summary_path):
-        with open(summary_path) as f:
-            summary = json.load(f)
-        print(f"  Loaded existing summary ({len(summary)} dims), will merge new results")
+    summary_path = os.path.join(str(data_subdir(out_dir)), variant_filename("summary", ".json"))
+    legacy_summary_path = os.path.join(out_dir, "summary.json")
+    if dim_filter:
+        if os.path.exists(summary_path):
+            with open(summary_path) as f:
+                summary = json.load(f)
+            print(f"  Loaded existing summary ({len(summary)} dims), will merge new results")
+        elif os.path.exists(legacy_summary_path):
+            with open(legacy_summary_path) as f:
+                summary = json.load(f)
+            print(f"  Loaded existing legacy summary ({len(summary)} dims), will merge new results")
+        else:
+            summary = {}
     else:
         summary = {}
 
@@ -639,7 +664,7 @@ def run_standalone_alignment(metacognitive_weights, operational_weights, dim_fil
         # Save per-dimension
         dim_out = os.path.join(out_dir, dim_name)
         os.makedirs(dim_out, exist_ok=True)
-        np.savez_compressed(os.path.join(dim_out, "alignment.npz"), **save_kwargs)
+        np.savez_compressed(os.path.join(dim_out, variant_filename("alignment", ".npz")), **save_kwargs)
 
         summary[dim_name] = {
             "dim_id": dim_id,
@@ -649,7 +674,7 @@ def run_standalone_alignment(metacognitive_weights, operational_weights, dim_fil
             "control_boot_ci95": boot_ci_control,
         }
 
-    with open(os.path.join(out_dir, "summary.json"), "w") as f:
+    with open(os.path.join(str(data_subdir(out_dir)), variant_filename("summary", ".json")), "w") as f:
         json.dump(summary, f, indent=2)
 
     print_summary_table("STANDALONE ALIGNMENT", summary)

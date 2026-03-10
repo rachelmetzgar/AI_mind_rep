@@ -13,16 +13,16 @@ Steps:
        (excludes sysprompt variants 20-23)
     2. Select top prompt per dim: highest mean cosine to centroid (layers 20-40)
     3. Compute per-concept contrast: top_X - mean(top_Y for Y≠X)
-    4. Save in concept_activations_1/ in format compatible with downstream scripts
+    4. Save in concept_activations/ with _top_align filename suffix
 
 Output:
-    results/{model}/concept_activations_1/
-        top_prompt_selections.json
+    results/{model}/concept_activations/
+        top_prompt_selections_top_align.json
         contrasts/{dim_name}/
-            concept_vector_per_layer.npz   (concept_direction, norms)
-            concept_prompts.json           (single prompt metadata)
+            concept_vector_per_layer_top_align.npz   (concept_direction, norms)
+            concept_prompts_top_align.json            (single prompt metadata)
         standalone/{dim_name}/
-            mean_vectors_per_layer.npz     (mean_concept = single prompt activation)
+            mean_vectors_per_layer_top_align.npz      (mean_concept = single prompt activation)
 
 No GPU needed — reads existing .npz files and computes means/cosines.
 
@@ -38,7 +38,7 @@ import json
 import argparse
 import numpy as np
 
-from config import config, set_variant
+from config import config, set_variant, variant_filename
 
 # ========================== CONFIG ========================== #
 
@@ -211,11 +211,11 @@ def main():
         dim_contrast_dir = os.path.join(contrasts_dir, dim_name)
         os.makedirs(dim_contrast_dir, exist_ok=True)
         np.savez_compressed(
-            os.path.join(dim_contrast_dir, "concept_vector_per_layer.npz"),
+            os.path.join(dim_contrast_dir, variant_filename("concept_vector_per_layer", ".npz")),
             concept_direction=contrast_direction,
             norms=norms,
         )
-        with open(os.path.join(dim_contrast_dir, "concept_prompts.json"), "w") as f:
+        with open(os.path.join(dim_contrast_dir, variant_filename("concept_prompts", ".json")), "w") as f:
             json.dump([{
                 "prompt": selections[dim_name]["prompt_text"],
                 "label": -1,
@@ -227,14 +227,14 @@ def main():
         dim_standalone_dir = os.path.join(standalone_dir, dim_name)
         os.makedirs(dim_standalone_dir, exist_ok=True)
         np.savez_compressed(
-            os.path.join(dim_standalone_dir, "mean_vectors_per_layer.npz"),
+            os.path.join(dim_standalone_dir, variant_filename("mean_vectors_per_layer", ".npz")),
             mean_concept=top_act,
         )
 
         print(f"  {dim_name:<25s}: ||contrast|| layers 20-40 mean={np.mean(norms[20:41]):.2f}")
 
     # Save selection metadata
-    meta_path = os.path.join(out_root, "top_prompt_selections.json")
+    meta_path = os.path.join(out_root, variant_filename("top_prompt_selections", ".json"))
     with open(meta_path, "w") as f:
         json.dump(selections, f, indent=2)
     print(f"\n[SAVED] Top prompt selections: {meta_path}")

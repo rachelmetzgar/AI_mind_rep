@@ -371,11 +371,12 @@ def process_version(version, analysis_type, turn, out_dir):
 
     # Save version-specific results
     version_dir_out = out_dir / version
-    version_dir_out.mkdir(parents=True, exist_ok=True)
+    data_dir = version_dir_out / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
 
-    save_csv(results, version_dir_out / "pairwise_dimensions.csv")
-    save_json(results, version_dir_out / "pairwise_dimensions.json")
-    save_summary(summary, version_dir_out / "pairwise_summary.json")
+    save_csv(results, data_dir / "pairwise_dimensions.csv")
+    save_json(results, data_dir / "pairwise_dimensions.json")
+    save_summary(summary, data_dir / "pairwise_summary.json")
 
     return results, summary
 

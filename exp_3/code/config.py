@@ -59,6 +59,10 @@ _active_turn = None
 _active_model = None
 _active_variant = ""
 
+# Variant suffix mapping: variant flag → filename suffix
+VARIANT_SUFFIXES = {"": "", "_1": "_top_align", "_simple": "_simple"}
+_active_variant_suffix = ""
+
 
 # ============================================================================
 # MODEL
@@ -179,11 +183,11 @@ class OutputPaths:
         """Update model-scoped paths (version-independent)."""
         model = _model_dir()
         model_root = self.root / model
-        self.concept_activations = model_root / f"concept_activations{_active_variant}"
+        self.concept_activations = model_root / "concept_activations"
         self.concept_activations_contrasts = self.concept_activations / "contrasts"
         self.concept_activations_standalone = self.concept_activations / "standalone"
         self.concept_probes_data = model_root / "concept_probes"
-        self.concept_overlap = model_root / f"concept_overlap{_active_variant}"
+        self.concept_overlap = model_root / "concept_overlap"
         self.sysprompt = model_root / "sysprompt"
         self.lexical = model_root / "lexical"
         self.comparisons = model_root / "comparisons"
@@ -194,7 +198,7 @@ class OutputPaths:
         """Update version-dependent paths under results/{model}/{version}/."""
         model = _model_dir()
         ver_root = self.root / model / version
-        alignment_base = ver_root / f"alignment{_active_variant}"
+        alignment_base = ver_root / "alignment"
         self.alignment = alignment_base
         self.alignment_versions = alignment_base  # use with f"turn_{N}" directly
         self.alignment_contrasts = alignment_base / "contrasts"
@@ -203,7 +207,7 @@ class OutputPaths:
         self.alignment_standalone = alignment_base / "standalone"
         self.alignment_layer_profiles = alignment_base / "layer_profiles"
         self.alignment_sysprompt = alignment_base / "sysprompt"
-        self.concept_steering = ver_root / f"concept_steering{_active_variant}"
+        self.concept_steering = ver_root / "concept_steering"
         self.interventions = ver_root / "interventions"
         self.interventions_v1 = ver_root / "interventions" / "V1"
         self.interventions_v2 = ver_root / "interventions" / "V2"
@@ -476,12 +480,35 @@ def add_model_argument(parser):
 # ============================================================================
 
 def set_variant(variant):
-    """Set active variant suffix (e.g., '_1'). Updates concept activation + output paths."""
-    global _active_variant
+    """Set active variant suffix (e.g., '_1'). Maps to filename suffix via VARIANT_SUFFIXES."""
+    global _active_variant, _active_variant_suffix
     _active_variant = variant
-    config.RESULTS._update_model_paths()
-    if _active_version:
-        config.RESULTS._update_version_paths(_active_version)
+    _active_variant_suffix = VARIANT_SUFFIXES.get(variant, variant)
+    # Directory paths no longer change with variant — only filenames do.
+    # No need to call _update_model_paths() or _update_version_paths().
+
+
+def get_variant_suffix():
+    """Return the active filename suffix (e.g., '_top_align', '_simple', or '')."""
+    return _active_variant_suffix
+
+
+def variant_filename(base, ext):
+    """Build a filename with the active variant suffix.
+
+    Examples:
+        variant_filename("alignment", ".npz")   → "alignment_top_align.npz"
+        variant_filename("summary", ".json")     → "summary_simple.json"
+        variant_filename("overlap_matrix", ".csv") → "overlap_matrix.csv"  (default variant)
+    """
+    return f"{base}{_active_variant_suffix}{ext}"
+
+
+def data_subdir(parent):
+    """Return parent/data/, creating if needed."""
+    d = Path(parent) / "data"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
 
 
 def add_variant_argument(parser):
