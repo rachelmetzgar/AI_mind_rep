@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gray Replication — Individual, Without Self (12 entities) — LLaMA-2-13B (Base)</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#1e293b;background:#f8fafc;line-height:1.6;max-width:1100px;margin:0 auto;padding:2rem}
+h1{font-size:1.8rem;color:#0f172a;border-bottom:3px solid #0d9488;padding-bottom:.5rem;margin-bottom:1rem}
+h2{font-size:1.4rem;color:#0f172a;margin:2rem 0 .75rem;border-bottom:2px solid #e2e8f0;padding-bottom:.4rem}
+h3{font-size:1.1rem;color:#334155;margin:1.2rem 0 .5rem}
+h4{font-size:1rem;color:#475569;margin:1rem 0 .4rem}
+p,li{font-size:.93rem;margin-bottom:.5rem}
+ul,ol{padding-left:1.5rem}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:1.25rem;margin-bottom:1.5rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+table{width:100%;border-collapse:collapse;margin:.75rem 0;font-size:.85rem}
+th,td{padding:6px 10px;text-align:left;border-bottom:1px solid #e2e8f0}
+th{background:#f1f5f9;font-weight:600;color:#334155}
+td{color:#475569}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.sig{color:#ef4444;font-weight:700}
+.tag-e{background:#ccfbf1;color:#0d9488;padding:1px 6px;border-radius:3px;font-size:.78rem;font-weight:600}
+.tag-a{background:#fef3c7;color:#d97706;padding:1px 6px;border-radius:3px;font-size:.78rem;font-weight:600}
+.charts-row{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center}
+.chart-wrap{text-align:center}
+.small{font-size:.82rem;color:#64748b}
+.bold{font-weight:700}
+.legend-box{display:inline-flex;gap:1rem;align-items:center;margin:.5rem 0;font-size:.82rem}
+.legend-swatch{display:inline-block;width:14px;height:14px;border-radius:2px;vertical-align:middle}
+</style>
+</head><body>
+<h1>Gray Replication — Individual, Without Self (12 entities)</h1>
+<p class="small">LLaMA-2-13B (Base) &mdash; Replication of Gray, Gray, &amp; Wegner (2007)</p>
+
+
+<div class="card">
+<strong>Summary:</strong> 18 mental capacities, 12 entities.
+<strong>2</strong> factor(s) retained (eigenvalue &gt; 1),
+explaining <strong>90.6%</strong> of variance.
+</div>
+
+<div class="legend-box">
+<span class="legend-swatch" style="background:#8cc8c0"></span>
+Low E+A (dead_w: 0.13)
+&nbsp;&rarr;&nbsp;
+<span class="legend-swatch" style="background:#004d40"></span>
+High E+A (self: 1.97)
+&nbsp;&nbsp;(darker teal = higher combined Experience + Agency in Gray et al.)
+</div>
+
+<h2>1. Scree Plot</h2><div class="card">
+<table><tr><th>Component</th><th class="num">Eigenvalue</th><th class="num">Variance</th><th class="num">Cumulative</th></tr>
+<tr><td>PC1 *</td><td class="num">15.05</td><td class="num">83.6%</td><td class="num">83.6%</td></tr>
+<tr><td>PC2 *</td><td class="num">1.25</td><td class="num">6.9%</td><td class="num">90.6%</td></tr>
+<tr><td>PC3</td><td class="num">0.78</td><td class="num">4.3%</td><td class="num">94.9%</td></tr>
+<tr><td>PC4</td><td class="num">0.32</td><td class="num">1.8%</td><td class="num">96.7%</td></tr>
+<tr><td>PC5</td><td class="num">0.29</td><td class="num">1.6%</td><td class="num">98.3%</td></tr>
+</table>
+<p class="small">* eigenvalue &gt; 1 (retained). Gray et al.: eigenvalues 15.85 and 1.46, explaining 97%.</p>
+</div>
+<h2>2. Capacity Loadings (Varimax-Rotated)</h2><div class="card">
+<table><tr><th>Capacity</th><th>Gray Factor</th>
+<th class="num">F1 (83.6%)</th>
+<th class="num">F2 (6.9%)</th>
+</tr>
+<tr><td>hunger</td><td><span class="tag-e">E</span></td>
+<td class="num">+0.358</td>
+<td class="num bold">-0.906</td>
+</tr>
+<tr><td>fear</td><td><span class="tag-e">E</span></td>
+<td class="num">+0.393</td>
+<td class="num bold">-0.904</td>
+</tr>
+<tr><td>pain</td><td><span class="tag-e">E</span></td>
+<td class="num">+0.377</td>
+<td class="num bold">-0.894</td>
+</tr>
+<tr><td>pleasure</td><td><span class="tag-e">E</span></td>
+<td class="num bold">+0.449</td>
+<td class="num bold">-0.830</td>
+</tr>
+<tr><td>rage</td><td><span class="tag-e">E</span></td>
+<td class="num bold">+0.435</td>
+<td class="num bold">-0.622</td>
+</tr>
+<tr><td>desire</td><td><span class="tag-e">E</span></td>
+<td class="num bold">+0.739</td>
+<td class="num bold">-0.623</td>
+</tr>
+<tr><td>personality</td><td><span class="tag-e">E</span></td>
+<td class="num bold">+0.718</td>
+<td class="num bold">-0.687</td>
+</tr>
+<tr><td>consciousness</td><td><span class="tag-e">E</span></td>
+<td class="num bold">+0.734</td>
+<td class="num bold">-0.639</td>
+</tr>
+<tr><td>pride</td><td><span class="tag-e">E</span></td>
+<td class="num bold">+0.679</td>
+<td class="num bold">-0.609</td>
+</tr>
+<tr><td>embarrassment</td><td><span class="tag-e">E</span></td>
+<td class="num bold">+0.731</td>
+<td class="num bold">-0.571</td>
+</tr>
+<tr><td>joy</td><td><span class="tag-e">E</span></td>
+<td class="num bold">+0.470</td>
+<td class="num bold">-0.769</td>
+</tr>
+<tr><td>self_control</td><td><span class="tag-a">A</span></td>
+<td class="num bold">+0.913</td>
+<td class="num">-0.365</td>
+</tr>
+<tr><td>morality</td><td><span class="tag-a">A</span></td>
+<td class="num bold">+0.903</td>
+<td class="num">-0.347</td>
+</tr>
+<tr><td>memory</td><td><span class="tag-a">A</span></td>
+<td class="num bold">+0.791</td>
+<td class="num bold">-0.575</td>
+</tr>
+<tr><td>emotion_recognition</td><td><span class="tag-a">A</span></td>
+<td class="num bold">+0.708</td>
+<td class="num bold">-0.608</td>
+</tr>
+<tr><td>planning</td><td><span class="tag-a">A</span></td>
+<td class="num bold">+0.945</td>
+<td class="num">-0.245</td>
+</tr>
+<tr><td>communication</td><td><span class="tag-a">A</span></td>
+<td class="num bold">+0.786</td>
+<td class="num bold">-0.600</td>
+</tr>
+<tr><td>thought</td><td><span class="tag-a">A</span></td>
+<td class="num bold">+0.870</td>
+<td class="num bold">-0.432</td>
+</tr>
+</table>
+<p class="small">Bold = |loading| &gt; 0.4. Compare to Gray: Experience capacities loaded .67&ndash;.97 on Factor 1, Agency .73&ndash;.97 on Factor 2.</p>
+<h3>Loading Bar Charts</h3>
+<svg width="600" height="466" viewBox="0 0 600 466" style="font-family:inherit">
+<text x="300" y="18" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Factor 1 Loadings (λ=15.05, 83.6% var) — All Entities</text>
+<line x1="350" y1="30" x2="350" y2="426" stroke="#94a3b8" stroke-width="1"/>
+<line x1="442" y1="30" x2="442" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<line x1="258" y1="30" x2="258" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<text x="116" y="44" text-anchor="end" font-size="9" fill="#475569">hunger</text>
+<rect x="350.0" y="30" width="82.4" height="18" fill="#0d9488" rx="2"/>
+<text x="391" y="44" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.36</text>
+<text x="116" y="66" text-anchor="end" font-size="9" fill="#475569">pain</text>
+<rect x="350.0" y="52" width="86.7" height="18" fill="#0d9488" rx="2"/>
+<text x="393" y="66" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.38</text>
+<text x="116" y="88" text-anchor="end" font-size="9" fill="#475569">fear</text>
+<rect x="350.0" y="74" width="90.3" height="18" fill="#0d9488" rx="2"/>
+<text x="395" y="88" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.39</text>
+<text x="116" y="110" text-anchor="end" font-size="9" fill="#475569">rage</text>
+<rect x="350.0" y="96" width="100.0" height="18" fill="#0d9488" rx="2"/>
+<text x="400" y="110" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.43</text>
+<text x="116" y="132" text-anchor="end" font-size="9" fill="#475569">pleasure</text>
+<rect x="350.0" y="118" width="103.2" height="18" fill="#0d9488" rx="2"/>
+<text x="402" y="132" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.45</text>
+<text x="116" y="154" text-anchor="end" font-size="9" fill="#475569">joy</text>
+<rect x="350.0" y="140" width="108.1" height="18" fill="#0d9488" rx="2"/>
+<text x="404" y="154" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.47</text>
+<text x="116" y="176" text-anchor="end" font-size="9" fill="#475569">pride</text>
+<rect x="350.0" y="162" width="156.2" height="18" fill="#0d9488" rx="2"/>
+<text x="428" y="176" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.68</text>
+<text x="116" y="198" text-anchor="end" font-size="9" fill="#475569">emotion_recognition</text>
+<rect x="350.0" y="184" width="163.0" height="18" fill="#d97706" rx="2"/>
+<text x="431" y="198" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.71</text>
+<text x="116" y="220" text-anchor="end" font-size="9" fill="#475569">personality</text>
+<rect x="350.0" y="206" width="165.1" height="18" fill="#0d9488" rx="2"/>
+<text x="433" y="220" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.72</text>
+<text x="116" y="242" text-anchor="end" font-size="9" fill="#475569">embarrassment</text>
+<rect x="350.0" y="228" width="168.1" height="18" fill="#0d9488" rx="2"/>
+<text x="434" y="242" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.73</text>
+<text x="116" y="264" text-anchor="end" font-size="9" fill="#475569">consciousness</text>
+<rect x="350.0" y="250" width="168.9" height="18" fill="#0d9488" rx="2"/>
+<text x="434" y="264" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.73</text>
+<text x="116" y="286" text-anchor="end" font-size="9" fill="#475569">desire</text>
+<rect x="350.0" y="272" width="169.9" height="18" fill="#0d9488" rx="2"/>
+<text x="435" y="286" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.74</text>
+<text x="116" y="308" text-anchor="end" font-size="9" fill="#475569">communication</text>
+<rect x="350.0" y="294" width="180.8" height="18" fill="#d97706" rx="2"/>
+<text x="440" y="308" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.79</text>
+<text x="116" y="330" text-anchor="end" font-size="9" fill="#475569">memory</text>
+<rect x="350.0" y="316" width="181.9" height="18" fill="#d97706" rx="2"/>
+<text x="441" y="330" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.79</text>
+<text x="116" y="352" text-anchor="end" font-size="9" fill="#475569">thought</text>
+<rect x="350.0" y="338" width="200.1" height="18" fill="#d97706" rx="2"/>
+<text x="450" y="352" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.87</text>
+<text x="116" y="374" text-anchor="end" font-size="9" fill="#475569">morality</text>
+<rect x="350.0" y="360" width="207.6" height="18" fill="#d97706" rx="2"/>
+<text x="454" y="374" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.90</text>
+<text x="116" y="396" text-anchor="end" font-size="9" fill="#475569">self_control</text>
+<rect x="350.0" y="382" width="209.9" height="18" fill="#d97706" rx="2"/>
+<text x="455" y="396" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.91</text>
+<text x="116" y="418" text-anchor="end" font-size="9" fill="#475569">planning</text>
+<rect x="350.0" y="404" width="217.3" height="18" fill="#d97706" rx="2"/>
+<text x="459" y="418" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.94</text>
+<rect x="120" y="438" width="12" height="12" fill="#0d9488" rx="2"/>
+<text x="136" y="448" font-size="9" fill="#475569">Experience (Gray)</text>
+<rect x="240" y="438" width="12" height="12" fill="#d97706" rx="2"/>
+<text x="256" y="448" font-size="9" fill="#475569">Agency (Gray)</text>
+</svg>
+<svg width="600" height="466" viewBox="0 0 600 466" style="font-family:inherit">
+<text x="300" y="18" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Factor 2 Loadings (λ=1.25, 6.9% var) — All Entities</text>
+<line x1="350" y1="30" x2="350" y2="426" stroke="#94a3b8" stroke-width="1"/>
+<line x1="442" y1="30" x2="442" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<line x1="258" y1="30" x2="258" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<text x="116" y="44" text-anchor="end" font-size="9" fill="#475569">hunger</text>
+<rect x="141.6" y="30" width="208.4" height="18" fill="#0d9488" rx="2"/>
+<text x="246" y="44" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.91</text>
+<text x="116" y="66" text-anchor="end" font-size="9" fill="#475569">fear</text>
+<rect x="142.2" y="52" width="207.8" height="18" fill="#0d9488" rx="2"/>
+<text x="246" y="66" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.90</text>
+<text x="116" y="88" text-anchor="end" font-size="9" fill="#475569">pain</text>
+<rect x="144.4" y="74" width="205.6" height="18" fill="#0d9488" rx="2"/>
+<text x="247" y="88" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.89</text>
+<text x="116" y="110" text-anchor="end" font-size="9" fill="#475569">pleasure</text>
+<rect x="159.2" y="96" width="190.8" height="18" fill="#0d9488" rx="2"/>
+<text x="255" y="110" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.83</text>
+<text x="116" y="132" text-anchor="end" font-size="9" fill="#475569">joy</text>
+<rect x="173.2" y="118" width="176.8" height="18" fill="#0d9488" rx="2"/>
+<text x="262" y="132" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.77</text>
+<text x="116" y="154" text-anchor="end" font-size="9" fill="#475569">personality</text>
+<rect x="192.0" y="140" width="158.0" height="18" fill="#0d9488" rx="2"/>
+<text x="271" y="154" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.69</text>
+<text x="116" y="176" text-anchor="end" font-size="9" fill="#475569">consciousness</text>
+<rect x="203.1" y="162" width="146.9" height="18" fill="#0d9488" rx="2"/>
+<text x="277" y="176" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.64</text>
+<text x="116" y="198" text-anchor="end" font-size="9" fill="#475569">desire</text>
+<rect x="206.8" y="184" width="143.2" height="18" fill="#0d9488" rx="2"/>
+<text x="278" y="198" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.62</text>
+<text x="116" y="220" text-anchor="end" font-size="9" fill="#475569">rage</text>
+<rect x="206.9" y="206" width="143.1" height="18" fill="#0d9488" rx="2"/>
+<text x="278" y="220" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.62</text>
+<text x="116" y="242" text-anchor="end" font-size="9" fill="#475569">pride</text>
+<rect x="210.0" y="228" width="140.0" height="18" fill="#0d9488" rx="2"/>
+<text x="280" y="242" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.61</text>
+<text x="116" y="264" text-anchor="end" font-size="9" fill="#475569">emotion_recognition</text>
+<rect x="210.2" y="250" width="139.8" height="18" fill="#d97706" rx="2"/>
+<text x="280" y="264" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.61</text>
+<text x="116" y="286" text-anchor="end" font-size="9" fill="#475569">communication</text>
+<rect x="212.0" y="272" width="138.0" height="18" fill="#d97706" rx="2"/>
+<text x="281" y="286" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.60</text>
+<text x="116" y="308" text-anchor="end" font-size="9" fill="#475569">memory</text>
+<rect x="217.6" y="294" width="132.4" height="18" fill="#d97706" rx="2"/>
+<text x="284" y="308" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.58</text>
+<text x="116" y="330" text-anchor="end" font-size="9" fill="#475569">embarrassment</text>
+<rect x="218.6" y="316" width="131.4" height="18" fill="#0d9488" rx="2"/>
+<text x="284" y="330" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.57</text>
+<text x="116" y="352" text-anchor="end" font-size="9" fill="#475569">thought</text>
+<rect x="250.7" y="338" width="99.3" height="18" fill="#d97706" rx="2"/>
+<text x="300" y="352" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.43</text>
+<text x="116" y="374" text-anchor="end" font-size="9" fill="#475569">self_control</text>
+<rect x="266.0" y="360" width="84.0" height="18" fill="#d97706" rx="2"/>
+<text x="308" y="374" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.37</text>
+<text x="116" y="396" text-anchor="end" font-size="9" fill="#475569">morality</text>
+<rect x="270.3" y="382" width="79.7" height="18" fill="#d97706" rx="2"/>
+<text x="310" y="396" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.35</text>
+<text x="116" y="418" text-anchor="end" font-size="9" fill="#475569">planning</text>
+<rect x="293.7" y="404" width="56.3" height="18" fill="#d97706" rx="2"/>
+<text x="322" y="418" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.24</text>
+<rect x="120" y="438" width="12" height="12" fill="#0d9488" rx="2"/>
+<text x="136" y="448" font-size="9" fill="#475569">Experience (Gray)</text>
+<rect x="240" y="438" width="12" height="12" fill="#d97706" rx="2"/>
+<text x="256" y="448" font-size="9" fill="#475569">Agency (Gray)</text>
+</svg>
+</div>
+<h2>2b. Factor Analysis Excluding Fetus + God</h2>
+<div class="card">
+<p class="small">PCA re-run from scratch on the 10-entity means matrix
+(fetus and god removed before computing correlations/eigenvalues).
+This can change factor structure, not just drop two rows.</p>
+<h3>Scree</h3>
+<table><tr><th>Component</th><th class="num">Eigenvalue</th><th class="num">Variance</th><th class="num">Cumulative</th></tr>
+<tr><td>PC1 *</td><td class="num">15.30</td><td class="num">85.0%</td><td class="num">85.0%</td></tr>
+<tr><td>PC2 *</td><td class="num">1.19</td><td class="num">6.6%</td><td class="num">91.6%</td></tr>
+<tr><td>PC3</td><td class="num">0.85</td><td class="num">4.7%</td><td class="num">96.3%</td></tr>
+<tr><td>PC4</td><td class="num">0.34</td><td class="num">1.9%</td><td class="num">98.2%</td></tr>
+<tr><td>PC5</td><td class="num">0.17</td><td class="num">0.9%</td><td class="num">99.1%</td></tr>
+</table>
+<h3>Capacity Loadings (Varimax-Rotated)</h3>
+<table><tr><th>Capacity</th><th>Gray Factor</th>
+<th class="num">F1 (85.0%)</th>
+<th class="num">F2 (6.6%)</th>
+</tr>
+<tr><td>hunger</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.408</td>
+<td class="num bold">-0.902</td>
+</tr>
+<tr><td>fear</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.449</td>
+<td class="num bold">-0.873</td>
+</tr>
+<tr><td>pain</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.449</td>
+<td class="num bold">-0.882</td>
+</tr>
+<tr><td>pleasure</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.418</td>
+<td class="num bold">-0.849</td>
+</tr>
+<tr><td>rage</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.449</td>
+<td class="num bold">-0.537</td>
+</tr>
+<tr><td>desire</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.731</td>
+<td class="num bold">-0.649</td>
+</tr>
+<tr><td>personality</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.719</td>
+<td class="num bold">-0.690</td>
+</tr>
+<tr><td>consciousness</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.775</td>
+<td class="num bold">-0.592</td>
+</tr>
+<tr><td>pride</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.738</td>
+<td class="num bold">-0.528</td>
+</tr>
+<tr><td>embarrassment</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.868</td>
+<td class="num bold">-0.428</td>
+</tr>
+<tr><td>joy</td><td><span class="tag-e">E</span></td>
+<td class="num">-0.363</td>
+<td class="num bold">-0.869</td>
+</tr>
+<tr><td>self_control</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.873</td>
+<td class="num bold">-0.429</td>
+</tr>
+<tr><td>morality</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.890</td>
+<td class="num">-0.349</td>
+</tr>
+<tr><td>memory</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.795</td>
+<td class="num bold">-0.577</td>
+</tr>
+<tr><td>emotion_recognition</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.670</td>
+<td class="num bold">-0.708</td>
+</tr>
+<tr><td>planning</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.903</td>
+<td class="num">-0.328</td>
+</tr>
+<tr><td>communication</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.752</td>
+<td class="num bold">-0.647</td>
+</tr>
+<tr><td>thought</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.877</td>
+<td class="num bold">-0.425</td>
+</tr>
+</table>
+<h3>Loading Bar Charts (Excl Fetus + God)</h3>
+<svg width="600" height="466" viewBox="0 0 600 466" style="font-family:inherit">
+<text x="300" y="18" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Factor 1 Loadings (λ=15.30, 85.0% var) — Excl Fetus+God</text>
+<line x1="350" y1="30" x2="350" y2="426" stroke="#94a3b8" stroke-width="1"/>
+<line x1="442" y1="30" x2="442" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<line x1="258" y1="30" x2="258" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<text x="116" y="44" text-anchor="end" font-size="9" fill="#475569">planning</text>
+<rect x="142.3" y="30" width="207.7" height="18" fill="#d97706" rx="2"/>
+<text x="246" y="44" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.90</text>
+<text x="116" y="66" text-anchor="end" font-size="9" fill="#475569">morality</text>
+<rect x="145.2" y="52" width="204.8" height="18" fill="#d97706" rx="2"/>
+<text x="248" y="66" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.89</text>
+<text x="116" y="88" text-anchor="end" font-size="9" fill="#475569">thought</text>
+<rect x="148.2" y="74" width="201.8" height="18" fill="#d97706" rx="2"/>
+<text x="249" y="88" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.88</text>
+<text x="116" y="110" text-anchor="end" font-size="9" fill="#475569">self_control</text>
+<rect x="149.1" y="96" width="200.9" height="18" fill="#d97706" rx="2"/>
+<text x="250" y="110" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.87</text>
+<text x="116" y="132" text-anchor="end" font-size="9" fill="#475569">embarrassment</text>
+<rect x="150.4" y="118" width="199.6" height="18" fill="#0d9488" rx="2"/>
+<text x="250" y="132" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.87</text>
+<text x="116" y="154" text-anchor="end" font-size="9" fill="#475569">memory</text>
+<rect x="167.2" y="140" width="182.8" height="18" fill="#d97706" rx="2"/>
+<text x="259" y="154" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.79</text>
+<text x="116" y="176" text-anchor="end" font-size="9" fill="#475569">consciousness</text>
+<rect x="171.8" y="162" width="178.2" height="18" fill="#0d9488" rx="2"/>
+<text x="261" y="176" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.77</text>
+<text x="116" y="198" text-anchor="end" font-size="9" fill="#475569">communication</text>
+<rect x="177.1" y="184" width="172.9" height="18" fill="#d97706" rx="2"/>
+<text x="264" y="198" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.75</text>
+<text x="116" y="220" text-anchor="end" font-size="9" fill="#475569">pride</text>
+<rect x="180.2" y="206" width="169.8" height="18" fill="#0d9488" rx="2"/>
+<text x="265" y="220" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.74</text>
+<text x="116" y="242" text-anchor="end" font-size="9" fill="#475569">desire</text>
+<rect x="181.9" y="228" width="168.1" height="18" fill="#0d9488" rx="2"/>
+<text x="266" y="242" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.73</text>
+<text x="116" y="264" text-anchor="end" font-size="9" fill="#475569">personality</text>
+<rect x="184.7" y="250" width="165.3" height="18" fill="#0d9488" rx="2"/>
+<text x="267" y="264" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.72</text>
+<text x="116" y="286" text-anchor="end" font-size="9" fill="#475569">emotion_recognition</text>
+<rect x="196.0" y="272" width="154.0" height="18" fill="#d97706" rx="2"/>
+<text x="273" y="286" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.67</text>
+<text x="116" y="308" text-anchor="end" font-size="9" fill="#475569">pain</text>
+<rect x="246.7" y="294" width="103.3" height="18" fill="#0d9488" rx="2"/>
+<text x="298" y="308" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.45</text>
+<text x="116" y="330" text-anchor="end" font-size="9" fill="#475569">rage</text>
+<rect x="246.8" y="316" width="103.2" height="18" fill="#0d9488" rx="2"/>
+<text x="298" y="330" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.45</text>
+<text x="116" y="352" text-anchor="end" font-size="9" fill="#475569">fear</text>
+<rect x="246.8" y="338" width="103.2" height="18" fill="#0d9488" rx="2"/>
+<text x="298" y="352" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.45</text>
+<text x="116" y="374" text-anchor="end" font-size="9" fill="#475569">pleasure</text>
+<rect x="253.9" y="360" width="96.1" height="18" fill="#0d9488" rx="2"/>
+<text x="302" y="374" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.42</text>
+<text x="116" y="396" text-anchor="end" font-size="9" fill="#475569">hunger</text>
+<rect x="256.2" y="382" width="93.8" height="18" fill="#0d9488" rx="2"/>
+<text x="303" y="396" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.41</text>
+<text x="116" y="418" text-anchor="end" font-size="9" fill="#475569">joy</text>
+<rect x="266.6" y="404" width="83.4" height="18" fill="#0d9488" rx="2"/>
+<text x="308" y="418" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.36</text>
+<rect x="120" y="438" width="12" height="12" fill="#0d9488" rx="2"/>
+<text x="136" y="448" font-size="9" fill="#475569">Experience (Gray)</text>
+<rect x="240" y="438" width="12" height="12" fill="#d97706" rx="2"/>
+<text x="256" y="448" font-size="9" fill="#475569">Agency (Gray)</text>
+</svg>
+<svg width="600" height="466" viewBox="0 0 600 466" style="font-family:inherit">
+<text x="300" y="18" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Factor 2 Loadings (λ=1.19, 6.6% var) — Excl Fetus+God</text>
+<line x1="350" y1="30" x2="350" y2="426" stroke="#94a3b8" stroke-width="1"/>
+<line x1="442" y1="30" x2="442" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<line x1="258" y1="30" x2="258" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<text x="116" y="44" text-anchor="end" font-size="9" fill="#475569">hunger</text>
+<rect x="142.6" y="30" width="207.4" height="18" fill="#0d9488" rx="2"/>
+<text x="246" y="44" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.90</text>
+<text x="116" y="66" text-anchor="end" font-size="9" fill="#475569">pain</text>
+<rect x="147.1" y="52" width="202.9" height="18" fill="#0d9488" rx="2"/>
+<text x="249" y="66" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.88</text>
+<text x="116" y="88" text-anchor="end" font-size="9" fill="#475569">fear</text>
+<rect x="149.2" y="74" width="200.8" height="18" fill="#0d9488" rx="2"/>
+<text x="250" y="88" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.87</text>
+<text x="116" y="110" text-anchor="end" font-size="9" fill="#475569">joy</text>
+<rect x="150.1" y="96" width="199.9" height="18" fill="#0d9488" rx="2"/>
+<text x="250" y="110" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.87</text>
+<text x="116" y="132" text-anchor="end" font-size="9" fill="#475569">pleasure</text>
+<rect x="154.7" y="118" width="195.3" height="18" fill="#0d9488" rx="2"/>
+<text x="252" y="132" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.85</text>
+<text x="116" y="154" text-anchor="end" font-size="9" fill="#475569">emotion_recognition</text>
+<rect x="187.1" y="140" width="162.9" height="18" fill="#d97706" rx="2"/>
+<text x="269" y="154" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.71</text>
+<text x="116" y="176" text-anchor="end" font-size="9" fill="#475569">personality</text>
+<rect x="191.4" y="162" width="158.6" height="18" fill="#0d9488" rx="2"/>
+<text x="271" y="176" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.69</text>
+<text x="116" y="198" text-anchor="end" font-size="9" fill="#475569">desire</text>
+<rect x="200.6" y="184" width="149.4" height="18" fill="#0d9488" rx="2"/>
+<text x="275" y="198" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.65</text>
+<text x="116" y="220" text-anchor="end" font-size="9" fill="#475569">communication</text>
+<rect x="201.1" y="206" width="148.9" height="18" fill="#d97706" rx="2"/>
+<text x="276" y="220" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.65</text>
+<text x="116" y="242" text-anchor="end" font-size="9" fill="#475569">consciousness</text>
+<rect x="213.7" y="228" width="136.3" height="18" fill="#0d9488" rx="2"/>
+<text x="282" y="242" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.59</text>
+<text x="116" y="264" text-anchor="end" font-size="9" fill="#475569">memory</text>
+<rect x="217.3" y="250" width="132.7" height="18" fill="#d97706" rx="2"/>
+<text x="284" y="264" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.58</text>
+<text x="116" y="286" text-anchor="end" font-size="9" fill="#475569">rage</text>
+<rect x="226.5" y="272" width="123.5" height="18" fill="#0d9488" rx="2"/>
+<text x="288" y="286" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.54</text>
+<text x="116" y="308" text-anchor="end" font-size="9" fill="#475569">pride</text>
+<rect x="228.6" y="294" width="121.4" height="18" fill="#0d9488" rx="2"/>
+<text x="289" y="308" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.53</text>
+<text x="116" y="330" text-anchor="end" font-size="9" fill="#475569">self_control</text>
+<rect x="251.3" y="316" width="98.7" height="18" fill="#d97706" rx="2"/>
+<text x="301" y="330" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.43</text>
+<text x="116" y="352" text-anchor="end" font-size="9" fill="#475569">embarrassment</text>
+<rect x="251.6" y="338" width="98.4" height="18" fill="#0d9488" rx="2"/>
+<text x="301" y="352" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.43</text>
+<text x="116" y="374" text-anchor="end" font-size="9" fill="#475569">thought</text>
+<rect x="252.2" y="360" width="97.8" height="18" fill="#d97706" rx="2"/>
+<text x="301" y="374" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.43</text>
+<text x="116" y="396" text-anchor="end" font-size="9" fill="#475569">morality</text>
+<rect x="269.6" y="382" width="80.4" height="18" fill="#d97706" rx="2"/>
+<text x="310" y="396" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.35</text>
+<text x="116" y="418" text-anchor="end" font-size="9" fill="#475569">planning</text>
+<rect x="274.6" y="404" width="75.4" height="18" fill="#d97706" rx="2"/>
+<text x="312" y="418" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.33</text>
+<rect x="120" y="438" width="12" height="12" fill="#0d9488" rx="2"/>
+<text x="136" y="448" font-size="9" fill="#475569">Experience (Gray)</text>
+<rect x="240" y="438" width="12" height="12" fill="#d97706" rx="2"/>
+<text x="256" y="448" font-size="9" fill="#475569">Agency (Gray)</text>
+</svg>
+</div>
+<h2>2c. Factor Analysis Excluding Fetus, God, + Dead Woman</h2>
+<div class="card">
+<p class="small">PCA re-run from scratch on the 9-entity means matrix
+(fetus, god, and dead_woman removed before computing correlations/eigenvalues).</p>
+<h3>Scree</h3>
+<table><tr><th>Component</th><th class="num">Eigenvalue</th><th class="num">Variance</th><th class="num">Cumulative</th></tr>
+<tr><td>PC1 *</td><td class="num">13.51</td><td class="num">75.1%</td><td class="num">75.1%</td></tr>
+<tr><td>PC2 *</td><td class="num">2.18</td><td class="num">12.1%</td><td class="num">87.2%</td></tr>
+<tr><td>PC3 *</td><td class="num">1.29</td><td class="num">7.2%</td><td class="num">94.3%</td></tr>
+<tr><td>PC4</td><td class="num">0.58</td><td class="num">3.2%</td><td class="num">97.5%</td></tr>
+<tr><td>PC5</td><td class="num">0.21</td><td class="num">1.2%</td><td class="num">98.7%</td></tr>
+</table>
+<h3>Capacity Loadings (Varimax-Rotated)</h3>
+<table><tr><th>Capacity</th><th>Gray Factor</th>
+<th class="num">F1 (75.1%)</th>
+<th class="num">F2 (12.1%)</th>
+<th class="num">F3 (7.2%)</th>
+</tr>
+<tr><td>hunger</td><td><span class="tag-e">E</span></td>
+<td class="num">-0.254</td>
+<td class="num bold">-0.936</td>
+<td class="num">+0.158</td>
+</tr>
+<tr><td>fear</td><td><span class="tag-e">E</span></td>
+<td class="num">-0.294</td>
+<td class="num bold">-0.901</td>
+<td class="num">+0.210</td>
+</tr>
+<tr><td>pain</td><td><span class="tag-e">E</span></td>
+<td class="num">-0.307</td>
+<td class="num bold">-0.907</td>
+<td class="num">+0.223</td>
+</tr>
+<tr><td>pleasure</td><td><span class="tag-e">E</span></td>
+<td class="num">-0.353</td>
+<td class="num bold">-0.879</td>
+<td class="num">+0.080</td>
+</tr>
+<tr><td>rage</td><td><span class="tag-e">E</span></td>
+<td class="num">-0.130</td>
+<td class="num">-0.137</td>
+<td class="num bold">+0.978</td>
+</tr>
+<tr><td>desire</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.746</td>
+<td class="num bold">-0.548</td>
+<td class="num">+0.225</td>
+</tr>
+<tr><td>personality</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.762</td>
+<td class="num bold">-0.627</td>
+<td class="num">+0.135</td>
+</tr>
+<tr><td>consciousness</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.881</td>
+<td class="num bold">-0.442</td>
+<td class="num">-0.009</td>
+</tr>
+<tr><td>pride</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.669</td>
+<td class="num">-0.290</td>
+<td class="num bold">+0.534</td>
+</tr>
+<tr><td>embarrassment</td><td><span class="tag-e">E</span></td>
+<td class="num bold">-0.912</td>
+<td class="num">-0.153</td>
+<td class="num">+0.249</td>
+</tr>
+<tr><td>joy</td><td><span class="tag-e">E</span></td>
+<td class="num">-0.306</td>
+<td class="num bold">-0.905</td>
+<td class="num">-0.098</td>
+</tr>
+<tr><td>self_control</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.911</td>
+<td class="num">-0.356</td>
+<td class="num">+0.044</td>
+</tr>
+<tr><td>morality</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.940</td>
+<td class="num">-0.256</td>
+<td class="num">-0.103</td>
+</tr>
+<tr><td>memory</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.823</td>
+<td class="num bold">-0.428</td>
+<td class="num">+0.271</td>
+</tr>
+<tr><td>emotion_recognition</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.689</td>
+<td class="num bold">-0.687</td>
+<td class="num">+0.034</td>
+</tr>
+<tr><td>planning</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.918</td>
+<td class="num">-0.320</td>
+<td class="num">+0.137</td>
+</tr>
+<tr><td>communication</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.770</td>
+<td class="num bold">-0.569</td>
+<td class="num">+0.228</td>
+</tr>
+<tr><td>thought</td><td><span class="tag-a">A</span></td>
+<td class="num bold">-0.876</td>
+<td class="num">-0.206</td>
+<td class="num">+0.374</td>
+</tr>
+</table>
+<h3>Loading Bar Charts (Excl Fetus, God, Dead Woman)</h3>
+<svg width="600" height="466" viewBox="0 0 600 466" style="font-family:inherit">
+<text x="300" y="18" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Factor 1 Loadings (λ=13.51, 75.1% var) — Excl Fetus+God+Dead</text>
+<line x1="350" y1="30" x2="350" y2="426" stroke="#94a3b8" stroke-width="1"/>
+<line x1="442" y1="30" x2="442" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<line x1="258" y1="30" x2="258" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<text x="116" y="44" text-anchor="end" font-size="9" fill="#475569">morality</text>
+<rect x="133.7" y="30" width="216.3" height="18" fill="#d97706" rx="2"/>
+<text x="242" y="44" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.94</text>
+<text x="116" y="66" text-anchor="end" font-size="9" fill="#475569">planning</text>
+<rect x="138.9" y="52" width="211.1" height="18" fill="#d97706" rx="2"/>
+<text x="244" y="66" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.92</text>
+<text x="116" y="88" text-anchor="end" font-size="9" fill="#475569">embarrassment</text>
+<rect x="140.2" y="74" width="209.8" height="18" fill="#0d9488" rx="2"/>
+<text x="245" y="88" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.91</text>
+<text x="116" y="110" text-anchor="end" font-size="9" fill="#475569">self_control</text>
+<rect x="140.5" y="96" width="209.5" height="18" fill="#d97706" rx="2"/>
+<text x="245" y="110" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.91</text>
+<text x="116" y="132" text-anchor="end" font-size="9" fill="#475569">consciousness</text>
+<rect x="147.3" y="118" width="202.7" height="18" fill="#0d9488" rx="2"/>
+<text x="249" y="132" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.88</text>
+<text x="116" y="154" text-anchor="end" font-size="9" fill="#475569">thought</text>
+<rect x="148.5" y="140" width="201.5" height="18" fill="#d97706" rx="2"/>
+<text x="249" y="154" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.88</text>
+<text x="116" y="176" text-anchor="end" font-size="9" fill="#475569">memory</text>
+<rect x="160.8" y="162" width="189.2" height="18" fill="#d97706" rx="2"/>
+<text x="255" y="176" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.82</text>
+<text x="116" y="198" text-anchor="end" font-size="9" fill="#475569">communication</text>
+<rect x="173.0" y="184" width="177.0" height="18" fill="#d97706" rx="2"/>
+<text x="261" y="198" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.77</text>
+<text x="116" y="220" text-anchor="end" font-size="9" fill="#475569">personality</text>
+<rect x="174.8" y="206" width="175.2" height="18" fill="#0d9488" rx="2"/>
+<text x="262" y="220" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.76</text>
+<text x="116" y="242" text-anchor="end" font-size="9" fill="#475569">desire</text>
+<rect x="178.4" y="228" width="171.6" height="18" fill="#0d9488" rx="2"/>
+<text x="264" y="242" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.75</text>
+<text x="116" y="264" text-anchor="end" font-size="9" fill="#475569">emotion_recognition</text>
+<rect x="191.6" y="250" width="158.4" height="18" fill="#d97706" rx="2"/>
+<text x="271" y="264" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.69</text>
+<text x="116" y="286" text-anchor="end" font-size="9" fill="#475569">pride</text>
+<rect x="196.0" y="272" width="154.0" height="18" fill="#0d9488" rx="2"/>
+<text x="273" y="286" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.67</text>
+<text x="116" y="308" text-anchor="end" font-size="9" fill="#475569">pleasure</text>
+<rect x="268.8" y="294" width="81.2" height="18" fill="#0d9488" rx="2"/>
+<text x="309" y="308" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.35</text>
+<text x="116" y="330" text-anchor="end" font-size="9" fill="#475569">pain</text>
+<rect x="279.4" y="316" width="70.6" height="18" fill="#0d9488" rx="2"/>
+<text x="315" y="330" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.31</text>
+<text x="116" y="352" text-anchor="end" font-size="9" fill="#475569">joy</text>
+<rect x="279.7" y="338" width="70.3" height="18" fill="#0d9488" rx="2"/>
+<text x="315" y="352" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.31</text>
+<text x="116" y="374" text-anchor="end" font-size="9" fill="#475569">fear</text>
+<rect x="282.3" y="360" width="67.7" height="18" fill="#0d9488" rx="2"/>
+<text x="316" y="374" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.29</text>
+<text x="116" y="396" text-anchor="end" font-size="9" fill="#475569">hunger</text>
+<rect x="291.5" y="382" width="58.5" height="18" fill="#0d9488" rx="2"/>
+<text x="321" y="396" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.25</text>
+<text x="116" y="418" text-anchor="end" font-size="9" fill="#475569">rage</text>
+<rect x="320.1" y="404" width="29.9" height="18" fill="#0d9488" rx="2"/>
+<text x="335" y="418" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.13</text>
+<rect x="120" y="438" width="12" height="12" fill="#0d9488" rx="2"/>
+<text x="136" y="448" font-size="9" fill="#475569">Experience (Gray)</text>
+<rect x="240" y="438" width="12" height="12" fill="#d97706" rx="2"/>
+<text x="256" y="448" font-size="9" fill="#475569">Agency (Gray)</text>
+</svg>
+<svg width="600" height="466" viewBox="0 0 600 466" style="font-family:inherit">
+<text x="300" y="18" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Factor 2 Loadings (λ=2.18, 12.1% var) — Excl Fetus+God+Dead</text>
+<line x1="350" y1="30" x2="350" y2="426" stroke="#94a3b8" stroke-width="1"/>
+<line x1="442" y1="30" x2="442" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<line x1="258" y1="30" x2="258" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<text x="116" y="44" text-anchor="end" font-size="9" fill="#475569">hunger</text>
+<rect x="134.7" y="30" width="215.3" height="18" fill="#0d9488" rx="2"/>
+<text x="242" y="44" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.94</text>
+<text x="116" y="66" text-anchor="end" font-size="9" fill="#475569">pain</text>
+<rect x="141.5" y="52" width="208.5" height="18" fill="#0d9488" rx="2"/>
+<text x="246" y="66" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.91</text>
+<text x="116" y="88" text-anchor="end" font-size="9" fill="#475569">joy</text>
+<rect x="141.8" y="74" width="208.2" height="18" fill="#0d9488" rx="2"/>
+<text x="246" y="88" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.91</text>
+<text x="116" y="110" text-anchor="end" font-size="9" fill="#475569">fear</text>
+<rect x="142.8" y="96" width="207.2" height="18" fill="#0d9488" rx="2"/>
+<text x="246" y="110" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.90</text>
+<text x="116" y="132" text-anchor="end" font-size="9" fill="#475569">pleasure</text>
+<rect x="147.8" y="118" width="202.2" height="18" fill="#0d9488" rx="2"/>
+<text x="249" y="132" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.88</text>
+<text x="116" y="154" text-anchor="end" font-size="9" fill="#475569">emotion_recognition</text>
+<rect x="191.9" y="140" width="158.1" height="18" fill="#d97706" rx="2"/>
+<text x="271" y="154" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.69</text>
+<text x="116" y="176" text-anchor="end" font-size="9" fill="#475569">personality</text>
+<rect x="205.8" y="162" width="144.2" height="18" fill="#0d9488" rx="2"/>
+<text x="278" y="176" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.63</text>
+<text x="116" y="198" text-anchor="end" font-size="9" fill="#475569">communication</text>
+<rect x="219.1" y="184" width="130.9" height="18" fill="#d97706" rx="2"/>
+<text x="285" y="198" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.57</text>
+<text x="116" y="220" text-anchor="end" font-size="9" fill="#475569">desire</text>
+<rect x="223.9" y="206" width="126.1" height="18" fill="#0d9488" rx="2"/>
+<text x="287" y="220" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.55</text>
+<text x="116" y="242" text-anchor="end" font-size="9" fill="#475569">consciousness</text>
+<rect x="248.4" y="228" width="101.6" height="18" fill="#0d9488" rx="2"/>
+<text x="299" y="242" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.44</text>
+<text x="116" y="264" text-anchor="end" font-size="9" fill="#475569">memory</text>
+<rect x="251.5" y="250" width="98.5" height="18" fill="#d97706" rx="2"/>
+<text x="301" y="264" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.43</text>
+<text x="116" y="286" text-anchor="end" font-size="9" fill="#475569">self_control</text>
+<rect x="268.1" y="272" width="81.9" height="18" fill="#d97706" rx="2"/>
+<text x="309" y="286" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.36</text>
+<text x="116" y="308" text-anchor="end" font-size="9" fill="#475569">planning</text>
+<rect x="276.5" y="294" width="73.5" height="18" fill="#d97706" rx="2"/>
+<text x="313" y="308" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.32</text>
+<text x="116" y="330" text-anchor="end" font-size="9" fill="#475569">pride</text>
+<rect x="283.4" y="316" width="66.6" height="18" fill="#0d9488" rx="2"/>
+<text x="317" y="330" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.29</text>
+<text x="116" y="352" text-anchor="end" font-size="9" fill="#475569">morality</text>
+<rect x="291.2" y="338" width="58.8" height="18" fill="#d97706" rx="2"/>
+<text x="321" y="352" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.26</text>
+<text x="116" y="374" text-anchor="end" font-size="9" fill="#475569">thought</text>
+<rect x="302.6" y="360" width="47.4" height="18" fill="#d97706" rx="2"/>
+<text x="326" y="374" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.21</text>
+<text x="116" y="396" text-anchor="end" font-size="9" fill="#475569">embarrassment</text>
+<rect x="314.7" y="382" width="35.3" height="18" fill="#0d9488" rx="2"/>
+<text x="332" y="396" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.15</text>
+<text x="116" y="418" text-anchor="end" font-size="9" fill="#475569">rage</text>
+<rect x="318.4" y="404" width="31.6" height="18" fill="#0d9488" rx="2"/>
+<text x="334" y="418" text-anchor="middle" font-size="8" fill="white" font-weight="600">-0.14</text>
+<rect x="120" y="438" width="12" height="12" fill="#0d9488" rx="2"/>
+<text x="136" y="448" font-size="9" fill="#475569">Experience (Gray)</text>
+<rect x="240" y="438" width="12" height="12" fill="#d97706" rx="2"/>
+<text x="256" y="448" font-size="9" fill="#475569">Agency (Gray)</text>
+</svg>
+<svg width="600" height="466" viewBox="0 0 600 466" style="font-family:inherit">
+<text x="300" y="18" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Factor 3 Loadings (λ=1.29, 7.2% var) — Excl Fetus+God+Dead</text>
+<line x1="350" y1="30" x2="350" y2="426" stroke="#94a3b8" stroke-width="1"/>
+<line x1="442" y1="30" x2="442" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<line x1="258" y1="30" x2="258" y2="426" stroke="#e2e8f0" stroke-dasharray="4,3"/>
+<text x="116" y="44" text-anchor="end" font-size="9" fill="#475569">morality</text>
+<rect x="326.2" y="30" width="23.8" height="18" fill="#d97706" rx="2"/>
+<text x="116" y="66" text-anchor="end" font-size="9" fill="#475569">joy</text>
+<rect x="327.4" y="52" width="22.6" height="18" fill="#0d9488" rx="2"/>
+<text x="116" y="88" text-anchor="end" font-size="9" fill="#475569">consciousness</text>
+<rect x="347.8" y="74" width="2.2" height="18" fill="#0d9488" rx="2"/>
+<text x="116" y="110" text-anchor="end" font-size="9" fill="#475569">emotion_recognition</text>
+<rect x="350.0" y="96" width="7.7" height="18" fill="#d97706" rx="2"/>
+<text x="116" y="132" text-anchor="end" font-size="9" fill="#475569">self_control</text>
+<rect x="350.0" y="118" width="10.1" height="18" fill="#d97706" rx="2"/>
+<text x="116" y="154" text-anchor="end" font-size="9" fill="#475569">pleasure</text>
+<rect x="350.0" y="140" width="18.5" height="18" fill="#0d9488" rx="2"/>
+<text x="116" y="176" text-anchor="end" font-size="9" fill="#475569">personality</text>
+<rect x="350.0" y="162" width="31.0" height="18" fill="#0d9488" rx="2"/>
+<text x="365" y="176" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.13</text>
+<text x="116" y="198" text-anchor="end" font-size="9" fill="#475569">planning</text>
+<rect x="350.0" y="184" width="31.5" height="18" fill="#d97706" rx="2"/>
+<text x="366" y="198" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.14</text>
+<text x="116" y="220" text-anchor="end" font-size="9" fill="#475569">hunger</text>
+<rect x="350.0" y="206" width="36.3" height="18" fill="#0d9488" rx="2"/>
+<text x="368" y="220" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.16</text>
+<text x="116" y="242" text-anchor="end" font-size="9" fill="#475569">fear</text>
+<rect x="350.0" y="228" width="48.3" height="18" fill="#0d9488" rx="2"/>
+<text x="374" y="242" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.21</text>
+<text x="116" y="264" text-anchor="end" font-size="9" fill="#475569">pain</text>
+<rect x="350.0" y="250" width="51.2" height="18" fill="#0d9488" rx="2"/>
+<text x="376" y="264" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.22</text>
+<text x="116" y="286" text-anchor="end" font-size="9" fill="#475569">desire</text>
+<rect x="350.0" y="272" width="51.6" height="18" fill="#0d9488" rx="2"/>
+<text x="376" y="286" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.22</text>
+<text x="116" y="308" text-anchor="end" font-size="9" fill="#475569">communication</text>
+<rect x="350.0" y="294" width="52.5" height="18" fill="#d97706" rx="2"/>
+<text x="376" y="308" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.23</text>
+<text x="116" y="330" text-anchor="end" font-size="9" fill="#475569">embarrassment</text>
+<rect x="350.0" y="316" width="57.3" height="18" fill="#0d9488" rx="2"/>
+<text x="379" y="330" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.25</text>
+<text x="116" y="352" text-anchor="end" font-size="9" fill="#475569">memory</text>
+<rect x="350.0" y="338" width="62.3" height="18" fill="#d97706" rx="2"/>
+<text x="381" y="352" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.27</text>
+<text x="116" y="374" text-anchor="end" font-size="9" fill="#475569">thought</text>
+<rect x="350.0" y="360" width="85.9" height="18" fill="#d97706" rx="2"/>
+<text x="393" y="374" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.37</text>
+<text x="116" y="396" text-anchor="end" font-size="9" fill="#475569">pride</text>
+<rect x="350.0" y="382" width="122.7" height="18" fill="#0d9488" rx="2"/>
+<text x="411" y="396" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.53</text>
+<text x="116" y="418" text-anchor="end" font-size="9" fill="#475569">rage</text>
+<rect x="350.0" y="404" width="225.0" height="18" fill="#0d9488" rx="2"/>
+<text x="463" y="418" text-anchor="middle" font-size="8" fill="white" font-weight="600">+0.98</text>
+<rect x="120" y="438" width="12" height="12" fill="#0d9488" rx="2"/>
+<text x="136" y="448" font-size="9" fill="#475569">Experience (Gray)</text>
+<rect x="240" y="438" width="12" height="12" fill="#d97706" rx="2"/>
+<text x="256" y="448" font-size="9" fill="#475569">Agency (Gray)</text>
+</svg>
+</div>
+<h2>3. Statistical Comparison with Human Factor Scores</h2>
+<div class="card">
+<h3>What each statistic measures</h3>
+<table>
+<tr><th style="width:25%">Statistic</th><th>Question it answers</th><th style="width:35%">How it is calculated</th></tr>
+<tr>
+<td><strong>Procrustes disparity</strong></td>
+<td>Does the overall 2D shape of entity positions in the model&rsquo;s factor space
+match the shape in Gray et al.&rsquo;s human factor space, allowing for rotation,
+reflection, and uniform scaling?</td>
+<td>Both point clouds (model [F1,&thinsp;F2] and human [Exp,&thinsp;Ag]) are centered and
+normalized to unit sum-of-squares. One cloud is then optimally rotated/reflected
+to minimize the sum of squared distances to the other
+(<code>scipy.spatial.procrustes</code>). The residual sum of squares after alignment
+is the <em>disparity</em>: 0&nbsp;=&nbsp;perfect match, 1&nbsp;=&nbsp;no better than
+chance. <strong>p-value (permutation):</strong> We ask: &ldquo;Could this good a match
+happen by accident?&rdquo; To find out, we randomly shuffle which model point goes with
+which human point 10,000 times (breaking the true entity pairings). Each time, we
+recompute Procrustes disparity. The p-value is the fraction of these random shuffles
+that achieved a disparity as low or lower than the real one. If p&nbsp;&lt;&nbsp;.05,
+the match is better than 95% of random pairings &mdash; the structural similarity is
+unlikely to be coincidence.</td>
+</tr>
+<tr>
+<td><strong>RV coefficient</strong></td>
+<td>How similar are the multivariate covariance patterns of the two 2D point clouds?
+(A multivariate generalization of R&sup2;.)</td>
+<td>After centering both matrices X (model) and Y (human):
+RV&nbsp;=&nbsp;trace(S<sub>XY</sub>&thinsp;S<sub>YX</sub>)&thinsp;/&thinsp;&radic;(trace(S<sub>XX</sub>&sup2;)&thinsp;&middot;&thinsp;trace(S<sub>YY</sub>&sup2;)),
+where S<sub>XY</sub>&nbsp;=&nbsp;X&prime;Y. Range [0,&thinsp;1]; higher means more similar.
+Think of it as: &ldquo;How much of the variance in one point cloud is shared with
+the other?&rdquo;
+<strong>p-value (permutation):</strong> Same logic as Procrustes &mdash; shuffle entity
+labels 10,000 times, recompute RV each time. p is the fraction of shuffled RVs
+that were as high or higher than the real one. A small p means the shared variance
+is unlikely to be a coincidence of the point distributions.</td>
+</tr>
+<tr>
+<td><strong>Spearman rho</strong><br>(e.g., F2 &harr; Experience)</td>
+<td>Does a single model factor preserve the <em>rank ordering</em> of entities on a
+single human dimension? For example, if humans rank adult&thinsp;man &gt; girl &gt; dog
+on Experience, does model F2 put them in the same order?</td>
+<td>Standard Spearman rank correlation between the model&rsquo;s entity scores on one
+factor and the human scores on one dimension. Computed separately for each of the
+four (F1,&thinsp;F2)&nbsp;&times;&nbsp;(Experience,&thinsp;Agency) combinations.
+<strong>p-value:</strong> exact (from <code>scipy.stats.spearmanr</code>).</td>
+</tr>
+<tr>
+<td><strong>Combined Spearman</strong><br>(e.g., F1 &harr; E+A, or F1+F2 &harr; E+A)</td>
+<td>Does the model capture the overall &ldquo;mindedness&rdquo; hierarchy &mdash; the
+total amount of mind humans attribute to each entity &mdash; regardless of which
+specific factor carries it? This collapses the 2D structure to 1D, losing the
+Experience/Agency distinction, but provides a simple check of whether the model
+ranks entities by overall mental capacity the way humans do.</td>
+<td>Human combined score = Experience + Agency for each entity. Model combined =
+F1 + F2. Spearman rank correlation between these sums, or between each individual
+factor and the human sum. <strong>p-value:</strong> exact.</td>
+</tr>
+</table>
+</div>
+<div class="card">
+<h3>All Entities (n=12)</h3>
+<table><tr><th>Comparison</th><th class="num">Statistic</th><th class="num">p-value</th></tr>
+<tr><td>Overall: Procrustes disparity</td><td class="num">0.6975</td><td class="num" class="sig">0.0499</td></tr>
+<tr><td>Overall: RV coefficient</td><td class="num">0.2622</td><td class="num">0.1498</td></tr>
+<tr><td>F1 &harr; Experience</td><td class="num">rho=+0.399</td><td class="num">0.1985</td></tr>
+<tr><td>F1 &harr; Agency</td><td class="num">rho=+0.713</td><td class="num" class="sig">0.0092</td></tr>
+<tr><td>F2 &harr; Experience</td><td class="num">rho=-0.228</td><td class="num">0.4767</td></tr>
+<tr><td>F2 &harr; Agency</td><td class="num">rho=-0.049</td><td class="num">0.8799</td></tr>
+<tr><td>F1 &harr; Combined (E+A)</td><td class="num">rho=+0.580</td><td class="num" class="sig">0.0479</td></tr>
+<tr><td>F2 &harr; Combined (E+A)</td><td class="num">rho=-0.147</td><td class="num">0.6488</td></tr>
+<tr><td>(F1+F2) &harr; Combined (E+A)</td><td class="num">rho=+0.217</td><td class="num">0.4986</td></tr>
+</table>
+<h3>Excluding Fetus + God (scores from full PCA) (n=10)</h3>
+<table><tr><th>Comparison</th><th class="num">Statistic</th><th class="num">p-value</th></tr>
+<tr><td>Overall: Procrustes disparity</td><td class="num">0.8020</td><td class="num">0.2666</td></tr>
+<tr><td>Overall: RV coefficient</td><td class="num">0.1861</td><td class="num">0.3674</td></tr>
+<tr><td>F1 &harr; Experience</td><td class="num">rho=+0.455</td><td class="num">0.1869</td></tr>
+<tr><td>F1 &harr; Agency</td><td class="num">rho=+0.624</td><td class="num">0.0537</td></tr>
+<tr><td>F2 &harr; Experience</td><td class="num">rho=-0.006</td><td class="num">0.9867</td></tr>
+<tr><td>F2 &harr; Agency</td><td class="num">rho=-0.079</td><td class="num">0.8287</td></tr>
+<tr><td>F1 &harr; Combined (E+A)</td><td class="num">rho=+0.515</td><td class="num">0.1276</td></tr>
+<tr><td>F2 &harr; Combined (E+A)</td><td class="num">rho=-0.055</td><td class="num">0.8810</td></tr>
+<tr><td>(F1+F2) &harr; Combined (E+A)</td><td class="num">rho=+0.176</td><td class="num">0.6272</td></tr>
+</table>
+<h3>Excluding Fetus + God (PCA re-run from scratch) (n=10)</h3>
+<table><tr><th>Comparison</th><th class="num">Statistic</th><th class="num">p-value</th></tr>
+<tr><td>Overall: Procrustes disparity</td><td class="num">0.7791</td><td class="num">0.2118</td></tr>
+<tr><td>Overall: RV coefficient</td><td class="num">0.2067</td><td class="num">0.3186</td></tr>
+<tr><td>F1 &harr; Experience</td><td class="num">rho=-0.455</td><td class="num">0.1869</td></tr>
+<tr><td>F1 &harr; Agency</td><td class="num">rho=-0.624</td><td class="num">0.0537</td></tr>
+<tr><td>F2 &harr; Experience</td><td class="num">rho=-0.006</td><td class="num">0.9867</td></tr>
+<tr><td>F2 &harr; Agency</td><td class="num">rho=-0.079</td><td class="num">0.8287</td></tr>
+<tr><td>F1 &harr; Combined (E+A)</td><td class="num">rho=-0.515</td><td class="num">0.1276</td></tr>
+<tr><td>F2 &harr; Combined (E+A)</td><td class="num">rho=-0.067</td><td class="num">0.8548</td></tr>
+<tr><td>(F1+F2) &harr; Combined (E+A)</td><td class="num">rho=-0.321</td><td class="num">0.3655</td></tr>
+</table>
+<h3>Excluding Fetus, God, Dead Woman (scores from full PCA) (n=9)</h3>
+<table><tr><th>Comparison</th><th class="num">Statistic</th><th class="num">p-value</th></tr>
+<tr><td>Overall: Procrustes disparity</td><td class="num">0.8786</td><td class="num">0.5447</td></tr>
+<tr><td>Overall: RV coefficient</td><td class="num">0.1303</td><td class="num">0.5330</td></tr>
+<tr><td>F1 &harr; Experience</td><td class="num">rho=+0.283</td><td class="num">0.4600</td></tr>
+<tr><td>F1 &harr; Agency</td><td class="num">rho=+0.500</td><td class="num">0.1705</td></tr>
+<tr><td>F2 &harr; Experience</td><td class="num">rho=+0.367</td><td class="num">0.3317</td></tr>
+<tr><td>F2 &harr; Agency</td><td class="num">rho=+0.267</td><td class="num">0.4879</td></tr>
+<tr><td>F1 &harr; Combined (E+A)</td><td class="num">rho=+0.350</td><td class="num">0.3558</td></tr>
+<tr><td>F2 &harr; Combined (E+A)</td><td class="num">rho=+0.300</td><td class="num">0.4328</td></tr>
+<tr><td>(F1+F2) &harr; Combined (E+A)</td><td class="num">rho=+0.300</td><td class="num">0.4328</td></tr>
+</table>
+<h3>Excluding Fetus, God, Dead Woman (PCA re-run from scratch) (n=9)</h3>
+<table><tr><th>Comparison</th><th class="num">Statistic</th><th class="num">p-value</th></tr>
+<tr><td>Overall: Procrustes disparity</td><td class="num">0.8987</td><td class="num">0.6464</td></tr>
+<tr><td>Overall: RV coefficient</td><td class="num">0.1006</td><td class="num">0.6805</td></tr>
+<tr><td>F1 &harr; Experience</td><td class="num">rho=-0.217</td><td class="num">0.5755</td></tr>
+<tr><td>F1 &harr; Agency</td><td class="num">rho=-0.417</td><td class="num">0.2646</td></tr>
+<tr><td>F2 &harr; Experience</td><td class="num">rho=+0.217</td><td class="num">0.5755</td></tr>
+<tr><td>F2 &harr; Agency</td><td class="num">rho=+0.100</td><td class="num">0.7980</td></tr>
+<tr><td>F1 &harr; Combined (E+A)</td><td class="num">rho=-0.283</td><td class="num">0.4600</td></tr>
+<tr><td>F2 &harr; Combined (E+A)</td><td class="num">rho=+0.100</td><td class="num">0.7980</td></tr>
+<tr><td>(F1+F2) &harr; Combined (E+A)</td><td class="num">rho=+0.150</td><td class="num">0.7001</td></tr>
+</table>
+</div>
+<h2>4. Entity Factor Scores</h2><div class="card">
+<table><tr><th>Entity</th>
+<th class="num">Model F1</th>
+<th class="num">Model F2</th>
+<th class="num">Human Exp</th><th class="num">Human Ag</th></tr>
+<tr><td style="color:#8cc8c0;font-weight:600">dead_woman</td>
+<td class="num">0.148</td>
+<td class="num">1.000</td>
+<td class="num">0.06</td><td class="num">0.07</td></tr>
+<tr><td style="color:#78b6ad;font-weight:600">frog</td>
+<td class="num">0.583</td>
+<td class="num">0.499</td>
+<td class="num">0.25</td><td class="num">0.14</td></tr>
+<tr><td style="color:#7bb9b0;font-weight:600">robot</td>
+<td class="num">1.000</td>
+<td class="num">0.413</td>
+<td class="num">0.13</td><td class="num">0.22</td></tr>
+<tr><td style="color:#82bfb7;font-weight:600">fetus</td>
+<td class="num">0.190</td>
+<td class="num">0.621</td>
+<td class="num">0.17</td><td class="num">0.08</td></tr>
+<tr><td style="color:#81beb6;font-weight:600">pvs_patient</td>
+<td class="num">0.000</td>
+<td class="num">0.474</td>
+<td class="num">0.17</td><td class="num">0.10</td></tr>
+<tr><td style="color:#498d83;font-weight:600">god</td>
+<td class="num">0.723</td>
+<td class="num">0.973</td>
+<td class="num">0.20</td><td class="num">0.80</td></tr>
+<tr><td style="color:#51948a;font-weight:600">dog</td>
+<td class="num">0.432</td>
+<td class="num">0.053</td>
+<td class="num">0.55</td><td class="num">0.35</td></tr>
+<tr><td style="color:#41867b;font-weight:600">chimpanzee</td>
+<td class="num">0.352</td>
+<td class="num">0.000</td>
+<td class="num">0.63</td><td class="num">0.48</td></tr>
+<tr><td style="color:#52958b;font-weight:600">baby</td>
+<td class="num">0.476</td>
+<td class="num">0.170</td>
+<td class="num">0.71</td><td class="num">0.17</td></tr>
+<tr><td style="color:#266f63;font-weight:600">girl</td>
+<td class="num">0.587</td>
+<td class="num">0.430</td>
+<td class="num">0.84</td><td class="num">0.62</td></tr>
+<tr><td style="color:#095549;font-weight:600">adult_woman</td>
+<td class="num">0.899</td>
+<td class="num">0.539</td>
+<td class="num">0.93</td><td class="num">0.91</td></tr>
+<tr><td style="color:#085447;font-weight:600">adult_man</td>
+<td class="num">0.638</td>
+<td class="num">0.621</td>
+<td class="num">0.91</td><td class="num">0.95</td></tr>
+</table></div>
+<h2>5. Entity Positions: Model vs Human</h2>
+<h3>5a. Original Axes (Model: F1&rarr;, F2&uarr;)</h3>
+<div class="charts-row">
+<div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Model Factor Space (Individual)</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#475569">F1</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#475569" transform="rotate(-90,-16,120)">F2</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="35.5" cy="0.0" r="4" fill="#8cc8c0"/><text x="41" y="-3" font-size="7" fill="#8cc8c0">dead_w</text>
+<circle cx="139.9" cy="120.1" r="4" fill="#78b6ad"/><text x="145" y="117" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="240.0" cy="140.9" r="4" fill="#7bb9b0"/><text x="245" y="138" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="45.7" cy="91.0" r="4" fill="#82bfb7"/><text x="51" y="88" font-size="7" fill="#82bfb7">fetus</text>
+<circle cx="0.0" cy="126.3" r="4" fill="#81beb6"/><text x="5" y="123" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="173.5" cy="6.5" r="4" fill="#498d83"/><text x="178" y="3" font-size="7" fill="#498d83">god</text>
+<circle cx="103.8" cy="227.3" r="4" fill="#51948a"/><text x="109" y="224" font-size="7" fill="#51948a">dog</text>
+<circle cx="84.5" cy="240.0" r="4" fill="#41867b"/><text x="90" y="237" font-size="7" fill="#41867b">chimp</text>
+<circle cx="114.3" cy="199.2" r="4" fill="#52958b"/><text x="119" y="196" font-size="7" fill="#52958b">baby</text>
+<circle cx="140.8" cy="136.7" r="4" fill="#266f63"/><text x="146" y="134" font-size="7" fill="#266f63">girl</text>
+<circle cx="215.8" cy="110.7" r="4" fill="#095549"/><text x="221" y="108" font-size="7" fill="#095549">woman</text>
+<circle cx="153.2" cy="90.9" r="4" fill="#085447"/><text x="158" y="88" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div><div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Human Factor Space (Gray et al.)</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#0d9488">Experience</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#d97706" transform="rotate(-90,-16,120)">Agency</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="14.4" cy="223.2" r="4" fill="#8cc8c0"/><text x="19" y="220" font-size="7" fill="#8cc8c0">dead_w</text>
+<circle cx="60.0" cy="206.4" r="4" fill="#78b6ad"/><text x="65" y="203" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="31.2" cy="187.2" r="4" fill="#7bb9b0"/><text x="36" y="184" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="40.8" cy="220.8" r="4" fill="#82bfb7"/><text x="46" y="218" font-size="7" fill="#82bfb7">fetus</text>
+<circle cx="40.8" cy="216.0" r="4" fill="#81beb6"/><text x="46" y="213" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="48.0" cy="48.0" r="4" fill="#498d83"/><text x="53" y="45" font-size="7" fill="#498d83">god</text>
+<circle cx="132.0" cy="156.0" r="4" fill="#51948a"/><text x="137" y="153" font-size="7" fill="#51948a">dog</text>
+<circle cx="151.2" cy="124.8" r="4" fill="#41867b"/><text x="156" y="122" font-size="7" fill="#41867b">chimp</text>
+<circle cx="170.4" cy="199.2" r="4" fill="#52958b"/><text x="175" y="196" font-size="7" fill="#52958b">baby</text>
+<circle cx="201.6" cy="91.2" r="4" fill="#266f63"/><text x="207" y="88" font-size="7" fill="#266f63">girl</text>
+<circle cx="223.2" cy="21.6" r="4" fill="#095549"/><text x="228" y="19" font-size="7" fill="#095549">woman</text>
+<circle cx="218.4" cy="12.0" r="4" fill="#085447"/><text x="223" y="9" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div></div>
+<h3>5b. Axis-Aligned (Model: F2&rarr;, F1&uarr;)</h3>
+<p class="small">Model axes swapped so F1 (Y) aligns with potential Agency direction and F2 (X) with potential Experience direction.</p>
+<div class="charts-row">
+<div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Model (F2&rarr;, F1&uarr;)</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#475569">F2</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#475569" transform="rotate(-90,-16,120)">F1</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="240.0" cy="204.5" r="4" fill="#8cc8c0"/><text x="245" y="201" font-size="7" fill="#8cc8c0">dead_w</text>
+<circle cx="119.9" cy="100.1" r="4" fill="#78b6ad"/><text x="125" y="97" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="99.1" cy="0.0" r="4" fill="#7bb9b0"/><text x="104" y="-3" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="149.0" cy="194.3" r="4" fill="#82bfb7"/><text x="154" y="191" font-size="7" fill="#82bfb7">fetus</text>
+<circle cx="113.7" cy="240.0" r="4" fill="#81beb6"/><text x="119" y="237" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="233.5" cy="66.5" r="4" fill="#498d83"/><text x="239" y="64" font-size="7" fill="#498d83">god</text>
+<circle cx="12.7" cy="136.2" r="4" fill="#51948a"/><text x="18" y="133" font-size="7" fill="#51948a">dog</text>
+<circle cx="0.0" cy="155.5" r="4" fill="#41867b"/><text x="5" y="152" font-size="7" fill="#41867b">chimp</text>
+<circle cx="40.8" cy="125.7" r="4" fill="#52958b"/><text x="46" y="123" font-size="7" fill="#52958b">baby</text>
+<circle cx="103.3" cy="99.2" r="4" fill="#266f63"/><text x="108" y="96" font-size="7" fill="#266f63">girl</text>
+<circle cx="129.3" cy="24.2" r="4" fill="#095549"/><text x="134" y="21" font-size="7" fill="#095549">woman</text>
+<circle cx="149.1" cy="86.8" r="4" fill="#085447"/><text x="154" y="84" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div><div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Human (Exp&rarr;, Ag&uarr;)</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#0d9488">Experience</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#d97706" transform="rotate(-90,-16,120)">Agency</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="14.4" cy="223.2" r="4" fill="#8cc8c0"/><text x="19" y="220" font-size="7" fill="#8cc8c0">dead_w</text>
+<circle cx="60.0" cy="206.4" r="4" fill="#78b6ad"/><text x="65" y="203" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="31.2" cy="187.2" r="4" fill="#7bb9b0"/><text x="36" y="184" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="40.8" cy="220.8" r="4" fill="#82bfb7"/><text x="46" y="218" font-size="7" fill="#82bfb7">fetus</text>
+<circle cx="40.8" cy="216.0" r="4" fill="#81beb6"/><text x="46" y="213" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="48.0" cy="48.0" r="4" fill="#498d83"/><text x="53" y="45" font-size="7" fill="#498d83">god</text>
+<circle cx="132.0" cy="156.0" r="4" fill="#51948a"/><text x="137" y="153" font-size="7" fill="#51948a">dog</text>
+<circle cx="151.2" cy="124.8" r="4" fill="#41867b"/><text x="156" y="122" font-size="7" fill="#41867b">chimp</text>
+<circle cx="170.4" cy="199.2" r="4" fill="#52958b"/><text x="175" y="196" font-size="7" fill="#52958b">baby</text>
+<circle cx="201.6" cy="91.2" r="4" fill="#266f63"/><text x="207" y="88" font-size="7" fill="#266f63">girl</text>
+<circle cx="223.2" cy="21.6" r="4" fill="#095549"/><text x="228" y="19" font-size="7" fill="#095549">woman</text>
+<circle cx="218.4" cy="12.0" r="4" fill="#085447"/><text x="223" y="9" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div></div>
+<h3>5c. Excluding Fetus + God (n=10), Rescaled to [0,1]</h3>
+<p class="small">Factor scores re-normalized to [0,1] within the remaining 10 entities so the full plot area is used.</p>
+<div class="charts-row">
+<div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Model excl. fetus+god</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#475569">F1</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#475569" transform="rotate(-90,-16,120)">F2</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="35.5" cy="0.0" r="4" fill="#8cc8c0"/><text x="41" y="-3" font-size="7" fill="#8cc8c0">dead_w</text>
+<circle cx="139.9" cy="120.1" r="4" fill="#78b6ad"/><text x="145" y="117" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="240.0" cy="140.9" r="4" fill="#7bb9b0"/><text x="245" y="138" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="0.0" cy="126.3" r="4" fill="#81beb6"/><text x="5" y="123" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="103.8" cy="227.3" r="4" fill="#51948a"/><text x="109" y="224" font-size="7" fill="#51948a">dog</text>
+<circle cx="84.5" cy="240.0" r="4" fill="#41867b"/><text x="90" y="237" font-size="7" fill="#41867b">chimp</text>
+<circle cx="114.3" cy="199.2" r="4" fill="#52958b"/><text x="119" y="196" font-size="7" fill="#52958b">baby</text>
+<circle cx="140.8" cy="136.7" r="4" fill="#266f63"/><text x="146" y="134" font-size="7" fill="#266f63">girl</text>
+<circle cx="215.8" cy="110.7" r="4" fill="#095549"/><text x="221" y="108" font-size="7" fill="#095549">woman</text>
+<circle cx="153.2" cy="90.9" r="4" fill="#085447"/><text x="158" y="88" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div><div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Human excl. fetus+god</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#0d9488">Experience</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#d97706" transform="rotate(-90,-16,120)">Agency</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="0.0" cy="240.0" r="4" fill="#8cc8c0"/><text x="5" y="237" font-size="7" fill="#8cc8c0">dead_w</text>
+<circle cx="52.4" cy="220.9" r="4" fill="#78b6ad"/><text x="57" y="218" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="19.3" cy="199.1" r="4" fill="#7bb9b0"/><text x="24" y="196" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="30.3" cy="231.8" r="4" fill="#81beb6"/><text x="35" y="229" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="135.2" cy="163.6" r="4" fill="#51948a"/><text x="140" y="161" font-size="7" fill="#51948a">dog</text>
+<circle cx="157.2" cy="128.2" r="4" fill="#41867b"/><text x="162" y="125" font-size="7" fill="#41867b">chimp</text>
+<circle cx="179.3" cy="212.7" r="4" fill="#52958b"/><text x="184" y="210" font-size="7" fill="#52958b">baby</text>
+<circle cx="215.2" cy="90.0" r="4" fill="#266f63"/><text x="220" y="87" font-size="7" fill="#266f63">girl</text>
+<circle cx="240.0" cy="10.9" r="4" fill="#095549"/><text x="245" y="8" font-size="7" fill="#095549">woman</text>
+<circle cx="234.5" cy="0.0" r="4" fill="#085447"/><text x="239" y="-3" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div></div>
+<h3>5d. Excluding Fetus + God, Axis-Aligned (F2&rarr;, F1&uarr;)</h3>
+<div class="charts-row">
+<div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Model excl. (F2&rarr;, F1&uarr;)</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#475569">F2</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#475569" transform="rotate(-90,-16,120)">F1</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="240.0" cy="204.5" r="4" fill="#8cc8c0"/><text x="245" y="201" font-size="7" fill="#8cc8c0">dead_w</text>
+<circle cx="119.9" cy="100.1" r="4" fill="#78b6ad"/><text x="125" y="97" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="99.1" cy="0.0" r="4" fill="#7bb9b0"/><text x="104" y="-3" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="113.7" cy="240.0" r="4" fill="#81beb6"/><text x="119" y="237" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="12.7" cy="136.2" r="4" fill="#51948a"/><text x="18" y="133" font-size="7" fill="#51948a">dog</text>
+<circle cx="0.0" cy="155.5" r="4" fill="#41867b"/><text x="5" y="152" font-size="7" fill="#41867b">chimp</text>
+<circle cx="40.8" cy="125.7" r="4" fill="#52958b"/><text x="46" y="123" font-size="7" fill="#52958b">baby</text>
+<circle cx="103.3" cy="99.2" r="4" fill="#266f63"/><text x="108" y="96" font-size="7" fill="#266f63">girl</text>
+<circle cx="129.3" cy="24.2" r="4" fill="#095549"/><text x="134" y="21" font-size="7" fill="#095549">woman</text>
+<circle cx="149.1" cy="86.8" r="4" fill="#085447"/><text x="154" y="84" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div><div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Human excl. (Exp&rarr;, Ag&uarr;)</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#0d9488">Experience</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#d97706" transform="rotate(-90,-16,120)">Agency</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="0.0" cy="240.0" r="4" fill="#8cc8c0"/><text x="5" y="237" font-size="7" fill="#8cc8c0">dead_w</text>
+<circle cx="52.4" cy="220.9" r="4" fill="#78b6ad"/><text x="57" y="218" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="19.3" cy="199.1" r="4" fill="#7bb9b0"/><text x="24" y="196" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="30.3" cy="231.8" r="4" fill="#81beb6"/><text x="35" y="229" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="135.2" cy="163.6" r="4" fill="#51948a"/><text x="140" y="161" font-size="7" fill="#51948a">dog</text>
+<circle cx="157.2" cy="128.2" r="4" fill="#41867b"/><text x="162" y="125" font-size="7" fill="#41867b">chimp</text>
+<circle cx="179.3" cy="212.7" r="4" fill="#52958b"/><text x="184" y="210" font-size="7" fill="#52958b">baby</text>
+<circle cx="215.2" cy="90.0" r="4" fill="#266f63"/><text x="220" y="87" font-size="7" fill="#266f63">girl</text>
+<circle cx="240.0" cy="10.9" r="4" fill="#095549"/><text x="245" y="8" font-size="7" fill="#095549">woman</text>
+<circle cx="234.5" cy="0.0" r="4" fill="#085447"/><text x="239" y="-3" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div></div>
+<h3>5e. Excl PCA (re-run): Model F1&rarr;, F2&uarr;</h3>
+<p class="small">Factor scores from PCA re-run without fetus+god. Human scores rescaled to [0,1] within remaining 10 entities.</p>
+<div class="charts-row">
+<div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Model (re-run PCA)</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#475569">F1</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#475569" transform="rotate(-90,-16,120)">F2</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="218.4" cy="0.0" r="4" fill="#8cc8c0"/><text x="223" y="-3" font-size="7" fill="#8cc8c0">dead_w</text>
+<circle cx="115.8" cy="127.4" r="4" fill="#78b6ad"/><text x="121" y="124" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="0.0" cy="137.9" r="4" fill="#7bb9b0"/><text x="5" y="135" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="240.0" cy="107.9" r="4" fill="#81beb6"/><text x="245" y="105" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="161.0" cy="240.0" r="4" fill="#51948a"/><text x="166" y="237" font-size="7" fill="#51948a">dog</text>
+<circle cx="165.7" cy="235.8" r="4" fill="#41867b"/><text x="171" y="233" font-size="7" fill="#41867b">chimp</text>
+<circle cx="144.7" cy="206.6" r="4" fill="#52958b"/><text x="150" y="204" font-size="7" fill="#52958b">baby</text>
+<circle cx="105.7" cy="134.0" r="4" fill="#266f63"/><text x="111" y="131" font-size="7" fill="#266f63">girl</text>
+<circle cx="16.2" cy="98.4" r="4" fill="#095549"/><text x="21" y="95" font-size="7" fill="#095549">woman</text>
+<circle cx="79.4" cy="75.5" r="4" fill="#085447"/><text x="84" y="72" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div><div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Human excl. fetus+god</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#0d9488">Experience</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#d97706" transform="rotate(-90,-16,120)">Agency</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="0.0" cy="240.0" r="4" fill="#8cc8c0"/><text x="5" y="237" font-size="7" fill="#8cc8c0">dead_w</text>
+<circle cx="52.4" cy="220.9" r="4" fill="#78b6ad"/><text x="57" y="218" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="19.3" cy="199.1" r="4" fill="#7bb9b0"/><text x="24" y="196" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="30.3" cy="231.8" r="4" fill="#81beb6"/><text x="35" y="229" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="135.2" cy="163.6" r="4" fill="#51948a"/><text x="140" y="161" font-size="7" fill="#51948a">dog</text>
+<circle cx="157.2" cy="128.2" r="4" fill="#41867b"/><text x="162" y="125" font-size="7" fill="#41867b">chimp</text>
+<circle cx="179.3" cy="212.7" r="4" fill="#52958b"/><text x="184" y="210" font-size="7" fill="#52958b">baby</text>
+<circle cx="215.2" cy="90.0" r="4" fill="#266f63"/><text x="220" y="87" font-size="7" fill="#266f63">girl</text>
+<circle cx="240.0" cy="10.9" r="4" fill="#095549"/><text x="245" y="8" font-size="7" fill="#095549">woman</text>
+<circle cx="234.5" cy="0.0" r="4" fill="#085447"/><text x="239" y="-3" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div></div>
+<h3>5f. Excl PCA Axis-Aligned (F2&rarr;, F1&uarr;)</h3>
+<div class="charts-row">
+<div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Model (F2&rarr;, F1&uarr;)</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#475569">F2</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#475569" transform="rotate(-90,-16,120)">F1</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="240.0" cy="21.6" r="4" fill="#8cc8c0"/><text x="245" y="19" font-size="7" fill="#8cc8c0">dead_w</text>
+<circle cx="112.6" cy="124.2" r="4" fill="#78b6ad"/><text x="118" y="121" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="102.1" cy="240.0" r="4" fill="#7bb9b0"/><text x="107" y="237" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="132.1" cy="0.0" r="4" fill="#81beb6"/><text x="137" y="-3" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="0.0" cy="79.0" r="4" fill="#51948a"/><text x="5" y="76" font-size="7" fill="#51948a">dog</text>
+<circle cx="4.2" cy="74.3" r="4" fill="#41867b"/><text x="9" y="71" font-size="7" fill="#41867b">chimp</text>
+<circle cx="33.4" cy="95.3" r="4" fill="#52958b"/><text x="38" y="92" font-size="7" fill="#52958b">baby</text>
+<circle cx="106.0" cy="134.3" r="4" fill="#266f63"/><text x="111" y="131" font-size="7" fill="#266f63">girl</text>
+<circle cx="141.6" cy="223.8" r="4" fill="#095549"/><text x="147" y="221" font-size="7" fill="#095549">woman</text>
+<circle cx="164.5" cy="160.6" r="4" fill="#085447"/><text x="170" y="158" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div><div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Human (Exp&rarr;, Ag&uarr;)</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#0d9488">Experience</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#d97706" transform="rotate(-90,-16,120)">Agency</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="0.0" cy="240.0" r="4" fill="#8cc8c0"/><text x="5" y="237" font-size="7" fill="#8cc8c0">dead_w</text>
+<circle cx="52.4" cy="220.9" r="4" fill="#78b6ad"/><text x="57" y="218" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="19.3" cy="199.1" r="4" fill="#7bb9b0"/><text x="24" y="196" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="30.3" cy="231.8" r="4" fill="#81beb6"/><text x="35" y="229" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="135.2" cy="163.6" r="4" fill="#51948a"/><text x="140" y="161" font-size="7" fill="#51948a">dog</text>
+<circle cx="157.2" cy="128.2" r="4" fill="#41867b"/><text x="162" y="125" font-size="7" fill="#41867b">chimp</text>
+<circle cx="179.3" cy="212.7" r="4" fill="#52958b"/><text x="184" y="210" font-size="7" fill="#52958b">baby</text>
+<circle cx="215.2" cy="90.0" r="4" fill="#266f63"/><text x="220" y="87" font-size="7" fill="#266f63">girl</text>
+<circle cx="240.0" cy="10.9" r="4" fill="#095549"/><text x="245" y="8" font-size="7" fill="#095549">woman</text>
+<circle cx="234.5" cy="0.0" r="4" fill="#085447"/><text x="239" y="-3" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div></div>
+<h3>5g. Excl Fetus+God+Dead (re-run PCA): F1&rarr;, F2&uarr;</h3>
+<p class="small">Factor scores from PCA re-run without fetus, god, dead_woman. Human scores rescaled to [0,1] within remaining 9 entities.</p>
+<div class="charts-row">
+<div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Model (re-run PCA)</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#475569">F1</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#475569" transform="rotate(-90,-16,120)">F2</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="99.2" cy="100.8" r="4" fill="#78b6ad"/><text x="104" y="98" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="0.0" cy="115.2" r="4" fill="#7bb9b0"/><text x="5" y="112" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="240.0" cy="0.0" r="4" fill="#81beb6"/><text x="245" y="-3" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="125.4" cy="240.0" r="4" fill="#51948a"/><text x="130" y="237" font-size="7" fill="#51948a">dog</text>
+<circle cx="171.0" cy="203.1" r="4" fill="#41867b"/><text x="176" y="200" font-size="7" fill="#41867b">chimp</text>
+<circle cx="122.1" cy="196.4" r="4" fill="#52958b"/><text x="127" y="193" font-size="7" fill="#52958b">baby</text>
+<circle cx="102.8" cy="97.4" r="4" fill="#266f63"/><text x="108" y="94" font-size="7" fill="#266f63">girl</text>
+<circle cx="20.7" cy="64.6" r="4" fill="#095549"/><text x="26" y="62" font-size="7" fill="#095549">woman</text>
+<circle cx="91.1" cy="13.3" r="4" fill="#085447"/><text x="96" y="10" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div><div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Human excl. fetus+god+dead</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#0d9488">Experience</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#d97706" transform="rotate(-90,-16,120)">Agency</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="36.0" cy="228.7" r="4" fill="#78b6ad"/><text x="41" y="226" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="0.0" cy="206.1" r="4" fill="#7bb9b0"/><text x="5" y="203" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="12.0" cy="240.0" r="4" fill="#81beb6"/><text x="17" y="237" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="126.0" cy="169.4" r="4" fill="#51948a"/><text x="131" y="166" font-size="7" fill="#51948a">dog</text>
+<circle cx="150.0" cy="132.7" r="4" fill="#41867b"/><text x="155" y="130" font-size="7" fill="#41867b">chimp</text>
+<circle cx="174.0" cy="220.2" r="4" fill="#52958b"/><text x="179" y="217" font-size="7" fill="#52958b">baby</text>
+<circle cx="213.0" cy="93.2" r="4" fill="#266f63"/><text x="218" y="90" font-size="7" fill="#266f63">girl</text>
+<circle cx="240.0" cy="11.3" r="4" fill="#095549"/><text x="245" y="8" font-size="7" fill="#095549">woman</text>
+<circle cx="234.0" cy="0.0" r="4" fill="#085447"/><text x="239" y="-3" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div></div>
+<h3>5h. Excl Fetus+God+Dead, Axis-Aligned (F2&rarr;, F1&uarr;)</h3>
+<div class="charts-row">
+<div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Model (F2&rarr;, F1&uarr;)</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#475569">F2</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#475569" transform="rotate(-90,-16,120)">F1</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="139.2" cy="140.8" r="4" fill="#78b6ad"/><text x="144" y="138" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="124.8" cy="240.0" r="4" fill="#7bb9b0"/><text x="130" y="237" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="240.0" cy="0.0" r="4" fill="#81beb6"/><text x="245" y="-3" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="0.0" cy="114.6" r="4" fill="#51948a"/><text x="5" y="112" font-size="7" fill="#51948a">dog</text>
+<circle cx="36.9" cy="69.0" r="4" fill="#41867b"/><text x="42" y="66" font-size="7" fill="#41867b">chimp</text>
+<circle cx="43.6" cy="117.9" r="4" fill="#52958b"/><text x="49" y="115" font-size="7" fill="#52958b">baby</text>
+<circle cx="142.6" cy="137.2" r="4" fill="#266f63"/><text x="148" y="134" font-size="7" fill="#266f63">girl</text>
+<circle cx="175.4" cy="219.3" r="4" fill="#095549"/><text x="180" y="216" font-size="7" fill="#095549">woman</text>
+<circle cx="226.7" cy="148.9" r="4" fill="#085447"/><text x="232" y="146" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div><div class="chart-wrap">
+<svg width="320" height="320" viewBox="0 0 320 320" style="font-family:inherit">
+<text x="160" y="16" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Human (Exp&rarr;, Ag&uarr;)</text>
+<g transform="translate(50,28)">
+<line x1="0" y1="240" x2="240" y2="240" stroke="#cbd5e1"/>
+<line x1="0" y1="0" x2="0" y2="240" stroke="#cbd5e1"/>
+<text x="120" y="262" text-anchor="middle" font-size="10" fill="#0d9488">Experience</text>
+<text x="-16" y="120" text-anchor="middle" font-size="10" fill="#d97706" transform="rotate(-90,-16,120)">Agency</text>
+<line x1="60" y1="0" x2="60" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="60" x2="240" y2="60" stroke="#f1f5f9"/>
+<line x1="120" y1="0" x2="120" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="120" x2="240" y2="120" stroke="#f1f5f9"/>
+<line x1="180" y1="0" x2="180" y2="240" stroke="#f1f5f9"/>
+<line x1="0" y1="180" x2="240" y2="180" stroke="#f1f5f9"/>
+<text x="0" y="252" font-size="8" fill="#94a3b8">0</text>
+<text x="237" y="252" font-size="8" fill="#94a3b8">1</text>
+<text x="-4" y="5" text-anchor="end" font-size="8" fill="#94a3b8">1</text>
+<circle cx="36.0" cy="228.7" r="4" fill="#78b6ad"/><text x="41" y="226" font-size="7" fill="#78b6ad">frog</text>
+<circle cx="0.0" cy="206.1" r="4" fill="#7bb9b0"/><text x="5" y="203" font-size="7" fill="#7bb9b0">robot</text>
+<circle cx="12.0" cy="240.0" r="4" fill="#81beb6"/><text x="17" y="237" font-size="7" fill="#81beb6">pvs</text>
+<circle cx="126.0" cy="169.4" r="4" fill="#51948a"/><text x="131" y="166" font-size="7" fill="#51948a">dog</text>
+<circle cx="150.0" cy="132.7" r="4" fill="#41867b"/><text x="155" y="130" font-size="7" fill="#41867b">chimp</text>
+<circle cx="174.0" cy="220.2" r="4" fill="#52958b"/><text x="179" y="217" font-size="7" fill="#52958b">baby</text>
+<circle cx="213.0" cy="93.2" r="4" fill="#266f63"/><text x="218" y="90" font-size="7" fill="#266f63">girl</text>
+<circle cx="240.0" cy="11.3" r="4" fill="#095549"/><text x="245" y="8" font-size="7" fill="#095549">woman</text>
+<circle cx="234.0" cy="0.0" r="4" fill="#085447"/><text x="239" y="-3" font-size="7" fill="#085447">man</text>
+</g>
+</svg>
+</div></div>
+
+<div style="margin-top:3rem;padding-top:1rem;border-top:1px solid #e2e8f0;text-align:center">
+<p class="small">Experiment 4 &mdash; LLaMA-2-13B (Base) &mdash; Graziano Lab, Princeton University</p>
+</div>
+</body></html>

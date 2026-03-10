@@ -411,3 +411,23 @@ def llama_v2_prompt(messages, system_prompt=None):
         )
 
     return "".join(parts)
+
+
+# ============================================================================
+# CATEGORICAL / BEHAVIORAL RDMs (Concept Geometry)
+# ============================================================================
+
+def compute_categorical_rdm(character_keys, type_dict):
+    """Binary RDM: same type = 0, different type = 1."""
+    n = len(character_keys)
+    rdm = np.zeros((n, n))
+    for i in range(n):
+        for j in range(n):
+            rdm[i, j] = 0.0 if type_dict[character_keys[i]] == type_dict[character_keys[j]] else 1.0
+    return rdm
+
+
+def compute_behavioral_rdm(factor_scores):
+    """Euclidean distance in PCA factor space."""
+    from scipy.spatial.distance import squareform, pdist
+    return squareform(pdist(factor_scores, metric='euclidean'))

@@ -43,6 +43,7 @@ from config import (
     data_dir, figures_dir, results_phase_dir,
 )
 from utils.utils import nice_entity
+from utils.report_utils import add_dataset_argument
 from entities.gray_entities import GRAY_ET_AL_SCORES, ENTITY_PROMPTS, ENTITY_NAMES
 
 
@@ -451,7 +452,7 @@ figcaption strong{color:#1e293b}
 # MAIN REPORT GENERATION
 # ============================================================================
 
-def generate_html(model_key):
+def generate_html(model_key, dataset="full_dataset"):
     """Generate the full RSA HTML report for one model variant."""
 
     # Set model config
@@ -750,7 +751,8 @@ procedure (q-values). Significance thresholds use FDR-corrected values.</p>
              '</body>\n</html>')
 
     # Write report
-    out_dir = results_phase_dir("internals")
+    out_dir = results_phase_dir("internals") / dataset
+    out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "rsa_report.html"
     with open(out_path, "w") as f:
         f.write(html)
@@ -766,9 +768,10 @@ def main():
         description="Exp 4 Phase 1a: Generate RSA HTML report"
     )
     add_model_argument(parser)
+    add_dataset_argument(parser)
     args = parser.parse_args()
 
-    generate_html(args.model)
+    generate_html(args.model, dataset=args.dataset)
     print("\nDone.")
 
 
