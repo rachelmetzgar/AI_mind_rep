@@ -51,7 +51,7 @@ import torch
 import torch.nn.functional as F
 
 from utils.probes import LinearProbeClassification
-from config import config, set_version, add_version_argument, add_turn_argument
+from config import config, set_version, add_version_argument, add_turn_argument, add_variant_argument, set_variant
 
 
 # ========================== CONFIG ========================== #
@@ -86,6 +86,11 @@ def _init_paths():
     global OUTPUT_ROOT, CONTRASTS_OUTPUT_DIR, RAW_OUTPUT_DIR
     global RESIDUAL_OUTPUT_DIR, STANDALONE_OUTPUT_DIR
     global METACOGNITIVE_PROBE_DIR, OPERATIONAL_PROBE_DIR
+    global CONTRAST_ACT_DIR, STANDALONE_ACT_DIR
+
+    # Re-read model-scoped paths (may have been updated by set_variant)
+    CONTRAST_ACT_DIR = str(config.RESULTS.concept_activations_contrasts)
+    STANDALONE_ACT_DIR = str(config.RESULTS.concept_activations_standalone)
 
     from config import _active_turn
     turn_dir = config.RESULTS.alignment_versions / f"turn_{_active_turn}"
@@ -158,29 +163,37 @@ def discover_dimensions(act_dir):
     return dims
 
 
-def load_contrast_vector(dim_name, act_dir=CONTRAST_ACT_DIR):
+def load_contrast_vector(dim_name, act_dir=None):
     """Load the concept direction (human - AI) per layer for a contrast dimension."""
+    if act_dir is None:
+        act_dir = CONTRAST_ACT_DIR
     path = os.path.join(act_dir, dim_name, "concept_vector_per_layer.npz")
     data = np.load(path)
     return data["concept_direction"]  # shape: (n_layers, hidden_dim)
 
 
-def load_contrast_activations(dim_name, act_dir=CONTRAST_ACT_DIR):
+def load_contrast_activations(dim_name, act_dir=None):
     """Load raw activations and labels for a contrast dimension."""
+    if act_dir is None:
+        act_dir = CONTRAST_ACT_DIR
     path = os.path.join(act_dir, dim_name, "concept_activations.npz")
     data = np.load(path)
     return data["activations"], data["labels"]  # (n_prompts, n_layers, hidden), (n_prompts,)
 
 
-def load_standalone_mean(dim_name, act_dir=STANDALONE_ACT_DIR):
+def load_standalone_mean(dim_name, act_dir=None):
     """Load the mean concept vector per layer for a standalone dimension."""
+    if act_dir is None:
+        act_dir = STANDALONE_ACT_DIR
     path = os.path.join(act_dir, dim_name, "mean_vectors_per_layer.npz")
     data = np.load(path)
     return data["mean_concept"]  # shape: (n_layers, hidden_dim)
 
 
-def load_standalone_activations(dim_name, act_dir=STANDALONE_ACT_DIR):
+def load_standalone_activations(dim_name, act_dir=None):
     """Load raw activations for a standalone dimension."""
+    if act_dir is None:
+        act_dir = STANDALONE_ACT_DIR
     path = os.path.join(act_dir, dim_name, "concept_activations.npz")
     data = np.load(path)
     return data["activations"]  # (n_prompts, n_layers, hidden)
@@ -368,7 +381,6 @@ def run_raw_alignment(metacognitive_weights, operational_weights, dim_filter=Non
         print(f"\n--- Dim {dim_id}: {dim_name} ---")
 
         cv = load_contrast_vector(dim_name)
-        acts, labels = load_contrast_activations(dim_name)
 
         # Per-layer alignment
         metacognitive_align = compute_alignment_per_layer(cv, metacognitive_weights)
@@ -380,34 +392,41 @@ def run_raw_alignment(metacognitive_weights, operational_weights, dim_filter=Non
         print(f"  Reading: mean R² = {reading_summary['mean_r_squared']:.4f}")
         print(f"  Control: mean R² = {control_summary['mean_r_squared']:.4f}")
 
-        # Bootstrap
-        boot_metacognitive = bootstrap_contrast_alignment(acts, labels, metacognitive_weights)
-        boot_operational = bootstrap_contrast_alignment(acts, labels, operational_weights)
+        # Bootstrap (skip if raw activations don't exist, e.g., _1 variant)
+        acts_path = os.path.join(CONTRAST_ACT_DIR, dim_name, "concept_activations.npz")
+        save_kwargs = dict(
+            reading_per_layer=json.dumps(metacognitive_align),
+            control_per_layer=json.dumps(operational_align),
+        )
+        boot_ci_reading = [0.0, 0.0]
+        boot_ci_control = [0.0, 0.0]
+
+        if os.path.isfile(acts_path):
+            acts, labels = load_contrast_activations(dim_name)
+            boot_metacognitive = bootstrap_contrast_alignment(acts, labels, metacognitive_weights)
+            boot_operational = bootstrap_contrast_alignment(acts, labels, operational_weights)
+            save_kwargs["boot_metacognitive_r2"] = boot_metacognitive
+            save_kwargs["boot_operational_r2"] = boot_operational
+            boot_ci_reading = [
+                float(np.percentile(boot_metacognitive, 2.5)),
+                float(np.percentile(boot_metacognitive, 97.5)),
+            ]
+            boot_ci_control = [
+                float(np.percentile(boot_operational, 2.5)),
+                float(np.percentile(boot_operational, 97.5)),
+            ]
 
         # Save per-dimension
         dim_out = os.path.join(out_dir, dim_name)
         os.makedirs(dim_out, exist_ok=True)
-
-        np.savez_compressed(
-            os.path.join(dim_out, "alignment.npz"),
-            reading_per_layer=json.dumps(metacognitive_align),
-            control_per_layer=json.dumps(operational_align),
-            boot_metacognitive_r2=boot_metacognitive,
-            boot_operational_r2=boot_operational,
-        )
+        np.savez_compressed(os.path.join(dim_out, "alignment.npz"), **save_kwargs)
 
         summary[dim_name] = {
             "dim_id": dim_id,
             "reading_mean_r2": reading_summary["mean_r_squared"],
             "control_mean_r2": control_summary["mean_r_squared"],
-            "reading_boot_ci95": [
-                float(np.percentile(boot_metacognitive, 2.5)),
-                float(np.percentile(boot_metacognitive, 97.5)),
-            ],
-            "control_boot_ci95": [
-                float(np.percentile(boot_operational, 2.5)),
-                float(np.percentile(boot_operational, 97.5)),
-            ],
+            "reading_boot_ci95": boot_ci_reading,
+            "control_boot_ci95": boot_ci_control,
         }
 
     # Save summary
@@ -439,14 +458,18 @@ def run_residual_alignment(metacognitive_weights, operational_weights, dim_filte
                 baseline_found = True
                 break
         if not baseline_found:
-            raise FileNotFoundError(
-                f"Entity baseline dimension not found in {CONTRAST_ACT_DIR}"
-            )
+            print(f"  [SKIP] Entity baseline not found in {CONTRAST_ACT_DIR} — skipping residual analysis")
+            return {}
     else:
         entity_baseline_name = ENTITY_BASELINE_DIM
 
     baseline_cv = load_contrast_vector(entity_baseline_name)
-    baseline_acts, baseline_labels = load_contrast_activations(entity_baseline_name)
+    # Load raw activations for baseline bootstrap (may not exist for variants)
+    baseline_acts_path = os.path.join(CONTRAST_ACT_DIR, entity_baseline_name, "concept_activations.npz")
+    has_baseline_acts = os.path.isfile(baseline_acts_path)
+    baseline_acts = baseline_labels = None
+    if has_baseline_acts:
+        baseline_acts, baseline_labels = load_contrast_activations(entity_baseline_name)
     print(f"Loaded entity baseline: {entity_baseline_name}")
 
     # Filter after baseline is loaded
@@ -493,49 +516,55 @@ def run_residual_alignment(metacognitive_weights, operational_weights, dim_filte
         print(f"  Reading (residual): mean R² = {reading_summary['mean_r_squared']:.4f}")
         print(f"  Control (residual): mean R² = {control_summary['mean_r_squared']:.4f}")
 
-        # Bootstrap with joint entity baseline resampling
-        acts, labels = load_contrast_activations(dim_name)
-        boot_metacognitive = bootstrap_contrast_alignment(
-            acts, labels, metacognitive_weights,
-            entity_baseline_acts=baseline_acts,
-            entity_baseline_labels=baseline_labels,
-            residual_mode=True,
-        )
-        boot_operational = bootstrap_contrast_alignment(
-            acts, labels, operational_weights,
-            entity_baseline_acts=baseline_acts,
-            entity_baseline_labels=baseline_labels,
-            residual_mode=True,
-        )
-
-        # Save per-dimension
-        dim_out = os.path.join(out_dir, dim_name)
-        os.makedirs(dim_out, exist_ok=True)
-
-        np.savez_compressed(
-            os.path.join(dim_out, "alignment.npz"),
+        # Bootstrap with joint entity baseline resampling (if activations exist)
+        acts_path = os.path.join(CONTRAST_ACT_DIR, dim_name, "concept_activations.npz")
+        save_kwargs = dict(
             reading_per_layer=json.dumps(metacognitive_align),
             control_per_layer=json.dumps(operational_align),
             entity_overlap_per_layer=json.dumps(
                 {str(k): v for k, v in entity_overlaps.items()}
             ),
-            boot_metacognitive_r2=boot_metacognitive,
-            boot_operational_r2=boot_operational,
         )
+        boot_ci_reading = [0.0, 0.0]
+        boot_ci_control = [0.0, 0.0]
+
+        if os.path.isfile(acts_path) and has_baseline_acts:
+            acts, labels = load_contrast_activations(dim_name)
+            boot_metacognitive = bootstrap_contrast_alignment(
+                acts, labels, metacognitive_weights,
+                entity_baseline_acts=baseline_acts,
+                entity_baseline_labels=baseline_labels,
+                residual_mode=True,
+            )
+            boot_operational = bootstrap_contrast_alignment(
+                acts, labels, operational_weights,
+                entity_baseline_acts=baseline_acts,
+                entity_baseline_labels=baseline_labels,
+                residual_mode=True,
+            )
+            save_kwargs["boot_metacognitive_r2"] = boot_metacognitive
+            save_kwargs["boot_operational_r2"] = boot_operational
+            boot_ci_reading = [
+                float(np.percentile(boot_metacognitive, 2.5)),
+                float(np.percentile(boot_metacognitive, 97.5)),
+            ]
+            boot_ci_control = [
+                float(np.percentile(boot_operational, 2.5)),
+                float(np.percentile(boot_operational, 97.5)),
+            ]
+
+        # Save per-dimension
+        dim_out = os.path.join(out_dir, dim_name)
+        os.makedirs(dim_out, exist_ok=True)
+        np.savez_compressed(os.path.join(dim_out, "alignment.npz"), **save_kwargs)
 
         summary[dim_name] = {
             "dim_id": dim_id,
             "entity_overlap": mean_entity_overlap,
             "reading_mean_r2": reading_summary["mean_r_squared"],
             "control_mean_r2": control_summary["mean_r_squared"],
-            "reading_boot_ci95": [
-                float(np.percentile(boot_metacognitive, 2.5)),
-                float(np.percentile(boot_metacognitive, 97.5)),
-            ],
-            "control_boot_ci95": [
-                float(np.percentile(boot_operational, 2.5)),
-                float(np.percentile(boot_operational, 97.5)),
-            ],
+            "reading_boot_ci95": boot_ci_reading,
+            "control_boot_ci95": boot_ci_control,
         }
 
     with open(os.path.join(out_dir, "summary.json"), "w") as f:
@@ -572,7 +601,6 @@ def run_standalone_alignment(metacognitive_weights, operational_weights, dim_fil
         print(f"\n--- Dim {dim_id}: {dim_name} ---")
 
         mean_vec = load_standalone_mean(dim_name)
-        acts = load_standalone_activations(dim_name)
 
         # Per-layer alignment
         metacognitive_align = compute_alignment_per_layer(mean_vec, metacognitive_weights)
@@ -584,34 +612,41 @@ def run_standalone_alignment(metacognitive_weights, operational_weights, dim_fil
         print(f"  Reading: mean R² = {reading_summary['mean_r_squared']:.4f}")
         print(f"  Control: mean R² = {control_summary['mean_r_squared']:.4f}")
 
-        # Bootstrap
-        boot_metacognitive = bootstrap_standalone_alignment(acts, metacognitive_weights)
-        boot_operational = bootstrap_standalone_alignment(acts, operational_weights)
+        # Bootstrap (skip if raw activations don't exist, e.g., _1 variant)
+        acts_path = os.path.join(STANDALONE_ACT_DIR, dim_name, "concept_activations.npz")
+        save_kwargs = dict(
+            reading_per_layer=json.dumps(metacognitive_align),
+            control_per_layer=json.dumps(operational_align),
+        )
+        boot_ci_reading = [0.0, 0.0]
+        boot_ci_control = [0.0, 0.0]
+
+        if os.path.isfile(acts_path):
+            acts = load_standalone_activations(dim_name)
+            boot_metacognitive = bootstrap_standalone_alignment(acts, metacognitive_weights)
+            boot_operational = bootstrap_standalone_alignment(acts, operational_weights)
+            save_kwargs["boot_metacognitive_r2"] = boot_metacognitive
+            save_kwargs["boot_operational_r2"] = boot_operational
+            boot_ci_reading = [
+                float(np.percentile(boot_metacognitive, 2.5)),
+                float(np.percentile(boot_metacognitive, 97.5)),
+            ]
+            boot_ci_control = [
+                float(np.percentile(boot_operational, 2.5)),
+                float(np.percentile(boot_operational, 97.5)),
+            ]
 
         # Save per-dimension
         dim_out = os.path.join(out_dir, dim_name)
         os.makedirs(dim_out, exist_ok=True)
-
-        np.savez_compressed(
-            os.path.join(dim_out, "alignment.npz"),
-            reading_per_layer=json.dumps(metacognitive_align),
-            control_per_layer=json.dumps(operational_align),
-            boot_metacognitive_r2=boot_metacognitive,
-            boot_operational_r2=boot_operational,
-        )
+        np.savez_compressed(os.path.join(dim_out, "alignment.npz"), **save_kwargs)
 
         summary[dim_name] = {
             "dim_id": dim_id,
             "reading_mean_r2": reading_summary["mean_r_squared"],
             "control_mean_r2": control_summary["mean_r_squared"],
-            "reading_boot_ci95": [
-                float(np.percentile(boot_metacognitive, 2.5)),
-                float(np.percentile(boot_metacognitive, 97.5)),
-            ],
-            "control_boot_ci95": [
-                float(np.percentile(boot_operational, 2.5)),
-                float(np.percentile(boot_operational, 97.5)),
-            ],
+            "reading_boot_ci95": boot_ci_reading,
+            "control_boot_ci95": boot_ci_control,
         }
 
     with open(os.path.join(out_dir, "summary.json"), "w") as f:
@@ -657,7 +692,12 @@ def main():
     parser.add_argument("--dims", type=str, default=None,
                         help="Comma-separated dim IDs to process (default: all). "
                              "E.g. --dims 18,20,21,22,23")
+    add_variant_argument(parser)
     args = parser.parse_args()
+
+    # Set variant before version so paths incorporate variant suffix
+    if args.variant:
+        set_variant(args.variant)
 
     # Set version and initialize version-dependent paths
     set_version(args.version, turn=args.turn)

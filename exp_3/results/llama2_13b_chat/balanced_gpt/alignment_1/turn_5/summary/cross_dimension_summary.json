@@ -1,0 +1,177 @@
+{
+  "1": {
+    "dim_id": 1,
+    "dim_name": "1_phenomenology",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "2": {
+    "dim_id": 2,
+    "dim_name": "2_emotions",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "3": {
+    "dim_id": 3,
+    "dim_name": "3_agency",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "4": {
+    "dim_id": 4,
+    "dim_name": "4_intentions",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "5": {
+    "dim_id": 5,
+    "dim_name": "5_prediction",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "6": {
+    "dim_id": 6,
+    "dim_name": "6_cognitive",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "7": {
+    "dim_id": 7,
+    "dim_name": "7_social",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "8": {
+    "dim_id": 8,
+    "dim_name": "8_embodiment",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "9": {
+    "dim_id": 9,
+    "dim_name": "9_roles",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "10": {
+    "dim_id": 10,
+    "dim_name": "10_animacy",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "11": {
+    "dim_id": 11,
+    "dim_name": "11_formality",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "12": {
+    "dim_id": 12,
+    "dim_name": "12_expertise",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "13": {
+    "dim_id": 13,
+    "dim_name": "13_helpfulness",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "14": {
+    "dim_id": 14,
+    "dim_name": "14_biological",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "15": {
+    "dim_id": 15,
+    "dim_name": "15_shapes",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "16": {
+    "dim_id": 16,
+    "dim_name": "16_human",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "17": {
+    "dim_id": 17,
+    "dim_name": "17_ai",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "18": {
+    "dim_id": 18,
+    "dim_name": "18_attention",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "19": {
+    "dim_id": 19,
+    "dim_name": "19_mind",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "25": {
+    "dim_id": 25,
+    "dim_name": "25_beliefs",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "26": {
+    "dim_id": 26,
+    "dim_name": "26_desires",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "27": {
+    "dim_id": 27,
+    "dim_name": "27_goals",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "30": {
+    "dim_id": 30,
+    "dim_name": "30_granite_sandstone",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "31": {
+    "dim_id": 31,
+    "dim_name": "31_squares_triangles",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  },
+  "32": {
+    "dim_id": 32,
+    "dim_name": "32_horizontal_vertical",
+    "probe_acc_mean": null,
+    "operational_probe_max_cos": null,
+    "metacognitive_probe_max_cos": null
+  }
+}

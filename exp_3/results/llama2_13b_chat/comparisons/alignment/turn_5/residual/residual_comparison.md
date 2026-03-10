@@ -1,6 +1,6 @@
 # Exp 3: Residual Alignment (Entity Baseline Projected Out) — Cross-Version Comparison
 
-*Generated: 2026-03-04 11:34*
+*Generated: 2026-03-08 14:55*
 
 > Same as raw alignment, but with the entity baseline direction (dim 0: 'this is a human/AI') projected out of each concept vector before computing alignment. This removes shared entity-level variance, isolating concept-specific alignment.
 
@@ -8,8 +8,8 @@
 
 | Version | Metacognitive R² (×10⁻³) | Operational R² (×10⁻³) | Description |
 |---------|---|---|---|
-| Partner Identity | 0.507 | 0.992 | Balanced names with GPT-4 replacing 'AI' partner — explicit identity cues |
-| Control | 0.217 | 0.313 | Nonsense codewords replacing identity labels — no meaningful identity cues |
+| Partner Identity | 0.492 | 0.991 | Balanced names with GPT-4 replacing 'AI' partner — explicit identity cues |
+| Control | 0.220 | 0.318 | Nonsense codewords replacing identity labels — no meaningful identity cues |
 
 ## Per-Dimension: Metacognitive Probe R² (×10⁻³)
 
@@ -23,6 +23,9 @@
 | Cognitive | Mental | 0.589 | 0.263 |
 | Social | Mental | 0.663 | 0.202 |
 | Attention | Mental | 0.656 | 0.265 |
+| Beliefs | Mental | 0.367 | 0.296 |
+| Desires | Mental | 0.327 | 0.228 |
+| Goals | Mental | 0.663 | 0.165 |
 | Embodiment | Physical | 0.249 | 0.203 |
 | Roles | Physical | 0.380 | 0.151 |
 | Animacy | Physical | 0.377 | 0.219 |
@@ -32,6 +35,9 @@
 | Baseline | Control | 0.400 | 0.159 |
 | Biological | Control | 0.313 | 0.164 |
 | Shapes | Control | 0.329 | 0.194 |
+| Granite/Sandstone | Control | 0.168 | 0.187 |
+| Squares/Triangles | Control | 0.229 | 0.223 |
+| Horizontal/Vertical | Control | 0.183 | 0.310 |
 | SysPrompt (labeled) | SysPrompt | 0.667 | 0.189 |
 
 ## Per-Dimension: Operational Probe R² (×10⁻³)
@@ -46,6 +52,9 @@
 | Cognitive | Mental | 1.255 | 0.255 |
 | Social | Mental | 1.269 | 0.293 |
 | Attention | Mental | 1.430 | 0.257 |
+| Beliefs | Mental | 1.019 | 0.351 |
+| Desires | Mental | 0.785 | 0.360 |
+| Goals | Mental | 1.164 | 0.290 |
 | Embodiment | Physical | 0.313 | 0.266 |
 | Roles | Physical | 0.584 | 0.300 |
 | Animacy | Physical | 0.566 | 0.247 |
@@ -55,6 +64,9 @@
 | Baseline | Control | 1.539 | 0.174 |
 | Biological | Control | 0.473 | 0.232 |
 | Shapes | Control | 0.316 | 0.205 |
+| Granite/Sandstone | Control | 0.094 | 0.170 |
+| Squares/Triangles | Control | 0.256 | 0.198 |
+| Horizontal/Vertical | Control | 0.162 | 0.269 |
 | SysPrompt (labeled) | SysPrompt | 1.315 | 0.080 |
 
 ## Entity Overlap (Mean |cosine| with baseline)
@@ -69,6 +81,9 @@
 | Cognitive | 0.2396 |
 | Social | 0.5568 |
 | Attention | 0.4183 |
+| Beliefs | 0.4917 |
+| Desires | 0.4691 |
+| Goals | 0.5136 |
 | Embodiment | 0.6324 |
 | Roles | 0.6834 |
 | Animacy | 0.7429 |
@@ -78,6 +93,9 @@
 | Baseline | 0.9756 |
 | Biological | 0.5146 |
 | Shapes | 0.1273 |
+| Granite/Sandstone | 0.0705 |
+| Squares/Triangles | 0.1897 |
+| Horizontal/Vertical | 0.1886 |
 | SysPrompt (labeled) | 0.2829 |
 
 ## Methods
@@ -87,4 +105,4 @@
 - **Probes**: Exp 2, logistic per-layer (metacognitive + operational)
 - **Layer range**: Layers 6–40 (35 of 41). Layers 0–5 excluded (embedding artifact + prompt-format confound).
 - **Bootstrap**: 1,000 iterations (prompt resampling)
-- **Script**: `exp_3/code/analysis/alignment/2a_alignment_analysis.py`
+- **Script**: `exp_3/code/2a_alignment_analysis.py`

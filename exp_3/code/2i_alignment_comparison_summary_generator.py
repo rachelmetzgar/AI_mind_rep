@@ -35,9 +35,10 @@ import numpy as np
 # CONFIG
 # ============================================================================
 
-from config import config, get_model
+from config import config, get_model, add_variant_argument
 _MODEL_RESULTS = config.RESULTS.root / get_model()
 ALIGNMENT_ROOT = _MODEL_RESULTS
+_VARIANT_SUFFIX = ""  # set by main() if --variant provided
 VERSIONS = ["balanced_gpt", "nonsense_codeword"]
 
 VERSION_LABELS = {
@@ -113,6 +114,11 @@ DIM_NAMES = {
     # Standalone-specific
     20: "SysPrompt (talkto human)", 21: "SysPrompt (talkto AI)",
     22: "SysPrompt (bare human)", 23: "SysPrompt (bare AI)",
+    # BDI concepts
+    25: "Beliefs", 26: "Desires", 27: "Goals",
+    # Shape controls
+    29: "Shapes (flip)", 30: "Granite/Sandstone", 31: "Squares/Triangles",
+    32: "Horizontal/Vertical",
 }
 
 # Standalone has 16_human and 17_ai instead of 16_mind and 17_attention
@@ -125,19 +131,19 @@ def get_dim_category(dim_id, analysis_type):
     """Get category for a dimension, handling standalone numbering."""
     if analysis_type == "standalone":
         categories = {
-            "Mental":    [1, 2, 3, 4, 5, 6, 7, 18],  # 18=attention in standalone
+            "Mental":    [1, 2, 3, 4, 5, 6, 7, 18, 25, 26, 27],  # 18=attention in standalone
             "Physical":  [8, 9, 10],
             "Pragmatic": [11, 12, 13],
-            "Control":   [14, 15],
+            "Control":   [14, 15, 30, 31, 32],
             "Entity":    [16, 17],  # human/ai concept vectors
             "SysPrompt": [20, 21, 22, 23],
         }
     else:
         categories = {
-            "Mental":    [1, 2, 3, 4, 5, 6, 7, 17],
+            "Mental":    [1, 2, 3, 4, 5, 6, 7, 17, 25, 26, 27],
             "Physical":  [8, 9, 10],
             "Pragmatic": [11, 12, 13],
-            "Control":   [0, 14, 15],
+            "Control":   [0, 14, 15, 29, 30, 31, 32],
             "SysPrompt": [18],
         }
     for cat, ids in categories.items():
@@ -173,7 +179,7 @@ def load_all_summaries(analysis_type, turn=5):
     subpath = ANALYSIS_TYPES[analysis_type]["path"]
     data = {}
     for v in VERSIONS:
-        path = ALIGNMENT_ROOT / v / "alignment" / f"turn_{turn}" / subpath / "summary.json"
+        path = ALIGNMENT_ROOT / v / f"alignment{_VARIANT_SUFFIX}" / f"turn_{turn}" / subpath / "summary.json"
         if not path.exists():
             print(f"  WARNING: {path} not found, skipping {v}")
             continue
@@ -1104,15 +1110,20 @@ def generate_markdown(dim_data, analysis_type):
 # ============================================================================
 
 def main():
+    global _VARIANT_SUFFIX
     parser = argparse.ArgumentParser(description="Generate alignment comparison reports")
     parser.add_argument("--type", choices=["raw", "residual", "standalone", "all"],
                         default="all", help="Which analysis type (default: all)")
     parser.add_argument("--turn", type=int, default=5, choices=[1, 2, 3, 4, 5],
                         help="Conversation turn (default: 5)")
+    add_variant_argument(parser)
     args = parser.parse_args()
 
+    if args.variant:
+        _VARIANT_SUFFIX = args.variant
+
     types = ["raw", "residual", "standalone"] if args.type == "all" else [args.type]
-    comparisons_root = config.RESULTS.comparisons / "alignment"
+    comparisons_root = config.RESULTS.comparisons / f"alignment{_VARIANT_SUFFIX}"
 
     for atype in types:
         print(f"\n{'='*60}")

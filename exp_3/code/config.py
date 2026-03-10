@@ -53,10 +53,11 @@ EXP1_ROOT = None
 # Valid turn numbers for Exp 2 conversational probes
 VALID_TURNS = (1, 2, 3, 4, 5)
 
-# Internal tracking of active version, turn, and model
+# Internal tracking of active version, turn, model, and variant
 _active_version = None
 _active_turn = None
 _active_model = None
+_active_variant = ""
 
 
 # ============================================================================
@@ -178,11 +179,11 @@ class OutputPaths:
         """Update model-scoped paths (version-independent)."""
         model = _model_dir()
         model_root = self.root / model
-        self.concept_activations = model_root / "concept_activations"
-        self.concept_activations_contrasts = model_root / "concept_activations" / "contrasts"
-        self.concept_activations_standalone = model_root / "concept_activations" / "standalone"
+        self.concept_activations = model_root / f"concept_activations{_active_variant}"
+        self.concept_activations_contrasts = self.concept_activations / "contrasts"
+        self.concept_activations_standalone = self.concept_activations / "standalone"
         self.concept_probes_data = model_root / "concept_probes"
-        self.concept_overlap = model_root / "concept_overlap"
+        self.concept_overlap = model_root / f"concept_overlap{_active_variant}"
         self.sysprompt = model_root / "sysprompt"
         self.lexical = model_root / "lexical"
         self.comparisons = model_root / "comparisons"
@@ -193,15 +194,16 @@ class OutputPaths:
         """Update version-dependent paths under results/{model}/{version}/."""
         model = _model_dir()
         ver_root = self.root / model / version
-        self.alignment = ver_root / "alignment"
-        self.alignment_versions = ver_root / "alignment"  # use with f"turn_{N}" directly
-        self.alignment_contrasts = ver_root / "alignment" / "contrasts"
-        self.alignment_contrasts_raw = ver_root / "alignment" / "contrasts" / "raw"
-        self.alignment_contrasts_residual = ver_root / "alignment" / "contrasts" / "residual"
-        self.alignment_standalone = ver_root / "alignment" / "standalone"
-        self.alignment_layer_profiles = ver_root / "alignment" / "layer_profiles"
-        self.alignment_sysprompt = ver_root / "alignment" / "sysprompt"
-        self.concept_steering = ver_root / "concept_steering"
+        alignment_base = ver_root / f"alignment{_active_variant}"
+        self.alignment = alignment_base
+        self.alignment_versions = alignment_base  # use with f"turn_{N}" directly
+        self.alignment_contrasts = alignment_base / "contrasts"
+        self.alignment_contrasts_raw = alignment_base / "contrasts" / "raw"
+        self.alignment_contrasts_residual = alignment_base / "contrasts" / "residual"
+        self.alignment_standalone = alignment_base / "standalone"
+        self.alignment_layer_profiles = alignment_base / "layer_profiles"
+        self.alignment_sysprompt = alignment_base / "sysprompt"
+        self.concept_steering = ver_root / f"concept_steering{_active_variant}"
         self.interventions = ver_root / "interventions"
         self.interventions_v1 = ver_root / "interventions" / "V1"
         self.interventions_v2 = ver_root / "interventions" / "V2"
@@ -299,13 +301,14 @@ class AnalysisConfig:
 # ============================================================================
 
 DIMENSION_CATEGORIES = {
-    "Mental":    [1, 2, 3, 4, 5, 6, 7, 16, 17],
+    "Mental":    [1, 2, 3, 4, 5, 6, 7, 17, 25, 26, 27],
     "Physical":  [8, 9, 10],
     "Pragmatic": [11, 12, 13],
     "Baseline":  [0],
     "Bio Ctrl":  [14],
-    "Shapes":    [15],
-    "SysPrompt": [18, 19, 20, 21],
+    "Shapes":    [15, 29, 30, 31, 32],  # 29=shapes_flip, 30-32=new shape controls
+    "Meta":      [16],                   # Mind (holistic)
+    "SysPrompt": [18, 20, 21, 22, 23],   # 18=contrasts, 20-23=standalone variants
 }
 
 CATEGORY_COLORS = {
@@ -315,6 +318,7 @@ CATEGORY_COLORS = {
     "Baseline": "#9E9E9E",
     "Bio Ctrl": "#795548",
     "Shapes": "#E91E63",
+    "Meta": "#9C27B0",
     "SysPrompt": "#00BCD4",
 }
 
@@ -464,6 +468,27 @@ def add_model_argument(parser):
         "--model", type=str, default="llama2_13b_chat",
         choices=VALID_MODELS,
         help=f"Model to use. Choices: {', '.join(VALID_MODELS)} (default: llama2_13b_chat)"
+    )
+
+
+# ============================================================================
+# VARIANT MANAGEMENT (for pipeline variants like _1 top-prompt)
+# ============================================================================
+
+def set_variant(variant):
+    """Set active variant suffix (e.g., '_1'). Updates concept activation + output paths."""
+    global _active_variant
+    _active_variant = variant
+    config.RESULTS._update_model_paths()
+    if _active_version:
+        config.RESULTS._update_version_paths(_active_version)
+
+
+def add_variant_argument(parser):
+    """Add optional --variant argument to argparse parser."""
+    parser.add_argument(
+        "--variant", type=str, default="",
+        help="Variant suffix for concept paths (e.g., '_1' for top-1 pipeline)"
     )
 
 

@@ -67,9 +67,9 @@ PROBE_HEADER_COLORS = {
 
 # Dimension display info
 DIM_CATEGORIES = {
-    "Mental":    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 17],
+    "Mental":    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 17, 25, 26, 27],
     "Pragmatic": [11, 12, 13],
-    "Control":   [0, 14, 15],
+    "Control":   [0, 14, 15, 29, 30, 31, 32],
     "SysPrompt": [18],
 }
 
@@ -86,6 +86,9 @@ DIM_NAMES = {
     8: "Embodiment", 9: "Roles", 10: "Animacy", 11: "Formality",
     12: "Expertise", 13: "Helpfulness", 14: "Biological", 15: "Shapes",
     16: "Mind (holistic)", 17: "Attention", 18: "SysPrompt",
+    25: "Beliefs", 26: "Desires", 27: "Goals",
+    29: "Shapes (flip)", 30: "Granite/Sandstone", 31: "Squares/Triangles",
+    32: "Horizontal/Vertical",
 }
 
 # Category-summary chart uses different label for dim 0

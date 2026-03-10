@@ -1,0 +1,314 @@
+{
+  "1_phenomenology": {
+    "dim_id": 1,
+    "reading_mean_r2": 0.00031239335026623746,
+    "control_mean_r2": 0.0002722948111417929,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "2_emotions": {
+    "dim_id": 2,
+    "reading_mean_r2": 0.00029126760430726574,
+    "control_mean_r2": 0.00030372552108814103,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "3_agency": {
+    "dim_id": 3,
+    "reading_mean_r2": 0.0003272554307535246,
+    "control_mean_r2": 0.0003037826757597874,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "4_intentions": {
+    "dim_id": 4,
+    "reading_mean_r2": 0.00029936839416283296,
+    "control_mean_r2": 0.00028379990397285794,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "5_prediction": {
+    "dim_id": 5,
+    "reading_mean_r2": 0.0003091517851650418,
+    "control_mean_r2": 0.00035801764636922786,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "6_cognitive": {
+    "dim_id": 6,
+    "reading_mean_r2": 0.0002895002386854581,
+    "control_mean_r2": 0.0003688116621949725,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "7_social": {
+    "dim_id": 7,
+    "reading_mean_r2": 0.00027901723665002716,
+    "control_mean_r2": 0.0004977113464147249,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "8_embodiment": {
+    "dim_id": 8,
+    "reading_mean_r2": 0.0002976086406382197,
+    "control_mean_r2": 0.00028586295751816703,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "9_roles": {
+    "dim_id": 9,
+    "reading_mean_r2": 0.00029169952699749135,
+    "control_mean_r2": 0.0003993155788555463,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "10_animacy": {
+    "dim_id": 10,
+    "reading_mean_r2": 0.00027403657737506406,
+    "control_mean_r2": 0.0002788537210950064,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "11_formality": {
+    "dim_id": 11,
+    "reading_mean_r2": 0.0002681949821285292,
+    "control_mean_r2": 0.000443946806594236,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "12_expertise": {
+    "dim_id": 12,
+    "reading_mean_r2": 0.00026478343758849055,
+    "control_mean_r2": 0.0005581694528597612,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "13_helpfulness": {
+    "dim_id": 13,
+    "reading_mean_r2": 0.0002845991293199572,
+    "control_mean_r2": 0.00042633052603517803,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "14_biological": {
+    "dim_id": 14,
+    "reading_mean_r2": 0.0002912698346904616,
+    "control_mean_r2": 0.0002764535282612967,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "15_shapes": {
+    "dim_id": 15,
+    "reading_mean_r2": 0.0003256206998621403,
+    "control_mean_r2": 0.00028985990190601266,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "16_human": {
+    "dim_id": 16,
+    "reading_mean_r2": 0.00026694813215205734,
+    "control_mean_r2": 0.0004298240893794814,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "17_ai": {
+    "dim_id": 17,
+    "reading_mean_r2": 0.0002634936715938498,
+    "control_mean_r2": 0.0005783527629719819,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "18_attention": {
+    "dim_id": 18,
+    "reading_mean_r2": 0.0002910019943086023,
+    "control_mean_r2": 0.0004033853241760525,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "25_beliefs": {
+    "dim_id": 25,
+    "reading_mean_r2": 0.0002828383963712925,
+    "control_mean_r2": 0.0003997690707400642,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "26_desires": {
+    "dim_id": 26,
+    "reading_mean_r2": 0.0003025667429800657,
+    "control_mean_r2": 0.00026372715639502443,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "27_goals": {
+    "dim_id": 27,
+    "reading_mean_r2": 0.00029698908701228507,
+    "control_mean_r2": 0.0003090329267681662,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "30_granite_sandstone": {
+    "dim_id": 30,
+    "reading_mean_r2": 0.00031215368154468155,
+    "control_mean_r2": 0.0003030437503168169,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "31_squares_triangles": {
+    "dim_id": 31,
+    "reading_mean_r2": 0.0003107870031532909,
+    "control_mean_r2": 0.0002946605265650171,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "32_horizontal_vertical": {
+    "dim_id": 32,
+    "reading_mean_r2": 0.0003132946948640051,
+    "control_mean_r2": 0.0003013136114311307,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  }
+}

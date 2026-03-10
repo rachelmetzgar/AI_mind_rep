@@ -42,7 +42,7 @@ import argparse
 import csv
 import numpy as np
 
-from config import config
+from config import config, add_variant_argument, set_variant
 
 # ========================== CONFIG ========================== #
 
@@ -410,7 +410,14 @@ def main():
     )
     parser.add_argument("--n-bootstrap", type=int, default=N_BOOTSTRAP,
                         help=f"Bootstrap iterations (default: {N_BOOTSTRAP})")
+    add_variant_argument(parser)
     args = parser.parse_args()
+
+    if args.variant:
+        set_variant(args.variant)
+        global STANDALONE_ACT_DIR, OUTPUT_DIR
+        STANDALONE_ACT_DIR = str(config.RESULTS.concept_activations_standalone)
+        OUTPUT_DIR = os.path.join(str(config.RESULTS.concept_overlap), "standalone")
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     layer_range = range(MIN_LAYER, N_LAYERS)

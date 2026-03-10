@@ -1,0 +1,314 @@
+{
+  "1_phenomenology": {
+    "dim_id": 1,
+    "reading_mean_r2": 0.00023226724930681874,
+    "control_mean_r2": 0.0001514081689379629,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "2_emotions": {
+    "dim_id": 2,
+    "reading_mean_r2": 0.0002351161208971771,
+    "control_mean_r2": 0.00013943634151975442,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "3_agency": {
+    "dim_id": 3,
+    "reading_mean_r2": 0.0002580721138381411,
+    "control_mean_r2": 0.00017965957983726808,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "4_intentions": {
+    "dim_id": 4,
+    "reading_mean_r2": 0.0002466194042985307,
+    "control_mean_r2": 0.0001583352093582823,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "5_prediction": {
+    "dim_id": 5,
+    "reading_mean_r2": 0.0002605056695370834,
+    "control_mean_r2": 0.0001320319293705437,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "6_cognitive": {
+    "dim_id": 6,
+    "reading_mean_r2": 0.00024363749551617196,
+    "control_mean_r2": 0.0001608558038035753,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "7_social": {
+    "dim_id": 7,
+    "reading_mean_r2": 0.00021440498691184222,
+    "control_mean_r2": 0.00016661285137226293,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "8_embodiment": {
+    "dim_id": 8,
+    "reading_mean_r2": 0.00025355993564901615,
+    "control_mean_r2": 0.00013981439252114275,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "9_roles": {
+    "dim_id": 9,
+    "reading_mean_r2": 0.000248042182870841,
+    "control_mean_r2": 0.0001376266495965023,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "10_animacy": {
+    "dim_id": 10,
+    "reading_mean_r2": 0.00023051107638574962,
+    "control_mean_r2": 0.0001614309169224666,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "11_formality": {
+    "dim_id": 11,
+    "reading_mean_r2": 0.00022953490630223835,
+    "control_mean_r2": 0.0001290771117667083,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "12_expertise": {
+    "dim_id": 12,
+    "reading_mean_r2": 0.00020946085980468518,
+    "control_mean_r2": 0.00018200504664501443,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "13_helpfulness": {
+    "dim_id": 13,
+    "reading_mean_r2": 0.00020770798381200716,
+    "control_mean_r2": 0.0001630375342977876,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "14_biological": {
+    "dim_id": 14,
+    "reading_mean_r2": 0.0002441867130519998,
+    "control_mean_r2": 0.00016244369181342655,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "15_shapes": {
+    "dim_id": 15,
+    "reading_mean_r2": 0.0002434849176980551,
+    "control_mean_r2": 0.00015104792960150533,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "16_human": {
+    "dim_id": 16,
+    "reading_mean_r2": 0.00022228713530368242,
+    "control_mean_r2": 0.0001781566721147579,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "17_ai": {
+    "dim_id": 17,
+    "reading_mean_r2": 0.00021592601267496955,
+    "control_mean_r2": 0.0001636881554666709,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "18_attention": {
+    "dim_id": 18,
+    "reading_mean_r2": 0.000237293320127906,
+    "control_mean_r2": 0.00014419333259571327,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "25_beliefs": {
+    "dim_id": 25,
+    "reading_mean_r2": 0.0002442704071475479,
+    "control_mean_r2": 0.00015301205915992347,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "26_desires": {
+    "dim_id": 26,
+    "reading_mean_r2": 0.0002442998848733646,
+    "control_mean_r2": 0.00014910547585582386,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "27_goals": {
+    "dim_id": 27,
+    "reading_mean_r2": 0.0002621954787406681,
+    "control_mean_r2": 0.0001486007018802896,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "30_granite_sandstone": {
+    "dim_id": 30,
+    "reading_mean_r2": 0.00023629950183103886,
+    "control_mean_r2": 0.0001528503553003386,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "31_squares_triangles": {
+    "dim_id": 31,
+    "reading_mean_r2": 0.00025100057671072754,
+    "control_mean_r2": 0.00014959223180699286,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "32_horizontal_vertical": {
+    "dim_id": 32,
+    "reading_mean_r2": 0.00026227088730679964,
+    "control_mean_r2": 0.0001511236941834206,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  }
+}

@@ -65,7 +65,9 @@ _s1_spec = spec_from_file_location(
 )
 _s1_mod = module_from_spec(_s1_spec)
 _s1_spec.loader.exec_module(_s1_mod)
-DIMENSION_REGISTRY = _s1_mod.DIMENSION_REGISTRY
+DIMENSION_REGISTRY = _s1_mod.build_dimension_registry(
+    os.path.join(os.path.dirname(__file__), "..", "concepts", "standalone")
+)
 
 
 # ========================== INLINE TRACEDICT ========================== #

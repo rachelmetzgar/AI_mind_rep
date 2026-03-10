@@ -51,7 +51,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 # --- Local imports ---
 from utils.dataset import llama_v2_prompt
-from config import config, set_version, add_version_argument, ensure_dir
+from config import config, set_version, add_version_argument, ensure_dir, add_variant_argument, set_variant
 
 
 # ========================== INLINE TRACEDICT ========================== #
@@ -107,23 +107,29 @@ CAUSAL_QUESTION_PATH = None
 CONCEPT_ALIGNED_JSON = None
 
 
-def _init_paths(version):
+def _init_paths(version, mode="contrasts"):
     """Initialize version-dependent paths."""
     global CONCEPT_VECTOR_ROOT, RESULT_DIR, CAUSAL_QUESTION_PATH, CONCEPT_ALIGNED_JSON
     set_version(version)
-    CONCEPT_VECTOR_ROOT = config.RESULTS.concept_activations_contrasts
-    RESULT_DIR = config.RESULTS.root / "versions" / version / "concept_steering" / "v1"
+    if mode == "standalone":
+        CONCEPT_VECTOR_ROOT = config.RESULTS.concept_activations_standalone
+        RESULT_DIR = config.RESULTS.concept_steering / "v1_standalone"
+    else:
+        CONCEPT_VECTOR_ROOT = config.RESULTS.concept_activations_contrasts
+        RESULT_DIR = config.RESULTS.concept_steering / "v1"
     CAUSAL_QUESTION_PATH = config.PATHS.causality_questions
     CONCEPT_ALIGNED_JSON = config.RESULTS.alignment / "concept_aligned_layers.json"
 
 
 # ========================== DIMENSION DISCOVERY ========================== #
 
-def discover_dimensions(concept_vector_root):
-    """Scan concept_activations/contrasts for available dimensions.
+def discover_dimensions(concept_vector_root, mode="contrasts"):
+    """Scan concept_activations directory for available dimensions.
 
     Returns dict: {dim_id: dim_name} where dim_name is the directory name.
     """
+    vec_filename = ("mean_vectors_per_layer.npz" if mode == "standalone"
+                    else "concept_vector_per_layer.npz")
     dims = {}
     for entry in sorted(os.listdir(concept_vector_root)):
         path = os.path.join(concept_vector_root, entry)
@@ -136,7 +142,7 @@ def discover_dimensions(concept_vector_root):
             dim_id = int(parts[0])
         except ValueError:
             continue
-        vec_path = os.path.join(path, "concept_vector_per_layer.npz")
+        vec_path = os.path.join(path, vec_filename)
         if os.path.isfile(vec_path):
             dims[dim_id] = entry
     return dims
@@ -144,18 +150,22 @@ def discover_dimensions(concept_vector_root):
 
 # ========================== VECTOR LOADING ========================== #
 
-def load_concept_direction(concept_vector_root, dim_name):
+def load_concept_direction(concept_vector_root, dim_name, mode="contrasts"):
     """Load and unit-normalize concept direction vectors.
 
-    The concept_direction array is shape (N_LAYERS, INPUT_DIM) where
-    concept_direction[i] = human_mean[i] - ai_mean[i] at layer i.
-    Positive direction = more human-like.
+    For contrasts mode: loads concept_vector_per_layer.npz with key 'concept_direction'.
+    For standalone mode: loads mean_vectors_per_layer.npz with key 'mean_concept'.
 
     Returns dict: {layer_idx: unit_normalized_direction_tensor} for all layers.
     """
-    vec_path = os.path.join(concept_vector_root, dim_name, "concept_vector_per_layer.npz")
-    data = np.load(vec_path)
-    directions_raw = data["concept_direction"]  # shape (N_LAYERS, INPUT_DIM)
+    if mode == "standalone":
+        vec_path = os.path.join(concept_vector_root, dim_name, "mean_vectors_per_layer.npz")
+        data = np.load(vec_path)
+        directions_raw = data["mean_concept"]  # shape (N_LAYERS, INPUT_DIM)
+    else:
+        vec_path = os.path.join(concept_vector_root, dim_name, "concept_vector_per_layer.npz")
+        data = np.load(vec_path)
+        directions_raw = data["concept_direction"]  # shape (N_LAYERS, INPUT_DIM)
 
     directions = {}
     for layer_idx in range(directions_raw.shape[0]):
@@ -454,15 +464,23 @@ Examples:
         default=DEFAULT_STRENGTHS,
         help=f"Intervention strengths (default: {DEFAULT_STRENGTHS}).",
     )
+    p.add_argument(
+        "--mode", type=str, default="contrasts",
+        choices=["contrasts", "standalone"],
+        help="Vector source: 'contrasts' (human-AI difference) or 'standalone' (mean concept vector).",
+    )
+    add_variant_argument(p)
     return p.parse_args()
 
 
 def main():
     args = parse_args()
-    _init_paths(args.version)
+    if args.variant:
+        set_variant(args.variant)
+    _init_paths(args.version, mode=args.mode)
 
     # Discover available dimensions
-    dim_registry = discover_dimensions(CONCEPT_VECTOR_ROOT)
+    dim_registry = discover_dimensions(CONCEPT_VECTOR_ROOT, mode=args.mode)
     if args.dim_id not in dim_registry:
         print(f"[ERROR] dim_id={args.dim_id} not found.")
         print(f"  Available: {sorted(dim_registry.keys())}")
@@ -479,8 +497,8 @@ def main():
     print(f"{'#'*70}\n")
 
     # Load concept direction vectors (all layers)
-    all_directions = load_concept_direction(CONCEPT_VECTOR_ROOT, dim_name)
-    print(f"Loaded concept direction for {dim_name}: {len(all_directions)} layers")
+    all_directions = load_concept_direction(CONCEPT_VECTOR_ROOT, dim_name, mode=args.mode)
+    print(f"Loaded concept direction for {dim_name} (mode={args.mode}): {len(all_directions)} layers")
 
     # Load model
     model, tokenizer = load_model_and_tokenizer()

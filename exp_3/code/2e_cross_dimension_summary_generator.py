@@ -24,9 +24,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 # Add parent directory to path for imports
-from config import config, set_version, add_version_argument, add_turn_argument
+from config import config, set_version, add_version_argument, add_turn_argument, add_variant_argument, set_variant
 
-# Import dimension registry from pipeline script
+# Import dimension registry builder from pipeline script
 from importlib.util import spec_from_file_location, module_from_spec
 _s1_spec = spec_from_file_location(
     "script1",
@@ -34,7 +34,10 @@ _s1_spec = spec_from_file_location(
 )
 _s1_mod = module_from_spec(_s1_spec)
 _s1_spec.loader.exec_module(_s1_mod)
-DIMENSION_REGISTRY = _s1_mod.DIMENSION_REGISTRY
+# Build registry from standalone concepts directory
+DIMENSION_REGISTRY = _s1_mod.build_dimension_registry(
+    os.path.join(os.path.dirname(__file__), "..", "concepts", "standalone")
+)
 
 PROBE_ROOT = str(config.RESULTS.concept_probes_data)
 
@@ -59,7 +62,12 @@ def main():
     )
     add_version_argument(parser)
     add_turn_argument(parser)
+    add_variant_argument(parser)
     args = parser.parse_args()
+
+    # Apply variant before version
+    if args.variant:
+        set_variant(args.variant)
 
     # Set version and initialize paths
     set_version(args.version, turn=args.turn)

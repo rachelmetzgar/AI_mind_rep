@@ -72,6 +72,9 @@ DIM_NAMES = {
     16: "Mind (holistic)", 17: "Attention", 18: "SysPrompt (labeled)",
     20: "SysPrompt (talkto human)", 21: "SysPrompt (talkto AI)",
     22: "SysPrompt (bare human)", 23: "SysPrompt (bare AI)",
+    25: "Beliefs", 26: "Desires", 27: "Goals",
+    29: "Shapes (flip)", 30: "Granite/Sandstone", 31: "Squares/Triangles",
+    32: "Horizontal/Vertical",
 }
 
 STANDALONE_DIM_NAMES = dict(DIM_NAMES)
@@ -247,19 +250,19 @@ def get_dim_category_static(dim_id, analysis_type):
     """Static version of category lookup."""
     if analysis_type == "standalone":
         categories = {
-            "Mental":    [1, 2, 3, 4, 5, 6, 7, 18],
+            "Mental":    [1, 2, 3, 4, 5, 6, 7, 18, 25, 26, 27],
             "Physical":  [8, 9, 10],
             "Pragmatic": [11, 12, 13],
-            "Control":   [14, 15],
+            "Control":   [14, 15, 30, 31, 32],
             "Entity":    [16, 17],
             "SysPrompt": [20, 21, 22, 23],
         }
     else:
         categories = {
-            "Mental":    [1, 2, 3, 4, 5, 6, 7, 17],
+            "Mental":    [1, 2, 3, 4, 5, 6, 7, 17, 25, 26, 27],
             "Physical":  [8, 9, 10],
             "Pragmatic": [11, 12, 13],
-            "Control":   [0, 14, 15],
+            "Control":   [0, 14, 15, 29, 30, 31, 32],
             "SysPrompt": [18],
         }
     for cat, ids in categories.items():

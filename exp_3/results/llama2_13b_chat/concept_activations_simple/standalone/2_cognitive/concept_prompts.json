@@ -1,0 +1,100 @@
+[
+  {
+    "prompt": "Think about what it is like to have thoughts.",
+    "concept": "thoughts",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have attention.",
+    "concept": "attention",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have memory.",
+    "concept": "memory",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have expectations.",
+    "concept": "expectations",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have knowledge.",
+    "concept": "knowledge",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have understanding.",
+    "concept": "understanding",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have reasoning.",
+    "concept": "reasoning",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have judgment.",
+    "concept": "judgment",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have intelligence.",
+    "concept": "intelligence",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have problem-solving skills.",
+    "concept": "problem-solving skills",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have learning ability.",
+    "concept": "learning ability",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have mental models.",
+    "concept": "mental models",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have cognitive biases.",
+    "concept": "cognitive biases",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have abstract concepts.",
+    "concept": "abstract concepts",
+    "category": "cognitive",
+    "concept_type": "mental",
+    "label": -1
+  }
+]

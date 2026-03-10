@@ -36,13 +36,13 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import numpy as np
 
-from config import config
+from config import config, add_variant_argument, set_variant
 
 # ============================================================================
 # CONFIG
 # ============================================================================
 
-OVERLAP_DIR = Path(str(config.RESULTS.alignment)) / "concept_overlap" / "contrasts"
+OVERLAP_DIR = Path(str(config.RESULTS.concept_overlap)) / "contrasts"
 OUTPUT_DIR = OVERLAP_DIR  # Report lives alongside data
 
 DIM_NAMES = {
@@ -51,6 +51,9 @@ DIM_NAMES = {
     8: "Embodiment", 9: "Roles", 10: "Animacy", 11: "Formality",
     12: "Expertise", 13: "Helpfulness", 14: "Biological", 15: "Shapes",
     16: "Mind (holistic)", 17: "Attention", 18: "SysPrompt (labeled)",
+    25: "Beliefs", 26: "Desires", 27: "Goals",
+    30: "Granite/Sandstone", 31: "Squares/Triangles",
+    32: "Horizontal/Vertical",
 }
 
 # Full description for the dimension table in the report
@@ -116,7 +119,7 @@ def load_overlap_data():
     if npz_path.exists():
         f = np.load(npz_path, allow_pickle=True)
         data["overlap"] = f["overlap"]
-        data["boot_overlap"] = f["boot_overlap"]
+        data["boot_overlap"] = f["boot_overlap"] if "boot_overlap" in f else None
         data["dim_ids"] = f["dim_ids"].tolist()
         data["dim_names"] = f["dim_names"].tolist()
         data["dim_categories"] = f["dim_categories"].tolist()
@@ -1071,6 +1074,17 @@ def generate_markdown(data):
 # ============================================================================
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Concept overlap report generator")
+    add_variant_argument(parser)
+    args = parser.parse_args()
+
+    if args.variant:
+        set_variant(args.variant)
+        global OVERLAP_DIR, OUTPUT_DIR
+        OVERLAP_DIR = Path(str(config.RESULTS.concept_overlap)) / "contrasts"
+        OUTPUT_DIR = OVERLAP_DIR
+
     print("Loading concept overlap data...")
     data = load_overlap_data()
     print(f"  {len(data['dim_ids'])} dimensions, "

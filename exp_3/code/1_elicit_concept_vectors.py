@@ -56,7 +56,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 # --- Local imports ---
 from utils.dataset import llama_v2_prompt
-from config import config
+from config import config, get_device
 
 
 # ========================== CONFIG ========================== #
@@ -64,7 +64,7 @@ from config import config
 MODEL_NAME = config.MODEL_NAME
 OUTPUT_ROOT = str(config.RESULTS.concept_activations)  # results/{model}/concept_activations/
 INPUT_DIM = config.INPUT_DIM
-DEVICE = config.get_device()
+DEVICE = get_device()
 torch.manual_seed(config.ANALYSIS.seed)
 
 

@@ -3,8 +3,8 @@
 #SBATCH --partition=all
 #SBATCH --mem=32G
 #SBATCH --time=02:00:00
-#SBATCH --output=/mnt/cup/graziano/rachel/mind_rep/exp_3/logs/alignment/%j.out
-#SBATCH --error=/mnt/cup/graziano/rachel/mind_rep/exp_3/logs/alignment/%j.err
+#SBATCH --output=/mnt/cup/labs/graziano/rachel/mind_rep/exp_3/logs/alignment/%j.out
+#SBATCH --error=/mnt/cup/labs/graziano/rachel/mind_rep/exp_3/logs/alignment/%j.err
 # -------------------------------------------------------------
 # Alignment analysis: concept vectors vs conversational probes
 # No GPU needed — CPU-only vector math + bootstrap.
@@ -29,16 +29,19 @@ set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 VERSION=${VERSION:?ERROR: VERSION is required. Use --export=VERSION=labels}
-PROJECT_ROOT="/mnt/cup/graziano/rachel/mind_rep/exp_3"
+PROJECT_ROOT="/mnt/cup/labs/graziano/rachel/mind_rep/exp_3"
 mkdir -p "$PROJECT_ROOT/logs/alignment"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 
 ANALYSIS=${ANALYSIS:-all}
 TURN=${TURN:-5}
+DIMS=${DIMS:-}
 
 echo "[$(date)] Starting alignment analysis — version=${VERSION}, turn=${TURN}, mode=${ANALYSIS}"
 echo "  Node: $(hostname)"
+[ -n "${DIMS}" ] && echo "  Dims: ${DIMS}"
 
-python code/2a_alignment_analysis.py --version "${VERSION}" --turn "${TURN}" --analysis "${ANALYSIS}"
+python code/2a_alignment_analysis.py --version "${VERSION}" --turn "${TURN}" --analysis "${ANALYSIS}" \
+    ${DIMS:+--dims "${DIMS}"}
 
 echo "[$(date)] Finished alignment analysis — version=${VERSION}, turn=${TURN}, mode=${ANALYSIS}"

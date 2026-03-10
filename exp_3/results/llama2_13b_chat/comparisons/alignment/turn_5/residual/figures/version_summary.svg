@@ -14,11 +14,11 @@
 <line x1="0" y1="0.0" x2="1010" y2="0.0" stroke="#eee"/>
 <text x="-8" y="4.0" text-anchor="end" font-size="10" fill="#666">1.14</text>
 <text x="-50" y="115.0" text-anchor="middle" font-size="11" fill="#333" transform="rotate(-90,-50,115.0)">Mean R² (×10⁻³)</text>
-<rect x="75.8" y="127.8" width="176.8" height="102.2" fill="#81C784" opacity="0.85"><title>Metacognitive: 0.507 ×10⁻³</title></rect>
-<rect x="254.5" y="30.0" width="176.8" height="200.0" fill="#2E7D32" opacity="0.85"><title>Operational: 0.992 ×10⁻³</title></rect>
+<rect x="75.8" y="130.7" width="176.8" height="99.3" fill="#81C784" opacity="0.85"><title>Metacognitive: 0.492 ×10⁻³</title></rect>
+<rect x="254.5" y="30.0" width="176.8" height="200.0" fill="#2E7D32" opacity="0.85"><title>Operational: 0.991 ×10⁻³</title></rect>
 <text x="252.5" y="244" text-anchor="end" font-size="10" fill="#333" transform="rotate(-35,252.5,244)">Partner Identity</text>
-<rect x="580.8" y="186.3" width="176.8" height="43.7" fill="#BDBDBD" opacity="0.85"><title>Metacognitive: 0.217 ×10⁻³</title></rect>
-<rect x="759.5" y="166.9" width="176.8" height="63.1" fill="#616161" opacity="0.85"><title>Operational: 0.313 ×10⁻³</title></rect>
+<rect x="580.8" y="185.5" width="176.8" height="44.5" fill="#BDBDBD" opacity="0.85"><title>Metacognitive: 0.220 ×10⁻³</title></rect>
+<rect x="759.5" y="165.8" width="176.8" height="64.2" fill="#616161" opacity="0.85"><title>Operational: 0.318 ×10⁻³</title></rect>
 <text x="757.5" y="244" text-anchor="end" font-size="10" fill="#333" transform="rotate(-35,757.5,244)">Control</text>
 <line x1="0" y1="230" x2="1010" y2="230" stroke="#333"/>
 <line x1="0" y1="0" x2="0" y2="230" stroke="#333"/>

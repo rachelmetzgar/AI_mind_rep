@@ -1,0 +1,107 @@
+[
+  {
+    "prompt": "Think about what it is like to have names.",
+    "concept": "names",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have addresses.",
+    "concept": "addresses",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have schedules.",
+    "concept": "schedules",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have deadlines.",
+    "concept": "deadlines",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have appointments.",
+    "concept": "appointments",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have passwords.",
+    "concept": "passwords",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have serial numbers.",
+    "concept": "serial numbers",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have identification numbers.",
+    "concept": "identification numbers",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have email addresses.",
+    "concept": "email addresses",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have phone numbers.",
+    "concept": "phone numbers",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have job titles.",
+    "concept": "job titles",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have licenses.",
+    "concept": "licenses",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have certifications.",
+    "concept": "certifications",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have tax records.",
+    "concept": "tax records",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have insurance.",
+    "concept": "insurance",
+    "category": "administrative_identity",
+    "concept_type": "control",
+    "label": -1
+  }
+]

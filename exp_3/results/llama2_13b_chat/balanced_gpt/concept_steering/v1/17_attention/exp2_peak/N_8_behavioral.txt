@@ -1,34 +1,34 @@
 ==========================================================================================
 CONCEPT VECTOR STEERING V1: BEHAVIORAL ANALYSIS
 Dimension: 17_attention  |  Strategy: exp2_peak  |  N = 8
-Generated: 2026-03-05 08:14:51
+Generated: 2026-03-08 23:22:17
 ==========================================================================================
 
-Metric                         Baseline     Human        AI           H-A diff     p(H vs A)   
-------------------------------------------------------------------------------------------
-word_count                     303.9667     370.4333     490.0833     -119.6500    nan      
-question_count                 0.9167       0.0167       0.1667       -0.1500      nan      
-demir_modal_rate               0.0205       0.0003       0.0157       -0.0154      nan      
-demir_verb_rate                0.0164       0.0001       0.0004       -0.0003      nan      
-demir_adverb_rate              0.0070       0.0000       0.0001       -0.0001      nan      
-demir_adjective_rate           0.0013       0.0000       0.0000       -0.0000      nan      
-demir_quantifier_rate          0.0030       0.0000       0.0002       -0.0002      nan      
-demir_noun_rate                0.0019       0.0000       0.0003       -0.0003      nan      
-demir_total_rate               0.0502       0.0004       0.0168       -0.0164      nan      
-fung_interpersonal_rate        0.0105       0.0545       0.0005       +0.0540      nan      
-fung_referential_rate          0.0662       0.0007       0.0476       -0.0468      nan      
-fung_structural_rate           0.0524       0.0007       0.0458       -0.0451      nan      
-fung_cognitive_rate            0.0050       0.0003       0.0003       +0.0000      nan      
-fung_total_rate                0.0736       0.0009       0.0475       -0.0466      nan      
-nonfluency_rate                0.0010       0.0000       0.0001       -0.0001      nan      
-liwc_filler_rate               0.0002       0.0000       0.0000       -0.0000      nan      
-disfluency_rate                0.0011       0.0000       0.0001       -0.0001      nan      
-like_rate                      0.0030       0.0000       0.0000       +0.0000      nan      
-tom_rate                       0.0017       0.0000       0.0000       -0.0000      nan      
-politeness_rate                0.0043       0.0545       0.0000       +0.0545      nan      
-sentiment                      0.9534       0.7203       0.1801       +0.5403      nan      
-------------------------------------------------------------------------------------------
-* p < .05, ** p < .01, *** p < .001
+Metric                         Baseline     Human        AI           H-A diff     p(raw)     p(FDR)    
+----------------------------------------------------------------------------------------------------
+word_count                     303.9667     370.4333     490.0833     -119.6500    0.0000     nan    
+question_count                 0.9167       0.0167       0.1667       -0.1500      0.0159     nan    
+demir_modal_rate               0.0205       0.0003       0.0157       -0.0154      0.0008     nan    
+demir_verb_rate                0.0164       0.0001       0.0004       -0.0003      0.0640     nan    
+demir_adverb_rate              0.0070       0.0000       0.0001       -0.0001      0.1565     nan    
+demir_adjective_rate           0.0013       0.0000       0.0000       -0.0000      0.3194     nan    
+demir_quantifier_rate          0.0030       0.0000       0.0002       -0.0002      0.2675     nan    
+demir_noun_rate                0.0019       0.0000       0.0003       -0.0003      0.0068     nan    
+demir_total_rate               0.0502       0.0004       0.0168       -0.0164      0.0005     nan    
+fung_interpersonal_rate        0.0105       0.0545       0.0005       +0.0540      0.0323     nan    
+fung_referential_rate          0.0662       0.0007       0.0476       -0.0468      0.0000     nan    
+fung_structural_rate           0.0524       0.0007       0.0458       -0.0451      0.0000     nan    
+fung_cognitive_rate            0.0050       0.0003       0.0003       +0.0000      0.9612     nan    
+fung_total_rate                0.0736       0.0009       0.0475       -0.0466      0.0000     nan    
+nonfluency_rate                0.0010       0.0000       0.0001       -0.0001      0.1619     nan    
+liwc_filler_rate               0.0002       0.0000       0.0000       -0.0000      0.3194     nan    
+disfluency_rate                0.0011       0.0000       0.0001       -0.0001      0.0852     nan    
+like_rate                      0.0030       0.0000       0.0000       +0.0000      nan        nan    
+tom_rate                       0.0017       0.0000       0.0000       -0.0000      0.3194     nan    
+politeness_rate                0.0043       0.0545       0.0000       +0.0545      0.0308     nan    
+sentiment                      0.9534       0.7203       0.1801       +0.5403      0.0000     nan    
+----------------------------------------------------------------------------------------------------
+* q < .05, ** q < .01, *** q < .001 (Benjamini-Hochberg FDR)
 
 
 DETAILED PAIRWISE COMPARISONS

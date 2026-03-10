@@ -35,7 +35,7 @@ import argparse
 import numpy as np
 import csv
 
-from config import config
+from config import config, add_variant_argument, set_variant
 
 # ========================== CONFIG ========================== #
 
@@ -45,7 +45,7 @@ N_BOOTSTRAP = config.ANALYSIS.n_bootstrap
 SEED = config.ANALYSIS.seed
 MIN_LAYER = config.ANALYSIS.restricted_layer_start  # 6
 
-OUTPUT_DIR = os.path.join(str(config.RESULTS.alignment), "concept_overlap", "contrasts")
+OUTPUT_DIR = os.path.join(str(config.RESULTS.concept_overlap), "contrasts")
 
 # Dimension display names
 DIM_NAMES = {
@@ -54,6 +54,9 @@ DIM_NAMES = {
     8: "Embodiment", 9: "Roles", 10: "Animacy", 11: "Formality",
     12: "Expertise", 13: "Helpfulness", 14: "Biological", 15: "Shapes",
     16: "Mind (holistic)", 17: "Attention", 18: "SysPrompt (labeled)",
+    25: "Beliefs", 26: "Desires", 27: "Goals",
+    30: "Granite/Sandstone", 31: "Squares/Triangles",
+    32: "Horizontal/Vertical",
 }
 
 DIM_CATEGORIES = {
@@ -87,15 +90,19 @@ def discover_dimensions(act_dir):
     return dims
 
 
-def load_contrast_vector(dim_name, act_dir=CONTRAST_ACT_DIR):
+def load_contrast_vector(dim_name, act_dir=None):
     """Load the concept direction (human - AI) per layer for a contrast dimension."""
+    if act_dir is None:
+        act_dir = CONTRAST_ACT_DIR
     path = os.path.join(act_dir, dim_name, "concept_vector_per_layer.npz")
     data = np.load(path)
     return data["concept_direction"]  # shape: (n_layers, hidden_dim)
 
 
-def load_contrast_activations(dim_name, act_dir=CONTRAST_ACT_DIR):
+def load_contrast_activations(dim_name, act_dir=None):
     """Load raw activations and labels for a contrast dimension."""
+    if act_dir is None:
+        act_dir = CONTRAST_ACT_DIR
     path = os.path.join(act_dir, dim_name, "concept_activations.npz")
     data = np.load(path)
     return data["activations"], data["labels"]  # (n_prompts, n_layers, hidden), (n_prompts,)
@@ -312,7 +319,16 @@ def main():
                         help=f"Bootstrap iterations (default: {N_BOOTSTRAP})")
     parser.add_argument("--exclude-dims", type=int, nargs="+", default=[10, 16],
                         help="Dimension IDs to exclude (default: 10 16)")
+    add_variant_argument(parser)
     args = parser.parse_args()
+
+    # Apply variant before reading paths
+    if args.variant:
+        set_variant(args.variant)
+        # Re-read paths after variant is set
+        global CONTRAST_ACT_DIR, OUTPUT_DIR
+        CONTRAST_ACT_DIR = str(config.RESULTS.concept_activations_contrasts)
+        OUTPUT_DIR = os.path.join(str(config.RESULTS.concept_overlap), "contrasts")
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     layer_range = range(MIN_LAYER, N_LAYERS)
@@ -355,23 +371,31 @@ def main():
             print(f"  {overlap[i, j]:>8.3f}", end="")
         print()
 
-    # Step 2: Load raw activations for bootstrap
-    print("\nLoading raw activations for bootstrap...", flush=True)
-    dim_activations = {}
-    dim_labels = {}
-    for dim_id in dim_ids:
-        print(f"  Loading dim {dim_id}: {dims[dim_id]}...", flush=True)
-        acts, labels = load_contrast_activations(dims[dim_id])
-        dim_activations[dim_id] = acts
-        dim_labels[dim_id] = labels
-    print(f"  Loaded activations for {len(dim_activations)} dimensions", flush=True)
+    # Step 2: Load raw activations for bootstrap (if available)
+    # For variant pipelines (e.g., _1), raw activations may not exist
+    sample_acts_path = os.path.join(CONTRAST_ACT_DIR, dims[dim_ids[0]], "concept_activations.npz")
+    has_raw_activations = os.path.isfile(sample_acts_path)
 
-    # Step 3: Bootstrap
-    print(f"\nRunning bootstrap ({args.n_bootstrap} iterations)...", flush=True)
-    boot_overlap = bootstrap_overlap(
-        dim_activations, dim_labels, dim_ids, layer_range,
-        n_bootstrap=args.n_bootstrap, seed=SEED
-    )
+    boot_overlap = None
+    if has_raw_activations:
+        print("\nLoading raw activations for bootstrap...", flush=True)
+        dim_activations = {}
+        dim_labels = {}
+        for dim_id in dim_ids:
+            print(f"  Loading dim {dim_id}: {dims[dim_id]}...", flush=True)
+            acts, labels = load_contrast_activations(dims[dim_id])
+            dim_activations[dim_id] = acts
+            dim_labels[dim_id] = labels
+        print(f"  Loaded activations for {len(dim_activations)} dimensions", flush=True)
+
+        # Step 3: Bootstrap
+        print(f"\nRunning bootstrap ({args.n_bootstrap} iterations)...", flush=True)
+        boot_overlap = bootstrap_overlap(
+            dim_activations, dim_labels, dim_ids, layer_range,
+            n_bootstrap=args.n_bootstrap, seed=SEED
+        )
+    else:
+        print("\n[INFO] Raw activations not found — skipping bootstrap.", flush=True)
 
     # Step 4: Compute baseline overlaps
     baseline_results_0 = None
@@ -397,10 +421,8 @@ def main():
     print(f"\nSaving results to {OUTPUT_DIR}/")
 
     # overlap_matrix.npz
-    np.savez_compressed(
-        os.path.join(OUTPUT_DIR, "overlap_matrix.npz"),
+    save_kwargs = dict(
         overlap=overlap,
-        boot_overlap=boot_overlap,
         dim_ids=np.array(dim_ids),
         dim_names=np.array([DIM_NAMES.get(d, f"dim_{d}") for d in dim_ids]),
         dim_categories=np.array([DIM_CATEGORIES.get(d, "Other") for d in dim_ids]),
@@ -409,6 +431,9 @@ def main():
         layer_range_end=N_LAYERS,
         n_bootstrap=args.n_bootstrap,
     )
+    if boot_overlap is not None:
+        save_kwargs["boot_overlap"] = boot_overlap
+    np.savez_compressed(os.path.join(OUTPUT_DIR, "overlap_matrix.npz"), **save_kwargs)
     print("  overlap_matrix.npz")
 
     # overlap_matrix.csv
@@ -425,13 +450,13 @@ def main():
     )
     print("  layer_profiles.npz")
 
-    # Baseline overlap CSVs
-    if baseline_results_0 is not None:
+    # Baseline overlap CSVs (only if bootstrap was run)
+    if baseline_results_0 is not None and boot_overlap is not None:
         path = os.path.join(OUTPUT_DIR, "baseline_overlap.csv")
         save_baseline_overlap_csv(baseline_results_0, boot_overlap, dim_ids, 0, path)
         print("  baseline_overlap.csv")
 
-    if baseline_results_18 is not None:
+    if baseline_results_18 is not None and boot_overlap is not None:
         path = os.path.join(OUTPUT_DIR, "sysprompt_baseline_overlap.csv")
         save_baseline_overlap_csv(baseline_results_18, boot_overlap, dim_ids, 18, path)
         print("  sysprompt_baseline_overlap.csv")

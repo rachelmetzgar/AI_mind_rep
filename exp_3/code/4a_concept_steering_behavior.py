@@ -34,6 +34,7 @@ import argparse
 import numpy as np
 import pandas as pd
 from scipy.stats import ttest_ind
+from statsmodels.stats.multitest import multipletests
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -41,7 +42,7 @@ warnings.filterwarnings('ignore')
 # Import Experiment 1 utils (shared linguistic markers)
 # ============================================================
 
-from config import config, set_version
+from config import config, set_version, add_variant_argument, set_variant
 
 EXP1_UTILS_DIR = str(config.PATHS.exp1_utils)
 if EXP1_UTILS_DIR not in sys.path:
@@ -103,6 +104,12 @@ def parse_args():
         "--strengths", type=int, nargs="+", default=None,
         help="Filter to specific strengths (e.g., 2 4 8). Default: all found.",
     )
+    parser.add_argument(
+        "--mode", type=str, default="contrasts",
+        choices=["contrasts", "standalone"],
+        help="Vector source: 'contrasts' (v1/) or 'standalone' (v1_standalone/).",
+    )
+    add_variant_argument(parser)
     return parser.parse_args()
 
 
@@ -290,8 +297,8 @@ def format_single_report(dim_name, strategy, N, condition_results):
     lines.append("=" * 90)
 
     # Summary table
-    lines.append(f"\n{'Metric':<30} {'Baseline':<12} {'Human':<12} {'AI':<12} {'H-A diff':<12} {'p(H vs A)':<12}")
-    lines.append("-" * 90)
+    lines.append(f"\n{'Metric':<30} {'Baseline':<12} {'Human':<12} {'AI':<12} {'H-A diff':<12} {'p(raw)':<10} {'p(FDR)':<10}")
+    lines.append("-" * 100)
 
     for r in condition_results:
         if "error" in r:
@@ -305,22 +312,25 @@ def format_single_report(dim_name, strategy, N, condition_results):
         p_hva = np.nan
         if "pairwise" in r:
             for pw in r["pairwise"]:
-                if pw["pair"] == "human_vs_ai":
+                if pw["pair"] in ("human_vs_ai", "ai_vs_human"):
                     p_hva = pw["p"]
 
+        p_fdr = r.get("hva_p_fdr", np.nan)
+
+        # Significance stars based on FDR-corrected p-value
         sig = ""
-        if not np.isnan(p_hva):
-            if p_hva < 0.001: sig = "***"
-            elif p_hva < 0.01: sig = "**"
-            elif p_hva < 0.05: sig = "*"
+        if not np.isnan(p_fdr):
+            if p_fdr < 0.001: sig = "***"
+            elif p_fdr < 0.01: sig = "**"
+            elif p_fdr < 0.05: sig = "*"
 
         lines.append(
             f"{metric:<30} {bl:<12.4f} {hu:<12.4f} {ai:<12.4f} "
-            f"{diff:<+12.4f} {p_hva:<8.4f} {sig}"
+            f"{diff:<+12.4f} {p_hva:<10.4f} {p_fdr:<6.4f} {sig}"
         )
 
-    lines.append("-" * 90)
-    lines.append("* p < .05, ** p < .01, *** p < .001")
+    lines.append("-" * 100)
+    lines.append("* q < .05, ** q < .01, *** q < .001 (Benjamini-Hochberg FDR)")
 
     # Detailed pairwise
     lines.append(f"\n\nDETAILED PAIRWISE COMPARISONS")
@@ -360,9 +370,13 @@ def extract_summary_row(dim_name, strategy, N, condition_results):
         # Pairwise human vs ai p-value
         if "pairwise" in r:
             for pw in r["pairwise"]:
-                if pw["pair"] == "human_vs_ai":
+                if pw["pair"] in ("human_vs_ai", "ai_vs_human"):
                     row[f"{metric}_hva_p"] = pw["p"]
                     row[f"{metric}_hva_t"] = pw["t"]
+
+        # FDR-corrected p-value
+        if "hva_p_fdr" in r:
+            row[f"{metric}_hva_p_fdr"] = r["hva_p_fdr"]
 
     return row
 
@@ -374,11 +388,16 @@ def extract_summary_row(dim_name, strategy, N, condition_results):
 def main():
     args = parse_args()
 
+    # Apply variant before version so paths incorporate variant suffix
+    if args.variant:
+        set_variant(args.variant)
+
     # Initialize version-dependent paths
     set_version(args.version)
 
     # Build root path
-    v1_root = str(config.RESULTS.concept_steering / "v1")
+    subdir = "v1_standalone" if args.mode == "standalone" else "v1"
+    v1_root = str(config.RESULTS.concept_steering / subdir)
     if not os.path.isdir(v1_root):
         print(f"[ERROR] V1 root not found: {v1_root}")
         sys.exit(1)
@@ -426,6 +445,20 @@ def main():
         # Run tests
         condition_results = [run_v1_between_subjects_tests(df, m) for m in active_metrics]
 
+        # FDR correction across metrics (human vs AI p-values)
+        hva_pvals = []
+        hva_indices = []
+        for i, r in enumerate(condition_results):
+            if "pairwise" in r:
+                for pw in r["pairwise"]:
+                    if pw["pair"] in ("human_vs_ai", "ai_vs_human"):
+                        hva_pvals.append(pw["p"])
+                        hva_indices.append(i)
+        if len(hva_pvals) > 1:
+            _, fdr_pvals, _, _ = multipletests(hva_pvals, method="fdr_bh")
+            for idx, fdr_p in zip(hva_indices, fdr_pvals):
+                condition_results[idx]["hva_p_fdr"] = fdr_p
+
         # Save outputs alongside the results CSV
         out_dir = os.path.dirname(csv_path)
 
@@ -444,17 +477,16 @@ def main():
         row = extract_summary_row(dim, strategy, N, condition_results)
         summary_rows.append(row)
 
-        # Quick summary
+        # Quick summary (using FDR-corrected p-values)
         sig_metrics = []
         for r in condition_results:
-            if "pairwise" in r:
-                for pw in r["pairwise"]:
-                    if pw["pair"] == "human_vs_ai" and pw["p"] < 0.05:
-                        sig_metrics.append(r["metric"])
+            p_fdr = r.get("hva_p_fdr", np.nan)
+            if not np.isnan(p_fdr) and p_fdr < 0.05:
+                sig_metrics.append(r["metric"])
         if sig_metrics:
-            print(f"  Significant H vs A: {', '.join(sig_metrics)}")
+            print(f"  Significant H vs A (FDR<.05): {', '.join(sig_metrics)}")
         else:
-            print(f"  No significant H vs A differences.")
+            print(f"  No significant H vs A differences (FDR-corrected).")
 
     # ================================================================
     # Cross-cell summary
@@ -488,7 +520,7 @@ def main():
             line = f"{row['dimension']:<20} {row['strategy']:<18} {row['N']:<4}"
             for m in key_metrics:
                 diff = row.get(f"{m}_human_minus_ai", np.nan)
-                p = row.get(f"{m}_hva_p", np.nan)
+                p = row.get(f"{m}_hva_p_fdr", row.get(f"{m}_hva_p", np.nan))
                 sig = ""
                 if not np.isnan(p):
                     if p < 0.001: sig = "***"

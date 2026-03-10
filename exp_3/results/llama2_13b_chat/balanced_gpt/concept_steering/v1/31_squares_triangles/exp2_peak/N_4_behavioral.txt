@@ -1,0 +1,140 @@
+==========================================================================================
+CONCEPT VECTOR STEERING V1: BEHAVIORAL ANALYSIS
+Dimension: 31_squares_triangles  |  Strategy: exp2_peak  |  N = 4
+Generated: 2026-03-08 23:22:57
+==========================================================================================
+
+Metric                         Baseline     Human        AI           H-A diff     p(raw)     p(FDR)    
+----------------------------------------------------------------------------------------------------
+word_count                     307.0667     273.6333     312.9500     -39.3167     0.0183     0.0548 
+question_count                 1.0667       0.7167       1.1667       -0.4500      0.2224     0.3267 
+demir_modal_rate               0.0194       0.0209       0.0224       -0.0015      0.5221     0.6091 
+demir_verb_rate                0.0188       0.0154       0.0197       -0.0042      0.0866     0.1819 
+demir_adverb_rate              0.0066       0.0073       0.0064       +0.0010      0.4782     0.5907 
+demir_adjective_rate           0.0009       0.0015       0.0014       +0.0002      0.7359     0.7726 
+demir_quantifier_rate          0.0041       0.0036       0.0036       -0.0001      0.9598     0.9598 
+demir_noun_rate                0.0016       0.0016       0.0032       -0.0016      0.0042     0.0220 *
+demir_total_rate               0.0514       0.0504       0.0566       -0.0062      0.1769     0.3166 
+fung_interpersonal_rate        0.0120       0.0093       0.0115       -0.0022      0.2334     0.3267 
+fung_referential_rate          0.0666       0.0639       0.0716       -0.0077      0.0269     0.0705 
+fung_structural_rate           0.0552       0.0524       0.0599       -0.0075      0.0595     0.1388 
+fung_cognitive_rate            0.0052       0.0034       0.0065       -0.0031      0.0032     0.0220 *
+fung_total_rate                0.0754       0.0675       0.0810       -0.0135      0.0004     0.0077 **
+nonfluency_rate                0.0009       0.0004       0.0016       -0.0012      0.0131     0.0458 *
+liwc_filler_rate               0.0002       0.0001       0.0004       -0.0002      0.3036     0.3985 
+disfluency_rate                0.0011       0.0006       0.0020       -0.0014      0.0066     0.0276 *
+like_rate                      0.0032       0.0020       0.0030       -0.0010      0.1809     0.3166 
+tom_rate                       0.0019       0.0022       0.0019       +0.0002      0.6999     0.7726 
+politeness_rate                0.0043       0.0030       0.0061       -0.0031      0.0039     0.0220 *
+sentiment                      0.9805       0.9831       0.9900       -0.0068      0.1979     0.3196 
+----------------------------------------------------------------------------------------------------
+* q < .05, ** q < .01, *** q < .001 (Benjamini-Hochberg FDR)
+
+
+DETAILED PAIRWISE COMPARISONS
+==========================================================================================
+
+  word_count:
+               ai_vs_baseline: diff=+5.8833, t=0.372, p=0.7105 
+                  ai_vs_human: diff=+39.3167, t=2.393, p=0.0183 *
+            baseline_vs_human: diff=+33.4333, t=1.851, p=0.0666 
+
+  question_count:
+               ai_vs_baseline: diff=+0.1000, t=0.235, p=0.8148 
+                  ai_vs_human: diff=+0.4500, t=1.227, p=0.2224 
+            baseline_vs_human: diff=+0.3500, t=0.995, p=0.3217 
+
+  demir_modal_rate:
+               ai_vs_baseline: diff=+0.0030, t=1.332, p=0.1853 
+                  ai_vs_human: diff=+0.0015, t=0.642, p=0.5221 
+            baseline_vs_human: diff=-0.0015, t=-0.669, p=0.5047 
+
+  demir_verb_rate:
+               ai_vs_baseline: diff=+0.0008, t=0.362, p=0.7180 
+                  ai_vs_human: diff=+0.0042, t=1.728, p=0.0866 
+            baseline_vs_human: diff=+0.0034, t=1.364, p=0.1752 
+
+  demir_adverb_rate:
+               ai_vs_baseline: diff=-0.0002, t=-0.181, p=0.8570 
+                  ai_vs_human: diff=-0.0010, t=-0.711, p=0.4782 
+            baseline_vs_human: diff=-0.0008, t=-0.542, p=0.5889 
+
+  demir_adjective_rate:
+               ai_vs_baseline: diff=+0.0005, t=1.086, p=0.2799 
+                  ai_vs_human: diff=-0.0002, t=-0.338, p=0.7359 
+            baseline_vs_human: diff=-0.0006, t=-1.407, p=0.1622 
+
+  demir_quantifier_rate:
+               ai_vs_baseline: diff=-0.0005, t=-0.451, p=0.6531 
+                  ai_vs_human: diff=+0.0001, t=0.051, p=0.9598 
+            baseline_vs_human: diff=+0.0005, t=0.499, p=0.6187 
+
+  demir_noun_rate:
+               ai_vs_baseline: diff=+0.0016, t=3.470, p=0.0007 ***
+                  ai_vs_human: diff=+0.0016, t=2.920, p=0.0042 **
+            baseline_vs_human: diff=-0.0000, t=-0.068, p=0.9459 
+
+  demir_total_rate:
+               ai_vs_baseline: diff=+0.0052, t=1.190, p=0.2363 
+                  ai_vs_human: diff=+0.0062, t=1.358, p=0.1769 
+            baseline_vs_human: diff=+0.0010, t=0.206, p=0.8368 
+
+  fung_interpersonal_rate:
+               ai_vs_baseline: diff=-0.0005, t=-0.255, p=0.7990 
+                  ai_vs_human: diff=+0.0022, t=1.198, p=0.2334 
+            baseline_vs_human: diff=+0.0027, t=1.485, p=0.1403 
+
+  fung_referential_rate:
+               ai_vs_baseline: diff=+0.0050, t=1.485, p=0.1403 
+                  ai_vs_human: diff=+0.0077, t=2.242, p=0.0269 *
+            baseline_vs_human: diff=+0.0027, t=0.822, p=0.4125 
+
+  fung_structural_rate:
+               ai_vs_baseline: diff=+0.0047, t=1.281, p=0.2028 
+                  ai_vs_human: diff=+0.0075, t=1.903, p=0.0595 
+            baseline_vs_human: diff=+0.0028, t=0.768, p=0.4439 
+
+  fung_cognitive_rate:
+               ai_vs_baseline: diff=+0.0012, t=1.204, p=0.2309 
+                  ai_vs_human: diff=+0.0031, t=3.010, p=0.0032 **
+            baseline_vs_human: diff=+0.0018, t=1.995, p=0.0484 *
+
+  fung_total_rate:
+               ai_vs_baseline: diff=+0.0056, t=1.446, p=0.1509 
+                  ai_vs_human: diff=+0.0135, t=3.668, p=0.0004 ***
+            baseline_vs_human: diff=+0.0079, t=2.206, p=0.0293 *
+
+  nonfluency_rate:
+               ai_vs_baseline: diff=+0.0008, t=1.610, p=0.1101 
+                  ai_vs_human: diff=+0.0012, t=2.519, p=0.0131 *
+            baseline_vs_human: diff=+0.0004, t=1.269, p=0.2069 
+
+  liwc_filler_rate:
+               ai_vs_baseline: diff=+0.0001, t=0.509, p=0.6119 
+                  ai_vs_human: diff=+0.0002, t=1.033, p=0.3036 
+            baseline_vs_human: diff=+0.0001, t=0.612, p=0.5415 
+
+  disfluency_rate:
+               ai_vs_baseline: diff=+0.0009, t=1.712, p=0.0896 
+                  ai_vs_human: diff=+0.0014, t=2.767, p=0.0066 **
+            baseline_vs_human: diff=+0.0005, t=1.417, p=0.1590 
+
+  like_rate:
+               ai_vs_baseline: diff=-0.0002, t=-0.232, p=0.8173 
+                  ai_vs_human: diff=+0.0010, t=1.346, p=0.1809 
+            baseline_vs_human: diff=+0.0012, t=1.494, p=0.1378 
+
+  tom_rate:
+               ai_vs_baseline: diff=-0.0000, t=-0.058, p=0.9536 
+                  ai_vs_human: diff=-0.0002, t=-0.386, p=0.6999 
+            baseline_vs_human: diff=-0.0002, t=-0.331, p=0.7411 
+
+  politeness_rate:
+               ai_vs_baseline: diff=+0.0019, t=1.649, p=0.1018 
+                  ai_vs_human: diff=+0.0031, t=2.945, p=0.0039 **
+            baseline_vs_human: diff=+0.0013, t=1.064, p=0.2894 
+
+  sentiment:
+               ai_vs_baseline: diff=+0.0095, t=1.648, p=0.1021 
+                  ai_vs_human: diff=+0.0068, t=1.295, p=0.1979 
+            baseline_vs_human: diff=-0.0026, t=-0.369, p=0.7130 

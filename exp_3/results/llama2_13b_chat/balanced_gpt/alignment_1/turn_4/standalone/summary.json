@@ -1,0 +1,314 @@
+{
+  "1_phenomenology": {
+    "dim_id": 1,
+    "reading_mean_r2": 0.0006221021381837639,
+    "control_mean_r2": 0.0025249517250654405,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "2_emotions": {
+    "dim_id": 2,
+    "reading_mean_r2": 0.0005737886062920702,
+    "control_mean_r2": 0.0027305068553772098,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "3_agency": {
+    "dim_id": 3,
+    "reading_mean_r2": 0.0005052447277069654,
+    "control_mean_r2": 0.002557646834809462,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "4_intentions": {
+    "dim_id": 4,
+    "reading_mean_r2": 0.0006216345361350044,
+    "control_mean_r2": 0.00255175221354484,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "5_prediction": {
+    "dim_id": 5,
+    "reading_mean_r2": 0.0005433107385701825,
+    "control_mean_r2": 0.0025130034593659617,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "6_cognitive": {
+    "dim_id": 6,
+    "reading_mean_r2": 0.0005191254014880608,
+    "control_mean_r2": 0.002601090412328553,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "7_social": {
+    "dim_id": 7,
+    "reading_mean_r2": 0.0003189835993872012,
+    "control_mean_r2": 0.0022177022515976865,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "8_embodiment": {
+    "dim_id": 8,
+    "reading_mean_r2": 0.0006446352901953171,
+    "control_mean_r2": 0.0027328077682108143,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "9_roles": {
+    "dim_id": 9,
+    "reading_mean_r2": 0.0005544553009496979,
+    "control_mean_r2": 0.002679248493698337,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "10_animacy": {
+    "dim_id": 10,
+    "reading_mean_r2": 0.00059414327671783,
+    "control_mean_r2": 0.0027426477826114717,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "11_formality": {
+    "dim_id": 11,
+    "reading_mean_r2": 0.0004293790437111716,
+    "control_mean_r2": 0.00219901634737746,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "12_expertise": {
+    "dim_id": 12,
+    "reading_mean_r2": 0.0003663168327906585,
+    "control_mean_r2": 0.0022894051906661183,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "13_helpfulness": {
+    "dim_id": 13,
+    "reading_mean_r2": 0.00044776412182474264,
+    "control_mean_r2": 0.0021514237091702078,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "14_biological": {
+    "dim_id": 14,
+    "reading_mean_r2": 0.0005550561117518934,
+    "control_mean_r2": 0.0027880438333954516,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "15_shapes": {
+    "dim_id": 15,
+    "reading_mean_r2": 0.0005087942619662054,
+    "control_mean_r2": 0.002908038513962024,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "16_human": {
+    "dim_id": 16,
+    "reading_mean_r2": 0.000571462111357056,
+    "control_mean_r2": 0.002718375867491652,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "17_ai": {
+    "dim_id": 17,
+    "reading_mean_r2": 0.0005823495425232328,
+    "control_mean_r2": 0.0033045132045258865,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "18_attention": {
+    "dim_id": 18,
+    "reading_mean_r2": 0.0005861746998330186,
+    "control_mean_r2": 0.002518914219985734,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "25_beliefs": {
+    "dim_id": 25,
+    "reading_mean_r2": 0.0004628362965067289,
+    "control_mean_r2": 0.0024474947743917137,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "26_desires": {
+    "dim_id": 26,
+    "reading_mean_r2": 0.0006513228283356468,
+    "control_mean_r2": 0.002677760598658711,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "27_goals": {
+    "dim_id": 27,
+    "reading_mean_r2": 0.0005454334738188289,
+    "control_mean_r2": 0.0024523302354129205,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "30_granite_sandstone": {
+    "dim_id": 30,
+    "reading_mean_r2": 0.0005373795386827967,
+    "control_mean_r2": 0.002939971478036585,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "31_squares_triangles": {
+    "dim_id": 31,
+    "reading_mean_r2": 0.00047612902586538595,
+    "control_mean_r2": 0.0029940200499869447,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "32_horizontal_vertical": {
+    "dim_id": 32,
+    "reading_mean_r2": 0.00047385017261774795,
+    "control_mean_r2": 0.002930519041594821,
+    "reading_boot_ci95": [
+      0.0,
+      0.0
+    ],
+    "control_boot_ci95": [
+      0.0,
+      0.0
+    ]
+  }
+}

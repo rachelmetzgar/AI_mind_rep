@@ -1,0 +1,107 @@
+[
+  {
+    "prompt": "Think about what it is like to have jobs.",
+    "concept": "jobs",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have taxes.",
+    "concept": "taxes",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have budgets.",
+    "concept": "budgets",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have contracts.",
+    "concept": "contracts",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have regulations.",
+    "concept": "regulations",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have policies.",
+    "concept": "policies",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have an organizational chart.",
+    "concept": "an organizational chart",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a chain of command.",
+    "concept": "a chain of command",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a mission statement.",
+    "concept": "a mission statement",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have bylaws.",
+    "concept": "bylaws",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a filing system.",
+    "concept": "a filing system",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have an inventory.",
+    "concept": "an inventory",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a mailing address.",
+    "concept": "a mailing address",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have office hours.",
+    "concept": "office hours",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a website.",
+    "concept": "a website",
+    "category": "social_institutional",
+    "concept_type": "control",
+    "label": -1
+  }
+]

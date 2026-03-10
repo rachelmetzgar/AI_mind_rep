@@ -1,0 +1,107 @@
+[
+  {
+    "prompt": "Think about what it is like to have digestion.",
+    "concept": "digestion",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have metabolism.",
+    "concept": "metabolism",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a shadow.",
+    "concept": "a shadow",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a weight.",
+    "concept": "a weight",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a temperature.",
+    "concept": "a temperature",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a height.",
+    "concept": "a height",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a surface area.",
+    "concept": "a surface area",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a chemical composition.",
+    "concept": "a chemical composition",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a center of gravity.",
+    "concept": "a center of gravity",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a density.",
+    "concept": "a density",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a volume.",
+    "concept": "a volume",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have electrical resistance.",
+    "concept": "electrical resistance",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have a melting point.",
+    "concept": "a melting point",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have corrosion.",
+    "concept": "corrosion",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  },
+  {
+    "prompt": "Think about what it is like to have friction.",
+    "concept": "friction",
+    "category": "physical_processes",
+    "concept_type": "control",
+    "label": -1
+  }
+]
