@@ -1,0 +1,10 @@
+logs/
+__pycache__/
+*.pyc
+results/*/activations/
+results/*/rdms/
+results/*/behavioral/
+results/*/stimuli/
+results/*/rsa/rsa_results.json
+*.pt
+*.pkl
