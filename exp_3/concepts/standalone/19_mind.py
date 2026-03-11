@@ -59,8 +59,8 @@ def build_general_mind_prompts(standalone_dir=None):
         3: "3_agency",
         4: "4_intentions",
         5: "5_prediction",
-        6: "6_cognition",
-        7: "7_social_cognition",
+        6: "6_cognitive",
+        7: "7_social",
     }
 
     all_prompts = []

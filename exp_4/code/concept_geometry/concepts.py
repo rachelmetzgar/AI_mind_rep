@@ -87,26 +87,26 @@ CONCEPT_NAMES = {
 # ============================================================================
 
 CONCEPT_DIRECTION = {
-    # Human-favored (12)
+    # Human-favored (14)
     "phenomenology": "human",   # subjective conscious experiences
     "emotions":      "human",   # genuine emotional experiences
     "agency":        "human",   # autonomy, free will
     "intentions":    "human",   # forming intentions
+    "cognitive":     "human",   # reasoning, problem-solving
     "prediction":    "human",   # anticipating behavior
     "social":        "human",   # understanding thoughts/feelings
+    "attention":     "human",   # selectively attending
     "embodiment":    "human",   # physical body
     "animacy":       "human",   # living, animate being
     "biological":    "human",   # biological processes
     "human":         "human",   # explicitly human
     "beliefs":       "human",   # holding beliefs
     "desires":       "human",   # having desires
-    # AI-favored (6)
-    "cognitive":     "ai",      # reasoning, problem-solving
+    # AI-favored (4)
     "formality":     "ai",      # formal communication
     "expertise":     "ai",      # specialized knowledge
     "helpfulness":   "ai",      # service-oriented
     "ai":            "ai",      # explicitly AI
-    "attention":     "ai",      # selectively attending
     # Ambiguous (4)
     "roles":         "ambiguous",  # functional roles
     "shapes":        "ambiguous",  # geometric shape (control)
