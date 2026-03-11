@@ -1,0 +1,3526 @@
+{
+  "per_layer": {
+    "0": {
+      "mean_r_epistemic": -0.00973578698049815,
+      "mean_r_communication": -0.04250881836603702,
+      "mean_r_position": 0.10415476122441203,
+      "sem_r_epistemic": 0.037651733705619764,
+      "sem_r_communication": 0.04151960820047878,
+      "sem_r_position": 0.038581927931445686,
+      "p_epist_vs_comm": 0.32849186853125034,
+      "p_permutation": 0.5798,
+      "p_epist_vs_comm_fdr": 0.37541927832142896
+    },
+    "1": {
+      "mean_r_epistemic": -0.040909162481459704,
+      "mean_r_communication": -0.0667829904687816,
+      "mean_r_position": -0.03986169874020709,
+      "sem_r_epistemic": 0.03664801472916134,
+      "sem_r_communication": 0.048929043517267026,
+      "sem_r_position": 0.052795527508186973,
+      "p_epist_vs_comm": 0.34639613685686566,
+      "p_permutation": 0.873,
+      "p_epist_vs_comm_fdr": 0.3848845965076285
+    },
+    "2": {
+      "mean_r_epistemic": -0.026553956696658183,
+      "mean_r_communication": -0.03782591945724106,
+      "mean_r_position": -0.019930849370103476,
+      "sem_r_epistemic": 0.033759686639061814,
+      "sem_r_communication": 0.05200730073497787,
+      "sem_r_position": 0.05252397146702537,
+      "p_epist_vs_comm": 0.5244716626916466,
+      "p_permutation": 0.703,
+      "p_epist_vs_comm_fdr": 0.5520754344122596
+    },
+    "3": {
+      "mean_r_epistemic": 0.016881649820652628,
+      "mean_r_communication": -0.04632840922805174,
+      "mean_r_position": 0.36518459491028427,
+      "sem_r_epistemic": 0.03651236758153349,
+      "sem_r_communication": 0.047111258040429094,
+      "sem_r_position": 0.024460198462555958,
+      "p_epist_vs_comm": 0.16749183400186352,
+      "p_permutation": 0.4128,
+      "p_epist_vs_comm_fdr": 0.22332244533581802
+    },
+    "4": {
+      "mean_r_epistemic": 0.05791414202308109,
+      "mean_r_communication": -0.08360116018494164,
+      "mean_r_position": 0.46194565394901277,
+      "sem_r_epistemic": 0.03324221879463139,
+      "sem_r_communication": 0.05661217828338846,
+      "sem_r_position": 0.02074959675404091,
+      "p_epist_vs_comm": 0.0059783183456897536,
+      "p_permutation": 0.2883,
+      "p_epist_vs_comm_fdr": 0.011387273039409054
+    },
+    "5": {
+      "mean_r_epistemic": 0.18409486165458508,
+      "mean_r_communication": -0.03813242851565473,
+      "mean_r_position": 0.45133729863911887,
+      "sem_r_epistemic": 0.03220813203996377,
+      "sem_r_communication": 0.05731607513669638,
+      "sem_r_position": 0.025845154543294002,
+      "p_epist_vs_comm": 0.00012225387661849745,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 0.0003056346915462436
+    },
+    "6": {
+      "mean_r_epistemic": 0.24804852951711834,
+      "mean_r_communication": -0.038319238341116064,
+      "mean_r_position": 0.5529203373641627,
+      "sem_r_epistemic": 0.028972176902429137,
+      "sem_r_communication": 0.06028076618052388,
+      "sem_r_position": 0.02344881317509532,
+      "p_epist_vs_comm": 7.53779061532456e-06,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 2.8207953436952554e-05
+    },
+    "7": {
+      "mean_r_epistemic": 0.3267872419438355,
+      "mean_r_communication": 0.023907813427854738,
+      "mean_r_position": 0.5992113423527904,
+      "sem_r_epistemic": 0.03088701539880576,
+      "sem_r_communication": 0.059994590729149096,
+      "sem_r_position": 0.026215906238490388,
+      "p_epist_vs_comm": 3.6078046705877356e-06,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 2.0616026689072776e-05
+    },
+    "8": {
+      "mean_r_epistemic": 0.4362096414756557,
+      "mean_r_communication": 0.10239986641263443,
+      "mean_r_position": 0.607890905788158,
+      "sem_r_epistemic": 0.034608883709113636,
+      "sem_r_communication": 0.05803093670307251,
+      "sem_r_position": 0.031177530144244812,
+      "p_epist_vs_comm": 2.3990708060927136e-07,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 9.596283224370854e-06
+    },
+    "9": {
+      "mean_r_epistemic": 0.45272130213340206,
+      "mean_r_communication": 0.17941196274578916,
+      "mean_r_position": 0.6130343507868944,
+      "sem_r_epistemic": 0.03350578354659635,
+      "sem_r_communication": 0.05101352041251172,
+      "sem_r_position": 0.03146592417559748,
+      "p_epist_vs_comm": 2.194671200309288e-06,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 1.7557369602474302e-05
+    },
+    "10": {
+      "mean_r_epistemic": 0.42376423112186146,
+      "mean_r_communication": 0.18403138155009258,
+      "mean_r_position": 0.5657789498610037,
+      "sem_r_epistemic": 0.033079747732355044,
+      "sem_r_communication": 0.0463148561056844,
+      "sem_r_position": 0.03701945419453185,
+      "p_epist_vs_comm": 6.454634634878924e-06,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 2.8207953436952554e-05
+    },
+    "11": {
+      "mean_r_epistemic": 0.4172948665030269,
+      "mean_r_communication": 0.16881286771850978,
+      "mean_r_position": 0.6159275385986837,
+      "sem_r_epistemic": 0.03411090479101184,
+      "sem_r_communication": 0.04947766360789918,
+      "sem_r_position": 0.03456048379033166,
+      "p_epist_vs_comm": 7.546211646315507e-06,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 2.8207953436952554e-05
+    },
+    "12": {
+      "mean_r_epistemic": 0.39610030693648457,
+      "mean_r_communication": 0.08687121303462164,
+      "mean_r_position": 0.6191421917228939,
+      "sem_r_epistemic": 0.0352443112984383,
+      "sem_r_communication": 0.0571617963652982,
+      "sem_r_position": 0.032830838104745116,
+      "p_epist_vs_comm": 1.9083481237392973e-06,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 1.7557369602474302e-05
+    },
+    "13": {
+      "mean_r_epistemic": 0.4013363743456317,
+      "mean_r_communication": 0.12309747660728539,
+      "mean_r_position": 0.6294290817203666,
+      "sem_r_epistemic": 0.03589623312362659,
+      "sem_r_communication": 0.05222451165112647,
+      "sem_r_position": 0.031815305969880525,
+      "p_epist_vs_comm": 3.254387849692206e-06,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 2.0616026689072776e-05
+    },
+    "14": {
+      "mean_r_epistemic": 0.39030744053896993,
+      "mean_r_communication": 0.09592687130578346,
+      "mean_r_position": 0.6361798532812082,
+      "sem_r_epistemic": 0.03518381476734867,
+      "sem_r_communication": 0.05606253404849588,
+      "sem_r_position": 0.030059707332955078,
+      "p_epist_vs_comm": 1.193095688156562e-06,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 1.7557369602474302e-05
+    },
+    "15": {
+      "mean_r_epistemic": 0.32339748986120315,
+      "mean_r_communication": 0.012011941086395335,
+      "mean_r_position": 0.6175348651607887,
+      "sem_r_epistemic": 0.03108444048165057,
+      "sem_r_communication": 0.06092562256331506,
+      "sem_r_position": 0.02904241270860713,
+      "p_epist_vs_comm": 1.783211207627596e-06,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 1.7557369602474302e-05
+    },
+    "16": {
+      "mean_r_epistemic": 0.2762656222028464,
+      "mean_r_communication": 0.025810347882829293,
+      "mean_r_position": 0.5500271495523735,
+      "sem_r_epistemic": 0.03175569934124384,
+      "sem_r_communication": 0.06063990573716527,
+      "sem_r_position": 0.03293304386746687,
+      "p_epist_vs_comm": 3.814554581318376e-05,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 0.0001089872737519536
+    },
+    "17": {
+      "mean_r_epistemic": 0.27269269078276914,
+      "mean_r_communication": 0.021310628311478255,
+      "mean_r_position": 0.4638744458235388,
+      "sem_r_epistemic": 0.03337150163843447,
+      "sem_r_communication": 0.05683652707659786,
+      "sem_r_position": 0.03267985107126563,
+      "p_epist_vs_comm": 1.6977755888163575e-05,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 5.659251962721192e-05
+    },
+    "18": {
+      "mean_r_epistemic": 0.19025771721500603,
+      "mean_r_communication": -0.039253287468422667,
+      "mean_r_position": 0.4098682733368067,
+      "sem_r_epistemic": 0.03619634811178687,
+      "sem_r_communication": 0.05627841831638924,
+      "sem_r_position": 0.028978368639340172,
+      "p_epist_vs_comm": 8.000846914947202e-05,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 0.0002133559177319254
+    },
+    "19": {
+      "mean_r_epistemic": 0.17744231769830562,
+      "mean_r_communication": -0.07658951852980513,
+      "mean_r_position": 0.349432794601654,
+      "sem_r_epistemic": 0.034300251977564845,
+      "sem_r_communication": 0.05518605255858202,
+      "sem_r_position": 0.02952737848388988,
+      "p_epist_vs_comm": 7.757187195161953e-06,
+      "p_permutation": 0.0396,
+      "p_epist_vs_comm_fdr": 2.8207953436952554e-05
+    },
+    "20": {
+      "mean_r_epistemic": 0.15889753188858313,
+      "mean_r_communication": -0.07326324655166538,
+      "mean_r_position": 0.33143073710607657,
+      "sem_r_epistemic": 0.03710627151720399,
+      "sem_r_communication": 0.053980986615871016,
+      "sem_r_position": 0.026499494768542776,
+      "p_epist_vs_comm": 3.513029128628166e-05,
+      "p_permutation": 0.0819,
+      "p_epist_vs_comm_fdr": 0.00010809320395778971
+    },
+    "21": {
+      "mean_r_epistemic": 0.12753734656216023,
+      "mean_r_communication": -0.06168114424465246,
+      "mean_r_position": 0.3018559283633423,
+      "sem_r_epistemic": 0.038501876810048935,
+      "sem_r_communication": 0.051962830517504055,
+      "sem_r_position": 0.026625136540140402,
+      "p_epist_vs_comm": 0.00020551995729774686,
+      "p_permutation": 0.0819,
+      "p_epist_vs_comm_fdr": 0.00048357637011234555
+    },
+    "22": {
+      "mean_r_epistemic": 0.09870360527158846,
+      "mean_r_communication": -0.105733399366807,
+      "mean_r_position": 0.21281003682271846,
+      "sem_r_epistemic": 0.03746059738500626,
+      "sem_r_communication": 0.05155082533151269,
+      "sem_r_position": 0.026794333988555893,
+      "p_epist_vs_comm": 0.00023815826356178213,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.0005292405856928492
+    },
+    "23": {
+      "mean_r_epistemic": 0.10215320697069695,
+      "mean_r_communication": -0.061681144244652465,
+      "mean_r_position": 0.23274088619282196,
+      "sem_r_epistemic": 0.038308431500374274,
+      "sem_r_communication": 0.05003810159966388,
+      "sem_r_position": 0.02884911872745161,
+      "p_epist_vs_comm": 0.0015031458898628494,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.0031645176628691566
+    },
+    "24": {
+      "mean_r_epistemic": 0.11293548133542124,
+      "mean_r_communication": -0.03882344868904026,
+      "mean_r_position": 0.25427906212503065,
+      "sem_r_epistemic": 0.03878419902897227,
+      "sem_r_communication": 0.04913417873913327,
+      "sem_r_position": 0.027124611080090556,
+      "p_epist_vs_comm": 0.0023830762847419926,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.004766152569483985
+    },
+    "25": {
+      "mean_r_epistemic": 0.10874590131050026,
+      "mean_r_communication": -0.019908673716411536,
+      "mean_r_position": 0.25042147837597833,
+      "sem_r_epistemic": 0.038782338700885426,
+      "sem_r_communication": 0.04664500860972298,
+      "sem_r_position": 0.028237970844664395,
+      "p_epist_vs_comm": 0.008372532550772565,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.015222786455950117
+    },
+    "26": {
+      "mean_r_epistemic": 0.1128121516144525,
+      "mean_r_communication": 0.013237977320049976,
+      "mean_r_position": 0.27067379305850287,
+      "sem_r_epistemic": 0.03752214687092249,
+      "sem_r_communication": 0.04565765534136804,
+      "sem_r_position": 0.027494509084482928,
+      "p_epist_vs_comm": 0.02693514332923793,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.046843727529109445
+    },
+    "27": {
+      "mean_r_epistemic": 0.10165988808682196,
+      "mean_r_communication": 0.032152752292678714,
+      "mean_r_position": 0.2922119689907116,
+      "sem_r_epistemic": 0.03565425458193341,
+      "sem_r_communication": 0.04532302262363743,
+      "sem_r_position": 0.029856077512841486,
+      "p_epist_vs_comm": 0.08952272753690532,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.14920454589484222
+    },
+    "28": {
+      "mean_r_epistemic": 0.10165988808682196,
+      "mean_r_communication": 0.040901901505426885,
+      "mean_r_position": 0.32403703492039304,
+      "sem_r_epistemic": 0.034764482279897535,
+      "sem_r_communication": 0.04481392545715625,
+      "sem_r_position": 0.028700626850658138,
+      "p_epist_vs_comm": 0.11931311723832622,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.17044731034046604
+    },
+    "29": {
+      "mean_r_epistemic": 0.11157885440476502,
+      "mean_r_communication": 0.051314186707244934,
+      "mean_r_position": 0.33818150866691815,
+      "sem_r_epistemic": 0.03460913153228413,
+      "sem_r_communication": 0.04426671991965077,
+      "sem_r_position": 0.028385683123802068,
+      "p_epist_vs_comm": 0.12706552322282205,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.17526279065216835
+    },
+    "30": {
+      "mean_r_epistemic": 0.10942239953182016,
+      "mean_r_communication": 0.04533814097228534,
+      "mean_r_position": 0.33625271679239194,
+      "sem_r_epistemic": 0.03388191327979308,
+      "sem_r_communication": 0.04320808105616841,
+      "sem_r_position": 0.027867987396402307,
+      "p_epist_vs_comm": 0.10760299740870616,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.159411848012898
+    },
+    "31": {
+      "mean_r_epistemic": 0.1097923886947264,
+      "mean_r_communication": 0.04533814097228534,
+      "mean_r_position": 0.33271659835576073,
+      "sem_r_epistemic": 0.033254794133652274,
+      "sem_r_communication": 0.043879582959733814,
+      "sem_r_position": 0.02894772145584831,
+      "p_epist_vs_comm": 0.0966787173242476,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.15081021324278465
+    },
+    "32": {
+      "mean_r_epistemic": 0.10966905897375763,
+      "mean_r_communication": 0.04330501582030923,
+      "mean_r_position": 0.3311092717936556,
+      "sem_r_epistemic": 0.03354825435920203,
+      "sem_r_communication": 0.04351893846971597,
+      "sem_r_position": 0.028439206462489357,
+      "p_epist_vs_comm": 0.09802663860781002,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.15081021324278465
+    },
+    "33": {
+      "mean_r_epistemic": 0.10510948978593043,
+      "mean_r_communication": 0.05803021076801699,
+      "mean_r_position": 0.3738641583456519,
+      "sem_r_epistemic": 0.032082354592075174,
+      "sem_r_communication": 0.043650223926382827,
+      "sem_r_position": 0.026912517203328226,
+      "p_epist_vs_comm": 0.2006079311763807,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.25075991397047587
+    },
+    "34": {
+      "mean_r_epistemic": 0.10714261493790656,
+      "mean_r_communication": 0.05599708561604088,
+      "mean_r_position": 0.36679192147238937,
+      "sem_r_epistemic": 0.033416035210626104,
+      "sem_r_communication": 0.04290627730460937,
+      "sem_r_position": 0.026521652192465335,
+      "p_epist_vs_comm": 0.18122812734606086,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.23384274496265917
+    },
+    "35": {
+      "mean_r_epistemic": 0.10067325031907198,
+      "mean_r_communication": 0.054210619906002254,
+      "mean_r_position": 0.3728997624083889,
+      "sem_r_epistemic": 0.033275924222614835,
+      "sem_r_communication": 0.04233026679129243,
+      "sem_r_position": 0.02694275416930853,
+      "p_epist_vs_comm": 0.2188470131444974,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.26526910684181504
+    },
+    "36": {
+      "mean_r_epistemic": 0.09660700001511975,
+      "mean_r_communication": 0.06474623482878905,
+      "mean_r_position": 0.3999028486517549,
+      "sem_r_epistemic": 0.03155375335781107,
+      "sem_r_communication": 0.042635893664032594,
+      "sem_r_position": 0.02737818263569198,
+      "p_epist_vs_comm": 0.29048000457071677,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.3417411818479021
+    },
+    "37": {
+      "mean_r_epistemic": 0.09457387486314366,
+      "mean_r_communication": 0.08809724926827624,
+      "mean_r_position": 0.45455195176332913,
+      "sem_r_epistemic": 0.029711476052530727,
+      "sem_r_communication": 0.04263618723421053,
+      "sem_r_position": 0.028468567016838114,
+      "p_epist_vs_comm": 0.4334834769564837,
+      "p_permutation": 0.1261,
+      "p_epist_vs_comm_fdr": 0.4686307858989013
+    },
+    "38": {
+      "mean_r_epistemic": 0.08225179423031824,
+      "mean_r_communication": 0.12260052723539394,
+      "mean_r_position": 0.5397402595549007,
+      "sem_r_epistemic": 0.03165916668285579,
+      "sem_r_communication": 0.04194130834799614,
+      "sem_r_position": 0.027210137090769474,
+      "p_epist_vs_comm": 0.8091091745899898,
+      "p_permutation": 0.2053,
+      "p_epist_vs_comm_fdr": 0.8276449558743126
+    },
+    "39": {
+      "mean_r_epistemic": 0.0681432478874542,
+      "mean_r_communication": 0.11077176548644353,
+      "mean_r_position": 0.5407046554921638,
+      "sem_r_epistemic": 0.032599912253273536,
+      "sem_r_communication": 0.0427712549694085,
+      "sem_r_position": 0.027655458545417073,
+      "p_epist_vs_comm": 0.8276449558743126,
+      "p_permutation": 0.2488,
+      "p_epist_vs_comm_fdr": 0.8276449558743126
+    }
+  },
+  "peak_layer": 9,
+  "peak_r_epistemic": 0.45272130213340206,
+  "cross_topology": {
+    "C_tells_D": {
+      "description": "AB=old, CD=new (chain vs diamond)",
+      "conditions": [
+        "chain_override_C_tells_D",
+        "diamond_override_C_tells_D"
+      ],
+      "n_pairs": 8,
+      "mean_r": 0.9500000000000001,
+      "sem_r": 0.027399431800199082,
+      "correlations": [
+        1.0,
+        0.942857142857143,
+        0.942857142857143,
+        1.0,
+        1.0,
+        0.7714285714285715,
+        1.0,
+        0.942857142857143
+      ]
+    },
+    "D_only": {
+      "description": "ABC=old, D=new (chain vs diamond)",
+      "conditions": [
+        "chain_override_D",
+        "diamond_override_D_only"
+      ],
+      "n_pairs": 8,
+      "mean_r": 0.9857142857142858,
+      "sem_r": 0.009352195295828229,
+      "correlations": [
+        1.0,
+        1.0,
+        1.0,
+        0.942857142857143,
+        1.0,
+        0.942857142857143,
+        1.0,
+        1.0
+      ]
+    }
+  },
+  "by_condition": {
+    "chain_no_override": {
+      "0": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "1": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "2": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "3": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "4": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "5": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "6": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "7": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "8": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "9": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "10": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "11": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "12": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "13": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "14": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "15": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "16": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "17": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "18": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "19": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "20": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "21": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "22": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "23": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "24": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "25": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "26": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "27": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "28": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "29": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "30": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "31": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "32": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "33": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "34": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "35": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "36": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "37": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "38": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "39": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      }
+    },
+    "chain_override_B_tells_C_D": {
+      "0": {
+        "mean_r_epistemic": 0.21957751641341994,
+        "sem_r_epistemic": 0.17276266603496893,
+        "n": 8
+      },
+      "1": {
+        "mean_r_epistemic": 0.34156502553198664,
+        "sem_r_epistemic": 0.21108724056477618,
+        "n": 8
+      },
+      "2": {
+        "mean_r_epistemic": 0.36596252735569995,
+        "sem_r_epistemic": 0.21488012794987607,
+        "n": 8
+      },
+      "3": {
+        "mean_r_epistemic": 0.8295150620062532,
+        "sem_r_epistemic": 0.04879500364742668,
+        "n": 8
+      },
+      "4": {
+        "mean_r_epistemic": 0.87831006565368,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "5": {
+        "mean_r_epistemic": 0.87831006565368,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "6": {
+        "mean_r_epistemic": 0.87831006565368,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "7": {
+        "mean_r_epistemic": 0.87831006565368,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "8": {
+        "mean_r_epistemic": 0.8539125638299666,
+        "sem_r_epistemic": 0.024397501823713346,
+        "n": 8
+      },
+      "9": {
+        "mean_r_epistemic": 0.7563225565351133,
+        "sem_r_epistemic": 0.051342520602018646,
+        "n": 8
+      },
+      "10": {
+        "mean_r_epistemic": 0.5855400437691198,
+        "sem_r_epistemic": 0.05216405309573011,
+        "n": 8
+      },
+      "11": {
+        "mean_r_epistemic": 0.6587325492402599,
+        "sem_r_epistemic": 0.06838765055402415,
+        "n": 8
+      },
+      "12": {
+        "mean_r_epistemic": 0.8295150620062532,
+        "sem_r_epistemic": 0.04879500364742668,
+        "n": 8
+      },
+      "13": {
+        "mean_r_epistemic": 0.80511756018254,
+        "sem_r_epistemic": 0.051342520602018646,
+        "n": 8
+      },
+      "14": {
+        "mean_r_epistemic": 0.8539125638299666,
+        "sem_r_epistemic": 0.024397501823713346,
+        "n": 8
+      },
+      "15": {
+        "mean_r_epistemic": 0.8295150620062532,
+        "sem_r_epistemic": 0.04879500364742668,
+        "n": 8
+      },
+      "16": {
+        "mean_r_epistemic": 0.41475753100312657,
+        "sem_r_epistemic": 0.06321865736834167,
+        "n": 8
+      },
+      "17": {
+        "mean_r_epistemic": 0.2927700218845599,
+        "sem_r_epistemic": 0.0521640530957301,
+        "n": 8
+      },
+      "18": {
+        "mean_r_epistemic": 0.12198750911856665,
+        "sem_r_epistemic": 0.06838765055402414,
+        "n": 8
+      },
+      "19": {
+        "mean_r_epistemic": 0.07319250547113999,
+        "sem_r_epistemic": 0.06838765055402414,
+        "n": 8
+      },
+      "20": {
+        "mean_r_epistemic": -0.02439750182371331,
+        "sem_r_epistemic": 0.06321865736834169,
+        "n": 8
+      },
+      "21": {
+        "mean_r_epistemic": -0.12198750911856662,
+        "sem_r_epistemic": 0.06838765055402414,
+        "n": 8
+      },
+      "22": {
+        "mean_r_epistemic": -0.12198750911856662,
+        "sem_r_epistemic": 0.06838765055402414,
+        "n": 8
+      },
+      "23": {
+        "mean_r_epistemic": -0.1707825127659933,
+        "sem_r_epistemic": 0.07319250547113998,
+        "n": 8
+      },
+      "24": {
+        "mean_r_epistemic": -0.21957751641341994,
+        "sem_r_epistemic": 0.06321865736834169,
+        "n": 8
+      },
+      "25": {
+        "mean_r_epistemic": -0.21957751641341994,
+        "sem_r_epistemic": 0.06321865736834169,
+        "n": 8
+      },
+      "26": {
+        "mean_r_epistemic": -0.24397501823713327,
+        "sem_r_epistemic": 0.06116777418411965,
+        "n": 8
+      },
+      "27": {
+        "mean_r_epistemic": -0.24397501823713325,
+        "sem_r_epistemic": 0.04879500364742666,
+        "n": 8
+      },
+      "28": {
+        "mean_r_epistemic": -0.24397501823713325,
+        "sem_r_epistemic": 0.04879500364742666,
+        "n": 8
+      },
+      "29": {
+        "mean_r_epistemic": -0.24397501823713325,
+        "sem_r_epistemic": 0.04879500364742666,
+        "n": 8
+      },
+      "30": {
+        "mean_r_epistemic": -0.24397501823713325,
+        "sem_r_epistemic": 0.04879500364742666,
+        "n": 8
+      },
+      "31": {
+        "mean_r_epistemic": -0.24397501823713325,
+        "sem_r_epistemic": 0.04879500364742666,
+        "n": 8
+      },
+      "32": {
+        "mean_r_epistemic": -0.24397501823713325,
+        "sem_r_epistemic": 0.04879500364742666,
+        "n": 8
+      },
+      "33": {
+        "mean_r_epistemic": -0.24397501823713325,
+        "sem_r_epistemic": 0.04879500364742666,
+        "n": 8
+      },
+      "34": {
+        "mean_r_epistemic": -0.24397501823713325,
+        "sem_r_epistemic": 0.04879500364742666,
+        "n": 8
+      },
+      "35": {
+        "mean_r_epistemic": -0.24397501823713325,
+        "sem_r_epistemic": 0.04879500364742666,
+        "n": 8
+      },
+      "36": {
+        "mean_r_epistemic": -0.24397501823713325,
+        "sem_r_epistemic": 0.04879500364742666,
+        "n": 8
+      },
+      "37": {
+        "mean_r_epistemic": -0.17078251276599327,
+        "sem_r_epistemic": 0.06321865736834169,
+        "n": 8
+      },
+      "38": {
+        "mean_r_epistemic": -0.17078251276599327,
+        "sem_r_epistemic": 0.08196149751456429,
+        "n": 8
+      },
+      "39": {
+        "mean_r_epistemic": 6.938893903907228e-18,
+        "sem_r_epistemic": 0.0521640530957301,
+        "n": 8
+      }
+    },
+    "chain_override_C_tells_D": {
+      "0": {
+        "mean_r_epistemic": -0.18114220932736802,
+        "sem_r_epistemic": 0.08241414828010234,
+        "n": 8
+      },
+      "1": {
+        "mean_r_epistemic": -0.02587745847533829,
+        "sem_r_epistemic": 0.07253605718424966,
+        "n": 8
+      },
+      "2": {
+        "mean_r_epistemic": -0.05175491695067658,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "3": {
+        "mean_r_epistemic": 0.05175491695067658,
+        "sem_r_epistemic": 0.05175491695067658,
+        "n": 8
+      },
+      "4": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.033881546358946926,
+        "n": 8
+      },
+      "5": {
+        "mean_r_epistemic": 0.2846520432287212,
+        "sem_r_epistemic": 0.06705351198399495,
+        "n": 8
+      },
+      "6": {
+        "mean_r_epistemic": 0.4140393356054126,
+        "sem_r_epistemic": 0.03912303982179758,
+        "n": 8
+      },
+      "7": {
+        "mean_r_epistemic": 0.5434266279821041,
+        "sem_r_epistemic": 0.06705351198399497,
+        "n": 8
+      },
+      "8": {
+        "mean_r_epistemic": 0.802201212735487,
+        "sem_r_epistemic": 0.025877458475338302,
+        "n": 8
+      },
+      "9": {
+        "mean_r_epistemic": 0.8280786712108252,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "10": {
+        "mean_r_epistemic": 0.802201212735487,
+        "sem_r_epistemic": 0.025877458475338302,
+        "n": 8
+      },
+      "11": {
+        "mean_r_epistemic": 0.7504462957848104,
+        "sem_r_epistemic": 0.037880720420707926,
+        "n": 8
+      },
+      "12": {
+        "mean_r_epistemic": 0.7763237542601487,
+        "sem_r_epistemic": 0.05175491695067658,
+        "n": 8
+      },
+      "13": {
+        "mean_r_epistemic": 0.7245688373094721,
+        "sem_r_epistemic": 0.05532833351724883,
+        "n": 8
+      },
+      "14": {
+        "mean_r_epistemic": 0.6469364618834572,
+        "sem_r_epistemic": 0.046906876916298926,
+        "n": 8
+      },
+      "15": {
+        "mean_r_epistemic": 0.4916717110314275,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "16": {
+        "mean_r_epistemic": 0.5434266279821041,
+        "sem_r_epistemic": 0.05445696672134609,
+        "n": 8
+      },
+      "17": {
+        "mean_r_epistemic": 0.4657942525560892,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "18": {
+        "mean_r_epistemic": 0.4140393356054126,
+        "sem_r_epistemic": 0.05532833351724881,
+        "n": 8
+      },
+      "19": {
+        "mean_r_epistemic": 0.31052950170405946,
+        "sem_r_epistemic": 0.07824607964359516,
+        "n": 8
+      },
+      "20": {
+        "mean_r_epistemic": 0.2846520432287212,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "21": {
+        "mean_r_epistemic": 0.2328971262780446,
+        "sem_r_epistemic": 0.06108082634459668,
+        "n": 8
+      },
+      "22": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "23": {
+        "mean_r_epistemic": 0.07763237542601487,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "24": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "25": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "26": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.06705351198399497,
+        "n": 8
+      },
+      "27": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "28": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "29": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "30": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "31": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "32": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "33": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.05175491695067658,
+        "n": 8
+      },
+      "34": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.05175491695067658,
+        "n": 8
+      },
+      "35": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.05175491695067658,
+        "n": 8
+      },
+      "36": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.05175491695067658,
+        "n": 8
+      },
+      "37": {
+        "mean_r_epistemic": 0.2070196678027063,
+        "sem_r_epistemic": 0.05532833351724882,
+        "n": 8
+      },
+      "38": {
+        "mean_r_epistemic": 0.2846520432287212,
+        "sem_r_epistemic": 0.037880720420707906,
+        "n": 8
+      },
+      "39": {
+        "mean_r_epistemic": 0.36228441865473604,
+        "sem_r_epistemic": 0.033881546358946926,
+        "n": 8
+      }
+    },
+    "chain_override_D": {
+      "0": {
+        "mean_r_epistemic": 0.19518001458970666,
+        "sem_r_epistemic": 0.17689691067625438,
+        "n": 8
+      },
+      "1": {
+        "mean_r_epistemic": -0.3171675237082733,
+        "sem_r_epistemic": 0.13008369885378795,
+        "n": 8
+      },
+      "2": {
+        "mean_r_epistemic": -0.21957751641341997,
+        "sem_r_epistemic": 0.07319250547113998,
+        "n": 8
+      },
+      "3": {
+        "mean_r_epistemic": -0.17078251276599327,
+        "sem_r_epistemic": 0.07319250547113998,
+        "n": 8
+      },
+      "4": {
+        "mean_r_epistemic": -0.09759000729485331,
+        "sem_r_epistemic": 0.1043281061914602,
+        "n": 8
+      },
+      "5": {
+        "mean_r_epistemic": 0.04879500364742667,
+        "sem_r_epistemic": 0.08844845533812717,
+        "n": 8
+      },
+      "6": {
+        "mean_r_epistemic": 0.14638501094227996,
+        "sem_r_epistemic": 0.06116777418411965,
+        "n": 8
+      },
+      "7": {
+        "mean_r_epistemic": 0.3659625273556999,
+        "sem_r_epistemic": 0.08987898137227082,
+        "n": 8
+      },
+      "8": {
+        "mean_r_epistemic": 0.5611425419454066,
+        "sem_r_epistemic": 0.06321865736834169,
+        "n": 8
+      },
+      "9": {
+        "mean_r_epistemic": 0.5367450401216932,
+        "sem_r_epistemic": 0.048795003647426644,
+        "n": 8
+      },
+      "10": {
+        "mean_r_epistemic": 0.46355253465055324,
+        "sem_r_epistemic": 0.02439750182371333,
+        "n": 8
+      },
+      "11": {
+        "mean_r_epistemic": 0.4391550328268399,
+        "sem_r_epistemic": 0.03194382824999699,
+        "n": 8
+      },
+      "12": {
+        "mean_r_epistemic": 0.41475753100312657,
+        "sem_r_epistemic": 0.03571428571428571,
+        "n": 8
+      },
+      "13": {
+        "mean_r_epistemic": 0.48795003647426655,
+        "sem_r_epistemic": 0.03688555567816587,
+        "n": 8
+      },
+      "14": {
+        "mean_r_epistemic": 0.5611425419454066,
+        "sem_r_epistemic": 0.051342520602018625,
+        "n": 8
+      },
+      "15": {
+        "mean_r_epistemic": 0.48795003647426655,
+        "sem_r_epistemic": 0.03688555567816587,
+        "n": 8
+      },
+      "16": {
+        "mean_r_epistemic": 0.4391550328268399,
+        "sem_r_epistemic": 0.03194382824999699,
+        "n": 8
+      },
+      "17": {
+        "mean_r_epistemic": 0.5123475382979799,
+        "sem_r_epistemic": 0.02439750182371333,
+        "n": 8
+      },
+      "18": {
+        "mean_r_epistemic": 0.2927700218845599,
+        "sem_r_epistemic": 0.06388765649999398,
+        "n": 8
+      },
+      "19": {
+        "mean_r_epistemic": 0.3171675237082733,
+        "sem_r_epistemic": 0.06838765055402413,
+        "n": 8
+      },
+      "20": {
+        "mean_r_epistemic": 0.3659625273556999,
+        "sem_r_epistemic": 0.05134252060201862,
+        "n": 8
+      },
+      "21": {
+        "mean_r_epistemic": 0.3171675237082733,
+        "sem_r_epistemic": 0.04422422766906359,
+        "n": 8
+      },
+      "22": {
+        "mean_r_epistemic": 0.21957751641341994,
+        "sem_r_epistemic": 0.05134252060201862,
+        "n": 8
+      },
+      "23": {
+        "mean_r_epistemic": 0.3171675237082733,
+        "sem_r_epistemic": 0.06838765055402413,
+        "n": 8
+      },
+      "24": {
+        "mean_r_epistemic": 0.34156502553198664,
+        "sem_r_epistemic": 0.095831484749991,
+        "n": 8
+      },
+      "25": {
+        "mean_r_epistemic": 0.34156502553198664,
+        "sem_r_epistemic": 0.095831484749991,
+        "n": 8
+      },
+      "26": {
+        "mean_r_epistemic": 0.3659625273557,
+        "sem_r_epistemic": 0.08987898137227082,
+        "n": 8
+      },
+      "27": {
+        "mean_r_epistemic": 0.3903600291794133,
+        "sem_r_epistemic": 0.08247860988423225,
+        "n": 8
+      },
+      "28": {
+        "mean_r_epistemic": 0.41475753100312657,
+        "sem_r_epistemic": 0.08987898137227082,
+        "n": 8
+      },
+      "29": {
+        "mean_r_epistemic": 0.46355253465055324,
+        "sem_r_epistemic": 0.10059347702036957,
+        "n": 8
+      },
+      "30": {
+        "mean_r_epistemic": 0.46355253465055324,
+        "sem_r_epistemic": 0.10059347702036957,
+        "n": 8
+      },
+      "31": {
+        "mean_r_epistemic": 0.4391550328268399,
+        "sem_r_epistemic": 0.08844845533812719,
+        "n": 8
+      },
+      "32": {
+        "mean_r_epistemic": 0.4391550328268399,
+        "sem_r_epistemic": 0.08844845533812719,
+        "n": 8
+      },
+      "33": {
+        "mean_r_epistemic": 0.46355253465055324,
+        "sem_r_epistemic": 0.07770080415276534,
+        "n": 8
+      },
+      "34": {
+        "mean_r_epistemic": 0.5123475382979799,
+        "sem_r_epistemic": 0.08601138984851642,
+        "n": 8
+      },
+      "35": {
+        "mean_r_epistemic": 0.5123475382979799,
+        "sem_r_epistemic": 0.08601138984851642,
+        "n": 8
+      },
+      "36": {
+        "mean_r_epistemic": 0.4391550328268399,
+        "sem_r_epistemic": 0.06116777418411965,
+        "n": 8
+      },
+      "37": {
+        "mean_r_epistemic": 0.4391550328268399,
+        "sem_r_epistemic": 0.06116777418411965,
+        "n": 8
+      },
+      "38": {
+        "mean_r_epistemic": 0.41475753100312657,
+        "sem_r_epistemic": 0.05134252060201862,
+        "n": 8
+      },
+      "39": {
+        "mean_r_epistemic": 0.3415650255319866,
+        "sem_r_epistemic": 0.03194382824999699,
+        "n": 8
+      }
+    },
+    "diamond_no_override": {
+      "0": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "1": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "2": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "3": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "4": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "5": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "6": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "7": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "8": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "9": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "10": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "11": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "12": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "13": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "14": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "15": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "16": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "17": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "18": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "19": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "20": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "21": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "22": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "23": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "24": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "25": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "26": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "27": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "28": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "29": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "30": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "31": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "32": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "33": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "34": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "35": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "36": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "37": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "38": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "39": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      }
+    },
+    "diamond_override_B_tells_D": {
+      "0": {
+        "mean_r_epistemic": 0.2846520432287212,
+        "sem_r_epistemic": 0.1407206307488968,
+        "n": 8
+      },
+      "1": {
+        "mean_r_epistemic": 0.18114220932736802,
+        "sem_r_epistemic": 0.13231166823459076,
+        "n": 8
+      },
+      "2": {
+        "mean_r_epistemic": 0.18114220932736802,
+        "sem_r_epistemic": 0.13231166823459076,
+        "n": 8
+      },
+      "3": {
+        "mean_r_epistemic": 0.10350983390135315,
+        "sem_r_epistemic": 0.095831484749991,
+        "n": 8
+      },
+      "4": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.10164463907684076,
+        "n": 8
+      },
+      "5": {
+        "mean_r_epistemic": 0.43991679408075085,
+        "sem_r_epistemic": 0.09926387221205211,
+        "n": 8
+      },
+      "6": {
+        "mean_r_epistemic": 0.33640696017939775,
+        "sem_r_epistemic": 0.11022356687150692,
+        "n": 8
+      },
+      "7": {
+        "mean_r_epistemic": 0.36228441865473604,
+        "sem_r_epistemic": 0.10164463907684076,
+        "n": 8
+      },
+      "8": {
+        "mean_r_epistemic": 0.4916717110314275,
+        "sem_r_epistemic": 0.11022356687150689,
+        "n": 8
+      },
+      "9": {
+        "mean_r_epistemic": 0.4140393356054126,
+        "sem_r_epistemic": 0.05532833351724881,
+        "n": 8
+      },
+      "10": {
+        "mean_r_epistemic": 0.36228441865473604,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "11": {
+        "mean_r_epistemic": 0.2846520432287212,
+        "sem_r_epistemic": 0.08693329603312919,
+        "n": 8
+      },
+      "12": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.05175491695067658,
+        "n": 8
+      },
+      "13": {
+        "mean_r_epistemic": 0.05175491695067658,
+        "sem_r_epistemic": 0.033881546358946926,
+        "n": 8
+      },
+      "14": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.03912303982179759,
+        "n": 8
+      },
+      "15": {
+        "mean_r_epistemic": -0.02587745847533829,
+        "sem_r_epistemic": 0.02587745847533829,
+        "n": 8
+      },
+      "16": {
+        "mean_r_epistemic": -0.2846520432287212,
+        "sem_r_epistemic": 0.06705351198399497,
+        "n": 8
+      },
+      "17": {
+        "mean_r_epistemic": -0.36228441865473604,
+        "sem_r_epistemic": 0.05175491695067656,
+        "n": 8
+      },
+      "18": {
+        "mean_r_epistemic": -0.5693040864574423,
+        "sem_r_epistemic": 0.05175491695067656,
+        "n": 8
+      },
+      "19": {
+        "mean_r_epistemic": -0.4916717110314275,
+        "sem_r_epistemic": 0.03788072042070789,
+        "n": 8
+      },
+      "20": {
+        "mean_r_epistemic": -0.5175491695067658,
+        "sem_r_epistemic": 0.06776309271789384,
+        "n": 8
+      },
+      "21": {
+        "mean_r_epistemic": -0.5951815449327806,
+        "sem_r_epistemic": 0.046906876916298926,
+        "n": 8
+      },
+      "22": {
+        "mean_r_epistemic": -0.5175491695067658,
+        "sem_r_epistemic": 0.05532833351724882,
+        "n": 8
+      },
+      "23": {
+        "mean_r_epistemic": -0.4916717110314275,
+        "sem_r_epistemic": 0.07763237542601484,
+        "n": 8
+      },
+      "24": {
+        "mean_r_epistemic": -0.4657942525560892,
+        "sem_r_epistemic": 0.07576144084141581,
+        "n": 8
+      },
+      "25": {
+        "mean_r_epistemic": -0.4399167940807509,
+        "sem_r_epistemic": 0.08241414828010234,
+        "n": 8
+      },
+      "26": {
+        "mean_r_epistemic": -0.36228441865473604,
+        "sem_r_epistemic": 0.08526668847366659,
+        "n": 8
+      },
+      "27": {
+        "mean_r_epistemic": -0.36228441865473604,
+        "sem_r_epistemic": 0.07576144084141581,
+        "n": 8
+      },
+      "28": {
+        "mean_r_epistemic": -0.31052950170405946,
+        "sem_r_epistemic": 0.06776309271789384,
+        "n": 8
+      },
+      "29": {
+        "mean_r_epistemic": -0.31052950170405946,
+        "sem_r_epistemic": 0.06776309271789384,
+        "n": 8
+      },
+      "30": {
+        "mean_r_epistemic": -0.2846520432287212,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "31": {
+        "mean_r_epistemic": -0.2846520432287212,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "32": {
+        "mean_r_epistemic": -0.2846520432287212,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "33": {
+        "mean_r_epistemic": -0.2846520432287212,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "34": {
+        "mean_r_epistemic": -0.2846520432287212,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "35": {
+        "mean_r_epistemic": -0.2846520432287212,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "36": {
+        "mean_r_epistemic": -0.2846520432287212,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "37": {
+        "mean_r_epistemic": -0.2587745847533829,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "38": {
+        "mean_r_epistemic": -0.2587745847533829,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "39": {
+        "mean_r_epistemic": -0.2846520432287212,
+        "sem_r_epistemic": 0.08693329603312919,
+        "n": 8
+      }
+    },
+    "diamond_override_C_tells_D": {
+      "0": {
+        "mean_r_epistemic": -0.18114220932736802,
+        "sem_r_epistemic": 0.08241414828010234,
+        "n": 8
+      },
+      "1": {
+        "mean_r_epistemic": -0.05175491695067658,
+        "sem_r_epistemic": 0.07576144084141581,
+        "n": 8
+      },
+      "2": {
+        "mean_r_epistemic": -0.05175491695067658,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "3": {
+        "mean_r_epistemic": 0.05175491695067658,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "4": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.037880720420707906,
+        "n": 8
+      },
+      "5": {
+        "mean_r_epistemic": 0.31052950170405946,
+        "sem_r_epistemic": 0.07824607964359516,
+        "n": 8
+      },
+      "6": {
+        "mean_r_epistemic": 0.4399167940807509,
+        "sem_r_epistemic": 0.025877458475338275,
+        "n": 8
+      },
+      "7": {
+        "mean_r_epistemic": 0.5434266279821041,
+        "sem_r_epistemic": 0.06705351198399497,
+        "n": 8
+      },
+      "8": {
+        "mean_r_epistemic": 0.802201212735487,
+        "sem_r_epistemic": 0.025877458475338302,
+        "n": 8
+      },
+      "9": {
+        "mean_r_epistemic": 0.8280786712108252,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "10": {
+        "mean_r_epistemic": 0.7504462957848104,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "11": {
+        "mean_r_epistemic": 0.7504462957848104,
+        "sem_r_epistemic": 0.037880720420707926,
+        "n": 8
+      },
+      "12": {
+        "mean_r_epistemic": 0.802201212735487,
+        "sem_r_epistemic": 0.025877458475338302,
+        "n": 8
+      },
+      "13": {
+        "mean_r_epistemic": 0.802201212735487,
+        "sem_r_epistemic": 0.025877458475338302,
+        "n": 8
+      },
+      "14": {
+        "mean_r_epistemic": 0.7504462957848104,
+        "sem_r_epistemic": 0.037880720420707926,
+        "n": 8
+      },
+      "15": {
+        "mean_r_epistemic": 0.5175491695067658,
+        "sem_r_epistemic": 0.039123039821797566,
+        "n": 8
+      },
+      "16": {
+        "mean_r_epistemic": 0.4916717110314275,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "17": {
+        "mean_r_epistemic": 0.4657942525560892,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "18": {
+        "mean_r_epistemic": 0.38816187713007433,
+        "sem_r_epistemic": 0.04690687691629892,
+        "n": 8
+      },
+      "19": {
+        "mean_r_epistemic": 0.31052950170405946,
+        "sem_r_epistemic": 0.06776309271789384,
+        "n": 8
+      },
+      "20": {
+        "mean_r_epistemic": 0.2328971262780446,
+        "sem_r_epistemic": 0.08241414828010234,
+        "n": 8
+      },
+      "21": {
+        "mean_r_epistemic": 0.2328971262780446,
+        "sem_r_epistemic": 0.07253605718424963,
+        "n": 8
+      },
+      "22": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.07576144084141581,
+        "n": 8
+      },
+      "23": {
+        "mean_r_epistemic": 0.10350983390135315,
+        "sem_r_epistemic": 0.06776309271789385,
+        "n": 8
+      },
+      "24": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.05175491695067658,
+        "n": 8
+      },
+      "25": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.05175491695067658,
+        "n": 8
+      },
+      "26": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "27": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.07763237542601485,
+        "n": 8
+      },
+      "28": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.07763237542601485,
+        "n": 8
+      },
+      "29": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.06705351198399497,
+        "n": 8
+      },
+      "30": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.06705351198399497,
+        "n": 8
+      },
+      "31": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.06705351198399497,
+        "n": 8
+      },
+      "32": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.06705351198399497,
+        "n": 8
+      },
+      "33": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "34": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "35": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "36": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "37": {
+        "mean_r_epistemic": 0.2070196678027063,
+        "sem_r_epistemic": 0.05532833351724882,
+        "n": 8
+      },
+      "38": {
+        "mean_r_epistemic": 0.2328971262780446,
+        "sem_r_epistemic": 0.046906876916298926,
+        "n": 8
+      },
+      "39": {
+        "mean_r_epistemic": 0.31052950170405946,
+        "sem_r_epistemic": 0.03912303982179759,
+        "n": 8
+      }
+    },
+    "diamond_override_D_only": {
+      "0": {
+        "mean_r_epistemic": 0.19518001458970666,
+        "sem_r_epistemic": 0.17689691067625438,
+        "n": 8
+      },
+      "1": {
+        "mean_r_epistemic": -0.26837252006084666,
+        "sem_r_epistemic": 0.14954579759468764,
+        "n": 8
+      },
+      "2": {
+        "mean_r_epistemic": -0.21957751641341997,
+        "sem_r_epistemic": 0.07319250547113998,
+        "n": 8
+      },
+      "3": {
+        "mean_r_epistemic": -0.12198750911856664,
+        "sem_r_epistemic": 0.06838765055402414,
+        "n": 8
+      },
+      "4": {
+        "mean_r_epistemic": -0.09759000729485331,
+        "sem_r_epistemic": 0.09035079029052512,
+        "n": 8
+      },
+      "5": {
+        "mean_r_epistemic": 0.09759000729485331,
+        "sem_r_epistemic": 0.1043281061914602,
+        "n": 8
+      },
+      "6": {
+        "mean_r_epistemic": 0.17078251276599332,
+        "sem_r_epistemic": 0.05134252060201862,
+        "n": 8
+      },
+      "7": {
+        "mean_r_epistemic": 0.39036002917941326,
+        "sem_r_epistemic": 0.08247860988423225,
+        "n": 8
+      },
+      "8": {
+        "mean_r_epistemic": 0.5611425419454066,
+        "sem_r_epistemic": 0.06321865736834169,
+        "n": 8
+      },
+      "9": {
+        "mean_r_epistemic": 0.5855400437691198,
+        "sem_r_epistemic": 0.0521640530957301,
+        "n": 8
+      },
+      "10": {
+        "mean_r_epistemic": 0.48795003647426655,
+        "sem_r_epistemic": 0.03688555567816587,
+        "n": 8
+      },
+      "11": {
+        "mean_r_epistemic": 0.46355253465055324,
+        "sem_r_epistemic": 0.02439750182371333,
+        "n": 8
+      },
+      "12": {
+        "mean_r_epistemic": 0.39036002917941326,
+        "sem_r_epistemic": 0.03688555567816587,
+        "n": 8
+      },
+      "13": {
+        "mean_r_epistemic": 0.5123475382979799,
+        "sem_r_epistemic": 0.04422422766906359,
+        "n": 8
+      },
+      "14": {
+        "mean_r_epistemic": 0.5367450401216932,
+        "sem_r_epistemic": 0.048795003647426644,
+        "n": 8
+      },
+      "15": {
+        "mean_r_epistemic": 0.48795003647426655,
+        "sem_r_epistemic": 0.03688555567816587,
+        "n": 8
+      },
+      "16": {
+        "mean_r_epistemic": 0.48795003647426655,
+        "sem_r_epistemic": 0.0521640530957301,
+        "n": 8
+      },
+      "17": {
+        "mean_r_epistemic": 0.41475753100312657,
+        "sem_r_epistemic": 0.07319250547113998,
+        "n": 8
+      },
+      "18": {
+        "mean_r_epistemic": 0.2683725200608466,
+        "sem_r_epistemic": 0.057587555344989626,
+        "n": 8
+      },
+      "19": {
+        "mean_r_epistemic": 0.2439750182371333,
+        "sem_r_epistemic": 0.048795003647426644,
+        "n": 8
+      },
+      "20": {
+        "mean_r_epistemic": 0.2927700218845599,
+        "sem_r_epistemic": 0.06388765649999398,
+        "n": 8
+      },
+      "21": {
+        "mean_r_epistemic": 0.2683725200608466,
+        "sem_r_epistemic": 0.057587555344989626,
+        "n": 8
+      },
+      "22": {
+        "mean_r_epistemic": 0.17078251276599332,
+        "sem_r_epistemic": 0.05134252060201862,
+        "n": 8
+      },
+      "23": {
+        "mean_r_epistemic": 0.2927700218845599,
+        "sem_r_epistemic": 0.08247860988423224,
+        "n": 8
+      },
+      "24": {
+        "mean_r_epistemic": 0.3171675237082733,
+        "sem_r_epistemic": 0.10059347702036955,
+        "n": 8
+      },
+      "25": {
+        "mean_r_epistemic": 0.34156502553198664,
+        "sem_r_epistemic": 0.095831484749991,
+        "n": 8
+      },
+      "26": {
+        "mean_r_epistemic": 0.3659625273557,
+        "sem_r_epistemic": 0.09715336077668173,
+        "n": 8
+      },
+      "27": {
+        "mean_r_epistemic": 0.4147575310031266,
+        "sem_r_epistemic": 0.08196149751456432,
+        "n": 8
+      },
+      "28": {
+        "mean_r_epistemic": 0.4391550328268399,
+        "sem_r_epistemic": 0.08844845533812719,
+        "n": 8
+      },
+      "29": {
+        "mean_r_epistemic": 0.4879500364742666,
+        "sem_r_epistemic": 0.09759000729485333,
+        "n": 8
+      },
+      "30": {
+        "mean_r_epistemic": 0.5123475382979799,
+        "sem_r_epistemic": 0.09358687622396927,
+        "n": 8
+      },
+      "31": {
+        "mean_r_epistemic": 0.46355253465055324,
+        "sem_r_epistemic": 0.08601138984851639,
+        "n": 8
+      },
+      "32": {
+        "mean_r_epistemic": 0.4879500364742666,
+        "sem_r_epistemic": 0.09759000729485333,
+        "n": 8
+      },
+      "33": {
+        "mean_r_epistemic": 0.5123475382979799,
+        "sem_r_epistemic": 0.08601138984851642,
+        "n": 8
+      },
+      "34": {
+        "mean_r_epistemic": 0.5367450401216932,
+        "sem_r_epistemic": 0.08039020483873398,
+        "n": 8
+      },
+      "35": {
+        "mean_r_epistemic": 0.5367450401216932,
+        "sem_r_epistemic": 0.08039020483873398,
+        "n": 8
+      },
+      "36": {
+        "mean_r_epistemic": 0.5367450401216932,
+        "sem_r_epistemic": 0.08039020483873398,
+        "n": 8
+      },
+      "37": {
+        "mean_r_epistemic": 0.48795003647426655,
+        "sem_r_epistemic": 0.07377111135633177,
+        "n": 8
+      },
+      "38": {
+        "mean_r_epistemic": 0.5123475382979799,
+        "sem_r_epistemic": 0.06838765055402415,
+        "n": 8
+      },
+      "39": {
+        "mean_r_epistemic": 0.39036002917941326,
+        "sem_r_epistemic": 0.03688555567816587,
+        "n": 8
+      }
+    },
+    "fork_no_override": {
+      "0": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "1": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "2": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "3": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "4": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "5": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "6": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "7": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "8": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "9": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "10": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "11": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "12": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "13": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "14": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "15": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "16": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "17": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "18": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "19": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "20": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "21": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "22": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "23": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "24": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "25": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "26": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "27": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "28": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "29": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "30": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "31": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "32": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "33": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "34": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "35": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "36": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "37": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "38": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      },
+      "39": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.0,
+        "n": 8
+      }
+    },
+    "fork_override_B_only": {
+      "0": {
+        "mean_r_epistemic": -0.3903600291794133,
+        "sem_r_epistemic": 0.14754222271266348,
+        "n": 8
+      },
+      "1": {
+        "mean_r_epistemic": -0.19518001458970669,
+        "sem_r_epistemic": 0.20865621238292043,
+        "n": 8
+      },
+      "2": {
+        "mean_r_epistemic": -0.21957751641342,
+        "sem_r_epistemic": 0.208452346958198,
+        "n": 8
+      },
+      "3": {
+        "mean_r_epistemic": -0.4635525346505533,
+        "sem_r_epistemic": 0.1667516789989822,
+        "n": 8
+      },
+      "4": {
+        "mean_r_epistemic": -0.19518001458970663,
+        "sem_r_epistemic": 0.07377111135633174,
+        "n": 8
+      },
+      "5": {
+        "mean_r_epistemic": 0.09759000729485331,
+        "sem_r_epistemic": 0.1043281061914602,
+        "n": 8
+      },
+      "6": {
+        "mean_r_epistemic": 0.07319250547113998,
+        "sem_r_epistemic": 0.08601138984851639,
+        "n": 8
+      },
+      "7": {
+        "mean_r_epistemic": 0.2683725200608466,
+        "sem_r_epistemic": 0.07770080415276533,
+        "n": 8
+      },
+      "8": {
+        "mean_r_epistemic": 0.46355253465055324,
+        "sem_r_epistemic": 0.06838765055402414,
+        "n": 8
+      },
+      "9": {
+        "mean_r_epistemic": 0.7075275528876865,
+        "sem_r_epistemic": 0.07770080415276535,
+        "n": 8
+      },
+      "10": {
+        "mean_r_epistemic": 0.80511756018254,
+        "sem_r_epistemic": 0.051342520602018646,
+        "n": 8
+      },
+      "11": {
+        "mean_r_epistemic": 0.7807200583588265,
+        "sem_r_epistemic": 0.052164053095730134,
+        "n": 8
+      },
+      "12": {
+        "mean_r_epistemic": 0.6343350474165466,
+        "sem_r_epistemic": 0.04879500364742668,
+        "n": 8
+      },
+      "13": {
+        "mean_r_epistemic": 0.7075275528876865,
+        "sem_r_epistemic": 0.05758755534498966,
+        "n": 8
+      },
+      "14": {
+        "mean_r_epistemic": 0.6099375455928333,
+        "sem_r_epistemic": 0.0632186573683417,
+        "n": 8
+      },
+      "15": {
+        "mean_r_epistemic": 0.3415650255319866,
+        "sem_r_epistemic": 0.048795003647426644,
+        "n": 8
+      },
+      "16": {
+        "mean_r_epistemic": 0.3171675237082733,
+        "sem_r_epistemic": 0.06838765055402414,
+        "n": 8
+      },
+      "17": {
+        "mean_r_epistemic": 0.2927700218845599,
+        "sem_r_epistemic": 0.07377111135633174,
+        "n": 8
+      },
+      "18": {
+        "mean_r_epistemic": 0.07319250547113998,
+        "sem_r_epistemic": 0.07770080415276533,
+        "n": 8
+      },
+      "19": {
+        "mean_r_epistemic": 0.0975900072948533,
+        "sem_r_epistemic": 0.08247860988423224,
+        "n": 8
+      },
+      "20": {
+        "mean_r_epistemic": -0.07319250547114,
+        "sem_r_epistemic": 0.09358687622396926,
+        "n": 8
+      },
+      "21": {
+        "mean_r_epistemic": -0.09759000729485331,
+        "sem_r_epistemic": 0.13299276232160895,
+        "n": 8
+      },
+      "22": {
+        "mean_r_epistemic": -0.1707825127659933,
+        "sem_r_epistemic": 0.1377047022944881,
+        "n": 8
+      },
+      "23": {
+        "mean_r_epistemic": -0.1707825127659933,
+        "sem_r_epistemic": 0.13267268300719076,
+        "n": 8
+      },
+      "24": {
+        "mean_r_epistemic": -0.1707825127659933,
+        "sem_r_epistemic": 0.12744213039116795,
+        "n": 8
+      },
+      "25": {
+        "mean_r_epistemic": -0.21957751641341997,
+        "sem_r_epistemic": 0.1377047022944881,
+        "n": 8
+      },
+      "26": {
+        "mean_r_epistemic": -0.19518001458970663,
+        "sem_r_epistemic": 0.13299276232160895,
+        "n": 8
+      },
+      "27": {
+        "mean_r_epistemic": -0.19518001458970663,
+        "sem_r_epistemic": 0.13299276232160895,
+        "n": 8
+      },
+      "28": {
+        "mean_r_epistemic": -0.2439750182371333,
+        "sem_r_epistemic": 0.12093738189714563,
+        "n": 8
+      },
+      "29": {
+        "mean_r_epistemic": -0.1707825127659933,
+        "sem_r_epistemic": 0.11027177311342296,
+        "n": 8
+      },
+      "30": {
+        "mean_r_epistemic": -0.19518001458970663,
+        "sem_r_epistemic": 0.1106566670344976,
+        "n": 8
+      },
+      "31": {
+        "mean_r_epistemic": -0.19518001458970663,
+        "sem_r_epistemic": 0.1106566670344976,
+        "n": 8
+      },
+      "32": {
+        "mean_r_epistemic": -0.19518001458970663,
+        "sem_r_epistemic": 0.1106566670344976,
+        "n": 8
+      },
+      "33": {
+        "mean_r_epistemic": -0.19518001458970663,
+        "sem_r_epistemic": 0.11664236870396086,
+        "n": 8
+      },
+      "34": {
+        "mean_r_epistemic": -0.2439750182371333,
+        "sem_r_epistemic": 0.12093738189714563,
+        "n": 8
+      },
+      "35": {
+        "mean_r_epistemic": -0.2439750182371333,
+        "sem_r_epistemic": 0.12093738189714563,
+        "n": 8
+      },
+      "36": {
+        "mean_r_epistemic": -0.21957751641341994,
+        "sem_r_epistemic": 0.12198750911856662,
+        "n": 8
+      },
+      "37": {
+        "mean_r_epistemic": -0.2683725200608466,
+        "sem_r_epistemic": 0.12474463711837841,
+        "n": 8
+      },
+      "38": {
+        "mean_r_epistemic": -0.39036002917941326,
+        "sem_r_epistemic": 0.13299276232160895,
+        "n": 8
+      },
+      "39": {
+        "mean_r_epistemic": -0.5611425419454066,
+        "sem_r_epistemic": 0.15622023526023093,
+        "n": 8
+      }
+    },
+    "fork_override_B_tells_C": {
+      "0": {
+        "mean_r_epistemic": -0.12938729237669144,
+        "sem_r_epistemic": 0.09533105582170814,
+        "n": 8
+      },
+      "1": {
+        "mean_r_epistemic": -0.07763237542601487,
+        "sem_r_epistemic": 0.08693329603312919,
+        "n": 8
+      },
+      "2": {
+        "mean_r_epistemic": -0.10350983390135314,
+        "sem_r_epistemic": 0.10350983390135315,
+        "n": 8
+      },
+      "3": {
+        "mean_r_epistemic": -0.02587745847533829,
+        "sem_r_epistemic": 0.07253605718424966,
+        "n": 8
+      },
+      "4": {
+        "mean_r_epistemic": -0.12938729237669144,
+        "sem_r_epistemic": 0.07763237542601485,
+        "n": 8
+      },
+      "5": {
+        "mean_r_epistemic": 0.02587745847533829,
+        "sem_r_epistemic": 0.07253605718424966,
+        "n": 8
+      },
+      "6": {
+        "mean_r_epistemic": 0.33640696017939775,
+        "sem_r_epistemic": 0.05445696672134609,
+        "n": 8
+      },
+      "7": {
+        "mean_r_epistemic": 0.38816187713007433,
+        "sem_r_epistemic": 0.07253605718424966,
+        "n": 8
+      },
+      "8": {
+        "mean_r_epistemic": 0.543426627982104,
+        "sem_r_epistemic": 0.05445696672134608,
+        "n": 8
+      },
+      "9": {
+        "mean_r_epistemic": 0.5175491695067658,
+        "sem_r_epistemic": 0.06776309271789384,
+        "n": 8
+      },
+      "10": {
+        "mean_r_epistemic": 0.6728139203587955,
+        "sem_r_epistemic": 0.06487822187351769,
+        "n": 8
+      },
+      "11": {
+        "mean_r_epistemic": 0.7504462957848104,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "12": {
+        "mean_r_epistemic": 0.6986913788341338,
+        "sem_r_epistemic": 0.037880720420707926,
+        "n": 8
+      },
+      "13": {
+        "mean_r_epistemic": 0.6728139203587955,
+        "sem_r_epistemic": 0.05175491695067658,
+        "n": 8
+      },
+      "14": {
+        "mean_r_epistemic": 0.6210590034081189,
+        "sem_r_epistemic": 0.03912303982179759,
+        "n": 8
+      },
+      "15": {
+        "mean_r_epistemic": 0.6469364618834572,
+        "sem_r_epistemic": 0.025877458475338302,
+        "n": 8
+      },
+      "16": {
+        "mean_r_epistemic": 0.6986913788341338,
+        "sem_r_epistemic": 0.037880720420707926,
+        "n": 8
+      },
+      "17": {
+        "mean_r_epistemic": 0.7763237542601487,
+        "sem_r_epistemic": 0.03388154635894695,
+        "n": 8
+      },
+      "18": {
+        "mean_r_epistemic": 0.7763237542601487,
+        "sem_r_epistemic": 0.03388154635894695,
+        "n": 8
+      },
+      "19": {
+        "mean_r_epistemic": 0.7763237542601487,
+        "sem_r_epistemic": 0.03388154635894695,
+        "n": 8
+      },
+      "20": {
+        "mean_r_epistemic": 0.802201212735487,
+        "sem_r_epistemic": 0.025877458475338302,
+        "n": 8
+      },
+      "21": {
+        "mean_r_epistemic": 0.7763237542601487,
+        "sem_r_epistemic": 0.03388154635894695,
+        "n": 8
+      },
+      "22": {
+        "mean_r_epistemic": 0.802201212735487,
+        "sem_r_epistemic": 0.025877458475338302,
+        "n": 8
+      },
+      "23": {
+        "mean_r_epistemic": 0.802201212735487,
+        "sem_r_epistemic": 0.025877458475338302,
+        "n": 8
+      },
+      "24": {
+        "mean_r_epistemic": 0.802201212735487,
+        "sem_r_epistemic": 0.025877458475338302,
+        "n": 8
+      },
+      "25": {
+        "mean_r_epistemic": 0.7763237542601487,
+        "sem_r_epistemic": 0.03388154635894695,
+        "n": 8
+      },
+      "26": {
+        "mean_r_epistemic": 0.7245688373094721,
+        "sem_r_epistemic": 0.05532833351724883,
+        "n": 8
+      },
+      "27": {
+        "mean_r_epistemic": 0.5951815449327806,
+        "sem_r_epistemic": 0.08241414828010234,
+        "n": 8
+      },
+      "28": {
+        "mean_r_epistemic": 0.5693040864574423,
+        "sem_r_epistemic": 0.07576144084141581,
+        "n": 8
+      },
+      "29": {
+        "mean_r_epistemic": 0.5434266279821041,
+        "sem_r_epistemic": 0.07763237542601485,
+        "n": 8
+      },
+      "30": {
+        "mean_r_epistemic": 0.5175491695067658,
+        "sem_r_epistemic": 0.06776309271789384,
+        "n": 8
+      },
+      "31": {
+        "mean_r_epistemic": 0.5175491695067658,
+        "sem_r_epistemic": 0.06776309271789384,
+        "n": 8
+      },
+      "32": {
+        "mean_r_epistemic": 0.5175491695067658,
+        "sem_r_epistemic": 0.06776309271789384,
+        "n": 8
+      },
+      "33": {
+        "mean_r_epistemic": 0.4657942525560892,
+        "sem_r_epistemic": 0.051754916950676556,
+        "n": 8
+      },
+      "34": {
+        "mean_r_epistemic": 0.4657942525560892,
+        "sem_r_epistemic": 0.051754916950676556,
+        "n": 8
+      },
+      "35": {
+        "mean_r_epistemic": 0.4657942525560892,
+        "sem_r_epistemic": 0.051754916950676556,
+        "n": 8
+      },
+      "36": {
+        "mean_r_epistemic": 0.4140393356054126,
+        "sem_r_epistemic": 0.05532833351724881,
+        "n": 8
+      },
+      "37": {
+        "mean_r_epistemic": 0.31052950170405946,
+        "sem_r_epistemic": 0.03912303982179759,
+        "n": 8
+      },
+      "38": {
+        "mean_r_epistemic": 0.2328971262780446,
+        "sem_r_epistemic": 0.06108082634459668,
+        "n": 8
+      },
+      "39": {
+        "mean_r_epistemic": 0.18114220932736802,
+        "sem_r_epistemic": 0.06108082634459668,
+        "n": 8
+      }
+    },
+    "fork_override_D_tells_A": {
+      "0": {
+        "mean_r_epistemic": -0.12938729237669144,
+        "sem_r_epistemic": 0.09533105582170814,
+        "n": 8
+      },
+      "1": {
+        "mean_r_epistemic": -0.07763237542601487,
+        "sem_r_epistemic": 0.06705351198399497,
+        "n": 8
+      },
+      "2": {
+        "mean_r_epistemic": 0.0,
+        "sem_r_epistemic": 0.05532833351724882,
+        "n": 8
+      },
+      "3": {
+        "mean_r_epistemic": -0.05175491695067658,
+        "sem_r_epistemic": 0.13410702396798993,
+        "n": 8
+      },
+      "4": {
+        "mean_r_epistemic": -0.10350983390135315,
+        "sem_r_epistemic": 0.10350983390135315,
+        "n": 8
+      },
+      "5": {
+        "mean_r_epistemic": 0.02587745847533829,
+        "sem_r_epistemic": 0.07253605718424966,
+        "n": 8
+      },
+      "6": {
+        "mean_r_epistemic": 0.18114220932736802,
+        "sem_r_epistemic": 0.06108082634459668,
+        "n": 8
+      },
+      "7": {
+        "mean_r_epistemic": 0.18114220932736802,
+        "sem_r_epistemic": 0.046906876916298926,
+        "n": 8
+      },
+      "8": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.05175491695067658,
+        "n": 8
+      },
+      "9": {
+        "mean_r_epistemic": 0.2587745847533829,
+        "sem_r_epistemic": 0.033881546358946926,
+        "n": 8
+      },
+      "10": {
+        "mean_r_epistemic": 0.15526475085202973,
+        "sem_r_epistemic": 0.033881546358946926,
+        "n": 8
+      },
+      "11": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.0544569667213461,
+        "n": 8
+      },
+      "12": {
+        "mean_r_epistemic": 0.05175491695067658,
+        "sem_r_epistemic": 0.05175491695067658,
+        "n": 8
+      },
+      "13": {
+        "mean_r_epistemic": 0.05175491695067658,
+        "sem_r_epistemic": 0.033881546358946926,
+        "n": 8
+      },
+      "14": {
+        "mean_r_epistemic": 0.10350983390135314,
+        "sem_r_epistemic": 0.07824607964359516,
+        "n": 8
+      },
+      "15": {
+        "mean_r_epistemic": 0.10350983390135314,
+        "sem_r_epistemic": 0.07824607964359516,
+        "n": 8
+      },
+      "16": {
+        "mean_r_epistemic": 0.2070196678027063,
+        "sem_r_epistemic": 0.07824607964359516,
+        "n": 8
+      },
+      "17": {
+        "mean_r_epistemic": 0.41403933560541256,
+        "sem_r_epistemic": 0.06776309271789384,
+        "n": 8
+      },
+      "18": {
+        "mean_r_epistemic": 0.5175491695067658,
+        "sem_r_epistemic": 0.07824607964359516,
+        "n": 8
+      },
+      "19": {
+        "mean_r_epistemic": 0.4916717110314275,
+        "sem_r_epistemic": 0.07763237542601484,
+        "n": 8
+      },
+      "20": {
+        "mean_r_epistemic": 0.5434266279821041,
+        "sem_r_epistemic": 0.09533105582170814,
+        "n": 8
+      },
+      "21": {
+        "mean_r_epistemic": 0.5175491695067658,
+        "sem_r_epistemic": 0.10350983390135315,
+        "n": 8
+      },
+      "22": {
+        "mean_r_epistemic": 0.4916717110314275,
+        "sem_r_epistemic": 0.11696087781294869,
+        "n": 8
+      },
+      "23": {
+        "mean_r_epistemic": 0.4657942525560892,
+        "sem_r_epistemic": 0.11572751247156896,
+        "n": 8
+      },
+      "24": {
+        "mean_r_epistemic": 0.4399167940807509,
+        "sem_r_epistemic": 0.12018799050331318,
+        "n": 8
+      },
+      "25": {
+        "mean_r_epistemic": 0.4140393356054126,
+        "sem_r_epistemic": 0.12975644374703538,
+        "n": 8
+      },
+      "26": {
+        "mean_r_epistemic": 0.4140393356054126,
+        "sem_r_epistemic": 0.12975644374703538,
+        "n": 8
+      },
+      "27": {
+        "mean_r_epistemic": 0.36228441865473604,
+        "sem_r_epistemic": 0.12827346425762837,
+        "n": 8
+      },
+      "28": {
+        "mean_r_epistemic": 0.31052950170405946,
+        "sem_r_epistemic": 0.11065666703449764,
+        "n": 8
+      },
+      "29": {
+        "mean_r_epistemic": 0.2846520432287212,
+        "sem_r_epistemic": 0.11022356687150692,
+        "n": 8
+      },
+      "30": {
+        "mean_r_epistemic": 0.2846520432287212,
+        "sem_r_epistemic": 0.10304670033038221,
+        "n": 8
+      },
+      "31": {
+        "mean_r_epistemic": 0.33640696017939775,
+        "sem_r_epistemic": 0.10304670033038221,
+        "n": 8
+      },
+      "32": {
+        "mean_r_epistemic": 0.31052950170405946,
+        "sem_r_epistemic": 0.10350983390135315,
+        "n": 8
+      },
+      "33": {
+        "mean_r_epistemic": 0.2328971262780446,
+        "sem_r_epistemic": 0.07253605718424963,
+        "n": 8
+      },
+      "34": {
+        "mean_r_epistemic": 0.2328971262780446,
+        "sem_r_epistemic": 0.07253605718424963,
+        "n": 8
+      },
+      "35": {
+        "mean_r_epistemic": 0.18114220932736802,
+        "sem_r_epistemic": 0.08241414828010234,
+        "n": 8
+      },
+      "36": {
+        "mean_r_epistemic": 0.2070196678027063,
+        "sem_r_epistemic": 0.06776309271789384,
+        "n": 8
+      },
+      "37": {
+        "mean_r_epistemic": 0.18114220932736802,
+        "sem_r_epistemic": 0.046906876916298926,
+        "n": 8
+      },
+      "38": {
+        "mean_r_epistemic": 0.12938729237669144,
+        "sem_r_epistemic": 0.06705351198399497,
+        "n": 8
+      },
+      "39": {
+        "mean_r_epistemic": 0.07763237542601487,
+        "sem_r_epistemic": 0.06705351198399497,
+        "n": 8
+      }
+    }
+  },
+  "by_topology": {
+    "chain": {
+      "0": {
+        "mean_r_epistemic": 0.05840383041893965,
+        "sem_r_epistemic": 0.068450525311519,
+        "n": 32
+      },
+      "1": {
+        "mean_r_epistemic": -0.0003699891629062278,
+        "sem_r_epistemic": 0.07433134731700136,
+        "n": 32
+      },
+      "2": {
+        "mean_r_epistemic": 0.023657523497900866,
+        "sem_r_epistemic": 0.06796353898728115,
+        "n": 32
+      },
+      "3": {
+        "mean_r_epistemic": 0.17762186654773415,
+        "sem_r_epistemic": 0.07332313771122223,
+        "n": 32
+      },
+      "4": {
+        "mean_r_epistemic": 0.23399620230271412,
+        "sem_r_epistemic": 0.07352138286269577,
+        "n": 32
+      },
+      "5": {
+        "mean_r_epistemic": 0.3029392781324569,
+        "sem_r_epistemic": 0.068035960820409,
+        "n": 32
+      },
+      "6": {
+        "mean_r_epistemic": 0.35968360305034314,
+        "sem_r_epistemic": 0.06245652029401612,
+        "n": 32
+      },
+      "7": {
+        "mean_r_epistemic": 0.446924805247871,
+        "sem_r_epistemic": 0.06284410755906923,
+        "n": 32
+      },
+      "8": {
+        "mean_r_epistemic": 0.5543140796277151,
+        "sem_r_epistemic": 0.06320399425992555,
+        "n": 32
+      },
+      "9": {
+        "mean_r_epistemic": 0.5302865669669079,
+        "sem_r_epistemic": 0.06065083892527955,
+        "n": 32
+      },
+      "10": {
+        "mean_r_epistemic": 0.46282344778879003,
+        "sem_r_epistemic": 0.054797610862554906,
+        "n": 32
+      },
+      "11": {
+        "mean_r_epistemic": 0.4620834694629775,
+        "sem_r_epistemic": 0.055778682870064385,
+        "n": 32
+      },
+      "12": {
+        "mean_r_epistemic": 0.5051490868173821,
+        "sem_r_epistemic": 0.06263311356835993,
+        "n": 32
+      },
+      "13": {
+        "mean_r_epistemic": 0.5044091084915696,
+        "sem_r_epistemic": 0.05977107475524547,
+        "n": 32
+      },
+      "14": {
+        "mean_r_epistemic": 0.5154978919147075,
+        "sem_r_epistemic": 0.059408572465841136,
+        "n": 32
+      },
+      "15": {
+        "mean_r_epistemic": 0.45228420237798683,
+        "sem_r_epistemic": 0.05655691919523494,
+        "n": 32
+      },
+      "16": {
+        "mean_r_epistemic": 0.34933479795301764,
+        "sem_r_epistemic": 0.042873804349728026,
+        "n": 32
+      },
+      "17": {
+        "mean_r_epistemic": 0.3177279531846573,
+        "sem_r_epistemic": 0.041547964306862514,
+        "n": 32
+      },
+      "18": {
+        "mean_r_epistemic": 0.2071992166521348,
+        "sem_r_epistemic": 0.038419988417160815,
+        "n": 32
+      },
+      "19": {
+        "mean_r_epistemic": 0.17522238272086818,
+        "sem_r_epistemic": 0.03892742959545945,
+        "n": 32
+      },
+      "20": {
+        "mean_r_epistemic": 0.15655426719017695,
+        "sem_r_epistemic": 0.03859436915058084,
+        "n": 32
+      },
+      "21": {
+        "mean_r_epistemic": 0.10701928521693782,
+        "sem_r_epistemic": 0.039802880744396404,
+        "n": 32
+      },
+      "22": {
+        "mean_r_epistemic": 0.06321368953672077,
+        "sem_r_epistemic": 0.03499691929734018,
+        "n": 32
+      },
+      "23": {
+        "mean_r_epistemic": 0.05600434659207371,
+        "sem_r_epistemic": 0.04156609262298649,
+        "n": 32
+      },
+      "24": {
+        "mean_r_epistemic": 0.06931306499264911,
+        "sem_r_epistemic": 0.04848487308159719,
+        "n": 32
+      },
+      "25": {
+        "mean_r_epistemic": 0.06931306499264911,
+        "sem_r_epistemic": 0.04848487308159719,
+        "n": 32
+      },
+      "26": {
+        "mean_r_epistemic": 0.06284370037381454,
+        "sem_r_epistemic": 0.049887570305158696,
+        "n": 32
+      },
+      "27": {
+        "mean_r_epistemic": 0.06894307582974286,
+        "sem_r_epistemic": 0.04874868777150475,
+        "n": 32
+      },
+      "28": {
+        "mean_r_epistemic": 0.08151181590450576,
+        "sem_r_epistemic": 0.05172481690554703,
+        "n": 32
+      },
+      "29": {
+        "mean_r_epistemic": 0.09371056681636245,
+        "sem_r_epistemic": 0.055383524185098676,
+        "n": 32
+      },
+      "30": {
+        "mean_r_epistemic": 0.08724120219752786,
+        "sem_r_epistemic": 0.05454804426147904,
+        "n": 32
+      },
+      "31": {
+        "mean_r_epistemic": 0.0876111913604341,
+        "sem_r_epistemic": 0.05287523880633741,
+        "n": 32
+      },
+      "32": {
+        "mean_r_epistemic": 0.0876111913604341,
+        "sem_r_epistemic": 0.05287523880633741,
+        "n": 32
+      },
+      "33": {
+        "mean_r_epistemic": 0.09371056681636243,
+        "sem_r_epistemic": 0.05244534750255462,
+        "n": 32
+      },
+      "34": {
+        "mean_r_epistemic": 0.1059093177282191,
+        "sem_r_epistemic": 0.05597134916609956,
+        "n": 32
+      },
+      "35": {
+        "mean_r_epistemic": 0.1059093177282191,
+        "sem_r_epistemic": 0.05597134916609956,
+        "n": 32
+      },
+      "36": {
+        "mean_r_epistemic": 0.08761119136043409,
+        "sem_r_epistemic": 0.04978926191790268,
+        "n": 32
+      },
+      "37": {
+        "mean_r_epistemic": 0.11884804696588823,
+        "sem_r_epistemic": 0.04785535644386201,
+        "n": 32
+      },
+      "38": {
+        "mean_r_epistemic": 0.13215676536646362,
+        "sem_r_epistemic": 0.04818282158658908,
+        "n": 32
+      },
+      "39": {
+        "mean_r_epistemic": 0.17596236104668067,
+        "sem_r_epistemic": 0.03572880006678984,
+        "n": 32
+      }
+    },
+    "diamond": {
+      "0": {
+        "mean_r_epistemic": 0.07467246212276496,
+        "sem_r_epistemic": 0.06567508922504309,
+        "n": 32
+      },
+      "1": {
+        "mean_r_epistemic": -0.0347463069210388,
+        "sem_r_epistemic": 0.058334166032182576,
+        "n": 32
+      },
+      "2": {
+        "mean_r_epistemic": -0.02254755600918213,
+        "sem_r_epistemic": 0.04676474380121246,
+        "n": 32
+      },
+      "3": {
+        "mean_r_epistemic": 0.008319310433365772,
+        "sem_r_epistemic": 0.03529656168231134,
+        "n": 32
+      },
+      "4": {
+        "mean_r_epistemic": 0.04676550898346697,
+        "sem_r_epistemic": 0.03821974884910788,
+        "n": 32
+      },
+      "5": {
+        "mean_r_epistemic": 0.2120090757699159,
+        "sem_r_epistemic": 0.04981486751485074,
+        "n": 32
+      },
+      "6": {
+        "mean_r_epistemic": 0.2367765667565355,
+        "sem_r_epistemic": 0.042101552418275456,
+        "n": 32
+      },
+      "7": {
+        "mean_r_epistemic": 0.3240177689540633,
+        "sem_r_epistemic": 0.050032818621740985,
+        "n": 32
+      },
+      "8": {
+        "mean_r_epistemic": 0.46375386642808025,
+        "sem_r_epistemic": 0.060747132439235914,
+        "n": 32
+      },
+      "9": {
+        "mean_r_epistemic": 0.4569145126463394,
+        "sem_r_epistemic": 0.05717775784347126,
+        "n": 32
+      },
+      "10": {
+        "mean_r_epistemic": 0.40017018772845325,
+        "sem_r_epistemic": 0.05325813493634949,
+        "n": 32
+      },
+      "11": {
+        "mean_r_epistemic": 0.37466271841602117,
+        "sem_r_epistemic": 0.054232315826402984,
+        "n": 32
+      },
+      "12": {
+        "mean_r_epistemic": 0.3369564981917325,
+        "sem_r_epistemic": 0.056712166853391,
+        "n": 32
+      },
+      "13": {
+        "mean_r_epistemic": 0.34157591699603584,
+        "sem_r_epistemic": 0.06146219788462666,
+        "n": 32
+      },
+      "14": {
+        "mean_r_epistemic": 0.32179783397662587,
+        "sem_r_epistemic": 0.06185799896004557,
+        "n": 32
+      },
+      "15": {
+        "mean_r_epistemic": 0.24490543687642352,
+        "sem_r_epistemic": 0.04849616936993262,
+        "n": 32
+      },
+      "16": {
+        "mean_r_epistemic": 0.17374242606924323,
+        "sem_r_epistemic": 0.06421970446011697,
+        "n": 32
+      },
+      "17": {
+        "mean_r_epistemic": 0.12956684122611994,
+        "sem_r_epistemic": 0.0659179668328751,
+        "n": 32
+      },
+      "18": {
+        "mean_r_epistemic": 0.021807577683369658,
+        "sem_r_epistemic": 0.06969197117228818,
+        "n": 32
+      },
+      "19": {
+        "mean_r_epistemic": 0.01570820222744132,
+        "sem_r_epistemic": 0.06061250726479951,
+        "n": 32
+      },
+      "20": {
+        "mean_r_epistemic": 0.0020294946639596977,
+        "sem_r_epistemic": 0.06451149892355179,
+        "n": 32
+      },
+      "21": {
+        "mean_r_epistemic": -0.023477974648472344,
+        "sem_r_epistemic": 0.06682593661641653,
+        "n": 32
+      },
+      "22": {
+        "mean_r_epistemic": -0.04787547647218568,
+        "sem_r_epistemic": 0.05622694733361778,
+        "n": 32
+      },
+      "23": {
+        "mean_r_epistemic": -0.023847963811378582,
+        "sem_r_epistemic": 0.0607642287934681,
+        "n": 32
+      },
+      "24": {
+        "mean_r_epistemic": 0.0016595055010534647,
+        "sem_r_epistemic": 0.061658369104292114,
+        "n": 32
+      },
+      "25": {
+        "mean_r_epistemic": 0.014228245575816367,
+        "sem_r_epistemic": 0.06117605348581346,
+        "n": 32
+      },
+      "26": {
+        "mean_r_epistemic": 0.03973571488824842,
+        "sem_r_epistemic": 0.0588463401966926,
+        "n": 32
+      },
+      "27": {
+        "mean_r_epistemic": 0.045465101181270506,
+        "sem_r_epistemic": 0.059645218571247174,
+        "n": 32
+      },
+      "28": {
+        "mean_r_epistemic": 0.06450320587486799,
+        "sem_r_epistemic": 0.0580931116722296,
+        "n": 32
+      },
+      "29": {
+        "mean_r_epistemic": 0.07670195678672465,
+        "sem_r_epistemic": 0.060775556044215834,
+        "n": 32
+      },
+      "30": {
+        "mean_r_epistemic": 0.08927069686148754,
+        "sem_r_epistemic": 0.059699009456916,
+        "n": 32
+      },
+      "31": {
+        "mean_r_epistemic": 0.07707194594963088,
+        "sem_r_epistemic": 0.056290313672615236,
+        "n": 32
+      },
+      "32": {
+        "mean_r_epistemic": 0.08317132140555922,
+        "sem_r_epistemic": 0.058688078551514096,
+        "n": 32
+      },
+      "33": {
+        "mean_r_epistemic": 0.09574006148032212,
+        "sem_r_epistemic": 0.05909111469517235,
+        "n": 32
+      },
+      "34": {
+        "mean_r_epistemic": 0.10183943693625044,
+        "sem_r_epistemic": 0.060054101450578205,
+        "n": 32
+      },
+      "35": {
+        "mean_r_epistemic": 0.09537007231741587,
+        "sem_r_epistemic": 0.05931308706454979,
+        "n": 32
+      },
+      "36": {
+        "mean_r_epistemic": 0.10183943693625044,
+        "sem_r_epistemic": 0.060054101450578205,
+        "n": 32
+      },
+      "37": {
+        "mean_r_epistemic": 0.10904877988089749,
+        "sem_r_epistemic": 0.05603413535736657,
+        "n": 32
+      },
+      "38": {
+        "mean_r_epistemic": 0.12161751995566039,
+        "sem_r_epistemic": 0.056948352320387204,
+        "n": 32
+      },
+      "39": {
+        "mean_r_epistemic": 0.10405937191368789,
+        "sem_r_epistemic": 0.05385634857475663,
+        "n": 32
+      }
+    },
+    "fork": {
+      "0": {
+        "mean_r_epistemic": -0.16228365348319906,
+        "sem_r_epistemic": 0.05389148697844724,
+        "n": 32
+      },
+      "1": {
+        "mean_r_epistemic": -0.0876111913604341,
+        "sem_r_epistemic": 0.057402289411416896,
+        "n": 32
+      },
+      "2": {
+        "mean_r_epistemic": -0.08077183757869327,
+        "sem_r_epistemic": 0.05912176135441861,
+        "n": 32
+      },
+      "3": {
+        "mean_r_epistemic": -0.13529622751914205,
+        "sem_r_epistemic": 0.06365069503786398,
+        "n": 32
+      },
+      "4": {
+        "mean_r_epistemic": -0.1070192852169378,
+        "sem_r_epistemic": 0.03756937922889874,
+        "n": 32
+      },
+      "5": {
+        "mean_r_epistemic": 0.037336231061382466,
+        "sem_r_epistemic": 0.03537110962476548,
+        "n": 32
+      },
+      "6": {
+        "mean_r_epistemic": 0.14768541874447644,
+        "sem_r_epistemic": 0.036229117273206685,
+        "n": 32
+      },
+      "7": {
+        "mean_r_epistemic": 0.20941915162957225,
+        "sem_r_epistemic": 0.037521442871849844,
+        "n": 32
+      },
+      "8": {
+        "mean_r_epistemic": 0.29056097837117173,
+        "sem_r_epistemic": 0.04656290320800255,
+        "n": 32
+      },
+      "9": {
+        "mean_r_epistemic": 0.3709628267869588,
+        "sem_r_epistemic": 0.05443281353117644,
+        "n": 32
+      },
+      "10": {
+        "mean_r_epistemic": 0.40829905784834125,
+        "sem_r_epistemic": 0.0643904357249339,
+        "n": 32
+      },
+      "11": {
+        "mean_r_epistemic": 0.4151384116300821,
+        "sem_r_epistemic": 0.06724056455915547,
+        "n": 32
+      },
+      "12": {
+        "mean_r_epistemic": 0.34619533580033923,
+        "sem_r_epistemic": 0.06085980942951661,
+        "n": 32
+      },
+      "13": {
+        "mean_r_epistemic": 0.35802409754928965,
+        "sem_r_epistemic": 0.06306853435903803,
+        "n": 32
+      },
+      "14": {
+        "mean_r_epistemic": 0.3336265957255763,
+        "sem_r_epistemic": 0.05713405137567965,
+        "n": 32
+      },
+      "15": {
+        "mean_r_epistemic": 0.27300283032919925,
+        "sem_r_epistemic": 0.05016077909341455,
+        "n": 32
+      },
+      "16": {
+        "mean_r_epistemic": 0.3057196425862783,
+        "sem_r_epistemic": 0.052624959222233675,
+        "n": 32
+      },
+      "17": {
+        "mean_r_epistemic": 0.3707832779375303,
+        "sem_r_epistemic": 0.05595031503434319,
+        "n": 32
+      },
+      "18": {
+        "mean_r_epistemic": 0.3417663573095136,
+        "sem_r_epistemic": 0.06361620349820875,
+        "n": 32
+      },
+      "19": {
+        "mean_r_epistemic": 0.34139636814660734,
+        "sem_r_epistemic": 0.06257768034230497,
+        "n": 32
+      },
+      "20": {
+        "mean_r_epistemic": 0.31810883381161276,
+        "sem_r_epistemic": 0.07345377102320158,
+        "n": 32
+      },
+      "21": {
+        "mean_r_epistemic": 0.29907072911801524,
+        "sem_r_epistemic": 0.07668176581443371,
+        "n": 32
+      },
+      "22": {
+        "mean_r_epistemic": 0.2807726027502303,
+        "sem_r_epistemic": 0.081926699623982,
+        "n": 32
+      },
+      "23": {
+        "mean_r_epistemic": 0.2743032381313957,
+        "sem_r_epistemic": 0.08083936970094177,
+        "n": 32
+      },
+      "24": {
+        "mean_r_epistemic": 0.26783387351256116,
+        "sem_r_epistemic": 0.08026038022060306,
+        "n": 32
+      },
+      "25": {
+        "mean_r_epistemic": 0.24269639336303533,
+        "sem_r_epistemic": 0.08256699252369988,
+        "n": 32
+      },
+      "26": {
+        "mean_r_epistemic": 0.2358570395812945,
+        "sem_r_epistemic": 0.07906229042501044,
+        "n": 32
+      },
+      "27": {
+        "mean_r_epistemic": 0.1905714872494525,
+        "sem_r_epistemic": 0.07322353538272348,
+        "n": 32
+      },
+      "28": {
+        "mean_r_epistemic": 0.1589646424810921,
+        "sem_r_epistemic": 0.06998008375065098,
+        "n": 32
+      },
+      "29": {
+        "mean_r_epistemic": 0.16432403961120795,
+        "sem_r_epistemic": 0.06412233663465783,
+        "n": 32
+      },
+      "30": {
+        "mean_r_epistemic": 0.15175529953644507,
+        "sem_r_epistemic": 0.06267221325154741,
+        "n": 32
+      },
+      "31": {
+        "mean_r_epistemic": 0.1646940287741142,
+        "sem_r_epistemic": 0.06367844063137047,
+        "n": 32
+      },
+      "32": {
+        "mean_r_epistemic": 0.15822466415527964,
+        "sem_r_epistemic": 0.0631880142428193,
+        "n": 32
+      },
+      "33": {
+        "mean_r_epistemic": 0.12587784106110678,
+        "sem_r_epistemic": 0.05656413175427278,
+        "n": 32
+      },
+      "34": {
+        "mean_r_epistemic": 0.11367909014925011,
+        "sem_r_epistemic": 0.05936483251089843,
+        "n": 32
+      },
+      "35": {
+        "mean_r_epistemic": 0.10074036091158096,
+        "sem_r_epistemic": 0.059390839768992953,
+        "n": 32
+      },
+      "36": {
+        "mean_r_epistemic": 0.10037037174867472,
+        "sem_r_epistemic": 0.05535379238823562,
+        "n": 32
+      },
+      "37": {
+        "mean_r_epistemic": 0.05582479774264522,
+        "sem_r_epistemic": 0.05110424921079608,
+        "n": 32
+      },
+      "38": {
+        "mean_r_epistemic": -0.007018902631169294,
+        "sem_r_epistemic": 0.05711934624985353,
+        "n": 32
+      },
+      "39": {
+        "mean_r_epistemic": -0.07559198929800594,
+        "sem_r_epistemic": 0.06715931118392668,
+        "n": 32
+      }
+    }
+  },
+  "n_narratives": 96,
+  "n_layers": 40,
+  "n_permutations": 10000,
+  "alpha": 0.05
+}

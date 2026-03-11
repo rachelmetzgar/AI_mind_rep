@@ -3,7 +3,7 @@
 #SBATCH --output=logs/rsa/%j.out
 #SBATCH --error=logs/rsa/%j.err
 #SBATCH --mem=16G
-#SBATCH --time=02:00:00
+#SBATCH --time=04:00:00
 
 export PS1=${PS1:-}
 set -euo pipefail
