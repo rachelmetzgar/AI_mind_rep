@@ -51,7 +51,7 @@ import torch
 import torch.nn.functional as F
 
 from utils.probes import LinearProbeClassification
-from config import config, set_version, add_version_argument, add_turn_argument, add_variant_argument, set_variant, variant_filename, data_subdir
+from config import config, set_version, add_version_argument, add_turn_argument, add_variant_argument, set_variant, variant_filename, get_variant_suffix, data_subdir
 
 
 # ========================== CONFIG ========================== #
@@ -607,6 +607,13 @@ def run_standalone_alignment(metacognitive_weights, operational_weights, dim_fil
     dims = discover_dimensions(STANDALONE_ACT_DIR)
     if dim_filter:
         dims = {k: v for k, v in dims.items() if k in dim_filter}
+
+    # Filter to dims that have the variant file (e.g., _other only exists for some dims)
+    suffix = get_variant_suffix()
+    if suffix:
+        dims = {k: v for k, v in dims.items()
+                if os.path.exists(os.path.join(STANDALONE_ACT_DIR, v,
+                                               variant_filename("mean_vectors_per_layer", ".npz")))}
 
     # Load existing summary to merge
     summary_path = os.path.join(str(data_subdir(out_dir)), variant_filename("summary", ".json"))
