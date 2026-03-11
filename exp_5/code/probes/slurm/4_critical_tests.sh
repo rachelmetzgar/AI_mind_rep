@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=exp5_cat_probes
+#SBATCH --job-name=exp5_critical
 #SBATCH --partition=all
-#SBATCH --mem=16G --time=2:00:00
-#SBATCH --output=/mnt/cup/labs/graziano/rachel/mind_rep/exp_5/logs/probe_training/category/category_%j.out
-#SBATCH --error=/mnt/cup/labs/graziano/rachel/mind_rep/exp_5/logs/probe_training/category/category_%j.err
+#SBATCH --mem=16G --time=1:00:00
+#SBATCH --output=/mnt/cup/labs/graziano/rachel/mind_rep/exp_5/logs/probe_training/critical/critical_%j.out
+#SBATCH --error=/mnt/cup/labs/graziano/rachel/mind_rep/exp_5/logs/probe_training/critical/critical_%j.err
 
-# Category probes
+# Critical tests
 
 export PS1=${PS1:-}
 set -euo pipefail
@@ -19,15 +19,15 @@ set -u
 trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 PROJECT_ROOT="/mnt/cup/labs/graziano/rachel/mind_rep/exp_5"
-mkdir -p "$PROJECT_ROOT/logs/probe_training/category"
+mkdir -p "$PROJECT_ROOT/logs/probe_training/critical"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd to $PROJECT_ROOT"; exit 1; }
 
 MODEL=${MODEL:-llama2_13b_chat}
 
-echo "[$(date)] Starting Category probes"
+echo "[$(date)] Starting Critical tests"
 echo "  model=$MODEL"
 echo "  host=$HOSTNAME"
 
-python code/12_category_probes.py --model "$MODEL"
+python code/probes/4_critical_tests.py --model "$MODEL"
 
 echo "[$(date)] Done"

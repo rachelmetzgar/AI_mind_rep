@@ -26,6 +26,6 @@ cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd"; exit 1; }
 MODEL=${MODEL:-llama2_13b_chat}
 echo "[$(date)] Starting simple RSA — model=$MODEL host=$HOSTNAME"
 
-python code/2_simple_rsa.py --model "$MODEL"
+python code/rsa/2_simple_rsa.py --model "$MODEL"
 
 echo "[$(date)] Done"

@@ -29,6 +29,6 @@ echo "  model=$MODEL"
 echo "  host=$HOSTNAME"
 echo "  gpu=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null || echo 'unknown')"
 
-python code/15_verb_swap_interventions.py --model "$MODEL"
+python code/interchange/2_verb_swap_interventions.py --model "$MODEL"
 
 echo "[$(date)] Done"

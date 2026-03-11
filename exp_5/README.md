@@ -178,11 +178,294 @@ Three additional variant analyses cross distance metric x stimulus type to test 
 
 Results saved to `results/{model}/rsa/data/{variant}/` subfolders, with the same CSV file names as the baseline analysis.
 
+## Reduced 4-Condition RSA
+
+A supplementary analysis that drops C5 (dis_action) and C6 (scr_action) entirely. The motivation: C5 and C6 never directly test Model A — their "similar" blocks don't overlap with C1×C1 pairs. Removing them:
+
+- Increases C1×C1 pair proportion from 2.7% to 6.2% of total pairs
+- Drops Models G and H (which rely on C5/C6)
+- Reduces multicollinearity (4 confound regressors instead of 7)
+- Sharpens standard errors on β_A
+
+**Conditions retained:** C1 (mental_state), C2 (dis_mental), C3 (scr_mental), C4 (action).
+
+**Combined regression:**
+```
+RDM_neural = β_A·A + β_E·E + β_B·B + β_C·C + β_D·D + β_F·F + ε
+```
+
+Both A and E are in the same regression. β_A = unique variance for full attribution BEYOND verb+object binding (E) and all confounds. β_E = unique variance for verb+object binding BEYOND full attribution (A).
+
+**Model F redefined for 4 conditions:** C1, C2, C4 are grammatical (was C1, C2, C4, C5 in the 6-condition design).
+
+Results in `results/{model}/rsa/data/reduced_4cond/`.
+
+---
+
+## Probe Training Pipeline
+
+### Overview and Key Questions
+
+The RSA analyses above test whether the *overall* representational geometry matches attribution-specific structure. The probe pipeline asks a complementary question: can we find specific *directions* in the activation space that encode attribution-relevant features, and do those directions compose into an attribution-specific signal?
+
+Two distinct claims are at stake:
+
+**Claim 1: The model can distinguish full attributions (C1) from everything else.**
+A c1_vs_all binary classifier that reliably discriminates C1 from C2-C6 demonstrates this. Because the stimulus design already controls for confounds (C2 shares mental verb + object; C4 shares subject + syntactic frame; C3/C5/C6 share various subsets), any probe that successfully classifies C1 must be picking up on the *conjunction* of features — subject + mental verb + object in grammatical order.
+
+**Claim 2: The model has a dedicated attribution direction that is NOT reducible to the sum of individual feature directions.**
+Even if a c1_vs_all probe works, the direction it finds might be a linear combination of simpler features (subject presence, mental verb presence, grammaticality). Claim 2 asks: after Gram-Schmidt orthogonalization removes the directions that encode these individual features, does a *residual* attribution direction remain? If yes, the model has a representation that cannot be decomposed into its component parts — a genuinely emergent attribution signal.
+
+### Method: Binary Linear Probes
+
+All probes use **logistic regression** (sklearn `LogisticRegression`, `C=1.0`, `class_weight='balanced'`, `solver='lbfgs'`, `max_iter=10000`).
+
+**Cross-validation:** Leave-one-item-out (LOIO). 56 folds, each holding out all 6 conditions for one item. This ensures train/test splits never share the same object noun, preventing lexical leakage.
+
+**Evaluation:** Accuracy and AUC (area under ROC curve) on held-out folds.
+
+**Permutation testing:** Shuffle class labels at the *item* level (all 6 conditions for an item move together), retrain and evaluate. This preserves the within-item correlation structure. 200 iterations for feature probes, 10,000 for critical tests.
+
+**FDR correction:** Benjamini-Hochberg across layers within each (probe_type, token_position) combination.
+
+### Phase 1: Feature Probes
+
+Four binary probes that test whether the model encodes individual features of the stimulus design. Trained at all 3 token positions (verb, object, period) × 41 layers = 123 combinations.
+
+| Probe | Positive class | Negative class | What it detects |
+|-------|---------------|----------------|-----------------|
+| **subject_presence** | C1, C4 (112 samples) | C2, C3, C5, C6 (224 samples) | Whether "He" is present |
+| **mental_verb** | C1, C2, C3 (168 samples) | C4, C5, C6 (168 samples) | Whether the verb is a mental state verb |
+| **grammaticality** | C1, C2, C4, C5 (224 samples) | C3, C6 (112 samples) | Whether words are in grammatical order |
+| **action_verb** | C4, C5, C6 (168 samples) | C1, C2, C3 (168 samples) | Whether the verb is an action verb |
+
+These probes serve two purposes:
+1. Establish that individual features are linearly decodable (sanity check)
+2. Provide weight vectors for Gram-Schmidt orthogonalization in the critical tests
+
+### Phase 2: Attribution Probes
+
+Three binary probes that target the attribution signal at different levels of specificity.
+
+| Probe | Positive | Negative | What it tests |
+|-------|----------|----------|---------------|
+| **c1_vs_all** | C1 (56) | C2-C6 (280) | Full attribution vs everything else — **Claim 1** |
+| **c1_vs_c2** | C1 (56) | C2 (56) | Subject's contribution to mental verb binding |
+| **c4_vs_c5** | C4 (56) | C5 (56) | Subject's contribution to action verb binding (control) |
+
+**Interpretation of c1_vs_all:** If this probe works (AUC >> 0.5, p < 0.05), the model distinguishes C1 from all other conditions. Given the stimulus design — where every individual feature (subject, mental verb, grammaticality) is shared with at least one other condition — the probe must be sensitive to the conjunction. This is sufficient for **Claim 1**.
+
+**Interpretation of c1_vs_c2 vs c4_vs_c5:** Both c1_vs_c2 and c4_vs_c5 test the effect of adding a subject ("He") while keeping everything else constant. If c1_vs_c2 works better than c4_vs_c5, the subject matters more in mental verb contexts than in action verb contexts — an interaction that suggests attribution-specific binding.
+
+### Phase 3: Critical Tests
+
+Performed at the peak (position, layer) identified from the attribution probes.
+
+#### Test 3a: Residual Probe Direction (Gram-Schmidt)
+
+1. Load trained weight vectors: **w_attr** (c1_vs_all), **w_subj** (subject_presence), **w_mental** (mental_verb), **w_gram** (grammaticality)
+2. Gram-Schmidt orthogonalization: sequentially project out w_subj, w_mental, and w_gram from w_attr:
+   ```
+   w_residual_1 = w_attr - (w_attr · ŵ_subj) ŵ_subj
+   w_residual_2 = w_residual_1 - (w_residual_1 · ŵ_mental) ŵ_mental
+   w_residual   = w_residual_2 - (w_residual_2 · ŵ_gram) ŵ_gram
+   ```
+   where ŵ denotes a unit vector.
+3. Project all 336 activations onto w_residual
+4. Compute AUC for classifying C1 vs rest using the 1D projection
+5. Permutation test: 10,000 iterations, shuffle C1/rest labels
+
+**Interpretation:** If AUC is significantly above chance after removing individual feature directions, the model has an attribution direction that cannot be decomposed into subject + mental verb + grammaticality. This is **Claim 2**.
+
+If AUC drops to chance, the c1_vs_all probe's success was entirely explained by a linear combination of simpler features.
+
+#### Test 3b: Interaction Direction
+
+A model-free approach to finding the attribution-specific direction:
+
+```
+delta_mental = mean(C1 activations) - mean(C2 activations)
+delta_action = mean(C4 activations) - mean(C5 activations)
+w_interaction = delta_mental - delta_action
+```
+
+delta_mental captures the effect of adding "He" to a mental verb sentence. delta_action captures the same for action verbs. Their *difference* isolates the attribution-specific component of subject addition — the part that is unique to mental state contexts.
+
+Project 336 activations onto w_interaction, compute AUC + permutation test.
+
+#### Test 3c: Direction Comparison
+
+Cosine similarity between w_c1vc2 and w_c4vc5 (the probe weight vectors). Bootstrap 10,000 iterations: resample items, retrain both probes, compute cosine, get 95% CI.
+
+**Interpretation:** If cosine ≈ 1: subject adds the same information regardless of verb type (generic syntactic effect). If cosine << 1: subject integration is verb-type-specific — evidence of attribution-specific binding.
+
+### Phase 4: Probe-Projected RSA
+
+If the critical tests reveal significant attribution directions, use them to focus the RSA:
+
+1. Collect significant directions (w_residual, w_interaction) from Phase 3
+2. Orthogonalize into a projection matrix **P** (k × 5120)
+3. Project all 336 activations: z_proj = activations @ P.T → (336, k)
+4. Compute RDM from projected activations
+5. Run full partial RSA with all model RDMs (same as Analysis 2)
+6. Run category RSA on projected C1 activations (same as Analysis 3)
+
+**Rationale:** If Model A was non-significant in the full partial RSA because the attribution signal lives in a thin subspace overwhelmed by other variance, projecting onto the probe-identified directions should amplify it.
+
+**Interpretation:** If β_A becomes significant after projection: the attribution structure exists but is low-dimensional (thin subspace). If still non-significant: the probe was picking up on something other than the attribution geometry.
+
+### Phase 5: Category Probes
+
+Test whether the model organizes mental state attributions by the 7 verb categories (Attention, Memory, Sensation, Belief, Desire, Emotion, Intention).
+
+| Analysis | Training data | Test data | What it tests |
+|----------|--------------|-----------|---------------|
+| **5a** | C1 only (56 samples, 7 classes) | LOIO CV | Category structure within full attributions |
+| **5b** | C2 only (56 samples, 7 classes) | LOIO CV | Category structure in verb+object (no subject) |
+| **5c** | All C1 | All C2 (and vice versa) | Cross-condition generalization of category structure |
+
+7-way multinomial logistic regression. Chance = 14.3%.
+
+**Interpretation:** If 5a > chance but 5b ≈ chance: category organization requires the full attribution form. If both work: category structure comes from verb semantics alone. If 5c works (train on C1, test on C2): category representation generalizes across sentence forms — shared verb-semantic substrate.
+
+### Summary: Which Results Support Which Claims
+
+| Result Pattern | Claim 1 | Claim 2 | Interpretation |
+|---|---|---|---|
+| c1_vs_all significant | yes | — | Model distinguishes C1 from rest |
+| c1_vs_all significant + residual AUC at chance | yes | no | Attribution probe = sum of feature probes |
+| c1_vs_all significant + residual AUC significant | yes | yes | Dedicated attribution direction exists |
+| c1_vs_c2 >> c4_vs_c5 | — | supports | Subject binding is attribution-specific |
+| cosine(w_c1vc2, w_c4vc5) << 1 | — | supports | Different binding mechanisms for mental vs action |
+| Projected RSA: β_A significant | — | supports | Attribution geometry exists in thin subspace |
+| Category probe: 5a > chance, 5b ≈ chance | — | — | Category structure requires full attribution form |
+
+---
+
+## Interchange Intervention Pipeline
+
+### Overview
+
+Tests whether the model uses a DIFFERENT binding mechanism for mental state attributions vs action sentences, adapted from the entity binding literature (Feng & Steinhardt, ICLR 2024; Gur-Arieh et al., 2025).
+
+The core idea: swap verb activations between sentences and measure how well the swap transfers. If mental state verbs are bound differently from action verbs, within-condition swaps (mental→mental) should work better than cross-condition swaps (mental→action). This is direct causal evidence of a dedicated attribution binding mechanism.
+
+### Activation Extraction
+
+For each of 336 sentences, extract the FULL residual stream at EVERY token position and EVERY layer. Save per-sentence `.npz` files `(n_tokens, 41, 5120)` in float16. Also save a token-position map identifying verb, object, subject (C1/C4 only), and period token indices.
+
+**Token position rules by condition:**
+- C1/C4 ("He [verb] the [obj]."): subject=token after BOS, verb=next token, period=last
+- C2/C5 ("[Verb] the [obj]."): verb=first token after BOS, period=last
+- C3/C6 ("The [obj] to [verb]."): object=after BOS, verb=before period
+
+Multi-subword verbs use the LAST subword token index.
+
+### Step 1: Verb Swap Interventions
+
+For each pair of sentences (A, B) at each layer L:
+1. Register a forward hook on layer L's transformer block
+2. Run sentence A's forward pass; the hook replaces A's verb activation with B's cached verb activation at that layer
+3. Collect the intervened final representation at A's period token
+
+**Swap success metric:**
+```
+swap_success = cos(rep_A_intervened, rep_B_original) - cos(rep_A_intervened, rep_A_original)
+```
+
+**Which pairs to swap:**
+- **Within-condition:** 56 × 10 random partners = 560 swaps per condition (6 conditions)
+- **Cross-condition, same item:** 56 swaps per condition pair (30 ordered pairs) — controls for object
+- **Cross-condition, different item:** 56 swaps per condition pair (1 random partner per item)
+
+**Layer subsampling:** Start with 8 layers (5, 10, 15, 20, 25, 30, 35, 40), then fill in around the peak.
+
+### Step 2: Transfer Matrix Analysis
+
+Build a 6×6 transfer matrix at each layer: `transfer_matrix[source, target] = mean(swap_success)`.
+
+**Key contrasts (permutation tests, 10K iterations):**
+
+| Test | Contrast | What it tests |
+|------|----------|---------------|
+| 1 | C1→C1 vs C1→C4 | Mental verbs swap better into mental contexts? |
+| 2 | C4→C4 vs C4→C1 | Action verbs swap better into action contexts? |
+| 3 | C1→C1 vs C1→C2 | Does the subject matter for mental verb binding? |
+| 4 | C1→C2 vs C1→C4 | Verb type vs subject presence for binding compatibility |
+| 5 | (C1→C1 − C1→C2) vs (C4→C4 − C4→C5) | **Attribution interaction**: subject matters MORE for mental binding? |
+
+**Block structure analysis:** Test whether the transfer matrix has a 2×2 block structure (mental C1-C3 vs action C4-C6). Block index = within-type mean − cross-type mean. Positive and significant = verb-type-specific binding.
+
+**Verb similarity control:** Regress `swap_success ~ verb_embedding_similarity + same_condition + same_verb_type` using layer-0 embeddings. If `same_condition` coefficient is significant after controlling for embedding similarity, binding is condition-specific, not just driven by verb semantics.
+
+### Step 3: Subject Token Swaps
+
+Swap the "He" activation between C1 and C4 sentences (both have "He" at the same position). Since "He" is the same word, any difference in its activation between C1 and C4 reflects verb-type-specific information written back to the subject position by attention.
+
+**Metric:** `subject_swap_effect = 1 - cos(rep_intervened, rep_original)`
+
+**Control:** Swap "He" between two C1 sentences (within-condition, 56 × 10 random partners per layer).
+
+**Key comparison:** If cross-type effect (C1↔C4) > within-type effect (C1↔C1), the model writes verb-type-specific information to the subject position — evidence that "He" is bound differently in mental state vs action contexts. This effect should emerge at mid-to-late layers (after attention propagates verb info backward).
+
+### Expected Results
+
+| Hypothesis | Prediction |
+|---|---|
+| **Dedicated attribution binding** | Block structure significant; Test 5 interaction significant; subject swap cross > within at mid-late layers |
+| **Generic binding** | Transfer matrix roughly uniform; no block structure; subject swap equal across conditions |
+| **Verb semantics only** | Block structure exists BUT verb similarity control regression shows same_condition is NOT significant |
+
+---
+
+## Code Organization
+
+Three independent analysis pipelines, each in its own subdirectory. Shared infrastructure (`config.py`, `stimuli.py`, `utils/`) lives in `code/`.
+
+```
+code/
+  config.py             # paths, model config — single source of truth
+  stimuli.py            # 56 items × 6 conditions = 336 sentences
+  utils/
+    rsa.py              # RDM construction, model RDMs, permutation tests, FDR
+    probes.py           # LOIO CV, permutation test, Gram-Schmidt utilities
+    token_positions.py  # verb/object/subject/period token identification
+
+  rsa/                  # Pipeline A: Representational Similarity Analysis
+    1_extract_activations.py        # GPU — extract last-token activations
+    2_simple_rsa.py                 # CPU — Model A vs neural RDM
+    3_partial_rsa.py                # CPU — partial RSA (A + confounds, E + confounds)
+    4_category_rsa.py               # CPU — within-condition category structure
+    5_reduced_rsa.py                # CPU — reduced 4-condition RSA (combined A+E)
+    6_extract_you_activations.py    # GPU — "You" variant activations
+    7_variant_rsa.py                # CPU — variant analyses (cosine, corr_you, cosine_you)
+    8a_report_generator.py          # login — HTML report
+    slurm/
+
+  probes/               # Pipeline B: Probe Training
+    1_extract_multipos_activations.py   # GPU — verb/object/period activations
+    2_feature_probes.py                 # CPU — subject, mental verb, grammaticality, action
+    3_attribution_probes.py             # CPU — c1_vs_all, c1_vs_c2, c4_vs_c5
+    4_critical_tests.py                 # CPU — Gram-Schmidt residual, interaction direction
+    5_projected_rsa.py                  # CPU — RSA on probe-projected activations
+    6_category_probes.py                # CPU — 7-way category classification
+    7a_report_generator.py              # login — HTML report
+    slurm/
+
+  interchange/          # Pipeline C: Interchange Intervention
+    1_extract_full_activations.py       # GPU — all tokens × all layers
+    2_verb_swap_interventions.py        # GPU — swap verb activations between sentences
+    3_subject_swap_interventions.py     # GPU — swap "He" between C1/C4
+    4_transfer_analysis.py              # CPU — 6×6 transfer matrix, contrasts, controls
+    5a_report_generator.py              # login — HTML report
+    slurm/
+```
+
 ## Implementation Notes
 
 - Extraction: Use forward hooks or `output_hidden_states=True` to capture activations at each layer
 - Distance metric: Correlation distance (1 - Pearson r) primary; cosine distance as variant
-- Token position: Last token position
+- Token position: Last token position (RSA), verb/object/period (probes), all tokens (interchange)
 - Permutation scheme: Permute condition labels within items (preserves item structure)
 - Correction: BH-FDR across layers
 - Full stimulus set defined in `code/stimuli.py`

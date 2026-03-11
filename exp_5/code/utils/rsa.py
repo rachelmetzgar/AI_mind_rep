@@ -126,6 +126,43 @@ def build_model_rdms(n_items=56, n_conds=6):
     return models
 
 
+def build_model_rdms_4cond(n_items=56):
+    """Build theoretical model RDMs for the reduced 4-condition design.
+
+    Keeps only C1 (mental_state), C2 (dis_mental), C3 (scr_mental), C4 (action).
+    Drops C5, C6, Models G, H.
+
+    Condition indices (within each item's 4 rows):
+        0 = mental_state, 1 = dis_mental, 2 = scr_mental, 3 = action
+
+    Returns:
+        dict of name -> (n_items * 4, n_items * 4) RDM
+    """
+    n_conds = 4
+    models = {}
+
+    # Model A: Full Attribution — only C1×C1 similar
+    models["A"] = _cross_item_condition_rdm(n_items, n_conds, [0])
+
+    # Model B: Mental Verb Presence — C1, C2, C3 all similar
+    models["B"] = _cross_item_condition_rdm(n_items, n_conds, [0, 1, 2])
+
+    # Model C: Subject Presence — C1, C4 similar
+    models["C"] = _cross_item_condition_rdm(n_items, n_conds, [0, 3])
+
+    # Model D: Item Identity — all 4 conditions of same item similar
+    models["D"] = _pair_conditions(n_items, n_conds,
+                                   [0, 1, 2, 3], [0, 1, 2, 3])
+
+    # Model E: Mental Verb + Object, Subject-Optional — C1, C2 similar
+    models["E"] = _cross_item_condition_rdm(n_items, n_conds, [0, 1])
+
+    # Model F: Grammatical Order — C1, C2, C4 (grammatical sentences)
+    models["F"] = _cross_item_condition_rdm(n_items, n_conds, [0, 1, 3])
+
+    return models
+
+
 def build_category_rdm(n_items=56, items_per_cat=8):
     """Build category-structure RDM for condition 1 only (56 items).
 
@@ -221,7 +258,8 @@ def _permute_conditions_within_items(n_items, n_conds, rng):
     return perm
 
 
-def permutation_test_simple(neural_rdm, model_rdm, n_perms=10000, seed=42):
+def permutation_test_simple(neural_rdm, model_rdm, n_perms=10000, seed=42,
+                            n_conds=6):
     """Permutation test for simple RSA.
 
     Shuffles condition labels within items, recomputes Spearman rho.
@@ -230,8 +268,7 @@ def permutation_test_simple(neural_rdm, model_rdm, n_perms=10000, seed=42):
         observed_rho, p_value, null_distribution
     """
     n = neural_rdm.shape[0]
-    n_items = n // 6
-    n_conds = 6
+    n_items = n // n_conds
 
     neural_vec = lower_triangle(neural_rdm)
     model_vec = lower_triangle(model_rdm)
@@ -251,7 +288,8 @@ def permutation_test_simple(neural_rdm, model_rdm, n_perms=10000, seed=42):
 
 
 def permutation_test_partial(neural_rdm, model_rdm_dict, hypothesis_key,
-                             confound_keys, n_perms=10000, seed=42):
+                             confound_keys, n_perms=10000, seed=42,
+                             n_conds=6):
     """Permutation test for partial RSA (multiple regression).
 
     Shuffles condition labels within items, rebuilds neural RDM,
@@ -263,8 +301,7 @@ def permutation_test_partial(neural_rdm, model_rdm_dict, hypothesis_key,
         null_betas: dict of model_name -> array of null betas
     """
     n = neural_rdm.shape[0]
-    n_items = n // 6
-    n_conds = 6
+    n_items = n // n_conds
 
     neural_vec = lower_triangle(neural_rdm)
     all_keys = [hypothesis_key] + list(confound_keys)

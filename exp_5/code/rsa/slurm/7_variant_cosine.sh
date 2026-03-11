@@ -1,13 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=exp5_partial_rsa
+#SBATCH --job-name=exp5_rsa_cosine
 #SBATCH --partition=all
 #SBATCH --mem=16G
-#SBATCH --time=4:00:00
-#SBATCH --output=/mnt/cup/labs/graziano/rachel/mind_rep/exp_5/logs/rsa/partial_%j.out
-#SBATCH --error=/mnt/cup/labs/graziano/rachel/mind_rep/exp_5/logs/rsa/partial_%j.err
+#SBATCH --time=6:00:00
+#SBATCH --output=/mnt/cup/labs/graziano/rachel/mind_rep/exp_5/logs/rsa/variant_cosine_%j.out
+#SBATCH --error=/mnt/cup/labs/graziano/rachel/mind_rep/exp_5/logs/rsa/variant_cosine_%j.err
 
-# Analysis 2: Partial RSA (Model A + Model E). Heaviest analysis.
-# ~1-3 hrs for 41 layers x 10K perms x 2 analyses.
+# Variant RSA: cosine distance, original stimuli. ~2-4 hrs for all 3 analyses.
 
 export PS1=${PS1:-}
 set -euo pipefail
@@ -25,9 +24,8 @@ mkdir -p "$PROJECT_ROOT/logs/rsa"
 cd "$PROJECT_ROOT" || { echo "FATAL: Cannot cd"; exit 1; }
 
 MODEL=${MODEL:-llama2_13b_chat}
-ANALYSIS=${ANALYSIS:-both}
-echo "[$(date)] Starting partial RSA — model=$MODEL analysis=$ANALYSIS host=$HOSTNAME"
+echo "[$(date)] Starting variant RSA: cosine / original — model=$MODEL host=$HOSTNAME"
 
-python code/3_partial_rsa.py --model "$MODEL" --analysis "$ANALYSIS"
+python code/rsa/7_variant_rsa.py --model "$MODEL" --metric cosine --variant original
 
 echo "[$(date)] Done"

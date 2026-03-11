@@ -1,0 +1,1391 @@
+#!/usr/bin/env python3
+"""
+Experiment 5, Phase 2a: RSA Report Generator
+
+Generates a comprehensive HTML report from saved RSA results.
+Standalone — regenerates from CSVs without recomputing.
+
+Output:
+    results/{model}/rsa/rsa_report.html
+
+Usage:
+    python code/rsa/8a_report_generator.py --model llama2_13b_chat
+
+Env: llama2_env (no GPU needed)
+Rachel C. Metzgar · Mar 2026
+"""
+
+import sys
+import argparse
+import base64
+import io
+from pathlib import Path
+from collections import defaultdict
+
+import numpy as np
+import pandas as pd
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from config import (
+    set_model, add_model_argument, results_dir, data_dir,
+    ensure_dir, figures_dir, CONDITION_LABELS, CATEGORY_LABELS,
+)
+
+
+# ── Helpers ──────────────────────────────────────────────────────────────────
+
+COLORS = {
+    "A": "#d62728",  # red
+    "B": "#1f77b4",  # blue
+    "C": "#ff7f0e",  # orange
+    "D": "#2ca02c",  # green
+    "E": "#9467bd",  # purple
+    "F": "#8c564b",  # brown
+    "G": "#e377c2",  # pink
+    "H": "#7f7f7f",  # gray
+}
+
+MODEL_NAMES = {
+    "A": "Full Attribution (C1 only)",
+    "B": "Mental Verb Presence (C1,C2,C3)",
+    "C": "Subject Presence (C1,C4)",
+    "D": "Item Identity (same item)",
+    "E": "Mental Verb + Object (C1,C2)",
+    "F": "Grammatical Order (C1,C2,C4,C5)",
+    "G": "Scrambled Form (C3,C6)",
+    "H": "Action Verb Presence (C4,C5,C6)",
+}
+
+COND_COLORS = {
+    "mental_state": "#d62728",
+    "dis_mental": "#ff7f0e",
+    "scr_mental": "#ffbb78",
+    "action": "#1f77b4",
+    "dis_action": "#2ca02c",
+    "scr_action": "#98df8a",
+}
+
+COND_NAMES = {
+    "mental_state": "C1: He [mental] the X",
+    "dis_mental": "C2: [Mental] the X",
+    "scr_mental": "C3: The X to [mental]",
+    "action": "C4: He [action] the X",
+    "dis_action": "C5: [Action] the X",
+    "scr_action": "C6: The X to [action]",
+}
+
+
+def fig_to_base64(fig, dpi=150):
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=dpi, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+    buf.seek(0)
+    return base64.b64encode(buf.read()).decode("utf-8")
+
+
+def save_fig(fig, path, dpi=150):
+    fig.savefig(path, dpi=dpi, bbox_inches="tight", facecolor="white")
+
+
+def sig_marker(p_fdr):
+    try:
+        if np.isnan(p_fdr):
+            return ""
+    except (TypeError, ValueError):
+        return ""
+    if p_fdr < 0.001:
+        return "***"
+    elif p_fdr < 0.01:
+        return "**"
+    elif p_fdr < 0.05:
+        return "*"
+    return ""
+
+
+def safe_p_fdr(df):
+    """Return p_fdr column if present, else p column, else ones."""
+    if "p_fdr" in df.columns:
+        return df["p_fdr"].values
+    if "p" in df.columns:
+        return df["p"].values
+    return np.ones(len(df))
+
+
+# ── Plot functions ───────────────────────────────────────────────────────────
+
+def plot_simple_rsa(df, fig_dir):
+    """Layer profile for simple RSA (Model A)."""
+    fig, ax = plt.subplots(figsize=(10, 4))
+    layers = df["layer"].values
+    rhos = df["rho"].values
+    p_fdr = safe_p_fdr(df)
+
+    ax.plot(layers, rhos, color=COLORS["A"], linewidth=2, label="Model A (Full Attribution)")
+    ax.axhline(0, color="gray", linewidth=0.5, linestyle="--")
+
+    # Mark significant layers
+    sig = p_fdr < 0.05
+    if sig.any():
+        ax.scatter(layers[sig], rhos[sig], color=COLORS["A"], s=40, zorder=5,
+                   edgecolors="black", linewidth=0.5)
+
+    ax.set_xlabel("Layer", fontsize=12)
+    ax.set_ylabel("Spearman rho", fontsize=12)
+    ax.set_title("Analysis 1: Simple RSA — Full Attribution (Model A) vs. Neural RDM", fontsize=13)
+    ax.legend(fontsize=10)
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
+    ax.set_xlim(-0.5, layers.max() + 0.5)
+
+    save_fig(fig, fig_dir / "simple_rsa_layer_profile.png")
+    return fig_to_base64(fig)
+
+
+def plot_partial_rsa(df, hypothesis_key, fig_dir, suffix="primary"):
+    """Layer profile for partial RSA betas — all models."""
+    all_keys = [hypothesis_key] + [k for k in df["model"].unique() if k != hypothesis_key]
+
+    fig, axes = plt.subplots(2, 1, figsize=(10, 8), sharex=True,
+                             gridspec_kw={"height_ratios": [2, 1]})
+
+    # Top: hypothesis model
+    ax = axes[0]
+    hyp_df = df[df["model"] == hypothesis_key]
+    layers = hyp_df["layer"].values
+    betas = hyp_df["beta"].values
+    srs = hyp_df["semi_partial_r"].values
+    p_fdr = safe_p_fdr(hyp_df)
+
+    ax.plot(layers, betas, color=COLORS[hypothesis_key], linewidth=2.5,
+            label=f"Model {hypothesis_key}: {MODEL_NAMES[hypothesis_key]}")
+    ax.fill_between(layers, 0, betas, alpha=0.15, color=COLORS[hypothesis_key])
+
+    sig = p_fdr < 0.05
+    if sig.any():
+        ax.scatter(layers[sig], betas[sig], color=COLORS[hypothesis_key],
+                   s=50, zorder=5, edgecolors="black", linewidth=0.5)
+
+    ax.axhline(0, color="gray", linewidth=0.5, linestyle="--")
+    ax.set_ylabel("Standardized beta", fontsize=12)
+    ax.set_title(f"Analysis 2: Partial RSA — Model {hypothesis_key} (hypothesis) "
+                 f"with confounds partialed out", fontsize=13)
+    ax.legend(fontsize=10, loc="upper left")
+
+    # Bottom: confound models
+    ax2 = axes[1]
+    confound_keys = [k for k in all_keys if k != hypothesis_key]
+    for k in confound_keys:
+        k_df = df[df["model"] == k]
+        ax2.plot(k_df["layer"].values, k_df["beta"].values,
+                 color=COLORS.get(k, "gray"), linewidth=1.2, alpha=0.8,
+                 label=f"{k}: {MODEL_NAMES[k]}")
+
+    ax2.axhline(0, color="gray", linewidth=0.5, linestyle="--")
+    ax2.set_xlabel("Layer", fontsize=12)
+    ax2.set_ylabel("Standardized beta", fontsize=12)
+    ax2.set_title("Confound model betas (same regression)", fontsize=11)
+    ax2.legend(fontsize=7, ncol=2, loc="upper left")
+    ax2.xaxis.set_major_locator(ticker.MultipleLocator(5))
+    ax2.set_xlim(-0.5, layers.max() + 0.5)
+
+    fig.tight_layout()
+    save_fig(fig, fig_dir / f"partial_rsa_{suffix}_layer_profile.png")
+    return fig_to_base64(fig)
+
+
+def plot_partial_semi_partial(df, hypothesis_key, fig_dir, suffix="primary"):
+    """Semi-partial r for hypothesis model across layers."""
+    fig, ax = plt.subplots(figsize=(10, 4))
+    hyp_df = df[df["model"] == hypothesis_key]
+    layers = hyp_df["layer"].values
+    srs = hyp_df["semi_partial_r"].values
+    p_fdr = safe_p_fdr(hyp_df)
+
+    ax.bar(layers, srs, color=COLORS[hypothesis_key], alpha=0.7, width=0.8)
+    sig = p_fdr < 0.05
+    if sig.any():
+        ax.scatter(layers[sig], srs[sig], color="black", s=20, zorder=5, marker="v")
+
+    ax.axhline(0, color="gray", linewidth=0.5, linestyle="--")
+    ax.set_xlabel("Layer", fontsize=12)
+    ax.set_ylabel("Semi-partial r", fontsize=12)
+    ax.set_title(f"Model {hypothesis_key}: Unique variance (semi-partial r) across layers",
+                 fontsize=13)
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
+    ax.set_xlim(-0.5, layers.max() + 0.5)
+
+    save_fig(fig, fig_dir / f"partial_rsa_{suffix}_semi_partial.png")
+    return fig_to_base64(fig)
+
+
+def plot_category_rsa(df, fig_dir):
+    """Category RSA across conditions and layers."""
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    for cond in CONDITION_LABELS:
+        cdf = df[df["condition"] == cond]
+        if cdf.empty:
+            continue
+        layers = cdf["layer"].values
+        rhos = cdf["rho"].values
+        p_fdr = safe_p_fdr(cdf)
+
+        lw = 2.5 if cond == "mental_state" else 1.2
+        alpha = 1.0 if cond == "mental_state" else 0.7
+        ax.plot(layers, rhos, color=COND_COLORS[cond], linewidth=lw, alpha=alpha,
+                label=COND_NAMES[cond])
+
+        sig = p_fdr < 0.05
+        if sig.any() and cond == "mental_state":
+            ax.scatter(layers[sig], rhos[sig], color=COND_COLORS[cond],
+                       s=40, zorder=5, edgecolors="black", linewidth=0.5)
+
+    ax.axhline(0, color="gray", linewidth=0.5, linestyle="--")
+    ax.set_xlabel("Layer", fontsize=12)
+    ax.set_ylabel("Spearman rho", fontsize=12)
+    ax.set_title("Analysis 3: Category Structure RSA (7 verb categories) by Condition",
+                 fontsize=13)
+    ax.legend(fontsize=8, loc="upper left", ncol=2)
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
+    ax.set_xlim(-0.5, layers.max() + 0.5)
+
+    save_fig(fig, fig_dir / "category_rsa_by_condition.png")
+    return fig_to_base64(fig)
+
+
+def plot_a_vs_e(df_primary, df_secondary, fig_dir):
+    """Compare Model A and Model E betas across layers."""
+    fig, ax = plt.subplots(figsize=(10, 4))
+
+    a_df = df_primary[df_primary["model"] == "A"]
+    e_df = df_secondary[df_secondary["model"] == "E"]
+
+    ax.plot(a_df["layer"].values, a_df["beta"].values,
+            color=COLORS["A"], linewidth=2, label=f"A: {MODEL_NAMES['A']}")
+    ax.plot(e_df["layer"].values, e_df["beta"].values,
+            color=COLORS["E"], linewidth=2, linestyle="--",
+            label=f"E: {MODEL_NAMES['E']}")
+
+    sig_a = safe_p_fdr(a_df) < 0.05
+    sig_e = safe_p_fdr(e_df) < 0.05
+    if sig_a.any():
+        ax.scatter(a_df["layer"].values[sig_a], a_df["beta"].values[sig_a],
+                   color=COLORS["A"], s=40, zorder=5, edgecolors="black", linewidth=0.5)
+    if sig_e.any():
+        ax.scatter(e_df["layer"].values[sig_e], e_df["beta"].values[sig_e],
+                   color=COLORS["E"], s=40, zorder=5, edgecolors="black", linewidth=0.5,
+                   marker="D")
+
+    ax.axhline(0, color="gray", linewidth=0.5, linestyle="--")
+    ax.set_xlabel("Layer", fontsize=12)
+    ax.set_ylabel("Standardized beta", fontsize=12)
+    ax.set_title("Model A vs. Model E: Is the subject required for attribution structure?",
+                 fontsize=13)
+    ax.legend(fontsize=10)
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
+
+    save_fig(fig, fig_dir / "model_a_vs_e_comparison.png")
+    return fig_to_base64(fig)
+
+
+# ── Summary tables ───────────────────────────────────────────────────────────
+
+def make_layerwise_table(df, value_col, p_col="p_fdr", label=""):
+    """Generate an HTML table with one row per layer, coloring significant rows."""
+    if p_col not in df.columns:
+        p_col = "p" if "p" in df.columns else None
+    rows_html = []
+    for _, row in df.iterrows():
+        sig = sig_marker(row[p_col]) if p_col else ""
+        style = ' style="background:#ffe0e0; font-weight:bold"' if sig else ""
+        cols = "".join(f"<td>{row[c]:.4f}</td>" if isinstance(row[c], float) else f"<td>{row[c]}</td>"
+                       for c in df.columns)
+        rows_html.append(f"<tr{style}>{cols}<td>{sig}</td></tr>")
+
+    header = "".join(f"<th>{c}</th>" for c in df.columns) + "<th>Sig</th>"
+    return f"""
+    <table class="results-table">
+    <thead><tr>{header}</tr></thead>
+    <tbody>{"".join(rows_html)}</tbody>
+    </table>
+    """
+
+
+VARIANT_INFO = {
+    "cosine": {
+        "label": "Cosine Distance, Original Stimuli",
+        "metric": "cosine",
+        "stimuli": "original",
+        "desc": ("Uses cosine distance instead of correlation distance to compute "
+                 "neural RDMs. Same original stimuli as the baseline analysis."),
+    },
+    "corr_you": {
+        "label": "Correlation Distance, 'You' Stimuli",
+        "metric": "correlation",
+        "stimuli": "you",
+        "desc": ("Uses correlation distance (same as baseline) but with modified "
+                 "stimuli: C2 and C5 sentences are prefixed with 'You' "
+                 "(e.g., 'Notice the crack.' &rarr; 'You notice the crack.'). "
+                 "This adds an explicit 2nd-person subject to the subjectless imperatives."),
+    },
+    "cosine_you": {
+        "label": "Cosine Distance, 'You' Stimuli",
+        "metric": "cosine",
+        "stimuli": "you",
+        "desc": ("Combines both modifications: cosine distance metric and 'You'-prefixed "
+                 "C2/C5 stimuli."),
+    },
+}
+
+
+def peak_summary(df, value_col, p_col="p_fdr", model_filter=None):
+    """Find peak layer and summarize."""
+    if model_filter:
+        df = df[df["model"] == model_filter]
+    if df.empty:
+        return "No data."
+    peak_idx = df[value_col].abs().idxmax()
+    peak = df.loc[peak_idx]
+    has_fdr = "p_fdr" in df.columns and "p_fdr" in peak.index
+    has_raw = "p" in df.columns and "p" in peak.index
+    # Build p-value string showing both raw and FDR when available
+    p_parts = []
+    if has_raw:
+        p_parts.append(f"p<sub>perm</sub>={peak['p']:.4f}")
+    if has_fdr:
+        p_parts.append(f"p<sub>FDR</sub>={peak['p_fdr']:.4f}")
+    p_str = ", ".join(p_parts) if p_parts else "p=N/A"
+    # Determine significance from FDR if available, else raw p
+    sig_col = "p_fdr" if has_fdr else ("p" if has_raw else None)
+    sig_layers = df[df[sig_col] < 0.05]["layer"].tolist() if sig_col else []
+    sig_str = ", ".join(str(l) for l in sig_layers) if sig_layers else "none"
+    return (f"Peak layer: <strong>{int(peak['layer'])}</strong> "
+            f"({value_col}={peak[value_col]:.4f}, {p_str}). "
+            f"Significant layers (FDR < .05): <strong>{sig_str}</strong>.")
+
+
+def build_model_definitions_table(reduced=False):
+    """Build an HTML reference table defining all model RDMs."""
+    if reduced:
+        rows = """
+<tr><td><strong>A</strong></td><td>Full Attribution</td><td>C1 only</td>
+    <td>Does full attribution (He + mental verb + object) explain variance
+    beyond verb+object binding (E)?</td></tr>
+<tr><td><strong>E</strong></td><td>Mental Verb + Object</td><td>C1, C2</td>
+    <td>Does verb+object binding explain variance beyond full attribution (A)?</td></tr>
+<tr><td><strong>B</strong></td><td>Mental Verb Presence</td><td>C1, C2, C3</td>
+    <td>Confound: shared mental vocabulary</td></tr>
+<tr><td><strong>C</strong></td><td>Subject Presence</td><td>C1, C4</td>
+    <td>Confound: presence of "He" (SVO frame)</td></tr>
+<tr><td><strong>D</strong></td><td>Item Identity</td><td>Same item (all 4 conds)</td>
+    <td>Confound: shared object noun / word overlap</td></tr>
+<tr><td><strong>F</strong></td><td>Grammatical Order</td><td>C1, C2, C4</td>
+    <td>Confound: grammatical vs scrambled sentence form</td></tr>
+"""
+    else:
+        rows = """
+<tr><td><strong>A</strong></td><td>Full Attribution</td><td>C1 only</td>
+    <td>Hypothesis: bound mental state attribution (He + mental verb + object)</td></tr>
+<tr><td><strong>E</strong></td><td>Mental Verb + Object</td><td>C1, C2</td>
+    <td>Hypothesis: mental verb + object binding, subject optional</td></tr>
+<tr><td><strong>B</strong></td><td>Mental Verb Presence</td><td>C1, C2, C3</td>
+    <td>Confound: shared mental vocabulary</td></tr>
+<tr><td><strong>C</strong></td><td>Subject Presence</td><td>C1, C4</td>
+    <td>Confound: presence of "He" (SVO frame)</td></tr>
+<tr><td><strong>D</strong></td><td>Item Identity</td><td>Same item (all 6 conds)</td>
+    <td>Confound: shared object noun / word overlap</td></tr>
+<tr><td><strong>F</strong></td><td>Grammatical Order</td><td>C1, C2, C4, C5</td>
+    <td>Confound: grammatical vs scrambled sentence form</td></tr>
+<tr><td><strong>G</strong></td><td>Scrambled Form</td><td>C3, C6</td>
+    <td>Confound: scrambled word-order fragments</td></tr>
+<tr><td><strong>H</strong></td><td>Action Verb Presence</td><td>C4, C5, C6</td>
+    <td>Confound: shared action vocabulary</td></tr>
+"""
+    return f"""
+<h3>Model RDM Definitions</h3>
+<table class="conditions" style="font-size: 0.85em;">
+<tr><th>Model</th><th>Name</th><th>Similar Conditions</th><th>What It Captures</th></tr>
+{rows}</table>
+<p style="font-size:0.85em; color:#555;">Each model RDM is binary: condition pairs listed
+as "similar" get distance 0; all other pairs get distance 1. In partial RSA, Model A (or E)
+is the hypothesis; all others are confounds entered simultaneously.</p>
+"""
+
+
+def load_csv_from(path):
+    """Load a CSV from an absolute path, returning None if missing."""
+    if path.exists():
+        df = pd.read_csv(path)
+        print(f"  Loaded {path.name}: {len(df)} rows")
+        return df
+    return None
+
+
+def build_sample_stimuli_table():
+    """Build an HTML table showing one example item across all 6 conditions."""
+    try:
+        from stimuli import STIMULI
+    except ImportError:
+        return ""
+
+    item = STIMULI[0]  # "notices / fills the crack"
+    return f"""
+<h3>Sample Stimulus (Item 1: {item["cat"]})</h3>
+<table class="conditions" style="font-size: 0.9em;">
+<tr><th>Condition</th><th>Sentence</th></tr>
+<tr><td>C1 (mental_state)</td><td>{item["mental_state"]}</td></tr>
+<tr><td>C2 (dis_mental)</td><td>{item["dis_mental"]}</td></tr>
+<tr><td>C3 (scr_mental)</td><td>{item["scr_mental"]}</td></tr>
+<tr><td>C4 (action)</td><td>{item["action"]}</td></tr>
+<tr><td>C5 (dis_action)</td><td>{item["dis_action"]}</td></tr>
+<tr><td>C6 (scr_action)</td><td>{item["scr_action"]}</td></tr>
+</table>
+<p style="font-size:0.85em; color:#555;">56 items &times; 6 conditions = 336 sentences.
+7 verb categories (8 items each): Attention, Memory, Sensation, Belief, Desire, Emotion, Intention.</p>
+"""
+
+
+# ── Variant helpers ──────────────────────────────────────────────────────────
+
+def plot_variant_comparison_simple(baseline_df, variant_dfs, fig_dir):
+    """Compare simple RSA (Model A rho) across baseline and variants."""
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    variant_colors = {
+        "baseline": "#d62728",
+        "cosine": "#1f77b4",
+        "corr_you": "#2ca02c",
+        "cosine_you": "#ff7f0e",
+    }
+    variant_labels = {
+        "baseline": "Baseline (corr, original)",
+        "cosine": "Cosine, original",
+        "corr_you": "Correlation, 'You'",
+        "cosine_you": "Cosine, 'You'",
+    }
+
+    if baseline_df is not None:
+        layers = baseline_df["layer"].values
+        rhos = baseline_df["rho"].values
+        ax.plot(layers, rhos, color=variant_colors["baseline"], linewidth=2.5,
+                label=variant_labels["baseline"])
+        sig = safe_p_fdr(baseline_df) < 0.05
+        if sig.any():
+            ax.scatter(layers[sig], rhos[sig], color=variant_colors["baseline"],
+                       s=40, zorder=5, edgecolors="black", linewidth=0.5)
+
+    for vname, vdf in variant_dfs.items():
+        if vdf is None:
+            continue
+        layers = vdf["layer"].values
+        rhos = vdf["rho"].values
+        ax.plot(layers, rhos, color=variant_colors.get(vname, "gray"),
+                linewidth=1.5, linestyle="--",
+                label=variant_labels.get(vname, vname))
+
+    ax.axhline(0, color="gray", linewidth=0.5, linestyle="--")
+    ax.set_xlabel("Layer", fontsize=12)
+    ax.set_ylabel("Spearman rho", fontsize=12)
+    ax.set_title("Simple RSA (Model A): Baseline vs. Variants", fontsize=13)
+    ax.legend(fontsize=9, loc="upper left")
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
+
+    save_fig(fig, fig_dir / "variant_comparison_simple_rsa.png")
+    return fig_to_base64(fig)
+
+
+def plot_variant_comparison_partial(baseline_df, variant_dfs, fig_dir):
+    """Compare partial RSA Model A beta across baseline and variants."""
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    variant_colors = {
+        "baseline": "#d62728",
+        "cosine": "#1f77b4",
+        "corr_you": "#2ca02c",
+        "cosine_you": "#ff7f0e",
+    }
+    variant_labels = {
+        "baseline": "Baseline (corr, original)",
+        "cosine": "Cosine, original",
+        "corr_you": "Correlation, 'You'",
+        "cosine_you": "Cosine, 'You'",
+    }
+
+    if baseline_df is not None:
+        a_df = baseline_df[baseline_df["model"] == "A"]
+        if not a_df.empty:
+            layers = a_df["layer"].values
+            betas = a_df["beta"].values
+            ax.plot(layers, betas, color=variant_colors["baseline"], linewidth=2.5,
+                    label=variant_labels["baseline"])
+            sig = safe_p_fdr(a_df) < 0.05
+            if sig.any():
+                ax.scatter(layers[sig], betas[sig], color=variant_colors["baseline"],
+                           s=40, zorder=5, edgecolors="black", linewidth=0.5)
+
+    for vname, vdf in variant_dfs.items():
+        if vdf is None:
+            continue
+        a_df = vdf[vdf["model"] == "A"]
+        if a_df.empty:
+            continue
+        layers = a_df["layer"].values
+        betas = a_df["beta"].values
+        ax.plot(layers, betas, color=variant_colors.get(vname, "gray"),
+                linewidth=1.5, linestyle="--",
+                label=variant_labels.get(vname, vname))
+
+    ax.axhline(0, color="gray", linewidth=0.5, linestyle="--")
+    ax.set_xlabel("Layer", fontsize=12)
+    ax.set_ylabel("Standardized beta (Model A)", fontsize=12)
+    ax.set_title("Partial RSA: Model A Beta Across Variants", fontsize=13)
+    ax.legend(fontsize=9, loc="upper left")
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
+
+    save_fig(fig, fig_dir / "variant_comparison_partial_rsa.png")
+    return fig_to_base64(fig)
+
+
+def generate_variant_report(vname, vinfo, rsa_data, fig_dir, out_dir, model):
+    """Generate a standalone HTML report for one variant analysis.
+
+    Returns:
+        loaded: dict with 'simple' and 'partial_primary' DataFrames (for cross-variant comparison)
+        None if no data available
+    """
+    PENDING = '<div class="result-box"><strong>Analysis not yet complete — rerun report after jobs finish.</strong></div>'
+
+    vdir = rsa_data / vname
+    def load_v(name):
+        path = vdir / name
+        if path.exists():
+            return pd.read_csv(path)
+        return None
+
+    simple = load_v("simple_rsa_results.csv")
+    partial_pri = load_v("partial_rsa_primary_results.csv")
+    partial_sec = load_v("partial_rsa_secondary_results.csv")
+    category = load_v("category_rsa_results.csv")
+
+    if all(x is None for x in [simple, partial_pri, partial_sec, category]):
+        return None
+
+    v_fig_dir = ensure_dir(fig_dir / vname)
+
+    # Figures
+    img_simple = plot_simple_rsa(simple, v_fig_dir) if simple is not None else ""
+    if partial_pri is not None and len(partial_pri) > 0:
+        img_partial = plot_partial_rsa(partial_pri, "A", v_fig_dir, "primary")
+        img_partial_sr = plot_partial_semi_partial(partial_pri, "A", v_fig_dir, "primary")
+    else:
+        img_partial = img_partial_sr = ""
+    if partial_sec is not None and len(partial_sec) > 0:
+        img_partial_sec = plot_partial_rsa(partial_sec, "E", v_fig_dir, "secondary")
+        img_partial_sec_sr = plot_partial_semi_partial(partial_sec, "E", v_fig_dir, "secondary")
+    else:
+        img_partial_sec = img_partial_sec_sr = ""
+    img_cat = plot_category_rsa(category, v_fig_dir) if category is not None else ""
+
+    fn = 1
+    body = f"""
+<h2 id="simple-rsa">Simple RSA (Model A)</h2>
+"""
+    if simple is not None:
+        body += f"""
+<img src="data:image/png;base64,{img_simple}" alt="Simple RSA — {vname}">
+<p class="caption"><strong>Figure {fn}.</strong> Simple RSA layer profile.</p>
+<div class="result-box">
+<strong>Summary:</strong> {peak_summary(simple, "rho")}
+</div>
+"""
+        fn += 1
+    else:
+        body += PENDING
+
+    body += '<h2 id="partial-rsa-a">Partial RSA (Model A)</h2>'
+    body += '<div class="method-box"><strong>Regression:</strong> <code>RDM<sub>neural</sub> = &beta;<sub>A</sub>&middot;A + &beta;<sub>B</sub>&middot;B + &beta;<sub>C</sub>&middot;C + &beta;<sub>D</sub>&middot;D + &beta;<sub>F</sub>&middot;F + &beta;<sub>G</sub>&middot;G + &beta;<sub>H</sub>&middot;H + &epsilon;</code></div>'
+    if partial_pri is not None and len(partial_pri) > 0:
+        body += f"""
+<img src="data:image/png;base64,{img_partial}" alt="Partial RSA Model A — {vname}">
+<p class="caption"><strong>Figure {fn}.</strong> Partial RSA with Model A as hypothesis.</p>
+<div class="result-box">
+<strong>Model A summary:</strong> {peak_summary(partial_pri, "beta", model_filter="A")}
+</div>
+"""
+        fn += 1
+        if img_partial_sr:
+            body += f"""
+<img src="data:image/png;base64,{img_partial_sr}" alt="Semi-partial r Model A — {vname}">
+<p class="caption"><strong>Figure {fn}.</strong> Semi-partial r for Model A.</p>
+"""
+            fn += 1
+    else:
+        body += PENDING
+
+    body += '<h2 id="partial-rsa-e">Partial RSA (Model E)</h2>'
+    body += '<div class="method-box"><strong>Regression:</strong> <code>RDM<sub>neural</sub> = &beta;<sub>E</sub>&middot;E + &beta;<sub>B</sub>&middot;B + &beta;<sub>C</sub>&middot;C + &beta;<sub>D</sub>&middot;D + &beta;<sub>F</sub>&middot;F + &beta;<sub>G</sub>&middot;G + &beta;<sub>H</sub>&middot;H + &epsilon;</code> (Model A not included)</div>'
+    if partial_sec is not None and len(partial_sec) > 0:
+        body += f"""
+<img src="data:image/png;base64,{img_partial_sec}" alt="Partial RSA Model E — {vname}">
+<p class="caption"><strong>Figure {fn}.</strong> Partial RSA with Model E as hypothesis.</p>
+<div class="result-box">
+<strong>Model E summary:</strong> {peak_summary(partial_sec, "beta", model_filter="E")}
+</div>
+"""
+        fn += 1
+        if img_partial_sec_sr:
+            body += f"""
+<img src="data:image/png;base64,{img_partial_sec_sr}" alt="Semi-partial r Model E — {vname}">
+<p class="caption"><strong>Figure {fn}.</strong> Semi-partial r for Model E.</p>
+"""
+            fn += 1
+    else:
+        body += PENDING
+
+    body += '<h2 id="category-rsa">Category RSA (C1)</h2>'
+    if category is not None:
+        c1 = category[category["condition"] == "mental_state"].reset_index(drop=True)
+        body += f"""
+<img src="data:image/png;base64,{img_cat}" alt="Category RSA — {vname}">
+<p class="caption"><strong>Figure {fn}.</strong> Category structure RSA by condition.</p>
+<div class="result-box">
+<strong>C1 summary:</strong> {peak_summary(c1, "rho")}
+</div>
+"""
+        fn += 1
+    else:
+        body += PENDING
+
+    # Appendix tables
+    body += f"""
+<hr>
+<h2 id="appendix-tables">Appendix: Layer-by-Layer Tables</h2>
+<p><a href="#simple-rsa">&uarr; Back to top</a></p>
+
+<h3>Simple RSA (Model A)</h3>
+{make_layerwise_table(simple, "rho") if simple is not None else PENDING}
+
+<h3>Partial RSA: Model A</h3>
+{make_layerwise_table(partial_pri[partial_pri["model"] == "A"].reset_index(drop=True), "beta") if partial_pri is not None else PENDING}
+
+<h3>Partial RSA: Model E</h3>
+{make_layerwise_table(partial_sec[partial_sec["model"] == "E"].reset_index(drop=True), "beta") if partial_sec is not None else PENDING}
+
+<h3>Category RSA (C1)</h3>
+{make_layerwise_table(c1, "rho") if category is not None else PENDING}
+"""
+
+    # Build full standalone HTML
+    variant_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Exp 5 RSA: {vinfo['label']}</title>
+<style>
+    body {{ font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 1100px;
+           margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }}
+    h1 {{ color: #1a1a2e; border-bottom: 3px solid #d62728; padding-bottom: 10px; }}
+    h2 {{ color: #1a1a2e; margin-top: 40px; border-bottom: 1px solid #ccc;
+          padding-bottom: 5px; }}
+    h3 {{ color: #444; margin-top: 25px; }}
+    .summary-box {{ background: #f0f4f8; border-left: 4px solid #1f77b4;
+                    padding: 15px; margin: 15px 0; border-radius: 4px; }}
+    .result-box {{ background: #fff8f0; border-left: 4px solid #ff7f0e;
+                   padding: 15px; margin: 15px 0; border-radius: 4px; }}
+    .method-box {{ background: #f0f8f0; border-left: 4px solid #2ca02c;
+                   padding: 15px; margin: 15px 0; border-radius: 4px; }}
+    img {{ max-width: 100%; margin: 15px 0; border: 1px solid #ddd;
+           border-radius: 4px; }}
+    .caption {{ font-size: 0.9em; color: #555; margin-top: -10px; margin-bottom: 20px;
+                font-style: italic; }}
+    table.results-table {{ border-collapse: collapse; width: 100%; font-size: 0.85em;
+                          margin: 15px 0; }}
+    table.results-table th {{ background: #1a1a2e; color: white; padding: 8px 10px;
+                             text-align: left; }}
+    table.results-table td {{ padding: 6px 10px; border-bottom: 1px solid #eee; }}
+    table.results-table tr:hover {{ background: #f5f5f5; }}
+    .sig {{ color: #d62728; font-weight: bold; }}
+    code {{ background: #f4f4f4; padding: 2px 6px; border-radius: 3px;
+            font-size: 0.9em; }}
+    nav.toc {{ background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px;
+               padding: 15px 25px; margin: 20px 0; }}
+    nav.toc h2 {{ margin-top: 5px; border: none; font-size: 1.1em; }}
+    nav.toc ul {{ padding-left: 20px; margin: 5px 0; }}
+    nav.toc li {{ margin: 3px 0; }}
+    nav.toc a {{ text-decoration: none; color: #1f77b4; }}
+    nav.toc a:hover {{ text-decoration: underline; }}
+</style>
+</head>
+<body>
+
+<h1>RSA Variant: {vinfo['label']}</h1>
+
+<p><a href="rsa_report.html">&larr; Back to main RSA report</a></p>
+
+<div class="method-box">
+<strong>Distance metric:</strong> {vinfo['metric']}<br>
+<strong>Stimuli:</strong> {vinfo['stimuli']}<br><br>
+{vinfo['desc']}
+</div>
+
+{build_sample_stimuli_table()}
+
+{build_model_definitions_table()}
+
+<nav class="toc">
+<h2>Contents</h2>
+<ul>
+<li><a href="#simple-rsa">Simple RSA (Model A)</a></li>
+<li><a href="#partial-rsa-a">Partial RSA (Model A)</a></li>
+<li><a href="#partial-rsa-e">Partial RSA (Model E)</a></li>
+<li><a href="#category-rsa">Category RSA (C1)</a></li>
+<li><a href="#appendix-tables">Appendix: Layer-by-Layer Tables</a></li>
+</ul>
+</nav>
+
+{body}
+
+<hr>
+<p style="font-size:0.85em; color:#888;">
+Generated by <code>rsa/8a_report_generator.py</code>.
+Regenerate: <code>python code/rsa/8a_report_generator.py --model {model}</code>
+</p>
+
+</body>
+</html>"""
+
+    out_path = out_dir / f"rsa_report_{vname}.html"
+    with open(out_path, "w") as f:
+        f.write(variant_html)
+    print(f"  Variant report saved: {out_path}")
+
+    return {"simple": simple, "partial_primary": partial_pri}
+
+
+# ── Main report ──────────────────────────────────────────────────────────────
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Generate RSA report")
+    add_model_argument(parser)
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    set_model(args.model)
+
+    rsa_data = data_dir("rsa")
+    fig_dir = ensure_dir(figures_dir("rsa"))
+    out_html = results_dir("rsa") / "rsa_report.html"
+
+    # Load data — handle missing files gracefully for partial results
+    def load_csv(name):
+        path = rsa_data / name
+        if path.exists():
+            df = pd.read_csv(path)
+            print(f"  Loaded {name}: {len(df)} rows")
+            return df
+        print(f"  Missing {name} — skipping")
+        return None
+
+    simple_df = load_csv("simple_rsa_results.csv")
+    partial_primary_df = load_csv("partial_rsa_primary_results.csv")
+    partial_secondary_df = load_csv("partial_rsa_secondary_results.csv")
+    category_df = load_csv("category_rsa_results.csv")
+
+    PLACEHOLDER_IMG = ""
+    PENDING_HTML = '<div class="result-box"><strong>Analysis still running — rerun report generator later.</strong></div>'
+
+    # Generate figures — only for available data
+    img_simple = plot_simple_rsa(simple_df, fig_dir) if simple_df is not None else PLACEHOLDER_IMG
+    if partial_primary_df is not None and len(partial_primary_df) > 0:
+        img_partial_primary = plot_partial_rsa(partial_primary_df, "A", fig_dir, "primary")
+        img_partial_primary_sr = plot_partial_semi_partial(
+            partial_primary_df, "A", fig_dir, "primary")
+    else:
+        img_partial_primary = img_partial_primary_sr = PLACEHOLDER_IMG
+    if partial_secondary_df is not None and len(partial_secondary_df) > 0:
+        img_partial_secondary = plot_partial_rsa(partial_secondary_df, "E", fig_dir, "secondary")
+        img_partial_secondary_sr = plot_partial_semi_partial(
+            partial_secondary_df, "E", fig_dir, "secondary")
+    else:
+        img_partial_secondary = img_partial_secondary_sr = PLACEHOLDER_IMG
+    if partial_primary_df is not None and partial_secondary_df is not None:
+        img_a_vs_e = plot_a_vs_e(partial_primary_df, partial_secondary_df, fig_dir)
+    else:
+        img_a_vs_e = PLACEHOLDER_IMG
+    img_category = plot_category_rsa(category_df, fig_dir) if category_df is not None else PLACEHOLDER_IMG
+
+    # Status banner
+    missing = []
+    if partial_primary_df is None or (partial_primary_df is not None and
+            len(partial_primary_df[partial_primary_df["model"] == "A"]) < 41):
+        n_done = len(partial_primary_df[partial_primary_df["model"] == "A"]) if partial_primary_df is not None else 0
+        missing.append(f"Partial RSA primary ({n_done}/41 layers)")
+    if partial_secondary_df is None:
+        missing.append("Partial RSA secondary (not started)")
+    elif len(partial_secondary_df[partial_secondary_df["model"] == "E"]) < 41:
+        n_done = len(partial_secondary_df[partial_secondary_df["model"] == "E"])
+        missing.append(f"Partial RSA secondary ({n_done}/41 layers)")
+    status_banner = ""
+    if missing:
+        status_banner = ('<div style="background:#fff3cd; border:2px solid #ffc107; '
+                         'padding:15px; margin:15px 0; border-radius:4px;">'
+                         '<strong>Partial results:</strong> The following analyses are '
+                         'still running: ' + ", ".join(missing) + '. '
+                         'Rerun the report generator after they complete.</div>')
+
+    # Build TOC
+    toc_items = [
+        ("simple-rsa", "Analysis 1: Simple RSA (Model A)"),
+        ("partial-rsa-a", "Analysis 2a: Partial RSA &mdash; Model A"),
+        ("partial-rsa-e", "Analysis 2b: Partial RSA &mdash; Model E"),
+        ("a-vs-e", "Model A vs. Model E"),
+        ("category-rsa", "Analysis 3: Category Structure RSA"),
+        ("interpretation", "Interpretation Guide"),
+    ]
+    # Check if any variant data exists for TOC entries
+    has_variants = False
+    for vname, vinfo in VARIANT_INFO.items():
+        vdir = rsa_data / vname
+        if any((vdir / f).exists() for f in
+               ["simple_rsa_results.csv", "partial_rsa_primary_results.csv",
+                "category_rsa_results.csv"]):
+            has_variants = True
+            break
+    if has_variants:
+        toc_items.append(("variants", "Variant Analyses"))
+        toc_items.append(("cross-variant", "Cross-Variant Comparison"))
+    r4_check_dir = rsa_data / "reduced_4cond"
+    if r4_check_dir.exists() and any(r4_check_dir.glob("*.csv")):
+        toc_items.append(("reduced-4cond", "Reduced 4-Condition Analysis"))
+    toc_items.append(("appendix-tables", "Appendix: Layer-by-Layer Tables"))
+    toc_li = "\n".join(f'<li><a href="#{aid}">{label}</a></li>' for aid, label in toc_items)
+    toc_html = f'<nav class="toc"><h2>Contents</h2><ul>{toc_li}</ul></nav>'
+
+    # Build report
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Exp 5: Mental State Attribution RSA — Results</title>
+<style>
+    body {{ font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 1100px;
+           margin: 0 auto; padding: 20px; line-height: 1.6; color: #333; }}
+    h1 {{ color: #1a1a2e; border-bottom: 3px solid #d62728; padding-bottom: 10px; }}
+    h2 {{ color: #1a1a2e; margin-top: 40px; border-bottom: 1px solid #ccc;
+          padding-bottom: 5px; }}
+    h3 {{ color: #444; margin-top: 25px; }}
+    .summary-box {{ background: #f0f4f8; border-left: 4px solid #1f77b4;
+                    padding: 15px; margin: 15px 0; border-radius: 4px; }}
+    .result-box {{ background: #fff8f0; border-left: 4px solid #ff7f0e;
+                   padding: 15px; margin: 15px 0; border-radius: 4px; }}
+    .method-box {{ background: #f0f8f0; border-left: 4px solid #2ca02c;
+                   padding: 15px; margin: 15px 0; border-radius: 4px; }}
+    .interpretation-box {{ background: #f8f0f8; border-left: 4px solid #9467bd;
+                           padding: 15px; margin: 15px 0; border-radius: 4px; }}
+    img {{ max-width: 100%; margin: 15px 0; border: 1px solid #ddd;
+           border-radius: 4px; }}
+    .caption {{ font-size: 0.9em; color: #555; margin-top: -10px; margin-bottom: 20px;
+                font-style: italic; }}
+    table.results-table {{ border-collapse: collapse; width: 100%; font-size: 0.85em;
+                          margin: 15px 0; }}
+    table.results-table th {{ background: #1a1a2e; color: white; padding: 8px 10px;
+                             text-align: left; }}
+    table.results-table td {{ padding: 6px 10px; border-bottom: 1px solid #eee; }}
+    table.results-table tr:hover {{ background: #f5f5f5; }}
+    table.conditions {{ border-collapse: collapse; margin: 15px 0; }}
+    table.conditions th, table.conditions td {{ padding: 8px 12px;
+                                                border: 1px solid #ddd; }}
+    table.conditions th {{ background: #f0f0f0; }}
+    .sig {{ color: #d62728; font-weight: bold; }}
+    code {{ background: #f4f4f4; padding: 2px 6px; border-radius: 3px;
+            font-size: 0.9em; }}
+    nav.toc {{ background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px;
+               padding: 15px 25px; margin: 20px 0; }}
+    nav.toc h2 {{ margin-top: 5px; border: none; font-size: 1.1em; }}
+    nav.toc ul {{ padding-left: 20px; margin: 5px 0; }}
+    nav.toc li {{ margin: 3px 0; }}
+    nav.toc a {{ text-decoration: none; color: #1f77b4; }}
+    nav.toc a:hover {{ text-decoration: underline; }}
+</style>
+</head>
+<body>
+
+<h1>Experiment 5: Mental State Attribution RSA</h1>
+
+{status_banner}
+
+<div class="summary-box">
+<strong>Question:</strong> Does LLaMA-2-13B-Chat maintain a dedicated representational
+structure for mental state attributions (He + mental verb + object) that is distinct
+from its component parts?<br><br>
+<strong>Design:</strong> 56 items &times; 6 conditions = 336 sentences. Each item pairs
+a mental state verb with a matched action verb and the same object noun across all
+conditions.<br><br>
+<strong>Model:</strong> LLaMA-2-13B-Chat. Activations extracted at the <strong>last token
+position</strong> (period ".") for all 41 layers.<br><br>
+<strong>Statistical testing:</strong> All p-values computed via permutation tests (10,000
+iterations, shuffling condition labels within items). Multiple comparisons corrected
+using Benjamini-Hochberg FDR across all 41 layers.
+</div>
+
+<h2>Stimulus Design</h2>
+
+<table class="conditions">
+<tr><th>Condition</th><th>Label</th><th>Example</th><th>Controls for</th></tr>
+<tr><td>C1</td><td><code>mental_state</code></td><td>He notices the crack.</td>
+    <td>Full attribution: subject + mental verb + object</td></tr>
+<tr><td>C2</td><td><code>dis_mental</code></td><td>Notice the crack.</td>
+    <td>Mental verb + object, NO subject</td></tr>
+<tr><td>C3</td><td><code>scr_mental</code></td><td>The crack to notice.</td>
+    <td>Same words as C2, scrambled order</td></tr>
+<tr><td>C4</td><td><code>action</code></td><td>He fills the crack.</td>
+    <td>Subject + action verb + object (same SVO frame, no mental state)</td></tr>
+<tr><td>C5</td><td><code>dis_action</code></td><td>Fill the crack.</td>
+    <td>Action verb + object, NO subject</td></tr>
+<tr><td>C6</td><td><code>scr_action</code></td><td>The crack to fill.</td>
+    <td>Same words as C5, scrambled order</td></tr>
+</table>
+
+<p>56 mental state verbs span 7 categories (8 each): Attention, Memory, Sensation,
+Belief, Desire, Emotion, Intention. Each paired with a unique concrete action verb
+(the "security camera test": identifiable from silent video).</p>
+
+{build_sample_stimuli_table()}
+
+{build_model_definitions_table()}
+
+{toc_html}
+
+<hr>
+
+<h2 id="simple-rsa">Analysis 1: Simple RSA (Model A &mdash; Full Attribution)</h2>
+
+<div class="method-box">
+<strong>Method:</strong> Model A predicts that only Condition 1 (full mental state
+attribution) sentences are similar to each other; all other pairs are dissimilar.
+Spearman rank correlation between the neural RDM and Model A at each layer.
+Permutation test: shuffle condition labels within items (10,000 iterations).
+BH-FDR correction across 41 layers.<br><br>
+<strong>What this tests:</strong> Do full mental state attribution sentences cluster
+together in activation space more than sentences from any other condition? Because
+C2/C3 share the same mental verbs and C4 shares the same SVO frame, a significant
+result already implies the clustering is not purely lexical or syntactic &mdash; the
+stimulus design does the controlling.
+</div>
+
+<img src="data:image/png;base64,{img_simple}" alt="Simple RSA layer profile">
+<p class="caption"><strong>Figure 1.</strong> Layer-by-layer Spearman correlation between
+the neural RDM (correlation distance) and Model A (full attribution). Filled circles
+indicate layers significant at FDR &lt; .05 (permutation test, 10,000 iterations).
+Model A predicts similarity only among Condition 1 (He + mental verb + object) sentences.</p>
+
+<div class="result-box">
+<strong>Summary:</strong> {peak_summary(simple_df, "rho") if simple_df is not None else "Pending."}
+</div>
+
+<hr>
+
+<h2 id="partial-rsa-a">Analysis 2a: Partial RSA &mdash; Model A (Full Attribution) as Hypothesis</h2>
+
+<div class="method-box">
+<strong>Regression formula:</strong>
+<code>RDM<sub>neural</sub> = &beta;<sub>A</sub>&middot;RDM<sub>A</sub> + &beta;<sub>B</sub>&middot;RDM<sub>B</sub> + &beta;<sub>C</sub>&middot;RDM<sub>C</sub> + &beta;<sub>D</sub>&middot;RDM<sub>D</sub> + &beta;<sub>F</sub>&middot;RDM<sub>F</sub> + &beta;<sub>G</sub>&middot;RDM<sub>G</sub> + &beta;<sub>H</sub>&middot;RDM<sub>H</sub> + &epsilon;</code>
+<br><br>
+<strong>Method:</strong> OLS multiple regression of the z-scored neural RDM (lower triangle)
+on z-scored model RDMs entered simultaneously. Model A is the hypothesis; B, C, D, F, G, H
+are confounds:
+<ul>
+<li><strong>A</strong> &mdash; Full Attribution (C1 only similar): <em>hypothesis</em></li>
+<li><strong>B</strong> &mdash; Mental Verb Presence (C1,C2,C3 similar): lexical confound</li>
+<li><strong>C</strong> &mdash; Subject Presence (C1,C4 similar): syntactic confound</li>
+<li><strong>D</strong> &mdash; Item Identity (same item similar): word overlap confound</li>
+<li><strong>F</strong> &mdash; Grammatical Order (C1,C2,C4,C5 similar): grammaticality confound</li>
+<li><strong>G</strong> &mdash; Scrambled Form (C3,C6 similar): scrambled fragment confound</li>
+<li><strong>H</strong> &mdash; Action Verb Presence (C4,C5,C6 similar): action lexical confound</li>
+</ul>
+The standardized &beta;<sub>A</sub> tells you how much variance in the neural RDM is
+<em>uniquely</em> explained by the full attribution structure after removing all confound
+variance. Semi-partial r = sign(&beta;) &times; &radic;&Delta;R&sup2;, where &Delta;R&sup2; = R&sup2;<sub>full</sub> &minus; R&sup2;<sub>reduced (drop A)</sub>.
+Significance via permutation (10,000 iterations, shuffling condition labels within items). BH-FDR correction across layers.
+</div>
+
+<img src="data:image/png;base64,{img_partial_primary}" alt="Partial RSA primary">
+<p class="caption"><strong>Figure 2.</strong> Partial RSA with Model A as hypothesis.
+<strong>Top:</strong> Standardized beta for Model A (full attribution) across layers,
+with confound models (B, C, D, F, G, H) partialed out. Filled circles = FDR &lt; .05.
+<strong>Bottom:</strong> Confound model betas from the same regression, showing what each
+surface feature contributes. A significant Model A beta means the full attribution
+structure explains neural variance <em>beyond</em> all of these confounds.</p>
+
+<div class="result-box">
+<strong>Model A summary:</strong> {peak_summary(partial_primary_df, "beta", model_filter="A") if partial_primary_df is not None else "Pending."}<br>
+<strong>Model B (mental verb) summary:</strong> {peak_summary(partial_primary_df, "beta", model_filter="B") if partial_primary_df is not None else "Pending."}<br>
+<strong>Model D (item identity) summary:</strong> {peak_summary(partial_primary_df, "beta", model_filter="D") if partial_primary_df is not None else "Pending."}<br>
+<strong>Model F (grammaticality) summary:</strong> {peak_summary(partial_primary_df, "beta", model_filter="F") if partial_primary_df is not None else "Pending."}
+</div>
+
+{f'<img src="data:image/png;base64,{img_partial_primary_sr}" alt="Semi-partial r for Model A">' if img_partial_primary_sr else ""}
+<p class="caption"><strong>Figure 3.</strong> Semi-partial r for Model A across layers.
+Semi-partial r = sign(&beta;<sub>A</sub>) &times; &radic;(R&sup2;<sub>full</sub> &minus; R&sup2;<sub>drop A</sub>),
+i.e. the unique variance explained by Model A after partialing out B, C, D, F, G, H.
+Triangles indicate FDR &lt; .05.</p>
+
+<hr>
+
+<h2 id="partial-rsa-e">Analysis 2b: Partial RSA &mdash; Model E (Subject-Optional) as Hypothesis</h2>
+
+<div class="method-box">
+<strong>Regression formula:</strong>
+<code>RDM<sub>neural</sub> = &beta;<sub>E</sub>&middot;RDM<sub>E</sub> + &beta;<sub>B</sub>&middot;RDM<sub>B</sub> + &beta;<sub>C</sub>&middot;RDM<sub>C</sub> + &beta;<sub>D</sub>&middot;RDM<sub>D</sub> + &beta;<sub>F</sub>&middot;RDM<sub>F</sub> + &beta;<sub>G</sub>&middot;RDM<sub>G</sub> + &beta;<sub>H</sub>&middot;RDM<sub>H</sub> + &epsilon;</code>
+<br><br>
+<strong>Method:</strong> Same OLS framework as Analysis 2a, but Model A is replaced by Model E.
+Model E predicts that C1 <em>and</em> C2 sentences are similar (mental verb + object in
+grammatical order, with or without subject). Model A is <strong>not</strong> included as a
+confound &mdash; Models A and E are tested in separate regressions because they are
+alternative hypotheses, not a hypothesis-confound pair. The same 6 confounds (B, C, D, F,
+G, H) are partialed out in both regressions.<br><br>
+<strong>What this tests:</strong> Whether the subject "He" is necessary for the attribution
+structure, or whether verb + object binding alone suffices.
+</div>
+
+<img src="data:image/png;base64,{img_partial_secondary}" alt="Partial RSA secondary">
+<p class="caption"><strong>Figure 4.</strong> Partial RSA with Model E (mental verb + object,
+subject-optional) as hypothesis. Regression: RDM<sub>neural</sub> = &beta;<sub>E</sub>&middot;E + &beta;<sub>B</sub>&middot;B + &beta;<sub>C</sub>&middot;C + &beta;<sub>D</sub>&middot;D + &beta;<sub>F</sub>&middot;F + &beta;<sub>G</sub>&middot;G + &beta;<sub>H</sub>&middot;H + &epsilon;.
+Note: Model A is not in this regression. Same format as Figure 2.</p>
+
+<img src="data:image/png;base64,{img_partial_secondary_sr}" alt="Semi-partial r for Model E">
+<p class="caption"><strong>Figure 5.</strong> Semi-partial r for Model E across layers.
+Semi-partial r = sign(&beta;<sub>E</sub>) &times; &radic;(R&sup2;<sub>full</sub> &minus; R&sup2;<sub>drop E</sub>),
+i.e. the unique variance in the neural RDM explained by Model E after partialing out
+B, C, D, F, G, H (but not A).</p>
+
+<div class="result-box">
+<strong>Model E summary:</strong> {peak_summary(partial_secondary_df, "beta", model_filter="E") if partial_secondary_df is not None else "Pending."}
+</div>
+
+<hr>
+
+<h2 id="a-vs-e">Model A vs. Model E: Is the Subject Required?</h2>
+
+<div class="method-box">
+<strong>Question:</strong> Does mental state attribution require an explicit agent
+("He"), or does the mental verb + object binding suffice?<br><br>
+<strong>Interpretation guide:</strong>
+<ul>
+<li>&beta;<sub>A</sub> significant, &beta;<sub>E</sub> not &rarr; Subject is <em>necessary</em>
+    for attribution structure</li>
+<li>&beta;<sub>E</sub> significant, &beta;<sub>A</sub> not &rarr; Mental verb + object
+    binding <em>suffices</em> without subject</li>
+<li>Both significant &rarr; Core verb+object structure that the subject enriches</li>
+<li>&beta;<sub>E</sub> significant, &beta;<sub>A</sub> not beyond confounds &rarr;
+    Subject adds nothing beyond verb+object</li>
+</ul>
+</div>
+
+<img src="data:image/png;base64,{img_a_vs_e}" alt="Model A vs E comparison">
+<p class="caption"><strong>Figure 6.</strong> Direct comparison of standardized betas for
+Model A (full attribution, requires subject) and Model E (subject-optional) from their
+respective partial RSA regressions. Filled markers = FDR &lt; .05.</p>
+
+<hr>
+
+<h2 id="category-rsa">Analysis 3: Within-Condition Category Structure RSA</h2>
+
+<div class="method-box">
+<strong>Question:</strong> Within the mental state attribution sentences (C1 only), does
+the model organize representations according to the 7 verb categories (Attention, Memory,
+Sensation, Belief, Desire, Emotion, Intention)?<br><br>
+<strong>Method:</strong> Compute 56&times;56 neural RDM for C1 sentences only. Model Cat
+predicts same-category pairs are similar, different-category pairs are dissimilar.
+Spearman correlation + permutation test (shuffle category labels across items, 10,000
+iterations). BH-FDR across layers.<br><br>
+<strong>Cross-condition comparison:</strong> The same category RSA is also run on each
+of the other 5 conditions independently. If category structure appears in C1 but not
+C2&ndash;C6, it specifically requires the full attribution form. If it also appears in C2
+(disembodied mental), verb semantics alone organize the space.
+</div>
+
+<img src="data:image/png;base64,{img_category}" alt="Category RSA by condition">
+<p class="caption"><strong>Figure 7.</strong> Category structure RSA (7 mental state verb
+categories) computed separately for each condition across layers. Bold red line = C1
+(full attribution); filled circles = FDR &lt; .05 for C1. If category structure is
+strongest or only significant in C1, it requires the full attribution form to emerge.</p>
+
+<div class="result-box">
+<strong>C1 (mental_state) summary:</strong>
+{peak_summary(category_df[category_df["condition"] == "mental_state"].reset_index(drop=True), "rho") if category_df is not None else "Pending."}<br>
+<strong>C2 (dis_mental) summary:</strong>
+{peak_summary(category_df[category_df["condition"] == "dis_mental"].reset_index(drop=True), "rho") if category_df is not None else "Pending."}<br>
+<strong>C4 (action) summary:</strong>
+{peak_summary(category_df[category_df["condition"] == "action"].reset_index(drop=True), "rho") if category_df is not None else "Pending."}
+</div>
+
+<hr>
+
+<h2 id="interpretation">Interpretation Guide</h2>
+
+<div class="interpretation-box">
+<h3>What would each pattern of results mean?</h3>
+<ul>
+<li><strong>Model A significant (Analysis 1 & 2a):</strong> The model has a dedicated
+representational structure for bound mental state attributions that cannot be reduced to
+lexical (mental vocabulary), syntactic (SVO frame), or surface (word overlap, grammaticality)
+features.</li>
+
+<li><strong>Model B significant but not A (Analysis 2a):</strong> The clustering is driven
+by shared mental vocabulary &mdash; the model groups mental verbs together regardless of
+whether they appear in a full attribution frame.</li>
+
+<li><strong>Model D significant but not A:</strong> The clustering is driven by shared
+object nouns &mdash; items cluster by word overlap, not by condition structure.</li>
+
+<li><strong>Category structure in C1 only (Analysis 3):</strong> The 7-category organization
+of mental states requires the full attribution form. The model doesn't just know that
+"fears" and "dreads" are similar words; it represents them as similar <em>kinds of mental
+state attributions</em>.</li>
+
+<li><strong>Category structure in C1 and C2:</strong> Verb semantics alone organize the
+representational space. Still interesting, but a weaker claim about attribution-specific
+structure.</li>
+</ul>
+</div>
+
+<hr>
+"""
+
+    # ── Variant reports (separate HTML files) ────────────────────────────
+    fig_num = 8
+    variant_loaded = {}
+
+    variant_links = []
+    for vname, vinfo in VARIANT_INFO.items():
+        v_data = generate_variant_report(
+            vname, vinfo, rsa_data, fig_dir, results_dir("rsa"), args.model)
+        if v_data is not None:
+            variant_loaded[vname] = v_data
+            variant_links.append((vname, vinfo))
+
+    if variant_links:
+        html += '\n<h2 id="variants">Variant Analyses</h2>\n'
+        html += '<div class="method-box">'
+        html += '<strong>Variant reports:</strong> Each variant uses a different distance metric '
+        html += 'and/or modified stimuli to test robustness of the RSA results.<ul>'
+        for vname, vinfo in variant_links:
+            html += f'<li><a href="rsa_report_{vname}.html">{vinfo["label"]}</a></li>'
+        html += '</ul></div>\n'
+
+    # ── Cross-variant comparison ──────────────────────────────────────────
+    variant_simple_dfs = {k: v.get("simple") for k, v in variant_loaded.items()}
+    variant_partial_dfs = {k: v.get("partial_primary") for k, v in variant_loaded.items()}
+    has_any_variant = any(v is not None for v in variant_simple_dfs.values())
+
+    if has_any_variant:
+        img_vc_simple = plot_variant_comparison_simple(
+            simple_df, variant_simple_dfs, fig_dir)
+        img_vc_partial = plot_variant_comparison_partial(
+            partial_primary_df, variant_partial_dfs, fig_dir)
+
+        html += f"""
+<h2 id="cross-variant">Cross-Variant Comparison</h2>
+
+<div class="method-box">
+<strong>Purpose:</strong> Compare the baseline analysis (correlation distance, original stimuli)
+with variant analyses that change the distance metric (cosine) and/or the stimulus set
+("You" subject added to C2/C5). Convergent results across variants strengthen confidence
+that the representational structure is robust and not an artifact of a particular distance
+metric or the specific surface form of imperative sentences.
+</div>
+
+<img src="data:image/png;base64,{img_vc_simple}" alt="Variant comparison — Simple RSA">
+<p class="caption"><strong>Figure {fig_num}.</strong> Simple RSA (Model A) layer profiles
+across all analysis variants. Solid line = baseline; dashed = variants. Convergent peaks
+indicate robust attribution structure.</p>
+
+<img src="data:image/png;base64,{img_vc_partial}" alt="Variant comparison — Partial RSA">
+<p class="caption"><strong>Figure {fig_num + 1}.</strong> Partial RSA Model A standardized
+beta across variants. Tests whether the unique variance explained by full attribution
+structure is robust to distance metric and stimulus modifications.</p>
+
+<hr>
+"""
+        fig_num += 2
+
+    # (Interpretation guide is already in the main HTML body above)
+
+    # ── Reduced 4-condition analysis ─────────────────────────────────────
+    r4_dir = rsa_data / "reduced_4cond"
+    r4_simple = load_csv_from(r4_dir / "simple_rsa_results.csv")
+    r4_partial = load_csv_from(r4_dir / "partial_rsa_combined_results.csv")
+    r4_category = load_csv_from(r4_dir / "category_rsa_results.csv")
+
+    has_r4 = any(x is not None for x in [r4_simple, r4_partial, r4_category])
+
+    if has_r4:
+        r4_fig_dir = ensure_dir(fig_dir / "reduced_4cond")
+
+        # Simple RSA figure
+        img_r4_simple = plot_simple_rsa(r4_simple, r4_fig_dir) if r4_simple is not None else ""
+        # Partial RSA figures — A and E from the same combined regression
+        if r4_partial is not None and len(r4_partial) > 0:
+            img_r4_partial_a = plot_partial_rsa(r4_partial, "A", r4_fig_dir, "combined")
+            img_r4_partial_a_sr = plot_partial_semi_partial(r4_partial, "A", r4_fig_dir, "combined")
+            img_r4_partial_e_sr = plot_partial_semi_partial(r4_partial, "E", r4_fig_dir, "combined_e")
+        else:
+            img_r4_partial_a = img_r4_partial_a_sr = img_r4_partial_e_sr = ""
+        img_r4_cat = plot_category_rsa(r4_category, r4_fig_dir) if r4_category is not None else ""
+
+        # Comparison overlay: 6-cond vs 4-cond
+        img_r4_compare = ""
+        if simple_df is not None and r4_simple is not None:
+            fig_cmp, ax_cmp = plt.subplots(figsize=(10, 5))
+            l6 = simple_df["layer"].values
+            r6 = simple_df["rho"].values
+            l4 = r4_simple["layer"].values
+            r4 = r4_simple["rho"].values
+            ax_cmp.plot(l6, r6, color="#d62728", linewidth=2, label="6-condition (original)")
+            sig6 = safe_p_fdr(simple_df) < 0.05
+            if sig6.any():
+                ax_cmp.scatter(l6[sig6], r6[sig6], color="#d62728", s=40, zorder=5,
+                               edgecolors="black", linewidth=0.5)
+            ax_cmp.plot(l4, r4, color="#1f77b4", linewidth=2, label="4-condition (reduced)")
+            sig4 = safe_p_fdr(r4_simple) < 0.05
+            if sig4.any():
+                ax_cmp.scatter(l4[sig4], r4[sig4], color="#1f77b4", s=40, zorder=5,
+                               edgecolors="black", linewidth=0.5)
+            ax_cmp.axhline(0, color="gray", linewidth=0.5, linestyle="--")
+            ax_cmp.set_xlabel("Layer", fontsize=12)
+            ax_cmp.set_ylabel("Spearman rho", fontsize=12)
+            ax_cmp.set_title("Simple RSA: 6-Condition vs 4-Condition Design", fontsize=13)
+            ax_cmp.legend(fontsize=10)
+            plt.tight_layout()
+            img_r4_compare = fig_to_base64(fig_cmp)
+            save_fig(fig_cmp, r4_fig_dir / "simple_rsa_comparison.png")
+            plt.close(fig_cmp)
+
+        html += f"""
+<h2 id="reduced-4cond">Reduced 4-Condition Analysis</h2>
+
+<div class="method-box">
+<strong>Motivation:</strong> The original 6-condition design includes C5 (dis_action) and C6
+(scr_action), whose Model A similar blocks never overlap with C1&times;C1. Models G
+(scrambled form) and H (action verb) likewise cannot confound Model A. Dropping these
+reduces multicollinearity and increases C1&times;C1 pair proportion from 2.7% to 6.2%
+of total pairs, giving tighter standard errors.<br><br>
+<strong>Design:</strong> 56 items &times; 4 conditions (C1&ndash;C4) = 224 sentences.<br>
+<strong>Combined partial RSA:</strong>
+<code>RDM<sub>neural</sub> = &beta;<sub>A</sub>&middot;A + &beta;<sub>E</sub>&middot;E + &beta;<sub>B</sub>&middot;B + &beta;<sub>C</sub>&middot;C + &beta;<sub>D</sub>&middot;D + &beta;<sub>F</sub>&middot;F + &epsilon;</code>
+&nbsp;(6 regressors: A and E tested together, not separately)
+</div>
+
+{build_model_definitions_table(reduced=True)}
+"""
+
+        if img_r4_compare:
+            html += f"""
+<img src="data:image/png;base64,{img_r4_compare}" alt="6-cond vs 4-cond simple RSA">
+<p class="caption"><strong>Figure {fig_num}.</strong> Simple RSA (Model A) comparison:
+original 6-condition design vs reduced 4-condition design. Filled circles = FDR &lt; .05.</p>
+"""
+            fig_num += 1
+
+        html += f'<h3>Simple RSA (Model A) &mdash; 4-Condition</h3>'
+        if r4_simple is not None:
+            html += f"""
+<img src="data:image/png;base64,{img_r4_simple}" alt="Simple RSA 4-cond">
+<div class="result-box">
+<strong>Summary:</strong> {peak_summary(r4_simple, "rho")}
+</div>
+"""
+        else:
+            html += PENDING_HTML
+
+        html += f'<h3>Combined Partial RSA &mdash; 4-Condition</h3>'
+        if r4_partial is not None and len(r4_partial) > 0:
+            html += f"""
+<div class="method-box">
+<strong>Single regression with A and E together:</strong>
+<code>RDM<sub>neural</sub> = &beta;<sub>A</sub>&middot;A + &beta;<sub>E</sub>&middot;E + &beta;<sub>B</sub>&middot;B + &beta;<sub>C</sub>&middot;C + &beta;<sub>D</sub>&middot;D + &beta;<sub>F</sub>&middot;F + &epsilon;</code><br>
+&beta;<sub>A</sub> = unique variance of full attribution <em>beyond</em> verb+object binding (E) and all confounds.<br>
+&beta;<sub>E</sub> = unique variance of verb+object binding <em>beyond</em> full attribution (A) and all confounds.
+</div>
+
+<img src="data:image/png;base64,{img_r4_partial_a}" alt="Combined Partial RSA 4-cond">
+<div class="result-box">
+<strong>Model A (full attribution):</strong> {peak_summary(r4_partial, "beta", model_filter="A")}<br>
+<strong>Model E (verb+object):</strong> {peak_summary(r4_partial, "beta", model_filter="E")}<br>
+<strong>Model B (mental verb):</strong> {peak_summary(r4_partial, "beta", model_filter="B")}<br>
+<strong>Model D (item identity):</strong> {peak_summary(r4_partial, "beta", model_filter="D")}
+</div>
+"""
+            if img_r4_partial_a_sr:
+                html += f"""
+<img src="data:image/png;base64,{img_r4_partial_a_sr}" alt="Semi-partial r Model A 4-cond">
+<p class="caption">Semi-partial r for Model A: unique variance of full attribution beyond
+Model E (verb+object binding) and all confounds.</p>
+"""
+            if img_r4_partial_e_sr:
+                html += f"""
+<img src="data:image/png;base64,{img_r4_partial_e_sr}" alt="Semi-partial r Model E 4-cond">
+<p class="caption">Semi-partial r for Model E: unique variance of verb+object binding beyond
+Model A (full attribution) and all confounds.</p>
+"""
+        else:
+            html += PENDING_HTML
+
+        html += f'<h3>Category RSA &mdash; 4-Condition</h3>'
+        if r4_category is not None:
+            r4_c1 = r4_category[r4_category["condition"] == "mental_state"].reset_index(drop=True)
+            html += f"""
+<img src="data:image/png;base64,{img_r4_cat}" alt="Category RSA 4-cond">
+<div class="result-box">
+<strong>C1 summary:</strong> {peak_summary(r4_c1, "rho")}
+</div>
+"""
+        else:
+            html += PENDING_HTML
+
+        html += "<hr>\n"
+
+    # ── Appendix: Layer-by-layer tables ──────────────────────────────────
+    html += f"""
+<h2 id="appendix-tables">Appendix: Layer-by-Layer Tables</h2>
+
+<p><a href="#simple-rsa">&uarr; Back to top</a></p>
+
+<h3>Simple RSA (Model A)</h3>
+{make_layerwise_table(simple_df, "rho") if simple_df is not None else PENDING_HTML}
+
+<h3>Partial RSA: Model A</h3>
+{make_layerwise_table(partial_primary_df[partial_primary_df["model"] == "A"].reset_index(drop=True), "beta") if partial_primary_df is not None else PENDING_HTML}
+
+<h3>Partial RSA: All Models (Primary Regression)</h3>
+{make_layerwise_table(partial_primary_df, "beta") if partial_primary_df is not None else PENDING_HTML}
+
+<h3>Partial RSA: Model E</h3>
+{make_layerwise_table(partial_secondary_df[partial_secondary_df["model"] == "E"].reset_index(drop=True), "beta") if partial_secondary_df is not None else PENDING_HTML}
+
+<h3>Category RSA (C1 &mdash; Mental State)</h3>
+{make_layerwise_table(category_df[category_df["condition"] == "mental_state"].reset_index(drop=True), "rho") if category_df is not None else PENDING_HTML}
+
+<hr>
+
+<p style="font-size:0.85em; color:#888;">
+Generated by <code>rsa/8a_report_generator.py</code>.
+Regenerate: <code>python code/rsa/8a_report_generator.py --model {args.model}</code>
+</p>
+
+</body>
+</html>"""
+
+    with open(out_html, "w") as f:
+        f.write(html)
+    print(f"Report saved: {out_html}")
+
+
+if __name__ == "__main__":
+    main()

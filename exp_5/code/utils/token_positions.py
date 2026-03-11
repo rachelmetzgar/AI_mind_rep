@@ -15,19 +15,36 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 # ── Helper ──────────────────────────────────────────────────────────────────
 
-def _find_subsequence(haystack, needle):
-    """Find first occurrence of needle list in haystack list.
+def _find_span_by_decode(input_ids, target_str, tokenizer, search_start=1):
+    """Find token span whose decoded text matches target_str.
+
+    Tokenizer-agnostic: works with both sentencepiece (LLaMA-2) and
+    BPE (LLaMA-3) by decoding candidate spans and comparing strings.
+
+    Args:
+        input_ids: list of token ids for the full sentence
+        target_str: the text to find (e.g. "notices", "crack")
+        tokenizer: HuggingFace tokenizer
+        search_start: first token index to consider (default 1, skip BOS)
 
     Returns:
-        (start, end) indices such that haystack[start:end] == needle.
+        (start, end) indices such that tokenizer.decode(input_ids[start:end])
+        matches target_str.
 
     Raises:
         ValueError if not found.
     """
-    for i in range(len(haystack) - len(needle) + 1):
-        if haystack[i : i + len(needle)] == needle:
-            return i, i + len(needle)
-    raise ValueError(f"Could not find {needle} in {haystack}")
+    target_clean = target_str.strip().lower()
+    max_span = min(10, len(input_ids))  # verbs/objects are at most ~5 tokens
+    for start in range(search_start, len(input_ids)):
+        for end in range(start + 1, min(start + max_span + 1, len(input_ids) + 1)):
+            decoded = tokenizer.decode(input_ids[start:end]).strip().lower()
+            if decoded == target_clean:
+                return start, end
+    raise ValueError(
+        f"Could not find '{target_str}' in token sequence "
+        f"{[tokenizer.decode([t]) for t in input_ids]}"
+    )
 
 
 # ── Core functions ──────────────────────────────────────────────────────────
@@ -97,18 +114,16 @@ def find_token_positions(sentence, item, condition, tokenizer):
     verb_str = _extract_verb_from_sentence(sentence, item, condition)
     obj_word = item["obj"].replace("the ", "", 1)  # e.g. "crack"
 
-    # Tokenize verb and object WITHOUT special tokens.
-    # Sentencepiece encodes the ▁ prefix on word-initial subwords
-    # automatically (e.g. encode("Notice") → [▁Notice]).
-    verb_ids = tokenizer.encode(verb_str, add_special_tokens=False)
-    obj_ids = tokenizer.encode(obj_word, add_special_tokens=False)
-
-    # Find verb subsequence in full token sequence
-    verb_start, verb_end = _find_subsequence(input_ids, verb_ids)
+    # Find verb and object spans by decoding candidate token spans.
+    # This is tokenizer-agnostic (works for both sentencepiece and BPE).
+    verb_start, verb_end = _find_span_by_decode(
+        input_ids, verb_str, tokenizer, search_start=1
+    )
     verb_idx = verb_end - 1  # last subword token of verb
 
-    # Find object subsequence
-    obj_start, obj_end = _find_subsequence(input_ids, obj_ids)
+    obj_start, obj_end = _find_span_by_decode(
+        input_ids, obj_word, tokenizer, search_start=1
+    )
     object_idx = obj_end - 1  # last subword token of object
 
     # Subject: only present in C1 (mental_state) and C4 (action)

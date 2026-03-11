@@ -1,0 +1,1 @@
+simple RSA does not account for correlations between outside pairs. so if c1 and c3 correlate but im testing for c1 against all others, it might still come out signficant  even though it is perfectly correlated with c3?
