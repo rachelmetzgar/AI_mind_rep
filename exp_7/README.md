@@ -4,7 +4,7 @@
 
 Experiments 1-3 establish that LLMs (1) behaviorally differentiate between human and AI partners, (2) form linearly decodable internal representations of partner identity, and (3) possess concept-level representations of mental properties like awareness, attention, and consciousness. Separately, Wu et al. (2025, npj AI) showed that ToM task performance depends on a sparse set of parameters concentrated in the positional encoding module — suggesting ToM relies on tracking which information is accessible to which entity based on narrative position.
 
-These two lines of evidence address different aspects of the same question. The positional-encoding work shows the model can track *who knows what* structurally, but doesn't ask whether mental-state concepts are involved. The concept elicitation work (Exp 3) shows the model *has* representations of mental properties, but doesn't test whether those representations are deployed during social reasoning.
+These two lines of evidence address different aspects of the same question. The positional-encoding work shows the model can track *who knows what* structurally, but doesn't ask whether mental-state concepts are involved. The previous work shows the model *has* representations of mental properties, but doesn't test whether those representations are deployed during social reasoning.
 
 Exp 7 bridges these approaches: **does the model activate mental-state concept representations (awareness, attention, consciousness) in a context-sensitive way that tracks characters' knowledge states during theory of mind tasks?**
 

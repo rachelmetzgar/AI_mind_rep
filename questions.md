@@ -8,7 +8,7 @@
 
 **Model choice: LLaMA-2-13B-Chat**
 - How is RLHF affecting things? What would we expect this to do to the representation?
-- 70B too big to run?
+- How do things compare to llama3? why do things change if they do?
 
 **System prompt wording**
 - "You believe you are speaking to" (current) vs "You are speaking to" — does the framing matter?
@@ -74,7 +74,6 @@ This probably explains why named models are performing better. Is this a confoun
 ### Causality
 
 - How to best pick an intervention strength and approach? So far I've been using Claude to QC data for degradation, and pick the strongest value before degradation.
-- I use a GPT judge like the Chen/Viegas paper. Is this a reasonable approach or might it be missing something?
 - V1 and V2 approaches. V1 is easier and quicker to run and shows that the steering generalizes. V2 is more of a replication — can we get the same results we saw before since we know we have equal power?
 
 ---
@@ -86,4 +85,3 @@ This probably explains why named models are performing better. Is this a confoun
 - Contrasts vs standalone: which is better?
 - How many concept examples do I actually need to elicit a good representation? Right now I have 40 human and 40 AI. Or 40 standalone. This is to allow me to do some stats. But it's different from the Anthropic approach which is 50 concepts but to isolate a concept they do a subtraction. But then how do I statistically compare that concept alignment with the other concepts? And how does this work with my probes?
 - Does my subtraction make sense? Human-AI probes and the human concept - AI concept.
-- Review statistical analyses and make sure they make sense.
