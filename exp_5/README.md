@@ -1,4 +1,4 @@
-# Experiment 5 — Mental State Attribution RSA
+# Experiment 5 — Mental State Attribution Bound Representation
 
 ## Overview
 
@@ -71,7 +71,19 @@ For item 1 (verb: "notices", action: "fills", object: "the crack"):
 | Scrambled form ("The X to Y") | no | no | yes | no | no | yes |
 | Shared object noun (within item) | yes | yes | yes | yes | yes | yes |
 
-## Analysis Pipeline
+## Three Analysis Approaches
+
+We test the core claim with three independent methods at increasing levels of causal strength:
+
+1. **RSA** (correlational) — Does the overall representational geometry across 336 sentences match attribution-specific structure, after partialing out confounds like verb type, subject presence, and word overlap?
+2. **Probes** (supervised) — Can we find specific linear directions that encode the bound attribution, and do those directions survive Gram-Schmidt removal of simpler feature directions?
+3. **Interchange intervention** (causal) — When we swap verb activations between sentences, do within-type swaps (mental→mental) transfer better than cross-type swaps (mental→action), indicating a dedicated binding mechanism?
+
+Each approach has its own code subdirectory (`code/rsa/`, `code/probes/`, `code/interchange/`) and can be run independently.
+
+---
+
+## Approach 1: RSA Analysis Pipeline
 
 ### Step 1: Extract Activations
 
@@ -202,7 +214,7 @@ Results in `results/{model}/rsa/data/reduced_4cond/`.
 
 ---
 
-## Probe Training Pipeline
+## Approach 2: Probe Training
 
 ### Overview and Key Questions
 
@@ -342,7 +354,7 @@ Test whether the model organizes mental state attributions by the 7 verb categor
 
 ---
 
-## Interchange Intervention Pipeline
+## Approach 3: Interchange Intervention Pipeline
 
 ### Overview
 
