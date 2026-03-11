@@ -56,7 +56,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 
 # --- Local imports ---
 from utils.dataset import llama_v2_prompt
-from config import config, get_device
+from config import config, get_device, add_variant_argument, set_variant, variant_filename
 
 
 # ========================== CONFIG ========================== #
@@ -274,25 +274,25 @@ def run_contrast_mode(model, tokenizer, human_prompts, ai_prompts,
     # Save
     os.makedirs(out_dir, exist_ok=True)
     np.savez_compressed(
-        os.path.join(out_dir, "concept_activations.npz"),
+        os.path.join(out_dir, variant_filename("concept_activations", ".npz")),
         activations=acts_array.numpy(),
         labels=labels_array.numpy(),
         n_human=int((labels_array == 1).sum()),
         n_ai=int((labels_array == 0).sum()),
     )
-    with open(os.path.join(out_dir, "concept_prompts.json"), "w") as f:
+    with open(os.path.join(out_dir, variant_filename("concept_prompts", ".json")), "w") as f:
         json.dump(prompt_metadata, f, indent=2)
     np.savez_compressed(
-        os.path.join(out_dir, "mean_vectors_per_layer.npz"),
+        os.path.join(out_dir, variant_filename("mean_vectors_per_layer", ".npz")),
         mean_human=mean_human.numpy(),
         mean_ai=mean_ai.numpy(),
     )
     np.savez_compressed(
-        os.path.join(out_dir, "concept_vector_per_layer.npz"),
+        os.path.join(out_dir, variant_filename("concept_vector_per_layer", ".npz")),
         concept_direction=concept_direction.numpy(),
         norms=norms.numpy(),
     )
-    with open(os.path.join(out_dir, "split_half_stability.json"), "w") as f:
+    with open(os.path.join(out_dir, variant_filename("split_half_stability", ".json")), "w") as f:
         json.dump({str(k): v for k, v in split_half.items()}, f, indent=2)
 
     print(f"\nSaved contrast outputs to {out_dir}/")
@@ -339,17 +339,17 @@ def run_standalone_mode(model, tokenizer, prompts, category_info,
     # Save
     os.makedirs(out_dir, exist_ok=True)
     np.savez_compressed(
-        os.path.join(out_dir, "concept_activations.npz"),
+        os.path.join(out_dir, variant_filename("concept_activations", ".npz")),
         activations=acts_array.numpy(),
         n_prompts=len(prompts),
     )
-    with open(os.path.join(out_dir, "concept_prompts.json"), "w") as f:
+    with open(os.path.join(out_dir, variant_filename("concept_prompts", ".json")), "w") as f:
         json.dump(prompt_metadata, f, indent=2)
     np.savez_compressed(
-        os.path.join(out_dir, "mean_vectors_per_layer.npz"),
+        os.path.join(out_dir, variant_filename("mean_vectors_per_layer", ".npz")),
         mean_concept=mean_concept.numpy(),
     )
-    with open(os.path.join(out_dir, "split_half_stability.json"), "w") as f:
+    with open(os.path.join(out_dir, variant_filename("split_half_stability", ".json")), "w") as f:
         json.dump({str(k): v for k, v in split_half.items()}, f, indent=2)
 
     print(f"\nSaved standalone outputs to {out_dir}/")
@@ -437,7 +437,11 @@ def main():
                         help="Dimension ID")
     parser.add_argument("--concepts_root", type=str, default=str(config.PATHS.concepts_root),
                         help="Root directory containing contrasts/ and standalone/")
+    add_variant_argument(parser)
     args = parser.parse_args()
+
+    if args.variant:
+        set_variant(args.variant)
 
     concepts_dir = os.path.join(args.concepts_root, args.mode)
 

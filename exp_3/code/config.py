@@ -60,7 +60,7 @@ _active_model = None
 _active_variant = ""
 
 # Variant suffix mapping: variant flag → filename suffix
-VARIANT_SUFFIXES = {"": "", "_1": "_top_align", "_simple": "_simple"}
+VARIANT_SUFFIXES = {"": "", "_1": "_top_align", "_simple": "_simple", "_other": "_other"}
 _active_variant_suffix = ""
 
 

@@ -117,7 +117,8 @@ exp_3/
 │
 ├── concepts/                                  # Concept prompt definitions
 │   ├── contrasts/                             #   Human vs AI paired prompts
-│   └── standalone/                            #   Concept-only prompts
+│   ├── standalone/                            #   Concept-only prompts (self-focused)
+│   └── other/standalone/                      #   Other-focused prompts ("someone")
 │
 ├── data/                                      # Reserved for external/input data
 │
@@ -215,6 +216,13 @@ config.RESULTS.comparisons      # → results/llama2_13b_chat/comparisons/
 ---
 
 ## Changelog
+
+### March 2026: Other-Focused Standalone Variant (`_other`)
+- **Purpose**: Tests whether concept alignment depends on self vs other perspective
+- **Prompts**: 25 files in `concepts/other/standalone/` — same dims as original standalone but with "someone" as subject instead of impersonal/generic framing
+- **Variant suffix**: `_other` on all data files (e.g., `concept_activations_other.npz`, `summary_other.json`)
+- **Pipeline**: Elicitation via `slurm/other_elicit_standalone.sh`, alignment via `slurm/other_alignment.sh`
+- **Scope**: Standalone analysis only (contrast prompts already use third-person entity framing)
 
 ### March 2026: Structural Refactoring
 - **Code flattened**: `pipeline/`, `analysis/alignment/`, `analysis/probes/`, `analysis/lexical/` merged into `code/`

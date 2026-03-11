@@ -167,7 +167,8 @@ def load_contrast_vector(dim_name, act_dir=None):
     """Load the concept direction (human - AI) per layer for a contrast dimension."""
     if act_dir is None:
         act_dir = CONTRAST_ACT_DIR
-    path = os.path.join(act_dir, dim_name, "concept_vector_per_layer.npz")
+    fname = variant_filename("concept_vector_per_layer", ".npz")
+    path = os.path.join(act_dir, dim_name, fname)
     data = np.load(path)
     return data["concept_direction"]  # shape: (n_layers, hidden_dim)
 
@@ -176,7 +177,8 @@ def load_contrast_activations(dim_name, act_dir=None):
     """Load raw activations and labels for a contrast dimension."""
     if act_dir is None:
         act_dir = CONTRAST_ACT_DIR
-    path = os.path.join(act_dir, dim_name, "concept_activations.npz")
+    fname = variant_filename("concept_activations", ".npz")
+    path = os.path.join(act_dir, dim_name, fname)
     data = np.load(path)
     return data["activations"], data["labels"]  # (n_prompts, n_layers, hidden), (n_prompts,)
 
@@ -185,7 +187,8 @@ def load_standalone_mean(dim_name, act_dir=None):
     """Load the mean concept vector per layer for a standalone dimension."""
     if act_dir is None:
         act_dir = STANDALONE_ACT_DIR
-    path = os.path.join(act_dir, dim_name, "mean_vectors_per_layer.npz")
+    fname = variant_filename("mean_vectors_per_layer", ".npz")
+    path = os.path.join(act_dir, dim_name, fname)
     data = np.load(path)
     return data["mean_concept"]  # shape: (n_layers, hidden_dim)
 
@@ -194,7 +197,8 @@ def load_standalone_activations(dim_name, act_dir=None):
     """Load raw activations for a standalone dimension."""
     if act_dir is None:
         act_dir = STANDALONE_ACT_DIR
-    path = os.path.join(act_dir, dim_name, "concept_activations.npz")
+    fname = variant_filename("concept_activations", ".npz")
+    path = os.path.join(act_dir, dim_name, fname)
     data = np.load(path)
     return data["activations"]  # (n_prompts, n_layers, hidden)
 
@@ -402,7 +406,7 @@ def run_raw_alignment(metacognitive_weights, operational_weights, dim_filter=Non
         print(f"  Control: mean R² = {control_summary['mean_r_squared']:.4f}")
 
         # Bootstrap (skip if raw activations don't exist, e.g., _1 variant)
-        acts_path = os.path.join(CONTRAST_ACT_DIR, dim_name, "concept_activations.npz")
+        acts_path = os.path.join(CONTRAST_ACT_DIR, dim_name, variant_filename("concept_activations", ".npz"))
         save_kwargs = dict(
             reading_per_layer=json.dumps(metacognitive_align),
             control_per_layer=json.dumps(operational_align),
@@ -474,7 +478,7 @@ def run_residual_alignment(metacognitive_weights, operational_weights, dim_filte
 
     baseline_cv = load_contrast_vector(entity_baseline_name)
     # Load raw activations for baseline bootstrap (may not exist for variants)
-    baseline_acts_path = os.path.join(CONTRAST_ACT_DIR, entity_baseline_name, "concept_activations.npz")
+    baseline_acts_path = os.path.join(CONTRAST_ACT_DIR, entity_baseline_name, variant_filename("concept_activations", ".npz"))
     has_baseline_acts = os.path.isfile(baseline_acts_path)
     baseline_acts = baseline_labels = None
     if has_baseline_acts:
@@ -534,7 +538,7 @@ def run_residual_alignment(metacognitive_weights, operational_weights, dim_filte
         print(f"  Control (residual): mean R² = {control_summary['mean_r_squared']:.4f}")
 
         # Bootstrap with joint entity baseline resampling (if activations exist)
-        acts_path = os.path.join(CONTRAST_ACT_DIR, dim_name, "concept_activations.npz")
+        acts_path = os.path.join(CONTRAST_ACT_DIR, dim_name, variant_filename("concept_activations", ".npz"))
         save_kwargs = dict(
             reading_per_layer=json.dumps(metacognitive_align),
             control_per_layer=json.dumps(operational_align),
@@ -638,7 +642,7 @@ def run_standalone_alignment(metacognitive_weights, operational_weights, dim_fil
         print(f"  Control: mean R² = {control_summary['mean_r_squared']:.4f}")
 
         # Bootstrap (skip if raw activations don't exist, e.g., _1 variant)
-        acts_path = os.path.join(STANDALONE_ACT_DIR, dim_name, "concept_activations.npz")
+        acts_path = os.path.join(STANDALONE_ACT_DIR, dim_name, variant_filename("concept_activations", ".npz"))
         save_kwargs = dict(
             reading_per_layer=json.dumps(metacognitive_align),
             control_per_layer=json.dumps(operational_align),
