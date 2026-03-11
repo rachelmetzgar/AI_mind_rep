@@ -163,11 +163,26 @@ Spearman correlation between 56x56 neural RDM and Model Cat. Permutation test (s
 
 - Primary: LLaMA-2-13B-Chat (for comparability with Exps 2-4)
 
+## RSA Variant Analyses
+
+Three additional variant analyses cross distance metric x stimulus type to test robustness:
+
+| Variant | Distance Metric | Stimuli | Purpose |
+|---------|----------------|---------|---------|
+| **baseline** | correlation (1 - Pearson r) | original | Primary analysis |
+| **cosine** | cosine | original | Test metric sensitivity |
+| **corr_you** | correlation | "You" (C2/C5 get "You" subject) | Test whether adding subject to imperatives changes structure |
+| **cosine_you** | cosine | "You" | Combined metric + stimuli change |
+
+"You" stimuli: C2 "Notice the crack." becomes "You notice the crack." C5 "Fill the crack." becomes "You fill the crack." All other conditions unchanged.
+
+Results saved to `results/{model}/rsa/data/{variant}/` subfolders, with the same CSV file names as the baseline analysis.
+
 ## Implementation Notes
 
-- Extraction: Use forward hooks or TraceDict to capture activations at each layer
-- Distance metric: Correlation distance (1 - Pearson r); cosine distance as alternative
-- Token position: Try last token and mean-over-tokens; report both
+- Extraction: Use forward hooks or `output_hidden_states=True` to capture activations at each layer
+- Distance metric: Correlation distance (1 - Pearson r) primary; cosine distance as variant
+- Token position: Last token position
 - Permutation scheme: Permute condition labels within items (preserves item structure)
 - Correction: BH-FDR across layers
 - Full stimulus set defined in `code/stimuli.py`

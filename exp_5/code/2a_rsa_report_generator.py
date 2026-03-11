@@ -314,6 +314,33 @@ def make_layerwise_table(df, value_col, p_col="p_fdr", label=""):
     """
 
 
+VARIANT_INFO = {
+    "cosine": {
+        "label": "Cosine Distance, Original Stimuli",
+        "metric": "cosine",
+        "stimuli": "original",
+        "desc": ("Uses cosine distance instead of correlation distance to compute "
+                 "neural RDMs. Same original stimuli as the baseline analysis."),
+    },
+    "corr_you": {
+        "label": "Correlation Distance, 'You' Stimuli",
+        "metric": "correlation",
+        "stimuli": "you",
+        "desc": ("Uses correlation distance (same as baseline) but with modified "
+                 "stimuli: C2 and C5 sentences are prefixed with 'You' "
+                 "(e.g., 'Notice the crack.' &rarr; 'You notice the crack.'). "
+                 "This adds an explicit 2nd-person subject to the subjectless imperatives."),
+    },
+    "cosine_you": {
+        "label": "Cosine Distance, 'You' Stimuli",
+        "metric": "cosine",
+        "stimuli": "you",
+        "desc": ("Combines both modifications: cosine distance metric and 'You'-prefixed "
+                 "C2/C5 stimuli."),
+    },
+}
+
+
 def peak_summary(df, value_col, p_col="p_fdr", model_filter=None):
     """Find peak layer and summarize."""
     if model_filter:
@@ -331,6 +358,198 @@ def peak_summary(df, value_col, p_col="p_fdr", model_filter=None):
     return (f"Peak layer: <strong>{int(peak['layer'])}</strong> "
             f"({value_col}={peak[value_col]:.4f}, {p_label}={p_val:.4f}). "
             f"Significant layers (FDR < .05): <strong>{sig_str}</strong>.")
+
+
+# ── Variant helpers ──────────────────────────────────────────────────────────
+
+def plot_variant_comparison_simple(baseline_df, variant_dfs, fig_dir):
+    """Compare simple RSA (Model A rho) across baseline and variants."""
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    variant_colors = {
+        "baseline": "#d62728",
+        "cosine": "#1f77b4",
+        "corr_you": "#2ca02c",
+        "cosine_you": "#ff7f0e",
+    }
+    variant_labels = {
+        "baseline": "Baseline (corr, original)",
+        "cosine": "Cosine, original",
+        "corr_you": "Correlation, 'You'",
+        "cosine_you": "Cosine, 'You'",
+    }
+
+    if baseline_df is not None:
+        layers = baseline_df["layer"].values
+        rhos = baseline_df["rho"].values
+        ax.plot(layers, rhos, color=variant_colors["baseline"], linewidth=2.5,
+                label=variant_labels["baseline"])
+        sig = safe_p_fdr(baseline_df) < 0.05
+        if sig.any():
+            ax.scatter(layers[sig], rhos[sig], color=variant_colors["baseline"],
+                       s=40, zorder=5, edgecolors="black", linewidth=0.5)
+
+    for vname, vdf in variant_dfs.items():
+        if vdf is None:
+            continue
+        layers = vdf["layer"].values
+        rhos = vdf["rho"].values
+        ax.plot(layers, rhos, color=variant_colors.get(vname, "gray"),
+                linewidth=1.5, linestyle="--",
+                label=variant_labels.get(vname, vname))
+
+    ax.axhline(0, color="gray", linewidth=0.5, linestyle="--")
+    ax.set_xlabel("Layer", fontsize=12)
+    ax.set_ylabel("Spearman rho", fontsize=12)
+    ax.set_title("Simple RSA (Model A): Baseline vs. Variants", fontsize=13)
+    ax.legend(fontsize=9, loc="upper left")
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
+
+    save_fig(fig, fig_dir / "variant_comparison_simple_rsa.png")
+    return fig_to_base64(fig)
+
+
+def plot_variant_comparison_partial(baseline_df, variant_dfs, fig_dir):
+    """Compare partial RSA Model A beta across baseline and variants."""
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    variant_colors = {
+        "baseline": "#d62728",
+        "cosine": "#1f77b4",
+        "corr_you": "#2ca02c",
+        "cosine_you": "#ff7f0e",
+    }
+    variant_labels = {
+        "baseline": "Baseline (corr, original)",
+        "cosine": "Cosine, original",
+        "corr_you": "Correlation, 'You'",
+        "cosine_you": "Cosine, 'You'",
+    }
+
+    if baseline_df is not None:
+        a_df = baseline_df[baseline_df["model"] == "A"]
+        if not a_df.empty:
+            layers = a_df["layer"].values
+            betas = a_df["beta"].values
+            ax.plot(layers, betas, color=variant_colors["baseline"], linewidth=2.5,
+                    label=variant_labels["baseline"])
+            sig = safe_p_fdr(a_df) < 0.05
+            if sig.any():
+                ax.scatter(layers[sig], betas[sig], color=variant_colors["baseline"],
+                           s=40, zorder=5, edgecolors="black", linewidth=0.5)
+
+    for vname, vdf in variant_dfs.items():
+        if vdf is None:
+            continue
+        a_df = vdf[vdf["model"] == "A"]
+        if a_df.empty:
+            continue
+        layers = a_df["layer"].values
+        betas = a_df["beta"].values
+        ax.plot(layers, betas, color=variant_colors.get(vname, "gray"),
+                linewidth=1.5, linestyle="--",
+                label=variant_labels.get(vname, vname))
+
+    ax.axhline(0, color="gray", linewidth=0.5, linestyle="--")
+    ax.set_xlabel("Layer", fontsize=12)
+    ax.set_ylabel("Standardized beta (Model A)", fontsize=12)
+    ax.set_title("Partial RSA: Model A Beta Across Variants", fontsize=13)
+    ax.legend(fontsize=9, loc="upper left")
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(5))
+
+    save_fig(fig, fig_dir / "variant_comparison_partial_rsa.png")
+    return fig_to_base64(fig)
+
+
+def generate_variant_section(vname, vinfo, rsa_data, fig_dir, fig_num_start):
+    """Generate HTML section for one variant analysis."""
+    PENDING = '<div class="result-box"><strong>Analysis not yet complete — rerun report after jobs finish.</strong></div>'
+
+    vdir = rsa_data / vname
+    def load_v(name):
+        path = vdir / name
+        if path.exists():
+            return pd.read_csv(path)
+        return None
+
+    simple = load_v("simple_rsa_results.csv")
+    partial_pri = load_v("partial_rsa_primary_results.csv")
+    partial_sec = load_v("partial_rsa_secondary_results.csv")
+    category = load_v("category_rsa_results.csv")
+
+    if all(x is None for x in [simple, partial_pri, partial_sec, category]):
+        return "", fig_num_start, {}
+
+    v_fig_dir = ensure_dir(fig_dir / vname)
+
+    # Figures
+    img_simple = plot_simple_rsa(simple, v_fig_dir) if simple is not None else ""
+    if partial_pri is not None and len(partial_pri) > 0:
+        img_partial = plot_partial_rsa(partial_pri, "A", v_fig_dir, "primary")
+        img_partial_sr = plot_partial_semi_partial(partial_pri, "A", v_fig_dir, "primary")
+    else:
+        img_partial = img_partial_sr = ""
+    img_cat = plot_category_rsa(category, v_fig_dir) if category is not None else ""
+
+    fn = fig_num_start
+    html = f"""
+<h2>Variant: {vinfo['label']}</h2>
+
+<div class="method-box">
+<strong>Distance metric:</strong> {vinfo['metric']}<br>
+<strong>Stimuli:</strong> {vinfo['stimuli']}<br><br>
+{vinfo['desc']}
+</div>
+
+<h3>Simple RSA (Model A)</h3>
+"""
+    if simple is not None:
+        html += f"""
+<img src="data:image/png;base64,{img_simple}" alt="Simple RSA — {vname}">
+<p class="caption"><strong>Figure {fn}.</strong> Simple RSA layer profile for variant
+<em>{vinfo['label']}</em>.</p>
+<div class="result-box">
+<strong>Summary:</strong> {peak_summary(simple, "rho")}
+</div>
+"""
+        fn += 1
+    else:
+        html += PENDING
+
+    html += "<h3>Partial RSA (Model A)</h3>"
+    if partial_pri is not None and len(partial_pri) > 0:
+        html += f"""
+<img src="data:image/png;base64,{img_partial}" alt="Partial RSA — {vname}">
+<p class="caption"><strong>Figure {fn}.</strong> Partial RSA with Model A as hypothesis
+for variant <em>{vinfo['label']}</em>.</p>
+<div class="result-box">
+<strong>Model A summary:</strong> {peak_summary(partial_pri, "beta", model_filter="A")}
+</div>
+"""
+        fn += 1
+    else:
+        html += PENDING
+
+    html += "<h3>Category RSA (C1)</h3>"
+    if category is not None:
+        c1 = category[category["condition"] == "mental_state"].reset_index(drop=True)
+        html += f"""
+<img src="data:image/png;base64,{img_cat}" alt="Category RSA — {vname}">
+<p class="caption"><strong>Figure {fn}.</strong> Category structure RSA by condition
+for variant <em>{vinfo['label']}</em>.</p>
+<div class="result-box">
+<strong>C1 summary:</strong> {peak_summary(c1, "rho")}
+</div>
+"""
+        fn += 1
+    else:
+        html += PENDING
+
+    html += "<hr>"
+
+    # Return loaded DFs for cross-variant comparison
+    loaded = {"simple": simple, "partial_primary": partial_pri}
+    return html, fn, loaded
 
 
 # ── Main report ──────────────────────────────────────────────────────────────
@@ -681,6 +900,93 @@ structure.</li>
 </div>
 
 <hr>
+"""
+
+    # ── Variant sections ─────────────────────────────────────────────────
+    fig_num = 8  # continue from baseline figures
+    variant_loaded = {}  # vname -> {"simple": df, "partial_primary": df}
+
+    for vname, vinfo in VARIANT_INFO.items():
+        v_html, fig_num, v_data = generate_variant_section(
+            vname, vinfo, rsa_data, fig_dir, fig_num)
+        if v_html:
+            html += v_html
+            variant_loaded[vname] = v_data
+
+    # ── Cross-variant comparison ──────────────────────────────────────────
+    variant_simple_dfs = {k: v.get("simple") for k, v in variant_loaded.items()}
+    variant_partial_dfs = {k: v.get("partial_primary") for k, v in variant_loaded.items()}
+    has_any_variant = any(v is not None for v in variant_simple_dfs.values())
+
+    if has_any_variant:
+        img_vc_simple = plot_variant_comparison_simple(
+            simple_df, variant_simple_dfs, fig_dir)
+        img_vc_partial = plot_variant_comparison_partial(
+            partial_primary_df, variant_partial_dfs, fig_dir)
+
+        html += f"""
+<h2>Cross-Variant Comparison</h2>
+
+<div class="method-box">
+<strong>Purpose:</strong> Compare the baseline analysis (correlation distance, original stimuli)
+with variant analyses that change the distance metric (cosine) and/or the stimulus set
+("You" subject added to C2/C5). Convergent results across variants strengthen confidence
+that the representational structure is robust and not an artifact of a particular distance
+metric or the specific surface form of imperative sentences.
+</div>
+
+<img src="data:image/png;base64,{img_vc_simple}" alt="Variant comparison — Simple RSA">
+<p class="caption"><strong>Figure {fig_num}.</strong> Simple RSA (Model A) layer profiles
+across all analysis variants. Solid line = baseline; dashed = variants. Convergent peaks
+indicate robust attribution structure.</p>
+
+<img src="data:image/png;base64,{img_vc_partial}" alt="Variant comparison — Partial RSA">
+<p class="caption"><strong>Figure {fig_num + 1}.</strong> Partial RSA Model A standardized
+beta across variants. Tests whether the unique variance explained by full attribution
+structure is robust to distance metric and stimulus modifications.</p>
+
+<hr>
+"""
+        fig_num += 2
+
+    # ── Interpretation + footer ───────────────────────────────────────────
+    html += """
+<h2>Interpretation Guide</h2>
+
+<div class="interpretation-box">
+<h3>What would each pattern of results mean?</h3>
+<ul>
+<li><strong>Model A significant (Analysis 1 & 2a):</strong> The model has a dedicated
+representational structure for bound mental state attributions that cannot be reduced to
+lexical (mental vocabulary), syntactic (SVO frame), or surface (word overlap, grammaticality)
+features.</li>
+
+<li><strong>Model B significant but not A (Analysis 2a):</strong> The clustering is driven
+by shared mental vocabulary &mdash; the model groups mental verbs together regardless of
+whether they appear in a full attribution frame.</li>
+
+<li><strong>Model D significant but not A:</strong> The clustering is driven by shared
+object nouns &mdash; items cluster by word overlap, not by condition structure.</li>
+
+<li><strong>Category structure in C1 only (Analysis 3):</strong> The 7-category organization
+of mental states requires the full attribution form. The model doesn't just know that
+"fears" and "dreads" are similar words; it represents them as similar <em>kinds of mental
+state attributions</em>.</li>
+
+<li><strong>Category structure in C1 and C2:</strong> Verb semantics alone organize the
+representational space. Still interesting, but a weaker claim about attribution-specific
+structure.</li>
+
+<li><strong>Variant convergence:</strong> If results hold across cosine vs. correlation
+distance and across original vs. "You" stimuli, the attribution structure is robust to
+both distance metric choice and the specific surface form of imperative conditions.</li>
+</ul>
+</div>
+
+<hr>
+"""
+
+    html += f"""
 <p style="font-size:0.85em; color:#888;">
 Generated by <code>2a_rsa_report_generator.py</code>.
 Regenerate: <code>python code/2a_rsa_report_generator.py --model {args.model}</code>

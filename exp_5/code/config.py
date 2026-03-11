@@ -124,6 +124,14 @@ N_CATEGORIES = len(CATEGORY_LABELS)
 
 N_PERMUTATIONS = 10_000
 
+# ── Probe / intervention constants ──────────────────────────────────────────
+
+POSITION_LABELS = ["verb", "object", "period"]
+N_POSITIONS = len(POSITION_LABELS)  # 3
+N_PERM_PROBES = 200       # permutation iterations for baseline probes
+N_PERM_CRITICAL = 10_000  # for critical tests
+N_BOOTSTRAP = 10_000      # for direction comparison
+
 # ── Self-test ────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

@@ -335,6 +335,29 @@ def get_item_groups():
     return groups
 
 
+def get_all_sentences_you():
+    """Return ordered list of (item_id, condition, category, sentence) tuples,
+    with C2 (dis_mental) and C5 (dis_action) modified to include 'You' subject.
+
+    C2: 'Notice the crack.' → 'You notice the crack.'
+    C5: 'Fill the crack.'   → 'You fill the crack.'
+
+    C1, C3, C4, C6 are unchanged.
+    Total: 336 tuples.  Index into this list matches row indices in the
+    activation matrix for the 'you' variant.
+    """
+    rows = []
+    for item in STIMULI:
+        for cond in CONDITION_LABELS:
+            sentence = item[cond]
+            if cond in ("dis_mental", "dis_action"):
+                # Lowercase first letter and prepend "You "
+                sentence = "You " + sentence[0].lower() + sentence[1:]
+            rows.append((item["id"], cond, item["cat"], sentence))
+    assert len(rows) == N_ITEMS * N_CONDITIONS
+    return rows
+
+
 if __name__ == "__main__":
     sentences = get_all_sentences()
     print(f"Total sentences: {len(sentences)}")
@@ -344,4 +367,12 @@ if __name__ == "__main__":
     for cat in CATEGORY_LABELS:
         idx = get_category_indices(cat)
         print(f"  {cat:12s}: {len(idx)} items, ids={[STIMULI[i]['id'] for i in idx]}")
+
+    # Show a few 'You' variant examples
+    you_sentences = get_all_sentences_you()
+    print(f"\n'You' variant sentences: {len(you_sentences)}")
+    print("  Examples (first item):")
+    for item_id, cond, cat, sent in you_sentences[:6]:
+        orig = sentences[you_sentences.index((item_id, cond, cat, sent))][3] if cond not in ("dis_mental", "dis_action") else "—"
+        print(f"    {cond:15s}: {sent}")
     print("Stimuli OK.")
