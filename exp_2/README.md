@@ -181,24 +181,6 @@ probes  = config.PATHS.probe_checkpoints        # -> exp_2/results/llama2_13b_ch
 v1_data = config.PATHS.intervention_results_v1  # -> exp_2/results/llama2_13b_chat/balanced_gpt/V1_causality/data/
 ```
 
-## Key Findings
-
-**Probe training (turn 5)**
-- Named-partner versions (names, balanced_names, balanced_gpt) achieve 75-79% peak accuracy, but operational probes match metacognitive probes — the signal comes from partner name tokens, not abstract identity.
-- Labels version shows a metacognitive > operational advantage (65% vs 60%, d=0.76), indicating probes detect abstract "human vs AI" beyond lexical cues.
-- Nonsense controls are at chance (~55%), confirming the signal requires semantic identity framing.
-
-**Turn comparison**
-- Turn 1 probes achieve near-perfect accuracy (~97%) across ALL versions including nonsense controls. This reflects proximity to the system prompt, not abstract representation.
-- Accuracy degrades monotonically across turns (prompt dilution): the system prompt tokens become proportionally diluted in longer sequences.
-- Peak layers shift from early (7-9) at turn 1 to late (33-40) at turn 5.
-
-**Alternative token positions**
-- BOS token: at chance (negative control).
-- Random mid-sequence: at chance for turns 2+ (partner identity is not broadcast to arbitrary tokens). Elevated at turn 1 due to short sequence length.
-- First `</s>` token: perfect accuracy, but this is a causal attention artifact.
-- Irrelevant (weather) suffix: nearly matches partner-relevant suffix, indicating the representation is accessible from any continuation token.
-
 ## Key Design Decisions
 
 - **Probe types**: Metacognitive probe (appends "I think my partner is") vs operational probe (probes at pre-generation position with no suffix).
