@@ -22,6 +22,10 @@
 - [Chat activation RSA](results/llama2_13b_chat/concept_geometry/rsa/activation/full_dataset/activation_rsa_report.html) — Chat model activation RSA
 - [Base contrast alignment](results/llama2_13b_base/concept_geometry/rsa/contrast_alignment/contrast_alignment_report.html) — Exp 3 contrast vectors projected onto character space
 - [Chat contrast alignment](results/llama2_13b_chat/concept_geometry/rsa/contrast_alignment/contrast_alignment_report.html) — Chat model contrast alignment
+- [Base standalone alignment](results/llama2_13b_base/concept_geometry/rsa/standalone_alignment/standalone_alignment_report.html) — Exp 3 standalone vectors projected onto character space
+- [Chat standalone alignment](results/llama2_13b_chat/concept_geometry/rsa/standalone_alignment/standalone_alignment_report.html) — Chat model standalone alignment
+- [Base concept RSA summary](results/llama2_13b_base/concept_geometry/rsa/concept/data/cross_concept_rsa_summary.md) — Per-dimension concept-specific RSA
+- [Chat concept RSA summary](results/llama2_13b_chat/concept_geometry/rsa/concept/data/cross_concept_rsa_summary.md) — Chat model concept RSA
 
 ### Archive
 - [Results walkthrough (pre-refactor)](archive/exp4_results_walkthrough.html) — Combined results across both models (legacy format)
@@ -47,6 +51,15 @@ Behavioral replication of Gray et al. (2007):
 - Spearman correlation of model factor scores with human Experience/Agency scores
 
 Both a chat and base model variant are tested, since the chat model's RLHF safety training causes refusals on ethically sensitive entities.
+
+### Bridge to human and AI entities
+How are different humans and AIs represented along these dimensions?
+TODO: more details
+
+### Concept Geometry (Exp 3 Bridge)
+
+Tests whether Exp 3 mental-property concept dimensions organize Exp 4's richer entity space. Uses 28 characters (14 AI + 14 human) and ~27 concept dimensions auto-discovered from `exp_3/concepts/standalone/`.
+TODO: more details
 
 ---
 
@@ -128,7 +141,9 @@ exp_4/
 │   │       ├── pca/behavioral/data/
 │   │       └── rsa/
 │   │           ├── activation/{data,full_dataset/}
-│   │           └── contrast_alignment/{data,contrast_alignment_report.html}
+│   │           ├── concept/{22 concept dims}/data/  # per-dim RSA
+│   │           ├── contrast_alignment/{data,contrast_alignment_report.html}
+│   │           └── standalone_alignment/{data,standalone_alignment_report.html}
 │   ├── llama2_13b_base/
 │   │   ├── internals/
 │   │   │   ├── rsa_report.html
@@ -147,7 +162,9 @@ exp_4/
 │   │       │   └── activation/data/
 │   │       └── rsa/
 │   │           ├── activation/{data,full_dataset/}
-│   │           └── contrast_alignment/{data,contrast_alignment_report.html}
+│   │           ├── concept/{22 concept dims}/data/    # per-dim RSA
+│   │           ├── contrast_alignment/{data,contrast_alignment_report.html}
+│   │           └── standalone_alignment/{data,standalone_alignment_report.html}
 │   └── comparisons/
 │       ├── behavioral_summary_report.html
 │       └── figures/                            # 10 cross-model publication figures
@@ -156,7 +173,8 @@ exp_4/
 │   └── exp5_plans.md
 └── logs/
     ├── internals/
-    └── behavior/
+    ├── behavior/
+    └── concept_geometry/
 ```
 
 ---
