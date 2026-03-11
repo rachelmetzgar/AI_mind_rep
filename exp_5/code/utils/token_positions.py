@@ -32,8 +32,49 @@ def _find_subsequence(haystack, needle):
 
 # ── Core functions ──────────────────────────────────────────────────────────
 
+def _extract_verb_from_sentence(sentence, item, condition):
+    """Extract the actual verb string as it appears in the sentence.
+
+    The verb form differs by condition:
+      C1/C4: 3rd-person ("notices", "fills")  — matches mverb/averb
+      C2/C5: imperative ("Notice", "Fill")     — bare form, capitalized
+      C3/C6: infinitive ("notice", "fill")     — bare form, lowercase
+
+    For multi-word verbs with prepositions (items 14, 30, 31, 37),
+    the preposition is part of the verb phrase.
+
+    Returns the verb string as it appears in the sentence.
+    """
+    is_mental = condition in ("mental_state", "dis_mental", "scr_mental")
+
+    # Get object phrase to locate boundaries (e.g. "the crack")
+    obj = item["obj"]  # "the crack"
+
+    if condition in ("mental_state", "action"):
+        # "He [verb...] the [obj]." or "He [verb...] [prep] the [obj]."
+        # Extract between "He " and the object phrase
+        after_he = sentence[3:]  # skip "He "
+        obj_pos = after_he.find(obj)
+        verb_str = after_he[:obj_pos].strip()
+    elif condition in ("dis_mental", "dis_action"):
+        # "[Verb...] the [obj]." or "[Verb...] [prep] the [obj]."
+        obj_pos = sentence.find(obj)
+        verb_str = sentence[:obj_pos].strip()
+    elif condition in ("scr_mental", "scr_action"):
+        # "The [obj] to [verb...]." or "The [obj] to [verb...] [prep]."
+        to_pos = sentence.find(" to ") + 4  # after " to "
+        verb_str = sentence[to_pos:].rstrip(".")
+    else:
+        raise ValueError(f"Unknown condition: {condition}")
+
+    return verb_str
+
+
 def find_token_positions(sentence, item, condition, tokenizer):
     """Identify verb, object, subject, and period token positions.
+
+    Extracts the actual verb and object strings from the sentence text,
+    then tokenizes them to find their positions in the full token sequence.
 
     Args:
         sentence: the raw sentence string
@@ -52,18 +93,15 @@ def find_token_positions(sentence, item, condition, tokenizer):
     # Period is always the last token
     period_idx = n_tokens - 1
 
-    # Determine which verb to use
-    is_mental = condition in ("mental_state", "dis_mental", "scr_mental")
-    verb_word = item["mverb"] if is_mental else item["averb"]
+    # Extract actual verb and object strings from the sentence
+    verb_str = _extract_verb_from_sentence(sentence, item, condition)
+    obj_word = item["obj"].replace("the ", "", 1)  # e.g. "crack"
 
-    # Get object word (strip "the " prefix from item["obj"])
-    obj_phrase = item["obj"]  # e.g. "the crack"
-    obj_word = obj_phrase.replace("the ", "", 1)  # e.g. "crack"
-
-    # Tokenize verb and object words with space prefix to match mid-sentence
-    # encoding (sentencepiece adds ▁ prefix for word-initial tokens)
-    verb_ids = tokenizer.encode(" " + verb_word, add_special_tokens=False)
-    obj_ids = tokenizer.encode(" " + obj_word, add_special_tokens=False)
+    # Tokenize verb and object WITHOUT special tokens.
+    # Sentencepiece encodes the ▁ prefix on word-initial subwords
+    # automatically (e.g. encode("Notice") → [▁Notice]).
+    verb_ids = tokenizer.encode(verb_str, add_special_tokens=False)
+    obj_ids = tokenizer.encode(obj_word, add_special_tokens=False)
 
     # Find verb subsequence in full token sequence
     verb_start, verb_end = _find_subsequence(input_ids, verb_ids)
@@ -187,9 +225,8 @@ def validate_positions(position_map, tokenizer):
         encoding = tokenizer(sentence, return_tensors="pt")
         input_ids = encoding["input_ids"][0].tolist()
 
-        # Check verb
-        is_mental = condition in ("mental_state", "dis_mental", "scr_mental")
-        expected_verb = item["mverb"] if is_mental else item["averb"]
+        # Check verb — compare to actual verb form in the sentence
+        expected_verb = _extract_verb_from_sentence(sentence, item, condition)
         verb_tokens = input_ids[entry["verb_start"] : entry["verb_end"]]
         decoded_verb = tokenizer.decode(verb_tokens).strip()
         if decoded_verb.lower() != expected_verb.lower():
