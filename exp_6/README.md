@@ -6,7 +6,16 @@ Extends classical 2-agent Theory of Mind probing (Zhu et al. 2024, Bortoletto et
 
 ## Sub-Experiments
 
-### 1_network — Displacement Narratives (Complete)
+### 1_deception — Lie Propagation (Planned)
+
+**Design:** Fixed 4-agent topology (Ann→Ben, Ann→Cam, Cam→Dan) where each communication edge can be truth or lie. 2^3 = 8 conditions, all with identical surface structure (same names, same sentence count, same extraction sentence). Conditions are grouped by lie count (0/1/2/3 lies), and within each group, different lie placements produce different belief geometries despite identical surface statistics.
+
+**Key advantages over 1_network:**
+- **Position confound eliminated:** Same extraction sentence and agent order in every condition
+- **Surface-stats-matched comparisons:** E1 vs E2 (both 1 lie, different belief geometry), E3 vs E6 (both 2 lies, but E6 has a double-flip where two lies cancel out)
+- **Double flip test:** In E6, Ann lies to Cam and Cam lies to Dan, so Dan ends up with the *correct* belief. No surface heuristic (counting lies) can predict this — requires compositional belief tracking
+
+### 2_network — Displacement Narratives (Complete)
 
 **Design:** 96 narratives = 3 topologies (chain/fork/diamond) x 4 conditions x 8 instantiations. An object moves and only some agents learn about it, creating divergent beliefs. RSA compares the model's agent-pair distance matrix to three candidate RDMs: epistemic (who shares beliefs), communication (who talked to whom), and position (token proximity).
 
@@ -18,22 +27,13 @@ Extends classical 2-agent Theory of Mind probing (Zhu et al. 2024, Bortoletto et
 - Cross-topology consistency: r = 0.95, 0.99 (same beliefs, different networks)
 - Epistemic > communication at 23/40 layers (Wilcoxon, BH-FDR corrected)
 
-**Limitation:** Position RDM dominates epistemic RDM at every layer — agents closer together in the extraction sentence have more similar representations regardless of belief state. The epistemic RDM is partially confounded with position (see `confound.md`). This motivates the deception sub-experiment.
-
-### 2_deception — Lie Propagation (Planned)
-
-**Design:** Fixed 4-agent topology (Ann→Ben, Ann→Cam, Cam→Dan) where each communication edge can be truth or lie. 2^3 = 8 conditions, all with identical surface structure (same names, same sentence count, same extraction sentence). Conditions are grouped by lie count (0/1/2/3 lies), and within each group, different lie placements produce different belief geometries despite identical surface statistics.
-
-**Key advantages over 1_network:**
-- **Position confound eliminated:** Same extraction sentence and agent order in every condition
-- **Surface-stats-matched comparisons:** E1 vs E2 (both 1 lie, different belief geometry), E3 vs E6 (both 2 lies, but E6 has a double-flip where two lies cancel out)
-- **Double flip test:** In E6, Ann lies to Cam and Cam lies to Dan, so Dan ends up with the *correct* belief. No surface heuristic (counting lies) can predict this — requires compositional belief tracking
+**Limitation:** Position RDM dominates epistemic RDM at every layer — agents closer together in the extraction sentence have more similar representations regardless of belief state. The epistemic RDM is partially confounded with position (see `confound.md`). This motivates the deception experiment.
 
 ## File Structure
 
 ```
 exp_6/
-  1_network/
+  2_network/
     code/
       config.py
       utils/
@@ -58,7 +58,7 @@ exp_6/
       {behavioral,activations,rdms,rsa,figures}/
     network_idea.md                # full experiment specification
     confound.md                    # position confound analysis
-  2_deception/
+  1_deception/
     deception_idea.md              # full design with all 8 conditions
   .gitignore
   README.md
