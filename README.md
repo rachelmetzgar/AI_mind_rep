@@ -6,7 +6,7 @@
 
 ## Motivation
 
-Do LLMs construct structured representations of mind during interaction, encoding dimensions like experience, agency, and intentionality in ways that parallel human social cognition? My work investigates both sides of human-AI interaction: using fMRI to study how human brains distinguish AI from human interlocutors, and using mechanistic interpretability methods to ask the complementary question about LLMs. Recent work on model personas (including persona vectors (Chen et al., 2025), the Assistant Axis (Lu et al., 2026), and the Persona Selection Model (Anthropic, 2026)) has shown that LLMs maintain coherent, causally active identity representations of *themselves*. We extend this line of inquiry to the other side of the conversation: how models represent the identity and mental properties of the *user* they are talking to during generation, and whether those representations carry the kind of compositional folk-psychological structure that decades of mind perception research in psychology would predict.
+Do LLMs construct structured representations of mind during interaction, encoding dimensions like experience, agency, and intentionality in ways that parallel human social cognition? My work investigates both sides of human-AI interaction: using fMRI to study how human brains distinguish AI from human interlocutors, and using mechanistic interpretability methods to ask the complementary question about LLMs.
 
 The project is organized around seven core questions:
 
@@ -16,9 +16,11 @@ The project is organized around seven core questions:
 4. Does LLM mind perception geometry mirror the structure found in human psychology? (Exp 4)
 5. Does the model maintain a dedicated representational structure for mental state attributions that is distinct from its component parts? (Exp 5)
 6. Do LLMs track multi-agent beliefs in their internal representations, beyond surface-level communication structure? (Exp 6)
-7. Do mental-state concept vectors activate during theory-of-mind reasoning? (Exp 7)
+7. *Future*: Do mental-state vectors activate during theory-of-mind reasoning? (Exp 7)
 
 **Why this matters:** Understanding how LLMs represent conversational partners has direct implications for AI safety (do models treat users differently based on who they think they're talking to?), alignment (are persona representations stable and controllable?), and the broader science of machine cognition (do LLMs develop something functionally analogous to theory of mind during real time interaction?). As AI-AI interaction becomes increasingly common, with models serving as agents, tools, and intermediaries for each other, knowing how partner identity representations shape behavior is critical for predicting how these systems will interact at scale. More broadly, this work probes the conceptual structure of representations of mind in LLMs: how models represent the mind of iteself and the user, what the characterisitcs and functions of those representations are, and whether that structure resembles the folk-psychological framework humans use to understand other agents. As models are deployed in high-stakes social contexts like therapy, education, companionship, the structure of these partner representations shapes how models adapt their behavior, and whether that adaptation is transparent, predictable, and aligned with human expectations.
+
+**Relevant Work:** Recent work on model representations of others (including demographic vectors (Chen et al., 2025), persona vectors (Chen et al. 2024), the Assistant Axis (Lu et al., 2026), and the Persona Selection Model (Anthropic, 2026)) has shown that LLMs maintain coherent, causally active identity representations of *user demographics* and *personas*. We extend this line of inquiry to ask: how models represent the identity and *mental properties* of the *user*, and do those representations carry the kind of compositional folk-psychological structure that decades of mind perception research in psychology would predict. Then I extend this work into questions about theory of mind: do models create structured, causally active representations of mental attribution?
 
 ---
 
@@ -35,7 +37,7 @@ Eight experiments address these questions at increasing mechanistic depth:
 | **Exp 4**: Mind Perception Geometry | Does the LLM's entity mind space mirror human folk psychology? | Behavioral replication of Gray et al. (2007) — pairwise + individual Likert ratings + activation RSA | LLaMA-2-13B base + chat |
 | **Exp 5**: Mental State Attribution RSA | Does the model have a dedicated representational structure for mental state attributions? | RSA on 336 sentences (56 items x 6 conditions) with partial regression to control lexical/syntactic confounds | LLaMA-2-13B-Chat |
 | **Exp 6**: Multi-Agent Belief Propagation | Do internal representations track who-believes-what in multi-agent narratives? | 4-agent belief propagation narratives + RSA comparing epistemic vs communication RDMs | LLaMA-2-13B-Chat |
-| **Exp 7**: ToM Concept Deployment | Are mental-state concepts activated during theory of mind reasoning? | Project Exp 3 concept vectors onto activations during false belief tasks | LLaMA-2-13B-Chat |
+| **Exp 7 (future)**: ToM Concept Deployment | Are mental-state concepts activated during theory of mind reasoning? | Project mind vectors onto activations during false belief tasks | LLaMA-2-13B-Chat |
 
 ### Data Versions
 
@@ -86,14 +88,11 @@ To test whether Exp 1 effects are driven by the *semantic instruction* about par
 
 | Version | Critical sentence | Tokens | Result |
 |---|---|---|---|
-| `nonsense_ignore/` | "Ignore the following phrase: {a Human / an AI}." | 40/41 | 14/23 significant (confounded) |
 | `nonsense_codeword/` | "Your assigned session code word is {a Human / an AI}." | 40/41 | **0/23 significant** |
 
 **nonsense_codeword** is the clean control: framing the tokens as an arbitrary session label eliminates all behavioral differentiation, confirming that effects require the model to process "Human"/"AI" as identity-relevant information, not just encounter the tokens.
 
-**nonsense_ignore** is confounded: "Ignore the following phrase: an AI" paradoxically activates instruction-compliance mode in LLaMA-2-Chat, shifting the AI-label condition into a formal, assistant-like register (8% action markers vs 30% baseline, 19% "Sure" prefixes vs 12% baseline). See `nonsense_ignore/results/QC_REPORT.md` for details.
-
-### Linguistic Measures
+### Linguistic Measure Examples
 All computed on participant agent speech only:
 1. **Word count** — communicative effort
 2. **Question frequency** — responsiveness and social engagement
@@ -104,42 +103,12 @@ All computed on participant agent speech only:
 7. **Theory of Mind phrases** — second-person mental state attributions (Wagovich et al., 2024)
 8. **Sentiment** — VADER compound scores
 
-### Analysis
-- 2×2 repeated-measures ANOVA (Partner × Sociality) with effect-specific error terms
-- Cross-species comparison via independent t-tests on subject-level condition effects
-
-### Results by Version
-
-| Version | Significant / 23 | Key effects |
-|---|---|---|
-| `names/` | **14** | Word count (AI > H), questions (H > AI), discourse markers, fillers, "like", ToM phrases, politeness (AI > H), hedging subcategories |
-| `balanced_names/` | **12** | Same core pattern minus word count and some hedging; discourse markers, "like", ToM phrases, politeness remain |
-| `balanced_gpt/` | **17** | Strongest version — adds sentiment (AI > H), conversational quality (AI > H), connectedness (H > AI) on top of the core pattern |
-| `labels/` | **5** | Interpersonal DMs, cognitive DMs, total DMs, "like" rate, politeness — the discourse/pragmatic core survives even without names |
-| `nonsense_codeword/` | **0** | Clean null — no effects when tokens lack identity-relevant framing |
-| `nonsense_ignore/` | **14** | Confounded by instruction-compliance artifact (see above) |
-
-The consistent core across all identity-relevant versions is **discourse markers** (interpersonal, cognitive), **"like" rate**, and **politeness** — pragmatic features that modulate conversational register. These survive even in the `labels/` version where no names are present. The `balanced_gpt/` version shows the strongest effects, likely because replacing Copilot with GPT-4 sharpens the AI category (Copilot's behavioral profile overlapped with human partners in the original `names/` version).
-
-**Status:** Complete. 
-
 ---
 
 ## Experiment 2 — Naturalistic Conversation Steering (`exp_2/`)
 
 ### Motivation
 Exp 1 shows behavioral differentiation. Exp 2 asks: is there a corresponding internal representation, and does it causally drive behavior? Uses naturalistic conversation structure identical to Exp 1.
-
-### Directory Structure
-Code is centralized at `exp_2/code/` with results organized by model and version:
-- `exp_2/code/` — Pipeline, analysis, utils, slurm scripts. Central `config.py`.
-- `exp_2/code/shared/` — Shared resources (topic lists, test questions)
-- `exp_2/results/llama2_13b_chat/{version}/` — Per-version results (`probe_training/`, `V1_causality/`, `V2_causality/`)
-- `exp_2/results/llama2_13b_chat/comparisons/` — Cross-version comparisons
-- `exp_2/archive/` — Old per-variant directory structure
-
-Six data versions: `labels` (primary), `balanced_names`, `balanced_gpt`, `names` (deprecated), `nonsense_codeword`, `nonsense_ignore`.
-Scripts use `--version` for data variant and `--mode V1/V2` for generation mode.
 
 ### Design
 
@@ -166,26 +135,13 @@ Scripts use `--version` for data variant and `--mode V1/V2` for generation mode.
 ### Motivation
 Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains* and how it aligns with different dimensions of human mental properties. Lindsey (2025) used concept injection and activation steering in Claude models to test whether LLMs exhibit emergent introspective awareness of their own internal states — finding limited but measurable introspective capability. Exp 3 applies similar contrastive concept elicitation and steering methods, directed at the model's representation of its conversational *partner's* mental properties.
 
-### Directory Structure
-Code is centralized at `exp_3/code/` with concepts and results at the top level:
-- `exp_3/code/` — Pipeline, analysis, utils, slurm scripts. Central `config.py` with `set_version()`.
-- `exp_3/concepts/` — Concept prompt definitions (`contrasts/`, `standalone/`, `other/standalone/`)
-- `exp_3/results/llama2_13b_chat/` — Model-scoped results
-  - `concept_activations/` — Extracted concept vectors (contrasts + standalone)
-  - `{version}/alignment/` — Concept-probe alignment per version
-  - `{version}/concept_steering/` — Steering outputs per version
-  - `comparisons/` — Cross-version comparisons
-- `exp_3/archive/` — Deprecated versions (`names/`, `old/`)
-
-Scripts accept `--version {labels,balanced_names,balanced_gpt,names}`. SLURM requires `VERSION` env var.
-
 ### Design
 
 **Phase 1 — Concept elicitation:**
 - Present LLaMA-2-13B-Chat with prompts designed to activate its concept of "human" vs. "AI" along 18 contrast dimensions
-- Dimensions span mental properties (social, agency, intentions, prediction, emotions, experience, communication, mind, attention), physical properties (embodiment, appearance, biology), behavioral properties (formality, warmth/expertise, helpfulness), and orthogonal controls (consciousness, shapes, baseline)
+- Dimensions span mental properties (e.g. social, agency, intentions, prediction, emotions, experience, communication, mind, attention), physical properties (embodiment, appearance, biology), behavioral properties (formality, warmth/expertise, helpfulness), and orthogonal controls (consciousness, shapes, baseline)
 - Extract contrastive activation vectors (human − AI) per dimension per layer
-- Additionally: 19 standalone concept vectors (no contrastive pairing)
+- Additionally: standalone concept vectors (no contrastive pairing)
 
 **Phase 2 — Alignment analysis:**
 - Cosine similarity between each concept dimension's probe weights and Exp 2's partner probes
@@ -201,45 +157,6 @@ Scripts accept `--version {labels,balanced_names,balanced_gpt,names}`. SLURM req
 
 **Phase 5 — Cross-prediction:**
 - Correlation between alignment (cos similarity) and causal efficacy (judge success rate) across dimensions
-
-### Concept Dimensions
-
-**Contrast dimensions** (human vs AI contrastive vectors):
-
-| ID | Dimension | Category |
-|---|---|---|
-| 0 | baseline | Baseline |
-| 1 | phenomenology | Mental |
-| 2 | emotions | Mental |
-| 3 | agency | Mental |
-| 4 | intentions | Mental |
-| 5 | prediction | Mental |
-| 6 | cognitive | Mental |
-| 7 | social | Mental |
-| 8 | embodiment | Physical |
-| 9 | roles | Physical |
-| 10 | animacy | Physical |
-| 11 | formality | Pragmatic |
-| 12 | expertise | Pragmatic |
-| 13 | helpfulness | Pragmatic |
-| 14 | biological | Bio Ctrl |
-| 15 | shapes | Shapes |
-| 16 | mind (holistic) | Meta |
-| 17 | attention | Mental |
-| 25 | beliefs | Mental |
-| 26 | desires | Mental |
-| 27 | goals | Mental |
-
-**Additional control dimensions** (non-mental negative controls):
-
-| ID | Dimension | Category |
-|---|---|---|
-| 29 | shapes (flipped poles) | Shapes |
-| 30 | granite vs sandstone | Shapes |
-| 31 | squares vs triangles | Shapes |
-| 32 | horizontal vs vertical | Shapes |
-
-**Standalone dimensions** (single-concept vectors, no contrastive pairing) cover the same mental, physical, and pragmatic concepts plus system prompt variants (dims 18-23). Three prompt perspectives: self-focused (default), other-focused ("someone"), and entity-focused (contrast prompts).
 
 ### Cross-Experiment Bridge: Concept Geometry
 
@@ -260,7 +177,7 @@ Behavioral replication of Gray et al. (2007):
 - PCA with varimax rotation to recover factor structure
 - Correlate model factor scores with human Experience/Agency scores
 
-### Two model variants
+### Model variants
 - **`llama2_13b_chat/`** — Chat model. Uses generated text responses.
 - **`llama2_13b_base/`** — Base model (no RLHF). Uses logit-based rating extraction (single forward pass, no generation). Avoids refusal issues inherent to chat models on ethically sensitive entities. Also testing individual Likert ratings (non-pairwise).
 
@@ -288,12 +205,6 @@ Experiments 2-3 show the model has linearly decodable partner representations wi
 
 56 mental state verbs span 7 categories (8 each): Attention, Memory, Sensation, Belief, Desire, Emotion, Intention.
 
-**Analysis:**
-- *Simple RSA*: Test whether full attribution sentences (C1) cluster together in activation space more than any other condition
-- *Partial RSA*: Multiple regression controlling for mental verb presence, subject presence, item identity (word overlap), grammatical order, scrambled form, and action verb presence. Tests unique variance for full attribution structure
-- *Secondary partial RSA*: Swaps Model A for Model E (mental verb + object, subject-optional) to test whether the subject is necessary
-- *Category structure RSA*: Within condition 1 only, test whether representations organize by the 7 verb categories. Optional graded model using Experience/Agency dimensions from Gray et al. (2007)
-
 ---
 
 ## Experiment 6 — Multi-Agent Belief Propagation (`exp_6/`)
@@ -301,41 +212,14 @@ Experiments 2-3 show the model has linearly decodable partner representations wi
 ### Motivation
 Experiments 1-3 examine 2-agent interactions (human vs AI). Exp 6 scales to 4 agents, asking whether the model's internal representational geometry of agent belief states mirrors the ground-truth epistemic geometry (who-believes-what), in a way that cannot be explained by surface-level features like syntactic proximity, co-occurrence, or communication structure. This parallels Gurnee & Tegmark (2023), who showed LLMs develop internal geographic representations whose distances reflect real-world geography — here applied to the social-cognitive domain.
 
-### Design
-- **96 narratives**: 3 network topologies (chain, fork, diamond) × 4 belief conditions × 8 instantiations
-- 4 agents per narrative learn a fact, communicate through a network, and experience a world-state change that reaches only some agents
-- **Key dissociation**: Override conditions create epistemic geometries that diverge from communication structure — agents who never communicated directly may share updated beliefs, while agents who did communicate may hold different beliefs
-- **Three candidate RDMs** compared via RSA: epistemic (who-believes-what, the prediction), communication (who-talked-to-whom), and positional (token distance)
-- **Confound controls**: 8 name sets rotated across conditions, fixed extraction sentence for agent positions, length-matched no-override narratives
-
-### Pipeline
-0. Stimulus generation → 1. Behavioral validation (can the model answer belief questions?) → 2. Activation extraction (hidden states at agent name tokens) → 3. RDM construction → 4. RSA analysis → 5. Figures
-
-See `exp_6/EXPERIMENT_SPEC.md` for full methodology, confound analysis, and implementation details.
-
 ---
 
 ## Experiment 7 — Mental-State Concept Deployment During Theory of Mind Reasoning (`exp_7/`)
 
 ### Motivation
-Experiments 1-3 establish that LLMs behaviorally differentiate between partner types, form linearly decodable partner representations, and possess concept-level representations of mental properties. Separately, Wu et al. (2025, npj AI) showed that ToM task performance depends on sparse parameters concentrated in positional encoding — suggesting ToM relies on tracking which information is accessible to which entity based on narrative position.
+Experiments 1-6 establish that LLMs behaviorally differentiate between partner types, form linearly decodable partner representations, and possess concept-level representations of mental properties. Separately, Wu et al. (2025, npj AI) showed that ToM task performance depends on sparse parameters concentrated in positional encoding — suggesting ToM relies on tracking which information is accessible to which entity based on narrative position.
 
-Exp 7 bridges these: **does the model activate mental-state concept representations (awareness, attention, consciousness) in a context-sensitive way that tracks characters' knowledge states during tasks meant to elicit ToM reasoning, like false belief tasks?**
-
-### Design
-
-**Stimuli:** Classic false belief tasks (Sally-Anne, unexpected contents) adapted for LLM processing, with multiple variants to avoid stimulus-specific artifacts.
-
-**Key extraction positions:** (1) Baseline — before any knowledge differential, (2) Shared knowledge — both characters know the state, (3) Knowledge divergence — character absent during state change, (4) False belief — character returns with outdated belief.
-
-**Analysis:**
-- Project hidden states onto Exp 3 concept vectors at each extraction position
-- Mental-state concepts (awareness, attention, consciousness, mind, prediction, intentions) hypothesized to modulate with knowledge state
-- Control concepts (shapes, embodiment, biology, formality) hypothesized to be stable
-- Test character specificity: modulation should track the specific character, not the scenario globally
-- Layer profiles compared to Exp 3 alignment and Exp 2 probe accuracy profiles
-
-**Potential extensions:** Causal steering during ToM, scaling to larger models, cross-experiment correlation with Exp 2/3 dimensions.
+Exp 7 bridges these: **does the model activate mental-state representations (e.g. from exp 3: awareness, attention, consciousness; exp5 bound representation) in a context-sensitive way that tracks characters' knowledge states during tasks meant to elicit ToM reasoning, like false belief tasks?**
 
 ---
 
@@ -386,7 +270,5 @@ Lu, C., Gallagher, J., Michala, J., Fish, K., & Lindsey, J. (2026). The assistan
 Touvron, H., Martin, L., Stone, K., et al. (2023). Llama 2: Open foundation and fine-tuned chat models. *arXiv preprint arXiv:2307.09288*.
 
 Wagovich, S. et al. (2024). Mental state verbs and linguistic measures. *Language & Communication*.
-
-Wimmer, H., & Perner, J. (1983). Beliefs about beliefs: Representation and constraining function of wrong beliefs in young children's understanding of deception. *Cognition*, 13(1), 103-128.
 
 Wu, Y., Guo, W., Liu, Z., Ji, H., Xu, Z., & Zhang, D. (2025). How large language models encode theory-of-mind: a study on sparse parameter patterns. *npj Artificial Intelligence*, 2(1).
