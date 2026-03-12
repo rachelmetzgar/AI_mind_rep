@@ -46,6 +46,10 @@ exp_5/code/utils/
 exp_5/results/
 exp_5/approach_brainstorm.md
 
+# Exp 6 network experiment (kept locally, not tracked)
+exp_6/2_network/
+exp_6/network.md
+
 # Large model or activation files
 **/activations/
 **/embeddings/
