@@ -38,6 +38,12 @@ Thumbs.db
 *.bak
 *.log
 
+# Exp 5 analysis code (kept locally, not tracked)
+exp_5/code/rsa/
+exp_5/code/probes/
+exp_5/code/interchange/
+exp_5/approach_brainstorm.md
+
 # Large model or activation files
 **/activations/
 **/embeddings/
