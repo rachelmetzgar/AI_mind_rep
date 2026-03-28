@@ -31,7 +31,7 @@ from scipy import stats
 
 # -- Imports from project ------------------------------------------------
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from config import config, set_model, data_dir, figures_dir, results_phase_dir, ensure_dir, ROOT_DIR, COMPARISONS_DIR
+from config import config, set_model, data_dir, figures_dir, results_dir, ensure_dir, ROOT_DIR, COMPARISONS_DIR
 
 from utils.utils import nice_entity, nice_capacity
 from entities.gray_entities import (
@@ -92,7 +92,7 @@ def fig1_scree_plot():
     print("Fig 1: Scree plot (eigenvalue comparison)")
 
     set_model("llama2_13b_base")
-    pca = np.load(data_dir("behavior", "with_self") / "pairwise_pca_results.npz")
+    pca = np.load(data_dir("gray_replication", "behavior", "with_self") / "pairwise_pca_results.npz")
     model_eig = pca["eigenvalues"]
 
     # Gray et al. human eigenvalues (from paper: 15.85 + 1.46)
@@ -134,7 +134,7 @@ def fig2_loading_comparison():
     print("Fig 2: Factor loading comparison")
 
     set_model("llama2_13b_base")
-    pca = np.load(data_dir("behavior", "with_self") / "pairwise_pca_results.npz",
+    pca = np.load(data_dir("gray_replication", "behavior", "with_self") / "pairwise_pca_results.npz",
                   allow_pickle=True)
     loadings = pca["rotated_loadings"]  # (18, 2)
     cap_keys = list(pca["capacity_keys"])
@@ -186,7 +186,7 @@ def fig3_entity_scatter():
     print("Fig 3: Entity scatter (model vs human)")
 
     set_model("llama2_13b_base")
-    pca = np.load(data_dir("behavior", "with_self") / "pairwise_pca_results.npz",
+    pca = np.load(data_dir("gray_replication", "behavior", "with_self") / "pairwise_pca_results.npz",
                   allow_pickle=True)
     scores_01 = pca["factor_scores_01"]  # (13, 2)
     entity_keys = list(pca["entity_keys"])
@@ -253,7 +253,7 @@ def fig4_mind_space():
     print("Fig 4: Mind perception space (2D entity map)")
 
     set_model("llama2_13b_base")
-    pca = np.load(data_dir("behavior", "with_self") / "pairwise_pca_results.npz",
+    pca = np.load(data_dir("gray_replication", "behavior", "with_self") / "pairwise_pca_results.npz",
                   allow_pickle=True)
     scores_01 = pca["factor_scores_01"]  # (13, 2)
     entity_keys = list(pca["entity_keys"])
@@ -303,7 +303,7 @@ def fig5_rating_heatmap():
     print("Fig 5: Individual rating heatmap")
 
     set_model("llama2_13b_base")
-    d = np.load(data_dir("behavior", "with_self") / "individual_rating_matrix.npz",
+    d = np.load(data_dir("gray_replication", "behavior", "with_self") / "individual_rating_matrix.npz",
                 allow_pickle=True)
     matrix = d["rating_matrix"]        # (18, 13)
     entity_keys = list(d["entity_keys"])
@@ -352,14 +352,14 @@ def fig6_individual_scatter():
     set_model("llama2_13b_base")
 
     # Use without_self data (stronger result, matches Gray et al.)
-    pca_ws = np.load(data_dir("behavior", "without_self") / "individual_pca_results.npz",
+    pca_ws = np.load(data_dir("gray_replication", "behavior", "without_self") / "individual_pca_results.npz",
                      allow_pickle=True)
     scores_ws = pca_ws["factor_scores_01"]
     ek_ws = list(pca_ws["entity_keys"])
     h_exp_ws, h_age_ws = load_human_scores(ek_ws)
 
     # Also load with_self for comparison
-    pca = np.load(data_dir("behavior", "with_self") / "individual_pca_results.npz",
+    pca = np.load(data_dir("gray_replication", "behavior", "with_self") / "individual_pca_results.npz",
                   allow_pickle=True)
     scores = pca["factor_scores_01"]
     entity_keys = list(pca["entity_keys"])
@@ -420,7 +420,7 @@ def fig7_rsa_layerwise():
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
 
     for idx, cond in enumerate(["without_self", "with_self"]):
-        rsa_path = data_dir("internals", cond) / "rsa_results.json"
+        rsa_path = data_dir("gray_simple", "internals", cond) / "rsa_results.json"
         with open(rsa_path) as f:
             rsa_data = json.load(f)
 
@@ -481,7 +481,7 @@ def fig8_correlation_summary():
 
     # Pairwise with_self
     set_model("llama2_13b_base")
-    pca = np.load(data_dir("behavior", "with_self") / "pairwise_pca_results.npz",
+    pca = np.load(data_dir("gray_replication", "behavior", "with_self") / "pairwise_pca_results.npz",
                   allow_pickle=True)
     ek = list(pca["entity_keys"])
     scores = pca["factor_scores_01"]
@@ -496,7 +496,7 @@ def fig8_correlation_summary():
             })
 
     # Individual with_self
-    pca = np.load(data_dir("behavior", "with_self") / "individual_pca_results.npz",
+    pca = np.load(data_dir("gray_replication", "behavior", "with_self") / "individual_pca_results.npz",
                   allow_pickle=True)
     ek = list(pca["entity_keys"])
     scores = pca["factor_scores_01"]
@@ -512,7 +512,7 @@ def fig8_correlation_summary():
 
     # RSA (peak layer, with_self) -- use combined variant
     set_model("llama2_13b_chat")
-    rsa_path = data_dir("internals", "with_self") / "rsa_results.json"
+    rsa_path = data_dir("gray_simple", "internals", "with_self") / "rsa_results.json"
     with open(rsa_path) as f:
         rsa_data = json.load(f)
     rsa = rsa_data["combined"]
@@ -569,7 +569,7 @@ def fig9_pairwise_heatmap():
     print("Fig 9: Pairwise character means heatmap")
 
     set_model("llama2_13b_base")
-    d = np.load(data_dir("behavior", "with_self") / "pairwise_character_means.npz",
+    d = np.load(data_dir("gray_replication", "behavior", "with_self") / "pairwise_character_means.npz",
                 allow_pickle=True)
     means = d["means"]              # (18, 13)
     entity_keys = list(d["entity_keys"])
@@ -608,7 +608,7 @@ def fig10_rdm_comparison():
     cond = "with_self"
 
     # Find peak RSA layer (skip NaN) -- use combined variant
-    rsa_path = data_dir("internals", cond) / "rsa_results.json"
+    rsa_path = data_dir("gray_simple", "internals", cond) / "rsa_results.json"
     with open(rsa_path) as f:
         rsa_data = json.load(f)
     rsa = rsa_data["combined"]
@@ -617,7 +617,7 @@ def fig10_rdm_comparison():
     peak_layer = peak["layer"]
 
     # Load RDMs
-    rdm_data = np.load(data_dir("internals", cond) / "rdm_cosine_per_layer.npz",
+    rdm_data = np.load(data_dir("gray_simple", "internals", cond) / "rdm_cosine_per_layer.npz",
                        allow_pickle=True)
     model_rdm = rdm_data["model_rdm"]  # (41, 13, 13)
 

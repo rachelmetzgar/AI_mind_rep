@@ -26,6 +26,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import ROOT_DIR, COMPARISONS_DIR, ensure_dir
 from utils.report_utils import (
     REPORT_CSS, build_toc, build_html_header, build_html_footer,
+    gray_entities_stimuli_html,
 )
 
 
@@ -168,6 +169,7 @@ def generate_report():
 
     sections = [
         {"id": "overview", "label": "Overview"},
+        {"id": "stimuli", "label": "Stimuli"},
         {"id": "behavioral", "label": "Behavioral Analysis (Base Model)"},
         {"id": "internals", "label": "Internal Representations (Chat Model)"},
         {"id": "summary", "label": "Cross-Method Summary"},
@@ -192,6 +194,9 @@ def generate_report():
     html += "</ol>\n"
     html += "<p>This report collects 10 publication-quality figures covering both levels.</p>\n"
     html += "</div>\n"
+
+    # ── Stimuli ──
+    html += gray_entities_stimuli_html(include_capacities=True)
 
     # ── Figures by section ──
     section_labels = {

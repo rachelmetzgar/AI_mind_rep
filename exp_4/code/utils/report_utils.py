@@ -18,6 +18,27 @@ from datetime import datetime
 # SHARED CSS
 # ============================================================================
 
+# ============================================================================
+# MODEL COLORS AND LABELS (cross-model reports)
+# ============================================================================
+
+MODEL_COLORS = {
+    "llama2_13b_chat": "#e41a1c",
+    "llama2_13b_base": "#377eb8",
+    "llama3_8b_instruct": "#ff7f00",
+    "llama3_8b_base": "#984ea3",
+}
+
+MODEL_LABELS = {
+    "llama2_13b_chat": "LLaMA-2-13B Chat",
+    "llama2_13b_base": "LLaMA-2-13B Base",
+    "llama3_8b_instruct": "LLaMA-3-8B Instruct",
+    "llama3_8b_base": "LLaMA-3-8B Base",
+}
+
+ALL_MODELS = list(MODEL_LABELS.keys())
+
+
 REPORT_CSS = """
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
            max-width: 1100px; margin: 40px auto; padding: 0 20px;
@@ -127,6 +148,23 @@ def build_html_header(title, model_label, css=None):
     )
 
 
+def build_cross_model_header(title, css=None):
+    """Return opening HTML for a cross-model report (no model in title)."""
+    full_css = REPORT_CSS
+    if css:
+        full_css += "\n" + css
+    now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return (
+        f'<!DOCTYPE html>\n<html><head>\n'
+        f'<meta charset="utf-8">\n'
+        f'<title>{title}</title>\n'
+        f'<style>{full_css}</style>\n'
+        f'</head><body>\n'
+        f'<h1>{title}</h1>\n'
+        f'<p>Generated: {now}</p>\n'
+    )
+
+
 def build_html_footer():
     """Return the closing </body></html> tags."""
     return '</body></html>'
@@ -153,6 +191,171 @@ def html_figure(b64_data, caption, fig_num=None, alt=""):
         f'  <figcaption>{prefix}{caption}</figcaption>\n'
         f'</figure>\n'
     )
+
+
+# ============================================================================
+# STIMULI SECTIONS
+# ============================================================================
+
+def gray_entities_stimuli_html(include_capacities=True):
+    """Return HTML for a 'Stimuli' section listing the 13 Gray et al. entities.
+
+    Includes entity names, descriptions, activation prompts, and human factor
+    scores. Optionally includes the 18 mental capacity survey items.
+    """
+    from entities.gray_entities import (
+        GRAY_ET_AL_SCORES, ENTITY_PROMPTS, ENTITY_NAMES,
+        CHARACTER_NAMES, CHARACTER_DESCRIPTIONS, CAPACITY_PROMPTS,
+    )
+
+    html = '<h2 id="stimuli">Stimuli</h2>\n'
+    html += '<h3>Entities</h3>\n'
+    html += ('<p>13 entities from Gray, Gray, &amp; Wegner (2007), spanning '
+             'biological organisms, artifacts, and supernatural beings. '
+             'Human factor scores (Experience, Agency) estimated from the '
+             'original Figure 1.</p>\n')
+    html += ('<table>\n'
+             '<tr><th>Entity</th><th>Name</th><th>Description</th>'
+             '<th>Prompt</th>'
+             '<th>Experience</th><th>Agency</th></tr>\n')
+    for key in ENTITY_NAMES:
+        name = CHARACTER_NAMES.get(key, key)
+        desc = CHARACTER_DESCRIPTIONS.get(key, "")
+        prompt = ENTITY_PROMPTS.get(key, "")
+        exp, ag = GRAY_ET_AL_SCORES[key]
+        html += (f'<tr><td>{key}</td><td>{name}</td>'
+                 f'<td style="font-size:0.85em">{desc}</td>'
+                 f'<td style="font-size:0.85em">{prompt}</td>'
+                 f'<td>{exp:.2f}</td><td>{ag:.2f}</td></tr>\n')
+    html += '</table>\n'
+
+    if include_capacities:
+        html += '<h3>Mental Capacities (18 items)</h3>\n'
+        html += ('<p>Pairwise comparison items from Gray et al. Each completes: '
+                 '&ldquo;Which character is more capable of &hellip;&rdquo;</p>\n')
+        html += ('<table>\n'
+                 '<tr><th>Capacity</th><th>Factor</th><th>Question</th></tr>\n')
+        for cap, (prompt, factor) in CAPACITY_PROMPTS.items():
+            factor_label = "Experience" if factor == "E" else "Agency"
+            html += (f'<tr><td>{cap}</td><td>{factor_label}</td>'
+                     f'<td style="font-size:0.85em">{prompt}</td></tr>\n')
+        html += '</table>\n'
+
+    return html
+
+
+def characters_stimuli_html(include_capacities=True, characters=None):
+    """Return HTML for a 'Stimuli' section listing the 30 AI/human characters.
+
+    Includes character names, types, descriptions, and activation prompts.
+    Optionally includes the 18 mental capacity survey items.
+    """
+    from entities.characters import (
+        CHARACTER_INFO, AI_CHARACTERS, HUMAN_CHARACTERS,
+        CHARACTER_PROMPTS, ALL_CHARACTERS,
+    )
+    from entities.gray_entities import CAPACITY_PROMPTS
+
+    char_keys = characters if characters is not None else ALL_CHARACTERS
+
+    html = '<h2 id="stimuli">Stimuli</h2>\n'
+    html += '<h3>Characters</h3>\n'
+
+    ai_in = [k for k in char_keys if k in AI_CHARACTERS]
+    human_in = [k for k in char_keys if k in HUMAN_CHARACTERS]
+    html += (f'<p>{len(char_keys)} characters: {len(ai_in)} AI + '
+             f'{len(human_in)} human. AI characters are identified by their '
+             'descriptions as artificial systems. Human characters have '
+             'naturalistic bios without explicit &ldquo;is a human&rdquo; '
+             'labeling.</p>\n')
+
+    html += ('<table>\n'
+             '<tr><th>Key</th><th>Name</th><th>Type</th>'
+             '<th>Description</th><th>Prompt</th></tr>\n')
+    # AI first, then human
+    for key in ai_in + human_in:
+        info = CHARACTER_INFO[key]
+        prompt = CHARACTER_PROMPTS.get(key, "")
+        type_label = info["type"].upper()
+        html += (f'<tr><td>{key}</td><td>{info["name"]}</td>'
+                 f'<td>{type_label}</td>'
+                 f'<td style="font-size:0.85em">{info["description"]}</td>'
+                 f'<td style="font-size:0.85em">{prompt}</td></tr>\n')
+    html += '</table>\n'
+
+    if include_capacities:
+        html += '<h3>Mental Capacities (18 items)</h3>\n'
+        html += ('<p>Pairwise comparison items from Gray et al. (2007). Each '
+                 'completes: &ldquo;Which character is more capable of '
+                 '&hellip;&rdquo;</p>\n')
+        html += ('<table>\n'
+                 '<tr><th>Capacity</th><th>Factor</th><th>Question</th></tr>\n')
+        for cap, (prompt, factor) in CAPACITY_PROMPTS.items():
+            factor_label = "Experience" if factor == "E" else "Agency"
+            html += (f'<tr><td>{cap}</td><td>{factor_label}</td>'
+                     f'<td style="font-size:0.85em">{prompt}</td></tr>\n')
+        html += '</table>\n'
+
+    return html
+
+
+def expanded_concepts_stimuli_html(characters=None):
+    """Return HTML for a 'Stimuli' section listing concept dimensions + characters.
+
+    Includes concept names, pairwise prompts, expected directions, plus the
+    character table.
+    """
+    from expanded_mental_concepts.concepts import (
+        CONCEPT_NAMES, CONCEPT_DIMENSIONS, CONCEPT_KEYS,
+        PAIRWISE_PROMPTS, CONCEPT_DIRECTION, N_CONCEPTS,
+    )
+    from entities.characters import (
+        CHARACTER_INFO, AI_CHARACTERS, HUMAN_CHARACTERS,
+        CHARACTER_PROMPTS, ALL_CHARACTERS,
+    )
+
+    char_keys = characters if characters is not None else ALL_CHARACTERS
+
+    html = '<h2 id="stimuli">Stimuli</h2>\n'
+
+    # Concept dimensions
+    html += '<h3>Concept Dimensions</h3>\n'
+    html += (f'<p>{N_CONCEPTS} concept dimensions bridging Exp 3 mental '
+             'concept vectors into the mind perception space.</p>\n')
+    html += ('<table>\n'
+             '<tr><th>Dim</th><th>Concept</th><th>Direction</th>'
+             '<th>Pairwise Prompt</th></tr>\n')
+    for key in CONCEPT_KEYS:
+        dim_info = CONCEPT_DIMENSIONS[key]
+        dim_id = dim_info["id"]
+        name = CONCEPT_NAMES.get(dim_id, key)
+        direction = CONCEPT_DIRECTION.get(dim_id, "?")
+        prompt = PAIRWISE_PROMPTS.get(dim_id, "")
+        html += (f'<tr><td>{dim_id}</td><td>{name}</td>'
+                 f'<td>{direction}</td>'
+                 f'<td style="font-size:0.85em">{prompt}</td></tr>\n')
+    html += '</table>\n'
+
+    # Characters
+    ai_in = [k for k in char_keys if k in AI_CHARACTERS]
+    human_in = [k for k in char_keys if k in HUMAN_CHARACTERS]
+    html += '<h3>Characters</h3>\n'
+    html += (f'<p>{len(char_keys)} characters: {len(ai_in)} AI + '
+             f'{len(human_in)} human.</p>\n')
+    html += ('<table>\n'
+             '<tr><th>Key</th><th>Name</th><th>Type</th>'
+             '<th>Description</th><th>Prompt</th></tr>\n')
+    for key in ai_in + human_in:
+        info = CHARACTER_INFO[key]
+        prompt = CHARACTER_PROMPTS.get(key, "")
+        type_label = info["type"].upper()
+        html += (f'<tr><td>{key}</td><td>{info["name"]}</td>'
+                 f'<td>{type_label}</td>'
+                 f'<td style="font-size:0.85em">{info["description"]}</td>'
+                 f'<td style="font-size:0.85em">{prompt}</td></tr>\n')
+    html += '</table>\n'
+
+    return html
 
 
 # ============================================================================

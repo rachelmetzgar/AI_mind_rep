@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<title>Experiment 4 — Data Status Report</title>
+<style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+           max-width: 1100px; margin: 40px auto; padding: 0 20px;
+           color: #333; line-height: 1.6; }
+    h1 { border-bottom: 2px solid #2196F3; padding-bottom: 10px; }
+    h2 { color: #1565C0; margin-top: 40px; }
+    h3 { color: #555; }
+    img { max-width: 100%; border: 1px solid #eee; border-radius: 4px;
+           margin: 10px 0; }
+    .stat { background: #f5f5f5; padding: 15px; border-radius: 6px;
+             margin: 10px 0; }
+    .stat strong { color: #1565C0; }
+    .method { background: #f8f9ff; padding: 20px; border-left: 4px solid #2196F3;
+              border-radius: 0 6px 6px 0; margin: 15px 0; }
+    .method ol { margin: 10px 0; padding-left: 20px; }
+    .method li { margin: 6px 0; }
+    .interpret { background: #fff8e1; padding: 15px; border-left: 4px solid #FFC107;
+                 border-radius: 0 6px 6px 0; margin: 15px 0; }
+    table { border-collapse: collapse; margin: 15px 0; }
+    th, td { padding: 6px 12px; border: 1px solid #ddd; text-align: right; }
+    th { background: #f0f0f0; }
+    td:first-child, th:first-child { text-align: left; }
+    .sig { color: #E53935; font-weight: bold; }
+    .success { background: #e8f5e9; padding: 12px; border-left: 4px solid #4CAF50;
+               border-radius: 0 6px 6px 0; margin: 10px 0; }
+    .warning { background: #fff3e0; padding: 12px; border-left: 4px solid #FF9800;
+               border-radius: 0 6px 6px 0; margin: 10px 0; }
+    .match { color: #2E7D32; font-weight: bold; }
+    .mismatch { color: #C62828; font-weight: bold; }
+    nav.toc { background: #f8f9ff; border: 1px solid #e0e0e0; border-radius: 6px;
+              padding: 15px 20px; margin: 15px 0; }
+    nav.toc ol { list-style: none; padding: 0; columns: 2; column-gap: 2rem; }
+    nav.toc li { padding: 2px 0; font-size: 0.9rem; }
+    nav.toc li a { color: #1565C0; text-decoration: none; }
+    nav.toc li a:hover { text-decoration: underline; }
+    figure { margin: 1.5rem 0; text-align: center; }
+    figure img { max-width: 100%; border: 1px solid #eee; border-radius: 4px; }
+    figcaption { font-size: 0.9rem; color: #555; margin-top: 8px;
+                 text-align: left; padding: 0 1rem; line-height: 1.5; }
+    figcaption strong { color: #333; }
+
+
+    .status-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    .status-table th, .status-table td {
+        padding: 8px 12px; border: 1px solid #ddd; text-align: center;
+        font-size: 0.9rem;
+    }
+    .status-table th { background: #f0f0f0; font-weight: 600; }
+    .status-table td:first-child { text-align: left; font-family: monospace;
+                                    font-size: 0.85rem; }
+    .status-table th:first-child { text-align: left; }
+    .cell-found { background: #e8f5e9; color: #2E7D32; font-weight: bold; }
+    .cell-missing { background: #ffebee; color: #C62828; font-weight: bold; }
+    .cell-na { background: #f5f5f5; color: #999; }
+    .summary-box { display: flex; gap: 20px; margin: 20px 0; flex-wrap: wrap; }
+    .summary-card { padding: 15px 25px; border-radius: 8px; text-align: center;
+                    min-width: 120px; }
+    .summary-card .count { font-size: 2rem; font-weight: bold; display: block; }
+    .summary-card .label { font-size: 0.85rem; color: #555; }
+    .card-found { background: #e8f5e9; }
+    .card-found .count { color: #2E7D32; }
+    .card-missing { background: #ffebee; }
+    .card-missing .count { color: #C62828; }
+    .card-na { background: #f5f5f5; }
+    .card-na .count { color: #999; }
+    .card-total { background: #e3f2fd; }
+    .card-total .count { color: #1565C0; }
+    .branch-header { margin-top: 40px; padding: 10px 15px; background: #f8f9ff;
+                     border-left: 4px solid #2196F3; border-radius: 0 6px 6px 0; }
+    .branch-desc { color: #555; font-size: 0.9rem; margin: 5px 0 15px 0; }
+    .path-hint { font-size: 0.8rem; color: #888; font-family: monospace; }
+</style>
+</head><body>
+<h1>Experiment 4 — Data Status Report</h1>
+<p>Generated: 2026-03-28 10:17:06</p>
+<nav class="toc">
+<strong>Contents</strong>
+<ol>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#overview">Overview by Branch</a></li>
+<li><a href="#gray_replication">Gray Replication (Pairwise Behavioral)</a></li>
+<li><a href="#gray_simple">Gray Simple (Neural Internals)</a></li>
+<li><a href="#human_ai_adaptation">Human/AI Adaptation (Behavioral)</a></li>
+<li><a href="#expanded_mental_concepts">Expanded Mental Concepts</a></li>
+</ol>
+</nav>
+<h2 id="summary">Summary</h2>
+<div class="summary-box">
+<div class="summary-card card-total"><span class="count">76</span><span class="label">Expected Files</span></div>
+<div class="summary-card card-found"><span class="count">59</span><span class="label">Found (78%)</span></div>
+<div class="summary-card card-missing"><span class="count">17</span><span class="label">Missing</span></div>
+<div class="summary-card card-na"><span class="count">0</span><span class="label">N/A</span></div>
+</div>
+<h2 id="overview">Overview by Branch</h2>
+<table class="status-table">
+<tr><th>Branch</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th></tr>
+<tr><td><a href="#gray_replication">Gray Replication (Pairwise Behavioral)</a></td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">3/5</td><td class="cell-found">5/5</td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">2/5</td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">2/5</td></tr>
+<tr><td><a href="#gray_simple">Gray Simple (Neural Internals)</a></td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td></tr>
+<tr><td><a href="#human_ai_adaptation">Human/AI Adaptation (Behavioral)</a></td><td class="cell-found">3/3</td><td class="cell-found">3/3</td><td class="cell-missing">0/3</td><td class="cell-found">3/3</td></tr>
+<tr><td><a href="#expanded_mental_concepts">Expanded Mental Concepts</a></td><td class="cell-found">7/7</td><td class="cell-found">7/7</td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">3/7</td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">5/7</td></tr>
+</table>
+<div class="branch-header"><h2 id="gray_replication">Gray Replication (Pairwise Behavioral)</h2></div>
+<p class="branch-desc">Replication of Gray, Gray, &amp; Wegner (2007) pairwise comparison paradigm with 13 entities and 18 mental capacity items.</p>
+<table class="status-table">
+<tr><th>File</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th></tr>
+<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/gray_replication/behavior/with_self/data/</td></tr>
+<tr><td>pairwise_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-missing">&#10007;</td></tr>
+<tr><td>pairwise_human_correlations.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-missing">&#10007;</td></tr>
+<tr><td>pairwise_consistency_stats.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-missing">&#10007;</td></tr>
+<tr><td>individual_pca_results.npz</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>individual_rating_matrix.npz</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+</table>
+<div class="branch-header"><h2 id="gray_simple">Gray Simple (Neural Internals)</h2></div>
+<p class="branch-desc">Simple activation extraction (&ldquo;Think about {entity}&rdquo;) for the 13 Gray entities. RSA and neural PCA analyses.</p>
+<table class="status-table">
+<tr><th>File</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th></tr>
+<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/gray_simple/internals/with_self/data/</td></tr>
+<tr><td>rsa_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>rdm_cosine_per_layer.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>neural_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>neural_pca_analysis.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+</table>
+<div class="branch-header"><h2 id="human_ai_adaptation">Human/AI Adaptation (Behavioral)</h2></div>
+<p class="branch-desc">30 AI/human characters rated on Gray et al. mental capacities via pairwise comparisons.</p>
+<table class="status-table">
+<tr><th>File</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th></tr>
+<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/human_ai_adaptation/behavior/data/</td></tr>
+<tr><td>pairwise_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>pairwise_categorical_analysis.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>pairwise_character_means.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td></tr>
+</table>
+<div class="branch-header"><h2 id="expanded_mental_concepts">Expanded Mental Concepts</h2></div>
+<p class="branch-desc">28 AI/human characters probed with Exp 3 concept dimensions. Behavioral (PCA), neural (RSA, concept RSA, alignment).</p>
+<table class="status-table">
+<tr><th>File</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th></tr>
+<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/behavior/pca/data/</td></tr>
+<tr><td>pairwise_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>pairwise_categorical_analysis.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/internals/rsa/data/</td></tr>
+<tr><td>rsa_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>rdm_cosine_per_layer.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/internals/concept_rsa/data/</td></tr>
+<tr><td>cross_concept_rsa_summary.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/internals/contrast_alignment/data/</td></tr>
+<tr><td>alignment_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-missing">&#10007;</td></tr>
+<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/internals/standalone_alignment/data/</td></tr>
+<tr><td>alignment_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-missing">&#10007;</td></tr>
+</table>
+<h2 id="legend">Legend</h2>
+<table class="status-table" style="width:auto;">
+<tr><td class="cell-found">&#10003;</td><td style="text-align:left;">File exists</td></tr>
+<tr><td class="cell-missing">&#10007;</td><td style="text-align:left;">File missing</td></tr>
+<tr><td class="cell-na">N/A</td><td style="text-align:left;">Not applicable for this model type</td></tr>
+</table>
+</body></html>

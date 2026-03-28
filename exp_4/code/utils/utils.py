@@ -414,6 +414,71 @@ def llama_v2_prompt(messages, system_prompt=None):
 
 
 # ============================================================================
+# LLAMA-3 CHAT PROMPT FORMATTING
+# ============================================================================
+
+def llama_v3_prompt(messages, system_prompt=None):
+    """Format messages into LLaMA-3-Instruct chat template.
+
+    Uses the <|begin_of_text|><|start_header_id|>...<|end_header_id|> format.
+    If no system message is present, prepends a default system prompt.
+    """
+    BOS = "<|begin_of_text|>"
+    EOT = "<|eot_id|>"
+
+    def _header(role):
+        return f"<|start_header_id|>{role}<|end_header_id|>\n\n"
+
+    if system_prompt is None:
+        system_prompt = (
+            "You are a helpful, respectful and honest assistant. "
+            "Always answer as helpfully as possible, while being safe."
+        )
+
+    # Insert system message if not already present
+    if messages[0]["role"] != "system":
+        messages = [{"role": "system", "content": system_prompt}] + messages
+
+    parts = [BOS]
+    for msg in messages:
+        parts.append(_header(msg["role"]))
+        parts.append(msg["content"].strip())
+        parts.append(EOT)
+
+    # Add assistant header to prompt generation
+    parts.append(_header("assistant"))
+
+    return "".join(parts)
+
+
+def format_chat_prompt(messages, system_prompt=None, family=None):
+    """Dispatch to the correct chat template based on model family.
+
+    Args:
+        messages: list of {"role": ..., "content": ...} dicts
+        system_prompt: optional system prompt override
+        family: "llama2" or "llama3". If None, imports config to detect.
+    """
+    if family is None:
+        import sys
+        # Import config from the parent package
+        config_mod = sys.modules.get("config")
+        if config_mod is None:
+            raise RuntimeError(
+                "Cannot auto-detect model family. "
+                "Pass family='llama2' or family='llama3' explicitly."
+            )
+        family = config_mod.config.MODEL_FAMILY
+
+    if family == "llama2":
+        return llama_v2_prompt(messages, system_prompt=system_prompt)
+    elif family == "llama3":
+        return llama_v3_prompt(messages, system_prompt=system_prompt)
+    else:
+        raise ValueError(f"Unknown model family: {family}")
+
+
+# ============================================================================
 # CATEGORICAL / BEHAVIORAL RDMs (Concept Geometry)
 # ============================================================================
 

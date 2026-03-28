@@ -3,7 +3,16 @@
 Experiment 4: Central Configuration
 
 All paths, model names, and constants in one place.
-Supports two model variants (llama2_13b_chat, llama2_13b_base) via set_model().
+Supports multiple model variants via set_model().
+
+Results are organized by branch (experimental paradigm), then modality:
+    results/{model}/{branch}/{modality}/{condition}/
+
+Branches:
+    gray_replication         — 13 Gray entities, pairwise comparisons
+    gray_simple              — 13 Gray entities, "Think about {entity}"
+    human_ai_adaptation      — 30 AI/human characters, Gray capacities
+    expanded_mental_concepts — 28 AI/human characters, Exp 3 concept dims
 
 Usage:
     import sys
@@ -11,7 +20,7 @@ Usage:
     from config import config, set_model, add_model_argument
 
     set_model("llama2_13b_chat")
-    data = config.data_dir("internals", "without_self")
+    ddir = data_dir("gray_simple", "internals", "without_self")
 
 Rachel C. Metzgar · Mar 2026
 """
@@ -28,7 +37,19 @@ from dataclasses import dataclass
 ROOT_DIR = Path(__file__).resolve().parent.parent  # exp_4/
 PROJECT_ROOT = ROOT_DIR.parent  # mind_rep/
 
-VALID_MODELS = ("llama2_13b_chat", "llama2_13b_base")
+VALID_MODELS = (
+    "llama2_13b_chat", "llama2_13b_base",
+    "llama3_8b_instruct", "llama3_8b_base",
+)
+
+VALID_BRANCHES = (
+    "gray_replication",
+    "gray_simple",
+    "human_ai_adaptation",
+    "expanded_mental_concepts",
+)
+
+_HF_CACHE = "/mnt/cup/labs/graziano/rachel/.cache_huggingface/hub"
 
 MODELS = {
     "llama2_13b_chat": {
@@ -38,19 +59,50 @@ MODELS = {
             "a2cb7a712bb6e5e736ca7f8cd98167f81a0b5bd8"
         ),
         "label": "LLaMA-2-13B-Chat",
+        "family": "llama2",
         "is_chat": True,
         "local_files_only": True,
+        "hidden_dim": 5120,
+        "n_transformer_layers": 40,
     },
     "llama2_13b_base": {
         "path": "meta-llama/Llama-2-13b-hf",
         "label": "LLaMA-2-13B (Base)",
+        "family": "llama2",
         "is_chat": False,
         "local_files_only": False,
+        "hidden_dim": 5120,
+        "n_transformer_layers": 40,
+    },
+    "llama3_8b_instruct": {
+        "path": (
+            f"{_HF_CACHE}/models--meta-llama--Meta-Llama-3-8B-Instruct/"
+            "snapshots/8afb486c1db24fe5011ec46dfbe5b5dccdb575c2"
+        ),
+        "label": "LLaMA-3-8B-Instruct",
+        "family": "llama3",
+        "is_chat": True,
+        "local_files_only": True,
+        "hidden_dim": 4096,
+        "n_transformer_layers": 32,
+    },
+    "llama3_8b_base": {
+        "path": (
+            f"{_HF_CACHE}/models--meta-llama--Meta-Llama-3-8B/"
+            "snapshots/8cde5ca8380496c9a6cc7ef3a8b46a0372a1d920"
+        ),
+        "label": "LLaMA-3-8B (Base)",
+        "family": "llama3",
+        "is_chat": False,
+        "local_files_only": True,
+        "hidden_dim": 4096,
+        "n_transformer_layers": 32,
     },
 }
 
-INPUT_DIM = 5120   # LLaMA-2-13B hidden size
-N_LAYERS = 41      # Embedding layer + 40 transformer layers
+# Defaults — updated by set_model() to match the active model
+INPUT_DIM = 5120   # LLaMA-2-13B hidden size (overwritten by set_model)
+N_LAYERS = 41      # Embedding + transformer layers (overwritten by set_model)
 
 
 # ============================================================================
@@ -77,6 +129,7 @@ class Config:
     MODEL_KEY: str = None
     MODEL_PATH: str = None
     MODEL_LABEL: str = None
+    MODEL_FAMILY: str = None
     IS_CHAT: bool = None
     LOCAL_FILES_ONLY: bool = None
 
@@ -106,27 +159,30 @@ def get_condition_tag(include_self: bool) -> str:
     return "with_self" if include_self else "without_self"
 
 
-def data_dir(phase, condition):
-    """Return path to data directory: results/{model}/{phase}/{condition}/data/"""
+def _build_path(*parts):
+    """Build a results path from parts, filtering out None."""
     if _active_model is None:
-        raise RuntimeError("Call set_model() before data_dir()")
-    return ensure_dir(ROOT_DIR / "results" / _active_model / phase / condition / "data")
+        raise RuntimeError("Call set_model() before using path helpers")
+    base = ROOT_DIR / "results" / _active_model
+    for p in parts:
+        if p is not None:
+            base = base / p
+    return base
 
 
-def figures_dir(phase, condition):
-    """Return path to figures directory: results/{model}/{phase}/{condition}/figures/"""
-    if _active_model is None:
-        raise RuntimeError("Call set_model() before figures_dir()")
-    return ensure_dir(ROOT_DIR / "results" / _active_model / phase / condition / "figures")
+def data_dir(branch, modality, condition=None):
+    """Return path: results/{model}/{branch}/{modality}/{condition}/data/"""
+    return ensure_dir(_build_path(branch, modality, condition, "data"))
 
 
-def results_phase_dir(phase, condition=None):
-    """Return path to results/{model}/{phase}/ or results/{model}/{phase}/{condition}/"""
-    if _active_model is None:
-        raise RuntimeError("Call set_model() before results_phase_dir()")
-    if condition:
-        return ensure_dir(ROOT_DIR / "results" / _active_model / phase / condition)
-    return ensure_dir(ROOT_DIR / "results" / _active_model / phase)
+def figures_dir(branch, modality, condition=None):
+    """Return path: results/{model}/{branch}/{modality}/{condition}/figures/"""
+    return ensure_dir(_build_path(branch, modality, condition, "figures"))
+
+
+def results_dir(branch, modality=None, condition=None):
+    """Return path: results/{model}/{branch}/{modality}/{condition}/"""
+    return ensure_dir(_build_path(branch, modality, condition))
 
 
 COMPARISONS_DIR = ROOT_DIR / "results" / "comparisons"
@@ -141,9 +197,9 @@ def set_model(model):
     Set the active model variant.
 
     Args:
-        model: One of VALID_MODELS ("llama2_13b_chat" or "llama2_13b_base")
+        model: One of VALID_MODELS
     """
-    global _active_model
+    global _active_model, INPUT_DIM, N_LAYERS
 
     if model not in VALID_MODELS:
         raise ValueError(f"Invalid model '{model}'. Must be one of: {VALID_MODELS}")
@@ -154,8 +210,15 @@ def set_model(model):
     config.MODEL_KEY = model
     config.MODEL_PATH = info["path"]
     config.MODEL_LABEL = info["label"]
+    config.MODEL_FAMILY = info["family"]
     config.IS_CHAT = info["is_chat"]
     config.LOCAL_FILES_ONLY = info["local_files_only"]
+
+    # Update model-specific architecture constants
+    config.INPUT_DIM = info["hidden_dim"]
+    config.N_LAYERS = info["n_transformer_layers"] + 1  # +1 for embedding layer
+    INPUT_DIM = config.INPUT_DIM
+    N_LAYERS = config.N_LAYERS
 
 
 def get_active_model():
@@ -192,9 +255,15 @@ if __name__ == "__main__":
         print(f"\n--- {m} ---")
         print(f"  Model path: {config.MODEL_PATH}")
         print(f"  Label: {config.MODEL_LABEL}")
+        print(f"  Family: {config.MODEL_FAMILY}")
         print(f"  Is chat: {config.IS_CHAT}")
         print(f"  Local files only: {config.LOCAL_FILES_ONLY}")
-        print(f"  data_dir('internals', 'without_self'): {data_dir('internals', 'without_self')}")
-        print(f"  figures_dir('behavior', 'with_self'): {figures_dir('behavior', 'with_self')}")
+        print(f"  Hidden dim: {config.INPUT_DIM}, Layers: {config.N_LAYERS}")
+        print(f"  data_dir('gray_simple', 'internals', 'without_self'):")
+        print(f"    {data_dir('gray_simple', 'internals', 'without_self')}")
+        print(f"  figures_dir('gray_replication', 'behavior', 'with_self'):")
+        print(f"    {figures_dir('gray_replication', 'behavior', 'with_self')}")
+        print(f"  results_dir('expanded_mental_concepts', 'internals', 'rsa'):")
+        print(f"    {results_dir('expanded_mental_concepts', 'internals', 'rsa')}")
 
     print(f"\nConfig loaded successfully!")
