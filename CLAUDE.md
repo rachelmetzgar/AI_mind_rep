@@ -36,32 +36,15 @@ After making significant changes, update MEMORY.md with the relevant tag:
 
 ## Project Overview
 
-Investigates whether LLMs internally represent conversation partner "mind type" (human vs AI) and whether steering those representations causally changes behavior. Four experiments at increasing mechanistic depth: behavioral analysis (Exp 1), linear probing + causal intervention (Exp 2), concept-level representational structure (Exp 3), implicit folk psychology geometry (Exp 4).
+Investigates whether LLMs internally represent conversation partner "mind type" (human vs AI) and whether steering those representations causally changes behavior. Eight experiments at increasing mechanistic depth: TalkTuner-style probing baseline (Exp 0), behavioral analysis across partner conditions (Exp 1), linear probing + causal intervention on naturalistic conversations (Exp 2), concept-level representational structure of mental properties (Exp 3), implicit folk psychology geometry replicating Gray et al. (Exp 4), RSA on mental state attribution sentences (Exp 5), multi-agent belief propagation tracking via representational geometry (Exp 6), and mental-state concept deployment during theory of mind reasoning (Exp 7, planned)
 
-**Primary model:** LLaMA-2-13B-Chat (probing/intervention). **Support:** GPT-3.5-Turbo (some data gen), GPT-4o-mini (judging).
+**Primary models:** LLaMA-2-13B-Chat,LLaMA-2-13B-Base, LLaMA-3-8B-Instruct, LLaMA-3-8B-Base. **Support:**  (exp5), GPT-3.5-Turbo (some data gen), GPT-4o-mini (judging).
 
 ---
 
 ## Experiments
 
-All experiments with conversation data have parallel versions to control for confounding factors.
-
-### Exp 1 — Behavioral Analysis (`exp_1/`)
-50 agents × 40 conversations (4 partner conditions × 10 topics). 23 linguistic measures. Multiple versions.
-
-### Exp 2 — Naturalistic Conversation Steering (`exp_2/`)
-Train linear probes on LLaMA-2 activations, steer via activation addition. Two probe types (reading vs control) test functional dissociation. V1 = single-turn, V2 = multi-turn.
-
-### Exp 3 — Concept Alignment / Injection (`exp_3/`)
-Tests whether partner representation has compositional mental-property structure. contrast dimensions, standalone concepts.
-
-### Exp 4 — Mind Perception Geometry (`exp_4/`)
-Behavioral + geometric replication of Gray et al. (2007). 13 entities × 18 mental capacities.
-
-### Exp 0 — TalkTuner Replication (`exp_0/`)
-Baseline replication of Viegas/TalkTuner methodology. Synthetic conversations with explicit partner roles.
-
-**For current status of each experiment, see MEMORY.md.**
+**For current status of each experiment, see README.md and MEMORY.md.**
 
 ---
 

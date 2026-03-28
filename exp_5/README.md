@@ -43,6 +43,10 @@ For item 1 (verb: "notices", action: "fills", object: "the crack"):
 | 5 | `dis_action` | Fill the crack. | Action verb + object, NO subject |
 | 6 | `scr_action` | The crack to fill. | Same words as cond 5, scrambled order |
 
+#### Open Question:
+Not sure the representational space is fully defined and cleaned of confounds. For example, do I need to control for the word "notices" or find a way to use notices in a grammatically correct sentence without referencing mental states? Or the word "he"
+or "he notices" but no object? Need to be careful to control for everything without introducing excess conditions that might limit signal detection power.
+
 ### Mental State Verb Categories (7 categories x 8 verbs = 56 items)
 
 | Category | Verbs |
