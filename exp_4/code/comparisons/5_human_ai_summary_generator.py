@@ -73,7 +73,7 @@ def load_model_data(model_key):
     or None if data is missing.
     """
     set_model(model_key)
-    ddir = data_dir("human_ai_adaptation", "behavior")
+    ddir = data_dir("human_ai_characters", "behavioral/gray_capacities")
 
     result = {"model": model_key, "label": MODEL_LABELS[model_key]}
 

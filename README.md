@@ -271,6 +271,6 @@ Lu, C., Gallagher, J., Michala, J., Fish, K., & Lindsey, J. (2026). The assistan
 
 Touvron, H., Martin, L., Stone, K., et al. (2023). Llama 2: Open foundation and fine-tuned chat models. *arXiv preprint arXiv:2307.09288*.
 
-Wagovich, S. et al. (2024). Mental state verbs and linguistic measures. *Language & Communication*.
+Wagovich, S. A., Threlkeld, K., Tigner, L., & Anderson, J. D. (2024). Mental state verb use in play by preschool-age children who stutter and their mothers. *Journal of Fluency Disorders*, 80, 106059.
 
 Wu, Y., Guo, W., Liu, Z., Ji, H., Xu, Z., & Zhang, D. (2025). How large language models encode theory-of-mind: a study on sparse parameter patterns. *npj Artificial Intelligence*, 2(1).

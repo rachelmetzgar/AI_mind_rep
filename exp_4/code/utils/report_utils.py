@@ -840,13 +840,12 @@ INSTRUCTION_TUNING_PAIRS = [
 # ============================================================================
 
 def add_dataset_argument(parser, default="full_dataset"):
-    """Add a --dataset argument to an argparse parser.
+    """Deprecated: previously controlled full_dataset/reduced_dataset subfolders.
 
-    Controls whether the report is written into a full_dataset/ or
-    reduced_dataset/ subfolder under the normal results directory.
+    Kept for CLI compatibility but the argument is ignored. Reports now
+    write directly to the results directory without a dataset subfolder.
     """
     parser.add_argument(
         "--dataset", type=str, default=default,
-        choices=["full_dataset", "reduced_dataset"],
-        help=f"Dataset subfolder for output (default: {default})"
+        help="(deprecated, ignored)"
     )

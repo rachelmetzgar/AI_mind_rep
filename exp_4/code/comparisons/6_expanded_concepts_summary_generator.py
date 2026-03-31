@@ -55,7 +55,7 @@ CONCEPT_KEYS = [
 CONTROL_CONCEPTS = {"shapes"}
 MENTAL_CONCEPTS = set(CONCEPT_KEYS) - CONTROL_CONCEPTS
 
-BRANCH = "expanded_mental_concepts"
+BRANCH = "human_ai_characters"
 
 # -- Style -------------------------------------------------------------------
 plt.rcParams.update({

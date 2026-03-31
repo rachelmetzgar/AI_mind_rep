@@ -58,21 +58,21 @@ submit_wave2() {
     log "Submitting Wave 2 for $model_key"
 
     # Individual ratings
-    local f="$SLURM_DIR/gray_replication/3_individual_${model_suffix}.sh"
+    local f="$SLURM_DIR/gray_entities/3_individual_${model_suffix}.sh"
     if [ -f "$f" ]; then
         local jid=$(sbatch "$f" 2>&1 | awk '{print $4}')
         log "  Submitted 3_individual: job $jid"
     fi
 
     # Neural PCA (CPU)
-    f="$SLURM_DIR/gray_simple/2_neural_pca_${model_suffix}.sh"
+    f="$SLURM_DIR/gray_entities/2_neural_pca_${model_suffix}.sh"
     if [ -f "$f" ]; then
         local jid=$(sbatch "$f" 2>&1 | awk '{print $4}')
         log "  Submitted 2_neural_pca: job $jid"
     fi
 
     # Names only
-    f="$SLURM_DIR/human_ai_adaptation/2_gray_names_only_${model_suffix}.sh"
+    f="$SLURM_DIR/human_ai_characters/2_gray_names_only_${model_suffix}.sh"
     if [ -f "$f" ]; then
         local jid=$(sbatch "$f" 2>&1 | awk '{print $4}')
         log "  Submitted 2_gray_names_only: job $jid"
@@ -95,72 +95,72 @@ run_postprocessing() {
     set -u
 
     # Gray replication post-processing
-    local pairwise_data=$(check_data_exists "$model" "gray_replication" "pairwise_pca_results.npz")
+    local pairwise_data=$(check_data_exists "$model" "gray_entities" "pairwise_pca_results.npz")
     if [ -n "$pairwise_data" ]; then
         log "  Running compute_excl_pca..."
-        python gray_replication/behavior/compute_excl_pca.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: compute_excl_pca failed"
+        python gray_entities/behavioral/5_compute_excl_pca.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: compute_excl_pca failed"
 
         log "  Running compute_human_comparisons..."
-        python gray_replication/behavior/compute_human_comparisons.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: compute_human_comparisons failed"
+        python gray_entities/behavioral/6_compute_human_comparisons.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: compute_human_comparisons failed"
 
         for cond in with_self without_self; do
             log "  Running make_loadings_bar_chart ($cond)..."
-            python gray_replication/behavior/make_loadings_bar_chart.py --model "$model" --condition "$cond" >> "$LOG" 2>&1 || log "  WARN: make_loadings_bar_chart ($cond) failed"
+            python gray_entities/behavioral/7a_loadings_bar_chart_generator.py --model "$model" --condition "$cond" >> "$LOG" 2>&1 || log "  WARN: make_loadings_bar_chart ($cond) failed"
 
             log "  Running make_condition_reports ($cond)..."
-            python gray_replication/behavior/make_condition_reports.py --model "$model" --condition "$cond" >> "$LOG" 2>&1 || log "  WARN: make_condition_reports ($cond) failed"
+            python gray_entities/behavioral/7_condition_report_generator.py --model "$model" --condition "$cond" >> "$LOG" 2>&1 || log "  WARN: make_condition_reports ($cond) failed"
         done
     else
         log "  SKIP: No pairwise data found for gray_replication"
     fi
 
     # Gray simple report
-    local rsa_data=$(check_data_exists "$model" "gray_simple" "rsa_results.json")
+    local rsa_data=$(check_data_exists "$model" "gray_entities" "rsa_results.json")
     if [ -n "$rsa_data" ]; then
         log "  Running gray_simple RSA report..."
-        python gray_simple/internals/1a_rsa_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: RSA report failed"
+        python gray_entities/neural/1a_rsa_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: RSA report failed"
     fi
 
-    local pca_data=$(check_data_exists "$model" "gray_simple" "neural_pca_results.npz")
+    local pca_data=$(check_data_exists "$model" "gray_entities" "neural_pca_results.npz")
     if [ -n "$pca_data" ]; then
         log "  Running neural PCA report..."
-        python gray_simple/internals/2a_neural_pca_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: neural PCA report failed"
+        python gray_entities/neural/2a_neural_pca_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: neural PCA report failed"
     fi
 
     # Human-AI adaptation reports
-    local chars_data=$(check_data_exists "$model" "human_ai_adaptation" "pairwise_pca_results.npz")
+    local chars_data=$(check_data_exists "$model" "human_ai_characters" "pairwise_pca_results.npz")
     if [ -n "$chars_data" ]; then
         log "  Running human_ai_adaptation reports..."
-        python human_ai_adaptation/behavior/1a_gray_chars_pca_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: PCA report failed"
-        python human_ai_adaptation/behavior/1b_gray_chars_detailed_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: detailed report failed"
-        python human_ai_adaptation/behavior/1c_gray_chars_rsa_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: RSA report failed"
+        python human_ai_characters/behavioral/gray_capacities/1a_gray_chars_pca_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: PCA report failed"
+        python human_ai_characters/behavioral/gray_capacities/1b_gray_chars_detailed_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: detailed report failed"
+        python human_ai_characters/behavioral/gray_capacities/1c_gray_chars_rsa_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: RSA report failed"
     fi
 
     # Expanded mental concepts reports
-    local bpca_data=$(check_data_exists "$model" "expanded_mental_concepts" "pairwise_pca_results.npz")
+    local bpca_data=$(check_data_exists "$model" "human_ai_characters" "pairwise_pca_results.npz")
     if [ -n "$bpca_data" ]; then
         log "  Running expanded_mental_concepts behavioral reports..."
-        python expanded_mental_concepts/behavior/pca/behavioral_pca_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: behavioral PCA report failed"
-        python expanded_mental_concepts/behavior/pca/matched_behavioral_pca.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: matched behavioral PCA failed"
-        python expanded_mental_concepts/behavior/pca/matched_behavioral_pca_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: matched behavioral PCA report failed"
-        python expanded_mental_concepts/behavior/pca/behavioral_attribution_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: behavioral attribution report failed"
-        python expanded_mental_concepts/behavior/pca/detailed_response_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: detailed response report failed"
+        python human_ai_characters/behavioral/expanded_concepts/1a_behavioral_pca_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: behavioral PCA report failed"
+        python human_ai_characters/behavioral/expanded_concepts/2_matched_behavioral_pca.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: matched behavioral PCA failed"
+        python human_ai_characters/behavioral/expanded_concepts/2a_matched_behavioral_pca_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: matched behavioral PCA report failed"
+        python human_ai_characters/behavioral/expanded_concepts/1b_behavioral_attribution_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: behavioral attribution report failed"
+        python human_ai_characters/behavioral/expanded_concepts/1c_detailed_response_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: detailed response report failed"
     fi
 
-    local arsa_data=$(check_data_exists "$model" "expanded_mental_concepts" "rsa_results.json")
+    local arsa_data=$(check_data_exists "$model" "human_ai_characters" "rsa_results.json")
     if [ -n "$arsa_data" ]; then
         log "  Running expanded_mental_concepts internals reports..."
-        python expanded_mental_concepts/internals/rsa/activation_rsa_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: activation RSA report failed"
-        python expanded_mental_concepts/internals/pca/activation_pca.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: activation PCA failed"
-        python expanded_mental_concepts/internals/pca/activation_pca_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: activation PCA report failed"
+        python human_ai_characters/neural/1a_activation_rsa_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: activation RSA report failed"
+        python human_ai_characters/neural/2_activation_pca.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: activation PCA failed"
+        python human_ai_characters/neural/1a_activation_pca_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: activation PCA report failed"
     fi
 
-    local salign_data=$(check_data_exists "$model" "expanded_mental_concepts" "standalone_alignment_report.html")
-    local salign_data2=$(check_data_exists "$model" "expanded_mental_concepts" "alignment_results.json")
+    local salign_data=$(check_data_exists "$model" "human_ai_characters" "standalone_alignment_report.html")
+    local salign_data2=$(check_data_exists "$model" "human_ai_characters" "alignment_results.json")
     if [ -n "$salign_data2" ]; then
         log "  Running standalone/contrast alignment reports..."
-        python expanded_mental_concepts/internals/standalone_alignment/standalone_alignment_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: standalone alignment report failed"
-        python expanded_mental_concepts/internals/contrast_alignment/contrast_alignment_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: contrast alignment report failed"
+        python human_ai_characters/neural/1a_standalone_alignment_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: standalone alignment report failed"
+        python human_ai_characters/neural/1a_contrast_alignment_report_generator.py --model "$model" >> "$LOG" 2>&1 || log "  WARN: contrast alignment report failed"
     fi
 
     log "  Post-processing complete for $model"

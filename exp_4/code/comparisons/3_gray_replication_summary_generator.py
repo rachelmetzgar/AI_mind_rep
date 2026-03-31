@@ -83,7 +83,7 @@ def load_model_data():
 
     for model in VALID_MODELS:
         set_model(model)
-        ddir = data_dir("gray_replication", "behavior", "with_self")
+        ddir = data_dir("gray_entities", "behavioral", "with_self")
         pca_path = ddir / "pairwise_pca_results.npz"
 
         if not pca_path.exists():

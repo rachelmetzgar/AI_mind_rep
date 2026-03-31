@@ -5,14 +5,12 @@ Experiment 4: Central Configuration
 All paths, model names, and constants in one place.
 Supports multiple model variants via set_model().
 
-Results are organized by branch (experimental paradigm), then modality:
+Results are organized by entity set, then modality:
     results/{model}/{branch}/{modality}/{condition}/
 
 Branches:
-    gray_replication         — 13 Gray entities, pairwise comparisons
-    gray_simple              — 13 Gray entities, "Think about {entity}"
-    human_ai_adaptation      — 30 AI/human characters, Gray capacities
-    expanded_mental_concepts — 28 AI/human characters, Exp 3 concept dims
+    gray_entities        — 13 Gray et al. entities (behavioral + neural)
+    human_ai_characters  — 30 AI/human characters (behavioral + neural + alignment)
 
 Usage:
     import sys
@@ -20,7 +18,7 @@ Usage:
     from config import config, set_model, add_model_argument
 
     set_model("llama2_13b_chat")
-    ddir = data_dir("gray_simple", "internals", "without_self")
+    ddir = data_dir("gray_entities", "neural", "without_self")
 
 Rachel C. Metzgar · Mar 2026
 """
@@ -47,10 +45,8 @@ VALID_MODELS = (
 )
 
 VALID_BRANCHES = (
-    "gray_replication",
-    "gray_simple",
-    "human_ai_adaptation",
-    "expanded_mental_concepts",
+    "gray_entities",
+    "human_ai_characters",
 )
 
 _HF_CACHE = "/mnt/cup/labs/graziano/rachel/.cache_huggingface/hub"
@@ -347,11 +343,11 @@ if __name__ == "__main__":
         print(f"  Is chat: {config.IS_CHAT}")
         print(f"  Local files only: {config.LOCAL_FILES_ONLY}")
         print(f"  Hidden dim: {config.INPUT_DIM}, Layers: {config.N_LAYERS}")
-        print(f"  data_dir('gray_simple', 'internals', 'without_self'):")
-        print(f"    {data_dir('gray_simple', 'internals', 'without_self')}")
-        print(f"  figures_dir('gray_replication', 'behavior', 'with_self'):")
-        print(f"    {figures_dir('gray_replication', 'behavior', 'with_self')}")
-        print(f"  results_dir('expanded_mental_concepts', 'internals', 'rsa'):")
-        print(f"    {results_dir('expanded_mental_concepts', 'internals', 'rsa')}")
+        print(f"  data_dir('gray_entities', 'neural', 'without_self'):")
+        print(f"    {data_dir('gray_entities', 'neural', 'without_self')}")
+        print(f"  figures_dir('gray_entities', 'behavioral', 'with_self'):")
+        print(f"    {figures_dir('gray_entities', 'behavioral', 'with_self')}")
+        print(f"  results_dir('human_ai_characters', 'neural/names_only', 'rsa_pca'):")
+        print(f"    {results_dir('human_ai_characters', 'neural/names_only', 'rsa_pca')}")
 
     print(f"\nConfig loaded successfully!")

@@ -76,7 +76,7 @@ def load_model_data(model_key):
     """Load all gray_simple data for a single model. Returns dict or None."""
     try:
         set_model(model_key)
-        ddir = data_dir("gray_simple", "internals", "with_self")
+        ddir = data_dir("gray_entities", "neural", "with_self")
 
         # RSA results
         rsa_path = ddir / "rsa_results.json"

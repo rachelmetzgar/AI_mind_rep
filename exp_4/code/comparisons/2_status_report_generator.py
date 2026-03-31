@@ -43,47 +43,47 @@ ALL = "all"
 BASE_ONLY = "base_only"
 
 EXPECTED_FILES = {
-    "gray_replication": {
+    "gray_entities": {
         "label": "Gray Replication (Pairwise Behavioral)",
         "description": (
             "Replication of Gray, Gray, &amp; Wegner (2007) pairwise comparison "
             "paradigm with 13 entities and 18 mental capacity items."
         ),
         "files": [
-            ("gray_replication/behavior/with_self/data", "pairwise_pca_results.npz", ALL),
-            ("gray_replication/behavior/with_self/data", "pairwise_human_correlations.json", ALL),
-            ("gray_replication/behavior/with_self/data", "pairwise_consistency_stats.json", ALL),
-            ("gray_replication/behavior/with_self/data", "individual_pca_results.npz", ALL),
-            ("gray_replication/behavior/with_self/data", "individual_rating_matrix.npz", ALL),
-            ("gray_replication/behavior/with_self/data", "behavioral_rsa_results.json", ALL),
+            ("gray_entities/behavioral/with_self/data", "pairwise_pca_results.npz", ALL),
+            ("gray_entities/behavioral/with_self/data", "pairwise_human_correlations.json", ALL),
+            ("gray_entities/behavioral/with_self/data", "pairwise_consistency_stats.json", ALL),
+            ("gray_entities/behavioral/with_self/data", "individual_pca_results.npz", ALL),
+            ("gray_entities/behavioral/with_self/data", "individual_rating_matrix.npz", ALL),
+            ("gray_entities/behavioral/with_self/data", "behavioral_rsa_results.json", ALL),
         ],
     },
-    "gray_simple": {
+    "gray_entities": {
         "label": "Gray Simple (Neural Internals)",
         "description": (
             "Simple activation extraction (&ldquo;Think about {entity}&rdquo;) "
             "for the 13 Gray entities. RSA and neural PCA analyses."
         ),
         "files": [
-            ("gray_simple/internals/with_self/data", "rsa_results.json", ALL),
-            ("gray_simple/internals/with_self/data", "rdm_cosine_per_layer.npz", ALL),
-            ("gray_simple/internals/with_self/data", "neural_pca_results.npz", ALL),
-            ("gray_simple/internals/with_self/data", "neural_pca_analysis.json", ALL),
+            ("gray_entities/neural/with_self/data", "rsa_results.json", ALL),
+            ("gray_entities/neural/with_self/data", "rdm_cosine_per_layer.npz", ALL),
+            ("gray_entities/neural/with_self/data", "neural_pca_results.npz", ALL),
+            ("gray_entities/neural/with_self/data", "neural_pca_analysis.json", ALL),
         ],
     },
-    "human_ai_adaptation": {
+    "human_ai_characters": {
         "label": "Human/AI Adaptation (Behavioral)",
         "description": (
             "30 AI/human characters rated on Gray et al. mental capacities "
             "via pairwise comparisons."
         ),
         "files": [
-            ("human_ai_adaptation/behavior/data", "pairwise_pca_results.npz", ALL),
-            ("human_ai_adaptation/behavior/data", "pairwise_categorical_analysis.json", ALL),
-            ("human_ai_adaptation/behavior/data", "pairwise_character_means.npz", ALL),
+            ("human_ai_characters/behavioral/gray_capacities/full_description/data", "pairwise_pca_results.npz", ALL),
+            ("human_ai_characters/behavioral/gray_capacities/full_description/data", "pairwise_categorical_analysis.json", ALL),
+            ("human_ai_characters/behavioral/gray_capacities/full_description/data", "pairwise_character_means.npz", ALL),
         ],
     },
-    "expanded_mental_concepts": {
+    "human_ai_characters": {
         "label": "Expanded Mental Concepts",
         "description": (
             "28 AI/human characters probed with Exp 3 concept dimensions. "
@@ -91,17 +91,17 @@ EXPECTED_FILES = {
         ),
         "files": [
             # Behavioral PCA
-            ("expanded_mental_concepts/behavior/pca/data", "pairwise_pca_results.npz", ALL),
-            ("expanded_mental_concepts/behavior/pca/data", "pairwise_categorical_analysis.json", ALL),
+            ("human_ai_characters/behavioral/expanded_concepts/full_description/data", "pairwise_pca_results.npz", ALL),
+            ("human_ai_characters/behavioral/expanded_concepts/full_description/data", "pairwise_categorical_analysis.json", ALL),
             # Internals: RSA
-            ("expanded_mental_concepts/internals/rsa/data", "rsa_results.json", ALL),
-            ("expanded_mental_concepts/internals/rsa/data", "rdm_cosine_per_layer.npz", ALL),
+            ("human_ai_characters/neural/names_only/rsa_pca/data", "rsa_results.json", ALL),
+            ("human_ai_characters/neural/names_only/rsa_pca/data", "rdm_cosine_per_layer.npz", ALL),
             # Internals: concept RSA
-            ("expanded_mental_concepts/internals/concept_rsa/data", "cross_concept_rsa_summary.json", ALL),
+            ("human_ai_characters/neural/names_only/concept_rsa/data", "cross_concept_rsa_summary.json", ALL),
             # Internals: contrast alignment
-            ("expanded_mental_concepts/internals/contrast_alignment/data", "alignment_results.json", ALL),
+            ("human_ai_characters/neural/names_only/alignment/contrast/data", "alignment_results.json", ALL),
             # Internals: standalone alignment
-            ("expanded_mental_concepts/internals/standalone_alignment/data", "alignment_results.json", ALL),
+            ("human_ai_characters/neural/names_only/alignment/standalone/data", "alignment_results.json", ALL),
         ],
     },
 }

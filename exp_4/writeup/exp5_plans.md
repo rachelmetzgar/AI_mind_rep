@@ -22,20 +22,20 @@ Select ~10 of the 19 standalone dimensions from exp_3. Full list with recommenda
 - **4: Intentions/goals/desires** — goal-directed behavior
 - **6: Cognitive (memory, attention, reasoning)** — shared capabilities?
 - **7: Social cognition** — understanding others' minds
-
-### Strong candidates (physical/pragmatic):
+- **18: Attention** — selective focus (straddles mental/cognitive)
+- **5: Prediction/behavior-reading**
 - **8: Embodiment** — physical vs digital existence
 - **10: Animacy** — biological vs mechanical
-- **13: Helpfulness/service orientation** — role asymmetry
+- **9: Functional roles**
 
 ### Control dimensions:
 - **15: Shapes** (orthogonal control) — should show NO human/AI difference
-- **18: Attention** — selective focus (straddles mental/cognitive)
+- **14: Biological processes** (non-mental control — should show strong divergence)
 
 ### Also worth considering:
-- **5: Prediction/behavior-reading**
-- **9: Functional roles**
-- **14: Biological processes** (non-mental control — should show strong divergence)
+- **13: Helpfulness/service orientation** — role asymmetry
+
+
 
 > **Decision needed:** Final selection of ~10 dimensions. User wants to be involved in this choice.
 
