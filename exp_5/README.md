@@ -1,8 +1,8 @@
-# Experiment 5 — Mental State Attribution Bound Representation
+# Experiment 5 — Mental State Attribution RSA
 
 ## Overview
 
-Tests whether LLaMA-2 maintains a dedicated representational structure for **mental state attributions** — the bound proposition {subject + mental state verb + object} — that is distinct from representations of the component parts in isolation.
+Tests whether LLMs maintain a dedicated representational structure for **mental state attributions** — the bound proposition {subject + mental state verb + object} — that is distinct from representations of the component parts in isolation. Run across 11 models spanning 4 families (LLaMA-2-13B, LLaMA-3-8B, Gemma-2-2B/9B, Qwen-2.5-7B, Qwen3-8B; base and instruct variants).
 
 The core claim: if the model has genuine mental state attribution machinery, then sentences like "He believes the story" should produce a representational geometry that is NOT explained by:
 - The presence of mental state vocabulary alone
@@ -74,4 +74,58 @@ or "he notices" but no object? Need to be careful to control for everything with
 | Grammatical word order | yes | yes | no | yes | yes | no |
 | Scrambled form ("The X to Y") | no | no | yes | no | no | yes |
 | Shared object noun (within item) | yes | yes | yes | yes | yes | yes |
+
+## Analysis: 5-Predictor Regression RSA
+
+The core analysis uses a 5-predictor multiple regression RSA on conditions C1-C4 (dropping C5/C6 scrambled action controls). The 5 model RDMs isolate progressively specific aspects of mental state attribution:
+
+| Predictor | Name | Conditions | Tests |
+|-----------|------|------------|-------|
+| A | Full Attribution | C1 only | Bound {subject + mental verb + object} |
+| B | Mental Verb + Object | C1, C2 | Mental verb with object, no subject required |
+| C | Mental Verb Presence | C1, C2, C3 | Presence of mental verb in any form |
+| D | Verb + Object | C1, C2, C4 | Verb-object binding regardless of verb type |
+| E | Subject + Verb + Object | C1, C4 | Full sentence structure regardless of verb type |
+
+**Key question:** Does predictor A capture unique variance (delta-R-squared) beyond what is explained by its component features (B-E)?
+
+Analyses run at three token positions: **verb** (before object is seen), **object** (verb-object binding begins), **period** (full sentence processed). 10,000 permutation tests with FDR correction.
+
+## Reports
+
+- [Cross-model comparison (11 models)](results/comparisons/rsa/5_predictors/5_predictors_cross_model_positional.html)
+- Per-model reports at `results/{model}/rsa/reports/5_predictors_positional_report.html`
+
+## Pipeline
+
+| Script | Description | GPU |
+|--------|-------------|-----|
+| `code/rsa/1_extract_activations.py` | Extract last-token activations (336 sentences) | Yes |
+| `code/probes/1_extract_multipos_activations.py` | Extract verb/object/period activations | Yes |
+| `code/rsa/5_predictors/1_reduced_1_4_rsa.py` | 5-predictor RSA (last-token) | No |
+| `code/rsa/5_predictors/1b_positional_rsa.py` | 5-predictor RSA (verb + object) | No |
+| `code/rsa/5_predictors/2b_positional_report.py` | Per-model + cross-model HTML reports | No |
+
+## Directory Structure
+
+```
+exp_5/
+├── code/
+│   ├── config.py
+│   ├── stimuli.py
+│   ├── rsa/
+│   │   ├── 1_extract_activations.py
+│   │   ├── 5_predictors/           # 5-predictor RSA analysis
+│   │   └── slurm/
+│   ├── probes/                     # Multi-position extraction + probe analyses
+│   ├── interchange/                # Interchange intervention analyses
+│   └── utils/
+├── results/
+│   ├── {model}/
+│   │   ├── activations/data/       # Extracted activations (gitignored)
+│   │   ├── rsa/data/5_predictors/  # RSA results (CSV, JSON, NPZ)
+│   │   └── rsa/reports/            # Per-model HTML reports
+│   └── comparisons/rsa/5_predictors/  # Cross-model comparison report
+└── concepts/                       # Stimulus definitions
+```
 

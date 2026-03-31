@@ -114,7 +114,7 @@ exp_2/
 │           └── causality_qc/                   # V1 QC summary across versions
 ├── logs/{model}/{version}/{step}/              # SLURM logs (gitignored)
 │   # step = probe_training | V1_causality | V2_causality
-└── write_up/
+└── writeup/
 ```
 
 ## Pipeline
