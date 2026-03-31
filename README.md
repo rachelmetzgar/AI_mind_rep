@@ -12,7 +12,7 @@ The project is organized around seven core questions:
 
 1. Do LLMs behaviorally differentiate between human and AI conversational partners, without explicit instruction to do so? (Exp 1)
 2. Are partner identity distinctions linearly encoded in model activations, and do they causally influence generation? (Exp 2)
-3. Do partner representations have compositional folk-psychological structure? (Exp 3)
+3. What is the semantic content of partner identity representations? Do they contain information about mental properties distinct for human and AI minds? (Exp 3)
 4. Does LLM mind perception geometry mirror the structure found in human psychology? (Exp 4)
 5. Does the model maintain a compositional representational structure for mental state attributions ({subject} + {mental state} + {object})? (Exp 5)
 6. *Planned*: Do LLMs track multi-agent beliefs in their internal representations, beyond surface-level communication structure? (Exp 6)
@@ -33,7 +33,7 @@ Eight experiments address these questions at increasing mechanistic depth:
 | **Exp 0**: TalkTuner Replication | Can we replicate method with existing human/AI classification? | Probing + intervention on synthetic conversations | LLaMA-2-13B-Chat + 7B base |
 | **Exp 1**: Behavioral Analysis | Do LLMs adjust behavior based on partner labels? | 2x2 ANOVA on linguistic measures across 2,000 conversations | LLaMA-2-13B-Chat + GPT 3.5 |
 | **Exp 2**: Naturalistic Steering | Is partner identity linearly decodable and causally active? | Linear probing + activation steering on naturalistic conversations | LLaMA-2-13B-Chat |
-| **Exp 3**: Concept-of-Mind Structure | Does the partner representation have compositional folk-psychological structure? | Contrastive concept elicitation (24 dimensions), alignment with partner probes, causal steering, lexical confound analysis | LLaMA-2-13B-Chat |
+| **Exp 3**: Concept-of-Mind Structure | What is the semantic content of partner identity representations? Do they encode mental properties distinct for human vs AI? | Contrastive concept elicitation (24 dimensions), alignment with partner probes, causal steering, lexical confound analysis | LLaMA-2-13B-Chat |
 | **Exp 4**: Implicit Folk Psychology | Does the LLM's entity mind space mirror human folk psychology? | Gray et al. (2007) replication across 4 branches: pairwise behavioral PCA, neural RSA, 30-character AI/human adaptation, expanded concept alignment | 11 models: LLaMA-2-13B, LLaMA-3-8B, Gemma-2-2B/9B, Qwen-2.5-7B, Qwen3-8B (base + instruct) |
 | **Exp 5**: Mental State Attribution RSA | Does the model have a dedicated representational structure for mental state attributions? | 5-predictor regression RSA on 336 sentences (56 items x 6 conditions) at last-token, verb, and object positions | 11 models: LLaMA-2-13B, LLaMA-3-8B, Gemma-2-2B/9B, Qwen-2.5-7B, Qwen3-8B (base + instruct) |
 | **Exp 6 (planned)**: Multi-Agent Belief Propagation | Do internal representations track who-believes-what in multi-agent narratives? | 4-agent belief propagation narratives + RSA comparing epistemic vs communication RDMs | LLaMA-2-13B-Chat |
@@ -130,10 +130,10 @@ Exp 1 shows behavioral differentiation. Exp 2 asks: is there a corresponding int
 
 ---
 
-## Experiment 3 — Concept-of-Mind Structure (`exp_3/`)
+## Experiment 3 — Semantic Content of Partner Identity Representations (`exp_3/`)
 
 ### Motivation
-Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains*: does it have compositional folk-psychological structure, with separable dimensions for different mental properties? Lindsey (2025) used concept injection and activation steering in Claude models to test whether LLMs exhibit emergent introspective awareness of their own internal states. Exp 3 applies similar contrastive concept elicitation and steering methods, directed at the model's representation of its conversational *partner's* mental properties.
+Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains*: what is its semantic content, and does it encode information about mental properties that are distinct for human versus AI minds? Lindsey (2025) used concept injection and activation steering in Claude models to test whether LLMs exhibit emergent introspective awareness of their own internal states. Exp 3 applies similar contrastive concept elicitation and steering methods, directed at the model's representation of its conversational *partner's* mental properties.
 
 ### Concept Dimensions
 24 concept dimensions spanning four categories, each defined by 40 reflective prompts:
