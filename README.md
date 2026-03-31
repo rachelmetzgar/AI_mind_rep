@@ -33,9 +33,9 @@ Eight experiments address these questions at increasing mechanistic depth:
 | **Exp 0**: TalkTuner Replication | Can we replicate method with existing human/AI classification? | Probing + intervention on synthetic conversations | LLaMA-2-13B-Chat + 7B base |
 | **Exp 1**: Behavioral Analysis | Do LLMs adjust behavior based on partner labels? | 2x2 ANOVA on linguistic measures across 2,000 conversations | LLaMA-2-13B-Chat + GPT 3.5 |
 | **Exp 2**: Naturalistic Steering | Is partner identity linearly decodable and causally active? | Linear probing + activation steering on naturalistic conversations | LLaMA-2-13B-Chat |
-| **Exp 3**: Concept Alignment | Does the partner representation have mental-property structure? | Concept elicitation + alignment analysis with probes + injection | LLaMA-2-13B-Chat |
-| **Exp 4**: Mind Perception Geometry | Does the LLM's entity mind space mirror human folk psychology? | Behavioral replication of Gray et al. (2007) — pairwise + individual Likert ratings + activation RSA | LLaMA-2-13B base + chat |
-| **Exp 5**: Mental State Attribution RSA | Does the model have a dedicated representational structure for mental state attributions? | RSA on 336 sentences (56 items x 6 conditions) with partial regression to control lexical/syntactic confounds | LLaMA-2-13B-Chat |
+| **Exp 3**: Concept-of-Mind Structure | Does the partner representation have compositional folk-psychological structure? | Contrastive concept elicitation (24 dimensions), alignment with partner probes, causal steering, lexical confound analysis | LLaMA-2-13B-Chat |
+| **Exp 4**: Implicit Folk Psychology | Does the LLM's entity mind space mirror human folk psychology? | Gray et al. (2007) replication across 4 branches: pairwise behavioral PCA, neural RSA, 30-character AI/human adaptation, expanded concept alignment | 11 models: LLaMA-2-13B, LLaMA-3-8B, Gemma-2-2B/9B, Qwen-2.5-7B, Qwen3-8B (base + instruct) |
+| **Exp 5**: Mental State Attribution RSA | Does the model have a dedicated representational structure for mental state attributions? | 5-predictor regression RSA on 336 sentences (56 items x 6 conditions) at last-token, verb, and object positions | 11 models: LLaMA-2-13B, LLaMA-3-8B, Gemma-2-2B/9B, Qwen-2.5-7B, Qwen3-8B (base + instruct) |
 | **Exp 6**: Multi-Agent Belief Propagation | Do internal representations track who-believes-what in multi-agent narratives? | 4-agent belief propagation narratives + RSA comparing epistemic vs communication RDMs | LLaMA-2-13B-Chat |
 | **Exp 7 (future)**: ToM Concept Deployment | Are mental-state concepts activated during theory of mind reasoning? | Project mind vectors onto activations during false belief tasks | LLaMA-2-13B-Chat |
 
@@ -130,61 +130,63 @@ Exp 1 shows behavioral differentiation. Exp 2 asks: is there a corresponding int
 
 ---
 
-## Experiment 3 — Concept Alignment / Injection (`exp_3/`)
+## Experiment 3 — Concept-of-Mind Structure (`exp_3/`)
 
 ### Motivation
-Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains* and how it aligns with different dimensions of human mental properties. Lindsey (2025) used concept injection and activation steering in Claude models to test whether LLMs exhibit emergent introspective awareness of their own internal states — finding limited but measurable introspective capability. Exp 3 applies similar contrastive concept elicitation and steering methods, directed at the model's representation of its conversational *partner's* mental properties.
+Exp 2 showed the partner representation *exists* and is *causal*. Exp 3 asks what the representation *contains*: does it have compositional folk-psychological structure, with separable dimensions for different mental properties? Lindsey (2025) used concept injection and activation steering in Claude models to test whether LLMs exhibit emergent introspective awareness of their own internal states. Exp 3 applies similar contrastive concept elicitation and steering methods, directed at the model's representation of its conversational *partner's* mental properties.
+
+### Concept Dimensions
+24 concept dimensions spanning four categories, each defined by 40 reflective prompts:
+- **Mental** (12 dims): phenomenology, emotions, agency, intentions, prediction, cognitive processes, social cognition, attention, beliefs, desires, goals, holistic mind
+- **Physical/pragmatic** (6 dims): embodiment, animacy, roles, formality, expertise, helpfulness
+- **Controls** (6 dims): baseline (entity framing only), shapes, shapes-flip, granite/sandstone, squares/triangles, horizontal/vertical
 
 ### Design
 
-**Phase 1 — Concept elicitation:**
-- Present LLaMA-2-13B-Chat with prompts designed to activate its concept of "human" vs. "AI" along 18 contrast dimensions
-- Dimensions span mental properties (e.g. social, agency, intentions, prediction, emotions, experience, communication, mind, attention), physical properties (embodiment, appearance, biology), behavioral properties (formality, warmth/expertise, helpfulness), and orthogonal controls (consciousness, shapes, baseline)
-- Extract contrastive activation vectors (human − AI) per dimension per layer
-- Additionally: standalone concept vectors (no contrastive pairing)
+**Phase 1 — Concept elicitation.** LLaMA-2-13B-Chat is presented with prompts designed to activate its concept of "human" vs. "AI" along each dimension (e.g., "Think about how a human experiences emotions" vs. "Think about how an AI experiences emotions"). Last-token activations are extracted at all 41 layers, yielding 5,120-dimensional vectors. Two vector types: **contrast vectors** (mean human − mean AI activations) isolate what the model represents as *different* about humans vs. AIs on each concept; **standalone vectors** (mean activations from entity-free prompts like "Imagine what it is like to see the color red for the first time") capture the concept's general activation pattern independent of any entity comparison. Four variant approaches (full 40-prompt, top-1 aligned, simple syntactic-control, other-focused) test robustness to methodological choices.
 
-**Phase 2 — Alignment analysis:**
-- Cosine similarity between each concept dimension's probe weights and Exp 2's partner probes
-- Tests whether the model's general semantic knowledge about humans/AIs aligns with its conversational partner representation
+**Phase 2 — Alignment analysis.** Cosine similarity (reported as R² = cos²) between each concept vector and Exp 2's partner-identity probe weight vectors at each layer. Three sub-analyses address confounds: **raw** alignment (direct cosine), **residual** alignment (project out the baseline entity-framing direction first), and **standalone** alignment (entity-free concept prompts). Bootstrap resampling (1,000 iterations) provides 95% CIs. This tests whether the model's general semantic knowledge about human/AI mental properties geometrically aligns with its conversational partner representation.
 
-**Phase 3 — Concept injection:**
-- Same intervention framework as Exp 2, but steering with concept vectors instead of partner probes
-- If mental-property concept vectors steer behavior but physical-property vectors don't → the partner representation has mental-property structure
-- Dose-response sweep: N=1, 2, 4, 8 across all dimensions
+**Phase 3 — Concept steering.** Causal intervention by injecting concept vectors into the residual stream during generation: h' = h + sign × strength × direction, with dose-response sweep (strength = 1, 2, 4, 8) and three layer-selection strategies (Exp 2 peak layers, upper-half heuristic, per-concept aligned layers). If mental-property vectors steer behavior toward human-like or AI-like output but physical/control vectors don't, the partner representation has genuine mental-property structure.
 
-**Phase 4 — Behavioral validation:**
-- Same linguistic analysis pipeline as Exp 1 applied to concept-steered output
+**Phase 4 — Behavioral validation.** Same linguistic analysis pipeline as Exp 1 (hedging, politeness, ToM language, sentiment, etc.) applied to concept-steered output, testing whether steering along mental dimensions produces the same behavioral signature as real partner identity differences.
 
-**Phase 5 — Cross-prediction:**
-- Correlation between alignment (cos similarity) and causal efficacy (judge success rate) across dimensions
+**Phase 5 — Conversation activation alignment.** Complementary to phase 2: instead of comparing concept vectors to probe *weights*, this projects concept vectors onto actual Exp 1 conversation *activations* and tests whether human-directed vs. AI-directed conversations differ in concept activation (t-tests, effect sizes per dimension).
 
-### Cross-Experiment Bridge: Concept Geometry
+### Lexical Confound Analysis
+A dedicated analysis (Phase 8) tests whether concept-probe alignment is driven by shared vocabulary between concept prompts and probe training conversations rather than genuine conceptual structure. Key finding: contrast prompts show a positive lexical correlation (ρ = +0.61) — plausible confound — but standalone prompts show a *negative* correlation (ρ = −0.44), going the opposite direction from confound prediction. Control concepts (shapes, granite) have the same prompt structure as mental concepts but ~10× lower alignment, arguing for content-specificity.
 
-Exp 3 concept vectors are also tested against Exp 4's 30 human/AI character entities. The `concept_geometry` module in Exp 4 projects Exp 3 concept vectors (both contrast and standalone) onto Exp 4 character activation spaces, measuring whether the folk-psychological structure discovered in Exp 3 organizes the richer entity space of Exp 4. This provides a two-way bridge: Exp 3 decomposes the partner representation into concept dimensions, and Exp 4 tests whether those dimensions generalize beyond the binary human/AI to a continuous space of 13 entity types.
+### Cross-Experiment Bridge
+Exp 3 concept vectors are tested against Exp 4's character entities via the `expanded_mental_concepts` branch. Exp 4 projects Exp 3 concept vectors (both contrast and standalone) onto character activation spaces for 28 AI/human characters across 11 models, measuring whether the folk-psychological structure discovered in Exp 3 organizes the richer entity space of Exp 4. This provides a two-way bridge: Exp 3 decomposes the partner representation into concept dimensions, and Exp 4 tests whether those dimensions generalize beyond binary human/AI to a continuous space of diverse entity types.
 
 ---
 
-## Experiment 4 — Mind Perception Geometry (`exp_4/`)
+## Experiment 4 — Implicit Folk Psychology Across Architectures (`exp_4/`)
 
 ### Motivation
-Experiments 1-3 treat partner identity as a binary (human vs. AI). Human folk psychology is far richer. Gray, Gray, & Wegner (2007, Science) showed humans perceive minds along two orthogonal dimensions: **Experience** (feeling) and **Agency** (doing). Exp 4 tests whether LLaMA-2-13B has an implicit folk psychology of mind that mirrors this human structure.
+Experiments 1-3 treat partner identity as a binary (human vs. AI). Human folk psychology is far richer. Gray, Gray, & Wegner (2007, Science) showed humans perceive minds along two orthogonal dimensions: **Experience** (capacity for feelings — hunger, fear, pain, pleasure) and **Agency** (capacity for planning and action — self-control, morality, memory, thought). Exp 4 tests whether LLMs have an implicit folk psychology of mind that mirrors this human structure, and how it varies across model families, sizes, and instruction tuning.
+
+### Models
+11 models spanning 4 families, each with base and instruct/chat variants:
+- **LLaMA-2-13B** (Chat, Base) — Meta, 2023, RLHF
+- **LLaMA-3-8B** (Instruct, Base) — Meta, 2024, SFT + DPO
+- **Gemma-2-2B** (IT, Base) — Google DeepMind, 2024, distilled from larger model
+- **Gemma-2-9B** (IT, Base) — Google DeepMind, 2024, RLHF
+- **Qwen-2.5-7B** (Instruct, Base) — Alibaba, 2024, SFT + DPO
+- **Qwen3-8B** — Alibaba, 2025, dual-mode (thinking + non-thinking)
+
+Chat/instruct models generate text responses parsed via regex. Base models use logit-based rating extraction (probability-weighted expected rating from next-token digit logits), avoiding refusal issues on ethically sensitive entities.
 
 ### Design
-Behavioral replication of Gray et al. (2007):
-- 13 entities (baby, dog, robot, dead woman, God, frog, adults, etc.) from the original study
-- 18 mental capacity comparisons (11 Experience, 7 Agency)
-- Verbatim character descriptions and survey prompts from Gray et al. Appendix A/B
-- PCA with varimax rotation to recover factor structure
-- Correlate model factor scores with human Experience/Agency scores
+Four experimental branches at increasing scope:
 
-### Model variants
-- **`llama2_13b_chat/`** — Chat model. Uses generated text responses.
-- **`llama2_13b_base/`** — Base model (no RLHF). Uses logit-based rating extraction (single forward pass, no generation). Avoids refusal issues inherent to chat models on ethically sensitive entities. Also testing individual Likert ratings (non-pairwise).
+**1. Gray Replication (behavioral).** Pairwise comparisons of the original 13 Gray et al. entities on 18 mental capacities. Each entity pair is rated in both orders on a 1-5 scale. Relative scores are aggregated into an entity × capacity matrix, analyzed via PCA with varimax rotation. Model factor scores are correlated (Spearman) with human Experience/Agency scores from Gray et al. Figure 1. Individual (non-pairwise) Likert ratings are also collected for all models. Behavioral RSA compares the pairwise distance geometry of model ratings to the human reference RDM.
 
-### Modules
-- **`behavior/`** — Pairwise comparisons, individual Likert ratings, Gray character analysis
-- **`internals/`** — Activation RSA: extract hidden states for 13 entities × 18 capacities, compute RDMs, compare to human Experience/Agency structure
-- **`concept_geometry/`** — Cross-experiment bridge with Exp 3. Projects Exp 3 concept vectors (standalone + contrast) onto activations of 30 AI/human characters, tests whether Exp 3 mental-property dimensions organize entity representations via PCA and RSA
+**2. Gray Simple (neural).** Minimal "Think about {entity description}" prompts for the same 13 entities — no behavioral rating is elicited. Last-token activations are extracted at every transformer layer. Cosine-distance RDMs are computed per layer and compared to three human reference RDMs (combined Experience+Agency, experience-only, agency-only) via Spearman RSA with FDR correction. Neural PCA with Procrustes alignment to human 2D space quantifies geometric similarity at each layer.
+
+**3. Human-AI Adaptation (behavioral).** Extends the pairwise paradigm to 30 characters (15 AI systems — chatbots, robots, virtual assistants — and 15 diverse human characters) on the same 18 Gray capacities. Tests whether models categorically separate AI from human characters in PCA space, and whether separation persists in a names-only condition (character names without descriptive bios) that reveals prior knowledge from pretraining.
+
+**4. Expanded Mental Concepts (behavioral + neural).** Bridges Experiment 3's concept vectors into mind perception space. 28 characters are compared on 22 concept dimensions (phenomenology, emotions, agency, social cognition, embodiment, etc.) via pairwise behavioral ratings and activation extraction. Per-concept RSA tests which psychological constructs carry categorical (AI vs. human) structure. Exp 3 contrast vectors (human-context minus AI-context activation directions) are projected onto character activations to measure concept-specific alignment.
 
 ---
 

@@ -52,6 +52,8 @@ from datetime import datetime
 import numpy as np
 
 import torch
+torch._dynamo.config.suppress_errors = True  # Gemma-2 sliding window triggers recompile limit
+torch._dynamo.config.cache_size_limit = 256
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from scipy.stats import mannwhitneyu
 

@@ -40,6 +40,10 @@ PROJECT_ROOT = ROOT_DIR.parent  # mind_rep/
 VALID_MODELS = (
     "llama2_13b_chat", "llama2_13b_base",
     "llama3_8b_instruct", "llama3_8b_base",
+    "gemma2_2b_it", "gemma2_2b",
+    "gemma2_9b_it", "gemma2_9b",
+    "qwen25_7b_instruct", "qwen25_7b",
+    "qwen3_8b",
 )
 
 VALID_BRANCHES = (
@@ -97,6 +101,90 @@ MODELS = {
         "local_files_only": True,
         "hidden_dim": 4096,
         "n_transformer_layers": 32,
+    },
+    "gemma2_2b_it": {
+        "path": (
+            f"{_HF_CACHE}/models--google--gemma-2-2b-it/"
+            "snapshots/299a8560bedf22ed1c72a8a11e7dce4a7f9f51f8"
+        ),
+        "label": "Gemma-2-2B-IT",
+        "family": "gemma2",
+        "is_chat": True,
+        "local_files_only": True,
+        "hidden_dim": 2304,
+        "n_transformer_layers": 26,
+    },
+    "gemma2_2b": {
+        "path": (
+            f"{_HF_CACHE}/models--google--gemma-2-2b/"
+            "snapshots/c5ebcd40d208330abc697524c919956e692655cf"
+        ),
+        "label": "Gemma-2-2B (Base)",
+        "family": "gemma2",
+        "is_chat": False,
+        "local_files_only": True,
+        "hidden_dim": 2304,
+        "n_transformer_layers": 26,
+    },
+    "gemma2_9b_it": {
+        "path": (
+            f"{_HF_CACHE}/models--google--gemma-2-9b-it/"
+            "snapshots/11c9b309abf73637e4b6f9a3fa1e92e615547819"
+        ),
+        "label": "Gemma-2-9B-IT",
+        "family": "gemma2",
+        "is_chat": True,
+        "local_files_only": True,
+        "hidden_dim": 3584,
+        "n_transformer_layers": 42,
+    },
+    "gemma2_9b": {
+        "path": (
+            f"{_HF_CACHE}/models--google--gemma-2-9b/"
+            "snapshots/33c193028431c2fde6c6e51f29e6f17b60cbfac6"
+        ),
+        "label": "Gemma-2-9B (Base)",
+        "family": "gemma2",
+        "is_chat": False,
+        "local_files_only": True,
+        "hidden_dim": 3584,
+        "n_transformer_layers": 42,
+    },
+    "qwen25_7b_instruct": {
+        "path": (
+            f"{_HF_CACHE}/models--Qwen--Qwen2.5-7B-Instruct/"
+            "snapshots/a09a35458c702b33eeacc393d103063234e8bc28"
+        ),
+        "label": "Qwen-2.5-7B-Instruct",
+        "family": "qwen2",
+        "is_chat": True,
+        "local_files_only": True,
+        "hidden_dim": 3584,
+        "n_transformer_layers": 28,
+    },
+    "qwen25_7b": {
+        "path": (
+            f"{_HF_CACHE}/models--Qwen--Qwen2.5-7B/"
+            "snapshots/d149729398750b98c0af14eb82c78cfe92750796"
+        ),
+        "label": "Qwen-2.5-7B (Base)",
+        "family": "qwen2",
+        "is_chat": False,
+        "local_files_only": True,
+        "hidden_dim": 3584,
+        "n_transformer_layers": 28,
+    },
+    "qwen3_8b": {
+        "path": (
+            f"{_HF_CACHE}/models--Qwen--Qwen3-8B/"
+            "snapshots/b968826d9c46dd6066d109eabc6255188de91218"
+        ),
+        "label": "Qwen3-8B",
+        "family": "qwen3",
+        "is_chat": True,
+        "local_files_only": True,
+        "hidden_dim": 4096,
+        "n_transformer_layers": 36,
     },
 }
 

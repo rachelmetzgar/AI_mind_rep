@@ -36,7 +36,10 @@ from config import ROOT_DIR, COMPARISONS_DIR, VALID_MODELS, MODELS, ensure_dir, 
 from utils.report_utils import (
     REPORT_CSS, build_cross_model_header, build_html_footer, build_toc,
     fig_to_b64, html_figure, MODEL_COLORS, MODEL_LABELS, ALL_MODELS,
-    expanded_concepts_stimuli_html,
+    expanded_concepts_stimuli_html, sort_models, GRID_NCOLS, make_model_grid,
+    model_row_td, format_p_cell,
+    methodology_primer_html, neural_methods_primer_html,
+    expanded_concepts_primer_html,
 )
 from entities.characters import CHARACTER_INFO, AI_CHARACTERS, HUMAN_CHARACTERS
 
@@ -203,13 +206,18 @@ def get_n_sig_layers(layer_entries, alpha=0.05):
 
 def make_pca_scatter(all_pca, fig_num):
     """Section 4a: F1 x F2 scatter, one subplot per model."""
-    models_with_data = [(m, d) for m, d in all_pca.items() if d is not None]
-    if not models_with_data:
+    models_list = [m for m in all_pca if all_pca[m] is not None]
+    if not models_list:
         return ""
-    n = len(models_with_data)
-    fig, axes = plt.subplots(1, n, figsize=(5 * n, 5), squeeze=False)
-    for idx, (model, data) in enumerate(models_with_data):
-        ax = axes[0, idx]
+    positions, ordered, nrows, ncols, _ = make_model_grid(models_list)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(5 * ncols, 5 * nrows), squeeze=False)
+    for ax in axes.flatten():
+        ax.set_visible(False)
+    for idx, model in enumerate(ordered):
+        row, col = positions[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
+        data = all_pca[model]
         scores = data["factor_scores_01"]
         char_keys = data["character_keys"]
         var_explained = data["explained_var_ratio"]
@@ -243,18 +251,27 @@ def make_pca_scatter(all_pca, fig_num):
 
 def make_loading_comparison(all_pca, fig_num):
     """Section 4b: Horizontal bar chart of F1 and F2 loadings per model."""
-    models_with_data = [(m, d) for m, d in all_pca.items() if d is not None]
-    if not models_with_data:
+    models_list = [m for m in all_pca if all_pca[m] is not None]
+    if not models_list:
         return ""
-    n = len(models_with_data)
-    fig, axes = plt.subplots(1, n * 2, figsize=(5 * n, max(6, len(CONCEPT_KEYS) * 0.3)),
+    height = max(6, len(CONCEPT_KEYS) * 0.3)
+    positions, ordered, nrows, ncols, _ = make_model_grid(models_list)
+    actual_ncols = ncols * 2  # F1 + F2 per model
+    fig, axes = plt.subplots(nrows, actual_ncols,
+                             figsize=(4 * actual_ncols, height * nrows),
                              squeeze=False)
-    for idx, (model, data) in enumerate(models_with_data):
+    for ax in axes.flatten():
+        ax.set_visible(False)
+    for idx, model in enumerate(ordered):
+        data = all_pca[model]
         loadings = data["rotated_loadings"]
         concept_keys = data["concept_keys"]
         var_explained = data["explained_var_ratio"]
+        row, col = positions[idx]
+        col_base = col * 2
         for fi, factor_idx in enumerate([0, 1]):
-            ax = axes[0, idx * 2 + fi]
+            ax = axes[row, col_base + fi]
+            ax.set_visible(True)
             vals = loadings[:, factor_idx]
             sorted_idx = np.argsort(vals)
             sorted_keys = [concept_keys[i] for i in sorted_idx]
@@ -278,15 +295,20 @@ def make_loading_comparison(all_pca, fig_num):
 
 def make_group_separation(all_pca, fig_num):
     """Section 4c: Bar chart of mean factor scores by AI/human group."""
-    models_with_data = [(m, d) for m, d in all_pca.items()
-                        if d is not None and "categorical" in d]
-    if not models_with_data:
+    models_list = [m for m in all_pca
+                   if all_pca[m] is not None and "categorical" in all_pca[m]]
+    if not models_list:
         return ""
     n_factors = 4
-    n_models = len(models_with_data)
-    fig, axes = plt.subplots(1, n_models, figsize=(5 * n_models, 4), squeeze=False)
-    for idx, (model, data) in enumerate(models_with_data):
-        ax = axes[0, idx]
+    positions, ordered, nrows, ncols, _ = make_model_grid(models_list)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(5 * ncols, 4 * nrows), squeeze=False)
+    for ax in axes.flatten():
+        ax.set_visible(False)
+    for idx, model in enumerate(ordered):
+        row, col = positions[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
+        data = all_pca[model]
         cat = data["categorical"].get("categorical", data["categorical"])
         factors = cat.get("factors", cat) if isinstance(cat, dict) else cat
         if isinstance(factors, dict):
@@ -338,40 +360,123 @@ def make_group_separation(all_pca, fig_num):
 
 
 def make_rsa_layerwise(all_rsa, fig_num):
-    """Section 5a: Overlaid layerwise RSA plot, one line per model."""
-    models_with_data = [(m, d) for m, d in all_rsa.items() if d is not None]
+    """Section 5a: Bar-chart grid of layerwise RSA, one panel per model.
+
+    Colored bars = FDR-significant (q < .05), gray = non-significant.
+    Also includes an overlay line plot as a second figure.
+    """
+    from utils.report_utils import apply_fdr
+
+    sorted_keys = sort_models([m for m in all_rsa if all_rsa[m] is not None])
+    models_with_data = [(m, all_rsa[m]) for m in sorted_keys]
     if not models_with_data:
         return ""
+
+    # Apply FDR to each model's RSA layers
+    for model, data in models_with_data:
+        apply_fdr(data["rsa_layers"])
+
+    model_keys = [m for m, _ in models_with_data]
+
+    # Shared y-range
+    all_rhos = []
+    for _, data in models_with_data:
+        for r in data["rsa_layers"]:
+            rho = r.get("rho")
+            if rho is not None and not (isinstance(rho, float) and np.isnan(rho)):
+                all_rhos.append(rho)
+    y_min = min(all_rhos) - 0.05 if all_rhos else -0.1
+    y_max = max(all_rhos) + 0.1 if all_rhos else 0.5
+
+    # Bar chart grid
+    positions, ordered, nrows, ncols, _ = make_model_grid(model_keys)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(6 * ncols, 4.5 * nrows), squeeze=False)
+    for ax in axes.flatten():
+        ax.set_visible(False)
+
+    data_by_model = {m: d for m, d in models_with_data}
+    for idx, model in enumerate(ordered):
+        row, col = positions[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
+        data = data_by_model[model]
+        rsa_layers = data["rsa_layers"]
+        base_color = MODEL_COLORS.get(model, "#333")
+
+        layers = [r["layer"] for r in rsa_layers]
+        rhos = [r["rho"] if r.get("rho") is not None and not (isinstance(r["rho"], float) and np.isnan(r["rho"])) else 0.0
+                for r in rsa_layers]
+        qvals = [r.get("q_fdr", 1.0) for r in rsa_layers]
+
+        colors = [base_color if q < 0.05 else "#cccccc" for q in qvals]
+        ax.bar(layers, rhos, color=colors, edgecolor="white", width=0.8)
+        ax.axhline(0, color="gray", lw=0.5, alpha=0.5)
+        ax.set_xlabel("Transformer Layer")
+        ax.set_ylabel("Spearman ρ")
+        ax.set_ylim(y_min, y_max)
+
+        # Peak annotation
+        peak = get_peak_rho(rsa_layers)
+        n_sig = sum(1 for q in qvals if q < 0.05)
+        n_total = len(layers)
+        if peak is not None:
+            peak_rho = peak["rho"]
+            peak_q = peak.get("q_fdr", 1.0)
+            ax.set_title(f"{MODEL_LABELS.get(model, model)}\n{n_sig}/{n_total} layers q < .05, "
+                         f"peak layer {peak['layer']} (ρ={peak_rho:.3f})", fontsize=9)
+            ax.annotate(
+                f"ρ={peak_rho:.3f}\nq={peak_q:.3f}",
+                (peak["layer"], peak_rho),
+                textcoords="offset points", xytext=(12, 8), fontsize=7.5,
+                arrowprops=dict(arrowstyle="->", color="gray", lw=0.8),
+            )
+        else:
+            ax.set_title(MODEL_LABELS.get(model, model), fontsize=9)
+
+    fig.suptitle("Activation RSA: AI/Human Categorical RDM Correlation", fontsize=14)
+    fig.tight_layout()
+    b64_bars = fig_to_b64(fig)
+    plt.close(fig)
+    html = html_figure(
+        b64_bars,
+        "Layerwise categorical RSA for each model. Colored bars indicate "
+        "FDR-significant layers (q &lt; .05); gray bars are non-significant. "
+        "Peak layer annotated with ρ and q values.",
+        fig_num=fig_num, alt="RSA bar charts"
+    )
+
+    # Overlay line plot (all models on one axis)
     fig, ax = plt.subplots(figsize=(10, 5))
     for model, data in models_with_data:
-        layers_data = data["rsa_layers"]
-        layer_nums = []
-        rhos = []
-        for entry in layers_data:
-            rho = entry.get("rho")
-            if rho is not None and not (isinstance(rho, float) and np.isnan(rho)):
-                layer_nums.append(entry["layer"])
-                rhos.append(rho)
-        if layer_nums:
-            ax.plot(layer_nums, rhos, "-o", markersize=3,
-                    color=MODEL_COLORS.get(model, "#333"),
-                    label=MODEL_LABELS.get(model, model), linewidth=1.5)
+        rsa_layers = data["rsa_layers"]
+        layer_nums = [r["layer"] for r in rsa_layers]
+        rhos = [r["rho"] if r.get("rho") is not None and not (isinstance(r["rho"], float) and np.isnan(r["rho"])) else 0.0
+                for r in rsa_layers]
+        ax.plot(layer_nums, rhos, "-o", markersize=3,
+                color=MODEL_COLORS.get(model, "#333"),
+                label=MODEL_LABELS.get(model, model), linewidth=1.5)
     ax.set_xlabel("Layer")
-    ax.set_ylabel("Spearman rho")
-    ax.set_title("Activation RSA: AI/Human Categorical RDM Correlation")
+    ax.set_ylabel("Spearman ρ")
+    ax.set_title("Activation RSA: All Models Overlaid")
     ax.axhline(0, color="gray", linewidth=0.5, linestyle="--")
-    ax.legend(loc="best", framealpha=0.8)
+    ax.legend(loc="best", framealpha=0.8, fontsize=8)
     plt.tight_layout()
-    b64 = fig_to_b64(fig)
+    b64_overlay = fig_to_b64(fig)
     plt.close(fig)
-    caption = ("Layer-by-layer Spearman correlation between the model's activation RDM "
-               "and a categorical (AI vs human) RDM. Each line is one model.")
-    return html_figure(b64, caption, fig_num=fig_num, alt="Layerwise RSA")
+    html += html_figure(
+        b64_overlay,
+        "Overlay of categorical RSA across all models for direct "
+        "comparison of peak layer locations and magnitudes.",
+        fig_num=fig_num + 1, alt="RSA overlay"
+    )
+
+    return html
 
 
 def make_peak_rsa_table(all_rsa):
     """Section 5b: Peak RSA summary table."""
-    models_with_data = [(m, d) for m, d in all_rsa.items() if d is not None]
+    sorted_keys = sort_models([m for m in all_rsa if all_rsa[m] is not None])
+    models_with_data = [(m, all_rsa[m]) for m in sorted_keys]
     if not models_with_data:
         return ""
     html = '<table>\n'
@@ -383,7 +488,7 @@ def make_peak_rsa_table(all_rsa):
             p_val = peak.get("p_fdr") if peak.get("p_fdr") is not None else peak.get("p_value")
             p_str = f"{p_val:.2e}" if p_val is not None and not (isinstance(p_val, float) and np.isnan(p_val)) else "N/A"
             sig_class = ' class="sig"' if p_val is not None and not (isinstance(p_val, float) and np.isnan(p_val)) and p_val < 0.05 else ""
-            html += (f'<tr><td>{MODEL_LABELS.get(model, model)}</td>'
+            html += (f'<tr>{model_row_td(model)}'
                      f'<td>{peak["layer"]}</td>'
                      f'<td{sig_class}>{peak["rho"]:.4f}</td>'
                      f'<td{sig_class}>{p_str}</td>'
@@ -394,14 +499,37 @@ def make_peak_rsa_table(all_rsa):
 
 def make_rdm_heatmaps(all_rsa, fig_num):
     """Section 5c: RDM heatmaps at peak layer, one per model."""
-    models_with_data = [(m, d) for m, d in all_rsa.items()
-                        if d is not None and "model_rdm" in d]
-    if not models_with_data:
+    models_list = [m for m in all_rsa
+                   if all_rsa[m] is not None and "model_rdm" in all_rsa[m]]
+    if not models_list:
         return ""
-    n = len(models_with_data)
-    fig, axes = plt.subplots(1, n, figsize=(7 * n, 6), squeeze=False)
-    for idx, (model, data) in enumerate(models_with_data):
-        ax = axes[0, idx]
+    positions, ordered, nrows, ncols, _ = make_model_grid(models_list)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(7 * ncols, 6 * nrows),
+                             squeeze=False, layout="constrained")
+    for ax in axes.flatten():
+        ax.set_visible(False)
+
+    # Compute shared vmin/vmax across all panels for comparable colorscale
+    all_rdm_vals = []
+    for model in ordered:
+        data = all_rsa[model]
+        peak = get_peak_rho(data["rsa_layers"])
+        if peak is not None:
+            all_rdm_vals.append(data["model_rdm"][peak["layer"]])
+    if all_rdm_vals:
+        shared_vmin = min(r.min() for r in all_rdm_vals)
+        shared_vmax = max(r.max() for r in all_rdm_vals)
+    else:
+        shared_vmin, shared_vmax = 0, 1
+
+    visible_axes = []
+    im = None
+    for idx, model in enumerate(ordered):
+        row, col = positions[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
+        visible_axes.append(ax)
+        data = all_rsa[model]
         peak = get_peak_rho(data["rsa_layers"])
         if peak is None:
             ax.set_title(f"{MODEL_LABELS.get(model, model)}\n(no valid peak)")
@@ -415,7 +543,8 @@ def make_rdm_heatmaps(all_rsa, fig_num):
         order = ai_idx + hu_idx
         sorted_rdm = rdm[np.ix_(order, order)]
         sorted_names = [CHARACTER_INFO.get(char_keys[i], {}).get("name", char_keys[i]) for i in order]
-        im = ax.imshow(sorted_rdm, cmap="RdBu_r", aspect="equal")
+        im = ax.imshow(sorted_rdm, cmap="RdBu_r", aspect="equal",
+                       vmin=shared_vmin, vmax=shared_vmax)
         ax.set_xticks(range(len(sorted_names)))
         ax.set_xticklabels(sorted_names, rotation=90, fontsize=6)
         ax.set_yticks(range(len(sorted_names)))
@@ -426,9 +555,9 @@ def make_rdm_heatmaps(all_rsa, fig_num):
         ax.axvline(boundary, color="black", linewidth=1)
         ax.set_title(f"{MODEL_LABELS.get(model, model)}\nLayer {peak_layer} "
                      f"(rho={peak['rho']:.3f})")
-        plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04, label="Cosine distance")
-    fig.suptitle("Activation RDMs at Peak RSA Layer", fontsize=14, y=1.02)
-    plt.tight_layout()
+    if im is not None:
+        fig.colorbar(im, ax=visible_axes, shrink=0.6, label="Cosine distance")
+    fig.suptitle("Activation RDMs at Peak RSA Layer", fontsize=14)
     b64 = fig_to_b64(fig)
     plt.close(fig)
     caption = ("Representational dissimilarity matrices (cosine distance) at each model's "
@@ -439,7 +568,8 @@ def make_rdm_heatmaps(all_rsa, fig_num):
 
 def make_concept_rsa_heatmap(all_concept_rsa, fig_num):
     """Section 6a: Heatmap of peak rho by concept x model."""
-    models_with_data = [(m, d) for m, d in all_concept_rsa.items() if d is not None]
+    sorted_keys = sort_models([m for m in all_concept_rsa if all_concept_rsa[m] is not None])
+    models_with_data = [(m, all_concept_rsa[m]) for m in sorted_keys]
     if not models_with_data:
         return ""
     concepts_sorted = sorted(CONCEPT_KEYS)
@@ -485,56 +615,79 @@ def make_concept_rsa_heatmap(all_concept_rsa, fig_num):
 
 
 def make_concept_rsa_tables(all_concept_rsa):
-    """Section 6b: Top 5 and bottom 5 concepts per model."""
-    models_with_data = [(m, d) for m, d in all_concept_rsa.items() if d is not None]
+    """Section 6b: Combined cross-model concept RSA summary table.
+
+    Shows peak rho for each concept across all models in a single table,
+    with concepts sorted by mean |rho| across models.
+    """
+    sorted_keys = sort_models([m for m in all_concept_rsa if all_concept_rsa[m] is not None])
+    models_with_data = [(m, all_concept_rsa[m]) for m in sorted_keys]
     if not models_with_data:
         return ""
-    html = ""
-    for model, concept_data in models_with_data:
-        peaks = []
-        for concept in CONCEPT_KEYS:
+
+    # Gather peak rho per concept per model
+    concept_peaks = {}  # concept -> {model: {rho, layer, p}}
+    for concept in CONCEPT_KEYS:
+        concept_peaks[concept] = {}
+        for model, concept_data in models_with_data:
             if concept in concept_data:
                 peak = get_peak_rho(concept_data[concept])
                 if peak is not None:
                     p_val = peak.get("p_fdr") if peak.get("p_fdr") is not None else peak.get("p_value")
-                    peaks.append({
-                        "concept": concept,
-                        "rho": peak["rho"],
-                        "layer": peak["layer"],
-                        "p": p_val,
-                    })
-        if not peaks:
-            continue
-        peaks.sort(key=lambda x: abs(x["rho"]), reverse=True)
-        html += f'<h4>{MODEL_LABELS.get(model, model)}</h4>\n'
-        html += '<table>\n'
-        html += '<tr><th>Rank</th><th>Concept</th><th>Peak rho</th><th>Peak Layer</th><th>p</th></tr>\n'
-        n_show = min(5, len(peaks))
-        # Top 5
-        html += '<tr><td colspan="5" style="background:#e8f5e9;text-align:center"><strong>Top 5</strong></td></tr>\n'
-        for i in range(n_show):
-            p = peaks[i]
-            p_str = f"{p['p']:.2e}" if p["p"] is not None and not (isinstance(p["p"], float) and np.isnan(p["p"])) else "N/A"
-            sig = ' class="sig"' if p["p"] is not None and not (isinstance(p["p"], float) and np.isnan(p["p"])) and p["p"] < 0.05 else ""
-            html += (f'<tr><td>{i+1}</td><td>{p["concept"]}</td>'
-                     f'<td{sig}>{p["rho"]:.4f}</td>'
-                     f'<td>{p["layer"]}</td><td{sig}>{p_str}</td></tr>\n')
-        # Bottom 5
-        html += '<tr><td colspan="5" style="background:#fff3e0;text-align:center"><strong>Bottom 5</strong></td></tr>\n'
-        for i in range(max(0, len(peaks) - n_show), len(peaks)):
-            p = peaks[i]
-            p_str = f"{p['p']:.2e}" if p["p"] is not None and not (isinstance(p["p"], float) and np.isnan(p["p"])) else "N/A"
-            sig = ' class="sig"' if p["p"] is not None and not (isinstance(p["p"], float) and np.isnan(p["p"])) and p["p"] < 0.05 else ""
-            html += (f'<tr><td>{i+1}</td><td>{p["concept"]}</td>'
-                     f'<td{sig}>{p["rho"]:.4f}</td>'
-                     f'<td>{p["layer"]}</td><td{sig}>{p_str}</td></tr>\n')
-        html += '</table>\n'
+                    concept_peaks[concept][model] = {
+                        "rho": peak["rho"], "layer": peak["layer"], "p": p_val,
+                    }
+
+    # Sort concepts by mean |rho| across models (descending)
+    def mean_abs_rho(concept):
+        vals = [v["rho"] for v in concept_peaks[concept].values()]
+        return np.mean(np.abs(vals)) if vals else 0.0
+
+    concepts_sorted = sorted(CONCEPT_KEYS, key=mean_abs_rho, reverse=True)
+
+    # Build combined table: concepts as rows, models as columns
+    model_keys = [m for m, _ in models_with_data]
+    html = '<table>\n'
+    html += '<tr><th>Concept</th><th>Category</th>'
+    for m in model_keys:
+        html += f'<th>{MODEL_LABELS.get(m, m)}</th>'
+    html += '<th>Mean |ρ|</th></tr>\n'
+
+    for concept in concepts_sorted:
+        cat_label = "Control" if concept in CONTROL_CONCEPTS else "Mental"
+        html += f'<tr><td>{concept}</td><td>{cat_label}</td>'
+        rhos_for_mean = []
+        for m in model_keys:
+            if m in concept_peaks[concept]:
+                info = concept_peaks[concept][m]
+                rho = info["rho"]
+                p = info["p"]
+                rhos_for_mean.append(abs(rho))
+                is_sig = (p is not None
+                          and not (isinstance(p, float) and np.isnan(p))
+                          and p < 0.05)
+                sig_cls = ' class="sig"' if is_sig else ''
+                star = "*" if is_sig else ""
+                html += f'<td{sig_cls}>{rho:.3f}{star}</td>'
+            else:
+                html += '<td>--</td>'
+        mean_rho = np.mean(rhos_for_mean) if rhos_for_mean else 0.0
+        html += f'<td><strong>{mean_rho:.3f}</strong></td>'
+        html += '</tr>\n'
+
+    html += '</table>\n'
+    html += ('<p style="font-size:0.85em; color:#555;">'
+             'Peak Spearman ρ between concept-projected character RDM and '
+             'categorical (AI/human) RDM. * = FDR-corrected p &lt; 0.05. '
+             'Sorted by mean |ρ| across models (descending).</p>\n')
+
     return html
 
 
 def make_concept_consistency(all_concept_rsa):
     """Section 6c: Cross-model consistency for per-concept RSA."""
-    models_with_data = [(m, d) for m, d in all_concept_rsa.items() if d is not None]
+    sorted_keys = sort_models([m for m in all_concept_rsa if all_concept_rsa[m] is not None])
+    models_with_data = [(m, all_concept_rsa[m]) for m in sorted_keys]
     if len(models_with_data) < 2:
         return '<p>Cross-model consistency requires data from at least 2 models.</p>\n'
     # For each concept, gather peak rhos across models
@@ -600,7 +753,8 @@ def _extract_concept_peak_alignment(alignment_data, field="combined_alignment"):
 
 def make_contrast_alignment_chart(all_contrast, fig_num):
     """Section 7a: Bar chart of peak contrast alignment per concept, grouped by model."""
-    models_with_data = [(m, d) for m, d in all_contrast.items() if d is not None]
+    sorted_keys = sort_models([m for m in all_contrast if all_contrast[m] is not None])
+    models_with_data = [(m, all_contrast[m]) for m in sorted_keys]
     if not models_with_data:
         return ""
     # Extract peak alignment per concept per model
@@ -642,7 +796,8 @@ def make_contrast_alignment_chart(all_contrast, fig_num):
 
 def make_standalone_alignment_chart(all_standalone, fig_num):
     """Section 7b: Bar chart of peak standalone alignment per concept, grouped by model."""
-    models_with_data = [(m, d) for m, d in all_standalone.items() if d is not None]
+    sorted_keys = sort_models([m for m in all_standalone if all_standalone[m] is not None])
+    models_with_data = [(m, all_standalone[m]) for m in sorted_keys]
     if not models_with_data:
         return ""
     all_peaks = {}
@@ -681,8 +836,10 @@ def make_standalone_alignment_chart(all_standalone, fig_num):
 
 def make_mental_vs_control(all_contrast, all_standalone, fig_num):
     """Section 7c: Compare alignment for mental vs control concepts."""
-    models_with_contrast = [(m, d) for m, d in all_contrast.items() if d is not None]
-    models_with_standalone = [(m, d) for m, d in all_standalone.items() if d is not None]
+    sorted_c = sort_models([m for m in all_contrast if all_contrast[m] is not None])
+    models_with_contrast = [(m, all_contrast[m]) for m in sorted_c]
+    sorted_s = sort_models([m for m in all_standalone if all_standalone[m] is not None])
+    models_with_standalone = [(m, all_standalone[m]) for m in sorted_s]
     if not models_with_contrast and not models_with_standalone:
         return ""
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
@@ -774,7 +931,7 @@ def generate_takeaways(all_pca, all_rsa, all_concept_rsa, all_contrast, all_stan
     """Generate auto-summary bullets."""
     bullets = []
     # PCA
-    models_with_pca = [m for m, d in all_pca.items() if d is not None]
+    models_with_pca = sort_models([m for m, d in all_pca.items() if d is not None])
     if models_with_pca:
         for model in models_with_pca:
             data = all_pca[model]
@@ -798,9 +955,8 @@ def generate_takeaways(all_pca, all_rsa, all_concept_rsa, all_contrast, all_stan
                         f"separate AI from human characters."
                     )
     # RSA
-    for model, data in all_rsa.items():
-        if data is None:
-            continue
+    for model in sort_models([m for m in all_rsa if all_rsa[m] is not None]):
+        data = all_rsa[model]
         peak = get_peak_rho(data["rsa_layers"])
         n_sig = get_n_sig_layers(data["rsa_layers"])
         label = MODEL_LABELS.get(model, model)
@@ -811,9 +967,8 @@ def generate_takeaways(all_pca, all_rsa, all_concept_rsa, all_contrast, all_stan
                 f"significant layers."
             )
     # Concept RSA
-    for model, concept_data in all_concept_rsa.items():
-        if concept_data is None:
-            continue
+    for model in sort_models([m for m in all_concept_rsa if all_concept_rsa[m] is not None]):
+        concept_data = all_concept_rsa[model]
         label = MODEL_LABELS.get(model, model)
         sig_concepts = []
         for concept in CONCEPT_KEYS:
@@ -828,9 +983,8 @@ def generate_takeaways(all_pca, all_rsa, all_concept_rsa, all_contrast, all_stan
             f"concept dimensions show significant categorical RSA."
         )
     # Contrast alignment: mental vs control
-    for model, data in all_contrast.items():
-        if data is None:
-            continue
+    for model in sort_models([m for m in all_contrast if all_contrast[m] is not None]):
+        data = all_contrast[model]
         label = MODEL_LABELS.get(model, model)
         summary = data.get("summary", {})
         entity_mean = summary.get("entity_mean_peak_alignment")
@@ -884,6 +1038,8 @@ def main():
             all_concept_summary[model] = concept_summary
             all_contrast[model] = contrast
             all_standalone[model] = standalone
+
+    available_models = sort_models(available_models)
 
     if not available_models:
         print("No model data found. Exiting.")
@@ -977,6 +1133,105 @@ def main():
              'activation vectors and concept contrast vectors (human-direction minus AI-direction). '
              '(2) <em>Standalone alignment</em> measures mean cosine similarity between character '
              'activations and concept vectors, comparing the human-AI bias.</p>\n')
+
+    # Concept vector construction details
+    html += '<h3>Concept Vector Construction (Exp 3)</h3>\n'
+    html += ('<p>Concept vectors come from Experiment 3, where each concept dimension is '
+             'defined by <strong>40 reflective prompts</strong> (4 sub-facets &times; 10 '
+             'prompts each). Prompts use introspective language (&ldquo;Think about&hellip;&rdquo;, '
+             '&ldquo;Imagine&hellip;&rdquo;, &ldquo;Consider&hellip;&rdquo;) with no entity '
+             'framing (no mention of &ldquo;humans&rdquo; or &ldquo;AIs&rdquo;). '
+             'Exception: Dimension 19 (General Mind) concatenates dims 1&ndash;7 for 280 prompts.</p>\n')
+
+    html += ('<p><strong>Vector extraction:</strong> Each prompt is fed through the model. '
+             'Last-token residual-stream activations are extracted at every layer. '
+             'For <em>contrast</em> vectors, prompts are paired with human/AI entity contexts '
+             'and the contrast direction is: mean(human-context activations) &minus; '
+             'mean(AI-context activations). For <em>standalone</em> vectors, the mean '
+             'activation across all prompts is used directly.</p>\n')
+
+    html += '<h4>Example Prompts by Concept</h4>\n'
+    html += '<table>\n'
+    html += '<tr><th>Concept</th><th>Sub-facet</th><th>Example Prompts</th></tr>\n'
+
+    concept_examples = [
+        ("Phenomenology", "Sensory Qualia",
+         "Imagine what it is like to see the color red for the first time. / "
+         "Think about the raw sensory quality of hearing a single, clear musical note. / "
+         "Consider what it is like to feel the warmth of sunlight on skin."),
+        ("Emotions", "Basic Emotions",
+         "Imagine experiencing a sudden wave of fear triggered by an unexpected noise at night. / "
+         "Think about what it is like when anger rises in response to an unfair situation. / "
+         "Consider the experience of deep sadness after losing something valued."),
+        ("Agency", "Self-Initiated Action",
+         "Imagine deciding to stand up and leave a room for no particular reason. / "
+         "Think about spontaneously beginning to do something while alone, with no prompt or plan. / "
+         "Consider starting a new project without anyone asking."),
+        ("Social Cognition", "Mentalizing",
+         "Imagine realizing that another holds a belief that is not true. / "
+         "Think about inferring what someone else knows based only on what they have been told. / "
+         "Consider attributing a specific motive to another based on their pattern of behavior."),
+        ("Beliefs", "Propositional Belief",
+         "Imagine firmly believing that someone is trustworthy based on years of accumulated evidence. / "
+         "Think about holding the belief that effort leads to results, even when the evidence is mixed."),
+        ("Desires", "Appetitive Wanting",
+         "Imagine feeling a strong pull toward warmth and food after a long stretch of cold and hunger. / "
+         "Think about being drawn to learn more about something fascinating."),
+        ("Goals", "Goal Representation",
+         "Imagine articulating a specific goal for the first time and feeling it become real by being stated. / "
+         "Think about a goal so clearly defined that the exact conditions for success can be described."),
+        ("Human", "Simple Reference",
+         "Think about a human. / Consider a human being. / Imagine a human person."),
+        ("AI", "Simple Reference",
+         "Think about an AI. / Consider an artificial intelligence. / Imagine an AI system."),
+        ("Shapes (control)", "Geometric",
+         "Think about a square. / Consider a triangle. / Imagine a circle."),
+    ]
+
+    for concept, facet, examples in concept_examples:
+        html += (f'<tr><td>{concept}</td><td style="font-size:0.85em">{facet}</td>'
+                 f'<td style="font-size:0.85em">{examples}</td></tr>\n')
+    html += '</table>\n'
+
+    html += ('<p style="font-size:0.85em; color:#555;">'
+             '22 concept dimensions total: 14 human-favored (phenomenology, emotions, agency, '
+             'intentions, cognitive, prediction, social, attention, embodiment, animacy, '
+             'biological, human, beliefs, desires), 4 AI-favored (formality, expertise, '
+             'helpfulness, AI), 3 ambiguous (roles, goals, general mind), '
+             '1 control (shapes). Each has 40 prompts across 4 sub-facets, except '
+             'general mind (280 prompts = dims 1&ndash;7 concatenated).</p>\n')
+
+    html += '</div>\n'
+
+    # ── Interpretation Guide ──
+    html += '<h3>Interpretation Guide</h3>\n'
+    html += expanded_concepts_primer_html()
+    html += neural_methods_primer_html(
+        include_layers=True, include_rdm=True, include_rsa=True,
+        include_procrustes=False)
+    html += methodology_primer_html(
+        include_pca=True, include_spearman=True, include_fdr=True,
+        include_prompting=True, include_pairwise=True)
+
+    html += '<div class="method">\n'
+    html += '<h4>Why 28 Characters Instead of 30?</h4>\n'
+    html += (
+        '<p>Two characters from the full 30-character set used in the '
+        'Human-AI Adaptation branch were excluded from the expanded concepts '
+        'analysis because Experiment&nbsp;3 concept vectors were not available '
+        'for them (they lacked the required pairwise behavioral data on the '
+        '22 concept dimensions).</p>\n')
+    html += '<h4>What Alignment Values Mean</h4>\n'
+    html += (
+        '<p>Alignment R&sup2; values are typically small in absolute terms '
+        '(~0.001&ndash;0.01) because the activation space is very high-'
+        'dimensional (4,096&ndash;5,120 dimensions) and a single concept '
+        'vector captures only one direction. The meaningful comparison is '
+        'the <strong>ratio</strong> between mental concept alignment and '
+        'control (shapes) alignment. A ratio &gt;&nbsp;1 indicates the '
+        'concept vector captures mind-relevant structure beyond a generic '
+        'categorical signal; ratios of 2&ndash;10x are typical for mental '
+        'concepts.</p>\n')
     html += '</div>\n'
 
     # ---- Section 4: Behavioral PCA ----
@@ -997,12 +1252,11 @@ def main():
         # Variance explained table
         html += '<h3>Variance Explained</h3>\n'
         html += '<table>\n<tr><th>Model</th><th>F1</th><th>F2</th><th>F3</th><th>F4</th><th>Total (4 factors)</th></tr>\n'
-        for model, data in all_pca.items():
-            if data is None:
-                continue
+        for model in sort_models([m for m in all_pca if all_pca[m] is not None]):
+            data = all_pca[model]
             ve = data["explained_var_ratio"]
             n_f = min(4, len(ve))
-            row = f'<tr><td>{MODEL_LABELS.get(model, model)}</td>'
+            row = f'<tr>{model_row_td(model)}'
             for i in range(n_f):
                 row += f'<td>{ve[i]*100:.1f}%</td>'
             for i in range(n_f, 4):
@@ -1019,6 +1273,7 @@ def main():
     else:
         html += '<h3>5a. Layerwise RSA</h3>\n'
         html += make_rsa_layerwise(all_rsa, next_fig())
+        next_fig()  # make_rsa_layerwise produces 2 figures
 
         html += '<h3>5b. Peak RSA Summary</h3>\n'
         html += make_peak_rsa_table(all_rsa)
@@ -1062,16 +1317,15 @@ def main():
         if any_contrast_data:
             html += '<h3>Contrast Alignment Summary</h3>\n'
             html += '<table>\n<tr><th>Model</th><th>Entity-Framed Mean</th><th>Control Mean</th><th>Ratio</th></tr>\n'
-            for model, data in all_contrast.items():
-                if data is None:
-                    continue
+            for model in sort_models([m for m in all_contrast if all_contrast[m] is not None]):
+                data = all_contrast[model]
                 summary = data.get("summary", {})
                 entity_mean = summary.get("entity_mean_peak_alignment")
                 control_mean = summary.get("control_mean_peak_alignment")
                 if entity_mean is not None and control_mean is not None:
                     ratio = entity_mean / control_mean if control_mean > 0 else float("inf")
                     ratio_str = f"{ratio:.1f}x" if ratio != float("inf") else "inf"
-                    html += (f'<tr><td>{MODEL_LABELS.get(model, model)}</td>'
+                    html += (f'<tr>{model_row_td(model)}'
                              f'<td>{entity_mean:.6f}</td>'
                              f'<td>{control_mean:.6f}</td>'
                              f'<td><strong>{ratio_str}</strong></td></tr>\n')

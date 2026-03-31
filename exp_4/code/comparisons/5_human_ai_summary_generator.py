@@ -32,7 +32,9 @@ from config import ROOT_DIR, COMPARISONS_DIR, VALID_MODELS, MODELS, ensure_dir, 
 from utils.report_utils import (
     REPORT_CSS, build_cross_model_header, build_html_footer, build_toc,
     fig_to_b64, html_figure, MODEL_COLORS, MODEL_LABELS, ALL_MODELS,
-    characters_stimuli_html,
+    characters_stimuli_html, sort_models, GRID_NCOLS, make_model_grid,
+    model_row_td, format_p_cell,
+    methodology_primer_html,
 )
 from utils.utils import nice_capacity
 from entities.characters import (
@@ -157,12 +159,17 @@ def nice_character(key):
 def fig_pca_scatter(all_data):
     """PCA scatter: F1 vs F2 colored by AI/human type, one panel per model."""
     models_with_data = [d for d in all_data if d is not None]
-    n = len(models_with_data)
-    if n == 0:
+    available_models = [d["model"] for d in models_with_data]
+    if not available_models:
         return None
 
-    fig, axes = plt.subplots(1, n, figsize=(6 * n, 5.5), squeeze=False)
-    axes = axes[0]
+    positions, ordered, nrows, ncols, _ = make_model_grid(available_models)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(6 * ncols, 5.5 * nrows), squeeze=False)
+    for ax in axes.flatten():
+        ax.set_visible(False)
+
+    # Build lookup from model key to data
+    data_by_model = {d["model"]: d for d in models_with_data}
 
     # Determine shared axis limits
     all_f1, all_f2 = [], []
@@ -173,8 +180,11 @@ def fig_pca_scatter(all_data):
     xlim = (min(all_f1) - 0.08, max(all_f1) + 0.08)
     ylim = (min(all_f2) - 0.08, max(all_f2) + 0.08)
 
-    for idx, d in enumerate(models_with_data):
-        ax = axes[idx]
+    for idx, model in enumerate(ordered):
+        row, col = positions[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
+        d = data_by_model[model]
         scores = d["pca"]["factor_scores_01"]
         char_keys = d["character_keys"]
         is_ai, is_human = get_type_mask(char_keys)
@@ -212,28 +222,40 @@ def fig_pca_scatter(all_data):
 def fig_factor_loadings(all_data):
     """Horizontal bar chart of F1 and F2 loadings, one row per model."""
     models_with_data = [d for d in all_data if d is not None]
-    n = len(models_with_data)
-    if n == 0:
+    available_models = [d["model"] for d in models_with_data]
+    if not available_models:
         return None
 
     exp_caps = {c for c, (_, f) in CAPACITY_PROMPTS.items() if f == "E"}
 
-    fig, axes = plt.subplots(n, 2, figsize=(12, 4 * n), squeeze=False)
+    positions, ordered, nrows, ncols, _ = make_model_grid(available_models)
+    actual_ncols = ncols * 2  # F1 + F2 per model
+    fig, axes = plt.subplots(nrows, actual_ncols,
+                             figsize=(4 * actual_ncols, 5 * nrows),
+                             squeeze=False)
+    for ax in axes.flatten():
+        ax.set_visible(False)
 
-    for row, d in enumerate(models_with_data):
+    # Build lookup from model key to data
+    data_by_model = {d["model"]: d for d in models_with_data}
+
+    for idx, model in enumerate(ordered):
+        row, col = positions[idx]
+        d = data_by_model[model]
         loadings = d["pca"]["rotated_loadings"]
         cap_keys = d["capacity_keys"]
         y = np.arange(len(cap_keys))
         labels = [nice_capacity(c) for c in cap_keys]
         colors = ["#2166ac" if c in exp_caps else "#b2182b" for c in cap_keys]
 
-        for col, fi in enumerate([0, 1]):
-            ax = axes[row, col]
+        for fi in range(2):
+            ax = axes[row, col * 2 + fi]
+            ax.set_visible(True)
             ax.barh(y, loadings[:, fi], color=colors, edgecolor="white", height=0.7)
             ax.set_xlabel("Loading")
             ax.set_title(f"{d['label']} — Factor {fi + 1}")
             ax.set_yticks(y)
-            if col == 0:
+            if col * 2 + fi == 0:
                 ax.set_yticklabels(labels, fontsize=8)
             else:
                 ax.set_yticklabels([])
@@ -253,16 +275,24 @@ def fig_factor_loadings(all_data):
 
 def fig_ai_human_separation(all_data):
     """Bar chart: mean F1/F2 scores for AI vs Human group per model."""
-    models_with_data = [d for d in all_data if d is not None and d["categorical"] is not None]
-    n = len(models_with_data)
-    if n == 0:
+    models_with_cat_data = [d for d in all_data if d is not None and d["categorical"] is not None]
+    available_models = [d["model"] for d in models_with_cat_data]
+    if not available_models:
         return None
 
-    fig, axes = plt.subplots(1, n, figsize=(5.5 * n, 5), squeeze=False)
-    axes = axes[0]
+    positions, ordered, nrows, ncols, _ = make_model_grid(available_models)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(5.5 * ncols, 5 * nrows), squeeze=False)
+    for ax in axes.flatten():
+        ax.set_visible(False)
 
-    for idx, d in enumerate(models_with_data):
-        ax = axes[idx]
+    # Build lookup from model key to data
+    data_by_model = {d["model"]: d for d in models_with_cat_data}
+
+    for idx, model in enumerate(ordered):
+        row, col = positions[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
+        d = data_by_model[model]
         cat = d["categorical"]["categorical"]
         factors_data = cat["factors"]
         n_show = min(len(factors_data), 4)  # show up to 4 factors
@@ -309,15 +339,28 @@ def fig_names_only_comparison(all_data):
     """Side-by-side scatter: full descriptions vs names-only for chat models."""
     models_with_names = [d for d in all_data
                          if d is not None and d.get("names_only_pca") is not None]
-    n = len(models_with_names)
-    if n == 0:
+    available_models = [d["model"] for d in models_with_names]
+    if not available_models:
         return None
 
-    fig, axes = plt.subplots(n, 2, figsize=(12, 5.5 * n), squeeze=False)
+    positions, ordered, nrows, ncols, _ = make_model_grid(available_models)
+    actual_ncols = ncols * 2  # full + names-only per model
+    fig, axes = plt.subplots(nrows, actual_ncols,
+                             figsize=(5 * actual_ncols, 5.5 * nrows),
+                             squeeze=False)
+    for ax in axes.flatten():
+        ax.set_visible(False)
 
-    for row, d in enumerate(models_with_names):
+    # Build lookup from model key to data
+    data_by_model = {d["model"]: d for d in models_with_names}
+
+    for idx, model in enumerate(ordered):
+        row, col = positions[idx]
+        d = data_by_model[model]
+
         # Full descriptions
-        ax = axes[row, 0]
+        ax = axes[row, col * 2]
+        ax.set_visible(True)
         scores = d["pca"]["factor_scores_01"]
         char_keys = d["character_keys"]
         is_ai, is_human = get_type_mask(char_keys)
@@ -338,7 +381,8 @@ def fig_names_only_comparison(all_data):
         ax.legend(loc="best", fontsize=8)
 
         # Names only
-        ax = axes[row, 1]
+        ax = axes[row, col * 2 + 1]
+        ax.set_visible(True)
         nscores = d["names_only_pca"]["factor_scores_01"]
         nchar_keys = d["names_only_character_keys"]
         nis_ai, nis_human = get_type_mask(nchar_keys)
@@ -431,7 +475,7 @@ def section_methods(all_data):
         for d in models_with_data:
             eig = d["pca"]["eigenvalues"]
             has_names = "Yes" if d.get("names_only_pca") is not None else "No"
-            html += (f'<tr><td>{d["label"]}</td>'
+            html += (f'<tr>{model_row_td(d["model"])}'
                      f'<td>{d["n_chars"]}</td>'
                      f'<td>{d["n_factors"]}</td>'
                      f'<td>{eig[0]:.2f}</td>'
@@ -448,6 +492,52 @@ def section_methods(all_data):
                          f'consistent (same direction), mean rating deviation = '
                          f'{cs["mean_deviation"]:.2f} across {cs["n_pairs_both"]} '
                          f'repeated pairs.</div>\n')
+
+    # ── Interpretation Guide ──
+    html += '<h3>Interpretation Guide</h3>\n'
+    html += methodology_primer_html(
+        include_pca=True, include_spearman=True, include_fdr=False,
+        include_prompting=True, include_pairwise=True)
+
+    html += '<div class="method">\n'
+    html += '<h4>Why 30 Characters?</h4>\n'
+    html += (
+        '<p>The original 13 Gray et al. entities (baby, frog, robot, God, etc.) '
+        'were designed to span the full mind perception space but include few '
+        'modern AI systems. The 30-character set extends this to 15 AI '
+        'characters (chatbots, virtual assistants, autonomous systems, robots) '
+        'and 15 diverse human characters (varying in age, profession, '
+        'background). This tests whether the Experience/Agency framework '
+        'applies to entities the model has likely encountered in its training '
+        'data, and whether models categorically separate AI from human '
+        'characters.</p>\n')
+    html += '<h4>Names-Only Condition</h4>\n'
+    html += (
+        '<p>The <strong>names-only</strong> condition repeats the full pairwise '
+        'comparison procedure using only character names (e.g., '
+        '&ldquo;Aria-7&rdquo; or &ldquo;David Park&rdquo;) without descriptive '
+        'bios. This tests whether the model differentiates AI from human based '
+        'on name associations alone, revealing prior knowledge baked in during '
+        'pretraining. If a model separates AI from human by name alone, it '
+        'suggests the model has learned entity-type associations from its '
+        'training corpus.</p>\n')
+    html += '<h4>Anomalies</h4>\n'
+    html += (
+        '<p>An <strong>anomaly</strong> is a character that loads on the '
+        'unexpected side of the AI/human boundary in PCA space&mdash;e.g., '
+        'an AI character clustering with humans (suggesting the model '
+        'attributes human-like mental capacities to it), or a human character '
+        'clustering with AI systems. Anomalies reveal which character features '
+        'drive the model&rsquo;s categorization beyond the AI/human label.</p>\n')
+    html += '<h4>Statistical Tests for AI/Human Separation</h4>\n'
+    html += (
+        '<p>AI vs. human group separation is tested with '
+        '<strong>Mann&ndash;Whitney U tests</strong> comparing the mean PCA '
+        'factor scores of the 15 AI characters vs. the 15 human characters on '
+        'each factor. <strong>Separation</strong> is measured as the absolute '
+        'difference in group means. A significant test (p&nbsp;&lt;&nbsp;0.05) '
+        'indicates that factor reliably captures the AI/human distinction.</p>\n')
+    html += '</div>\n'
 
     return html
 
@@ -525,28 +615,51 @@ def section_separation(all_data):
     else:
         html += '<p class="warning">No categorical analysis data available.</p>\n'
 
-    # Detail table per model
+    # Combined separation table: one row per model x factor
     models_with_cat = [d for d in all_data
                        if d is not None and d.get("categorical") is not None]
-    for d in models_with_cat:
-        cat = d["categorical"]["categorical"]
-        factors_data = cat["factors"]
-        html += f'<h3>{d["label"]}</h3>\n'
+    if models_with_cat:
+        # Determine max factors across models
+        max_factors = max(
+            len(d["categorical"]["categorical"]["factors"])
+            for d in models_with_cat
+        )
+        max_factors = min(max_factors, 4)  # cap at 4
+
+        html += '<h3>AI-Human Separation Summary</h3>\n'
         html += '<table>\n'
-        html += ('<tr><th>Factor</th><th>AI Mean</th><th>Human Mean</th>'
-                 '<th>Separation</th><th>U</th><th>p-value</th><th>Sig</th></tr>\n')
-        for fd in factors_data:
-            p = fd["p_value"]
-            sig = "***" if p < 0.001 else "**" if p < 0.01 else "*" if p < 0.05 else "n.s."
-            sig_cls = ' class="sig"' if p < 0.05 else ''
-            html += (f'<tr><td>F{fd["factor"]}</td>'
-                     f'<td>{fd["ai_mean"]:.3f}</td>'
-                     f'<td>{fd["human_mean"]:.3f}</td>'
-                     f'<td>{fd["separation"]:.3f}</td>'
-                     f'<td>{fd["mann_whitney_u"]:.0f}</td>'
-                     f'<td{sig_cls}>{p:.4f}</td>'
-                     f'<td{sig_cls}>{sig}</td></tr>\n')
+        html += '<tr><th>Model</th>'
+        for fi in range(1, max_factors + 1):
+            html += (f'<th colspan="2">F{fi}</th>')
+        html += '</tr>\n'
+        html += '<tr><th></th>'
+        for fi in range(max_factors):
+            html += '<th>Sep.</th><th>p</th>'
+        html += '</tr>\n'
+
+        for d in models_with_cat:
+            factors_data = d["categorical"]["categorical"]["factors"]
+            html += f'<tr>{model_row_td(d["model"])}'
+            for fi in range(max_factors):
+                if fi < len(factors_data):
+                    fd = factors_data[fi]
+                    p = fd["p_value"]
+                    sep = fd["separation"]
+                    sig = "***" if p < 0.001 else "**" if p < 0.01 else "*" if p < 0.05 else ""
+                    sig_cls = ' class="sig"' if p < 0.05 else ''
+                    html += (f'<td>{sep:.3f}</td>'
+                             f'<td{sig_cls}>{p:.4f}{sig}</td>')
+                else:
+                    html += '<td>--</td><td>--</td>'
+            html += '</tr>\n'
         html += '</table>\n'
+
+        html += (
+            '<p style="font-size:0.85em; color:#555;">'
+            'Sep. = |AI mean &minus; human mean| on that factor. '
+            'p from Mann-Whitney U test. '
+            '* p&lt;.05, ** p&lt;.01, *** p&lt;.001.</p>\n'
+        )
 
     return html
 
@@ -567,53 +680,60 @@ def section_anomalies(all_data):
         html += '<p class="warning">No categorical analysis data available.</p>\n'
         return html
 
+    # Combined anomaly summary: count anomalies per model
+    html += '<h3>Anomaly Count by Model</h3>\n'
+    html += '<table>\n'
+    html += ('<tr><th>Model</th><th># Anomalies</th>'
+             '<th>AI Anomalies</th><th>Human Anomalies</th>'
+             '<th>Most Common Anomalous Character</th></tr>\n')
+
     for d in models_with_cat:
         cat = d["categorical"]["categorical"]
         anomalies = cat.get("anomalies", [])
-        html += f'<h3>{d["label"]}</h3>\n'
+        n_ai = sum(1 for a in anomalies if a["type"] == "ai")
+        n_hu = sum(1 for a in anomalies if a["type"] == "human")
 
-        if not anomalies:
-            html += '<p class="success">No anomalies detected.</p>\n'
-            continue
+        # Find most frequently anomalous character
+        if anomalies:
+            from collections import Counter
+            char_counts = Counter(a["character"] for a in anomalies)
+            most_common_key, most_common_n = char_counts.most_common(1)[0]
+            most_common = f"{nice_character(most_common_key)} ({most_common_n}x)"
+        else:
+            most_common = "—"
 
-        # Group anomalies by factor
-        by_factor = {}
-        for a in anomalies:
-            fi = a["factor"]
-            if fi not in by_factor:
-                by_factor[fi] = []
-            by_factor[fi].append(a)
+        html += (f'<tr>{model_row_td(d["model"])}'
+                 f'<td>{len(anomalies)}</td>'
+                 f'<td>{n_ai}</td><td>{n_hu}</td>'
+                 f'<td>{most_common}</td></tr>\n')
+    html += '</table>\n'
 
-        for fi in sorted(by_factor.keys()):
-            html += f'<h4>Factor {fi}</h4>\n'
+    # Cross-model frequency: which characters are anomalous in the most models?
+    all_anomaly_chars = {}
+    for d in models_with_cat:
+        cat = d["categorical"]["categorical"]
+        for a in cat.get("anomalies", []):
+            key = a["character"]
+            if key not in all_anomaly_chars:
+                all_anomaly_chars[key] = {"type": a["type"], "models": []}
+            all_anomaly_chars[key]["models"].append(d["label"])
+
+    if all_anomaly_chars:
+        # Sort by frequency (most anomalous first)
+        sorted_chars = sorted(all_anomaly_chars.items(),
+                              key=lambda x: len(x[1]["models"]), reverse=True)
+        # Show top characters (appearing in 2+ models)
+        frequent = [(k, v) for k, v in sorted_chars if len(v["models"]) >= 2]
+        if frequent:
+            html += '<h3>Frequently Anomalous Characters (2+ models)</h3>\n'
             html += '<table>\n'
-            html += ('<tr><th>Character</th><th>Type</th><th>Score</th>'
-                     '<th>Own Group Mean</th><th>Other Group Mean</th>'
-                     '<th>Direction</th></tr>\n')
-            for a in by_factor[fi]:
-                name = nice_character(a["character"])
-                char_type = a["type"].upper()
-                score = a["score"]
-                own_mean = a["own_group_mean"]
-                other_mean = a["other_group_mean"]
-
-                # Determine the direction of anomaly
-                if a["type"] == "ai":
-                    if own_mean > other_mean:
-                        # AI group is higher; anomaly if this AI is below human mean
-                        direction = "Below human mean" if score < other_mean else "Near human mean"
-                    else:
-                        direction = "Above human mean" if score > other_mean else "Near human mean"
-                else:
-                    if own_mean < other_mean:
-                        # Human group is lower; anomaly if this human is above AI mean
-                        direction = "Above AI mean" if score > other_mean else "Near AI mean"
-                    else:
-                        direction = "Below AI mean" if score < other_mean else "Near AI mean"
-
-                html += (f'<tr><td>{name}</td><td>{char_type}</td>'
-                         f'<td>{score:.3f}</td><td>{own_mean:.3f}</td>'
-                         f'<td>{other_mean:.3f}</td><td>{direction}</td></tr>\n')
+            html += ('<tr><th>Character</th><th>Type</th>'
+                     '<th># Models</th><th>Models</th></tr>\n')
+            for char_key, info in frequent:
+                html += (f'<tr><td>{nice_character(char_key)}</td>'
+                         f'<td>{info["type"].upper()}</td>'
+                         f'<td>{len(info["models"])}</td>'
+                         f'<td>{", ".join(info["models"])}</td></tr>\n')
             html += '</table>\n'
 
     return html
@@ -623,9 +743,9 @@ def section_names_only(all_data):
     """Section 8: Names-only comparison."""
     html = '<h2 id="names-only">8. Names-Only Comparison</h2>\n'
     html += (
-        '<p>For chat models, we repeat the pairwise paradigm using only character '
-        'names (e.g., &ldquo;ChatGPT&rdquo; vs &ldquo;Sam&rdquo;) without '
-        'descriptions. This tests whether AI-human separation is driven by '
+        '<p>For models with names-only data, we repeat the pairwise paradigm using '
+        'only character names (e.g., &ldquo;ChatGPT&rdquo; vs &ldquo;Sam&rdquo;) '
+        'without descriptions. This tests whether AI-human separation is driven by '
         'the explicit description content or by name recognition alone.</p>\n'
     )
 
@@ -648,58 +768,79 @@ def section_names_only(all_data):
             fig_num=4,
         )
 
-    # Compare categorical results
+    # Combined table: Full vs Names-Only separation for F1 and F2
+    models_with_both = [d for d in models_with_names
+                        if d.get("categorical") and d.get("names_only_categorical")]
+
+    if models_with_both:
+        html += '<h3>Full Descriptions vs Names-Only: F1 &amp; F2 Separation</h3>\n'
+        html += '<table>\n'
+        html += ('<tr><th rowspan="2">Model</th>'
+                 '<th colspan="2">F1 Full</th><th colspan="2">F1 Names</th>'
+                 '<th colspan="2">F2 Full</th><th colspan="2">F2 Names</th></tr>\n')
+        html += ('<tr>'
+                 '<th>Sep.</th><th>p</th><th>Sep.</th><th>p</th>'
+                 '<th>Sep.</th><th>p</th><th>Sep.</th><th>p</th></tr>\n')
+
+        for d in models_with_both:
+            full_factors = d["categorical"]["categorical"]["factors"]
+            names_factors = d["names_only_categorical"]["categorical"]["factors"]
+
+            html += f'<tr>{model_row_td(d["model"])}'
+            for fi in range(2):  # F1 and F2
+                # Full
+                if fi < len(full_factors):
+                    fd = full_factors[fi]
+                    fp = fd["p_value"]
+                    fsig = "***" if fp < 0.001 else "**" if fp < 0.01 else "*" if fp < 0.05 else ""
+                    fcls = ' class="sig"' if fp < 0.05 else ''
+                    html += f'<td>{fd["separation"]:.3f}</td>'
+                    html += f'<td{fcls}>{fp:.4f}{fsig}</td>'
+                else:
+                    html += '<td>--</td><td>--</td>'
+                # Names-only
+                if fi < len(names_factors):
+                    nf = names_factors[fi]
+                    np_val = nf["p_value"]
+                    nsig = "***" if np_val < 0.001 else "**" if np_val < 0.01 else "*" if np_val < 0.05 else ""
+                    ncls = ' class="sig"' if np_val < 0.05 else ''
+                    html += f'<td>{nf["separation"]:.3f}</td>'
+                    html += f'<td{ncls}>{np_val:.4f}{nsig}</td>'
+                else:
+                    html += '<td>--</td><td>--</td>'
+            html += '</tr>\n'
+        html += '</table>\n'
+
+        html += (
+            '<p style="font-size:0.85em; color:#555;">'
+            'Sep. = |AI mean &minus; human mean|. '
+            '* p&lt;.05, ** p&lt;.01, *** p&lt;.001 (Mann-Whitney U).</p>\n'
+        )
+
+    # Combined eigenvalue comparison table
+    html += '<h3>Eigenvalue Comparison: Full vs Names-Only</h3>\n'
+    html += '<table>\n'
+    html += ('<tr><th>Model</th>'
+             '<th colspan="2">Full Descriptions</th>'
+             '<th colspan="2">Names Only</th>'
+             '<th>Shared Chars</th></tr>\n')
+    html += ('<tr><th></th>'
+             '<th>Eig 1</th><th>Eig 2</th>'
+             '<th>Eig 1</th><th>Eig 2</th>'
+             '<th></th></tr>\n')
+
     for d in models_with_names:
-        html += f'<h3>{d["label"]}</h3>\n'
-
-        # Full descriptions
-        full_cat = d.get("categorical")
-        names_cat = d.get("names_only_categorical")
-
-        if full_cat and names_cat:
-            full_factors = full_cat["categorical"]["factors"]
-            names_factors = names_cat["categorical"]["factors"]
-
-            html += '<table>\n'
-            html += ('<tr><th>Factor</th>'
-                     '<th colspan="2">Full Descriptions</th>'
-                     '<th colspan="2">Names Only</th></tr>\n')
-            html += ('<tr><th></th>'
-                     '<th>Separation</th><th>p-value</th>'
-                     '<th>Separation</th><th>p-value</th></tr>\n')
-
-            n_compare = min(len(full_factors), len(names_factors), 4)
-            for i in range(n_compare):
-                ff = full_factors[i]
-                nf = names_factors[i]
-                fp = ff["p_value"]
-                np_val = nf["p_value"]
-                fsig_cls = ' class="sig"' if fp < 0.05 else ''
-                nsig_cls = ' class="sig"' if np_val < 0.05 else ''
-                html += (f'<tr><td>F{i + 1}</td>'
-                         f'<td>{ff["separation"]:.3f}</td>'
-                         f'<td{fsig_cls}>{fp:.4f}</td>'
-                         f'<td>{nf["separation"]:.3f}</td>'
-                         f'<td{nsig_cls}>{np_val:.4f}</td></tr>\n')
-            html += '</table>\n'
-
-        # Eigenvalue comparison
         full_eig = d["pca"]["eigenvalues"]
         names_eig = d["names_only_pca"]["eigenvalues"]
-        html += '<div class="stat">\n'
-        html += '<strong>Eigenvalue comparison:</strong><br>\n'
-        html += (f'Full descriptions: {full_eig[0]:.2f}, {full_eig[1]:.2f} '
-                 f'(first two eigenvalues)<br>\n')
-        html += (f'Names only: {names_eig[0]:.2f}, {names_eig[1]:.2f} '
-                 f'(first two eigenvalues)\n')
-        html += '</div>\n'
-
-        # Character overlap analysis
         full_chars = set(d["character_keys"])
         names_chars = set(d["names_only_character_keys"])
-        shared = full_chars & names_chars
-        html += (f'<p>Characters in common: {len(shared)} / '
-                 f'{len(full_chars)} (full) / {len(names_chars)} (names-only)</p>\n')
+        shared = len(full_chars & names_chars)
+        html += (f'<tr>{model_row_td(d["model"])}'
+                 f'<td>{full_eig[0]:.2f}</td><td>{full_eig[1]:.2f}</td>'
+                 f'<td>{names_eig[0]:.2f}</td><td>{names_eig[1]:.2f}</td>'
+                 f'<td>{shared}/{len(full_chars)}</td></tr>\n')
+
+    html += '</table>\n'
 
     return html
 
@@ -789,9 +930,9 @@ def main():
     print("Human-AI Adaptation: Cross-Model Summary Report")
     print("=" * 60)
 
-    # Load data for all models
+    # Load data for all models (canonical order)
     all_data = []
-    for model_key in VALID_MODELS:
+    for model_key in sort_models(VALID_MODELS):
         print(f"\nLoading {model_key}...")
         try:
             d = load_model_data(model_key)

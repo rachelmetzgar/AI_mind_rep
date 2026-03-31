@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Exp 5: Residual Activation Probing Methods</title>
+<style>
+body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    background: #fff;
+    color: #222;
+    line-height: 1.7;
+    font-size: 15px;
+}
+h1 {
+    font-size: 22px;
+    color: #1a1a1a;
+    border-bottom: 2px solid #333;
+    padding-bottom: 8px;
+    margin-top: 40px;
+}
+h2 {
+    font-size: 18px;
+    color: #2c3e50;
+    margin-top: 35px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+h3 {
+    font-size: 15px;
+    color: #444;
+    margin-top: 25px;
+}
+p {
+    text-align: justify;
+    margin: 10px 0;
+}
+table {
+    border-collapse: collapse;
+    margin: 15px auto;
+    font-size: 13px;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    text-align: center;
+}
+th {
+    background: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+}
+td.left { text-align: left; }
+.equation {
+    background: #f8f8f8;
+    border-left: 4px solid #2c3e50;
+    padding: 12px 18px;
+    margin: 15px 0;
+    font-family: 'Cambria Math', 'STIX Two Math', serif;
+    font-size: 14px;
+    font-style: italic;
+}
+.note {
+    background: #fefce8;
+    border-left: 4px solid #ca8a04;
+    padding: 10px 15px;
+    margin: 15px 0;
+    font-size: 14px;
+}
+.toc {
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    padding: 15px 25px;
+    margin: 20px 0;
+    border-radius: 3px;
+}
+.toc a { color: #2563eb; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+.toc ul { list-style-type: none; padding-left: 15px; }
+.toc li { margin: 4px 0; font-size: 14px; }
+ul.software { margin: 10px 0; padding-left: 25px; }
+ul.software li { margin: 4px 0; font-size: 14px; }
+em.term { font-style: italic; }
+.subtitle {
+    font-size: 16px;
+    color: #555;
+    margin-top: -5px;
+    margin-bottom: 25px;
+}
+.author {
+    color: #888;
+    font-size: 13px;
+    margin-top: 30px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<h1>Experiment 5: Residual Activation Probing</h1>
+<p class="subtitle">Methods &mdash; OLS Deconfounding of Mental State Attribution Representations</p>
+
+<div class="toc">
+<strong>Contents</strong>
+<ul>
+<li><a href="#overview">1. Overview</a></li>
+<li><a href="#stimuli">2. Stimuli</a></li>
+<li><a href="#extraction">3. Activation Extraction</a></li>
+<li><a href="#confound-matrix">4. Confound Feature Matrix</a></li>
+<li><a href="#ols">5. OLS Residualization</a></li>
+<li><a href="#probe">6. Probe Training</a></li>
+<li><a href="#cv">7. Cross-Validation</a></li>
+<li><a href="#metrics">8. Metrics</a></li>
+<li><a href="#permutation">9. Permutation Testing</a></li>
+<li><a href="#fdr">10. FDR Correction</a></li>
+<li><a href="#baseline">11. Raw Baseline Comparison</a></li>
+<li><a href="#interpretation">12. Interpretation</a></li>
+<li><a href="#software">13. Software and Reproducibility</a></li>
+</ul>
+</div>
+
+<!-- ================================================================== -->
+<h2 id="overview">1. Overview</h2>
+
+<p>We used <strong>residual activation probing</strong> to test whether LLaMA-2-13B-Chat maintains a representation of mental state attribution (C1: &ldquo;He [mental verb] the [object]&rdquo;) that is irreducible to three binary confound features: subject presence, mental verb presence, and grammaticality. This analysis complements the 5-predictor RSA (which operates in distance space) and the Gram&ndash;Schmidt critical tests (which operate on probe weight vectors) by directly deconfounding the activation data via OLS regression before training a new probe from scratch.</p>
+
+<p>The logic is straightforward: if the model&rsquo;s representation of C1 is fully explained by the additive combination of subject + mental verb + grammaticality, then removing these features from the activation vectors should eliminate any ability to distinguish C1 from other conditions. If the residual probe still classifies C1 above chance, the model encodes attribution-specific information beyond the three features.</p>
+
+<!-- ================================================================== -->
+<h2 id="stimuli">2. Stimuli</h2>
+
+<p>We used the same 4-condition subset (C1&ndash;C4, 224 sentences) as the 5-predictor RSA analysis. See the 5-predictor methods document for full stimulus description. Briefly:</p>
+
+<table>
+<tr><th>Condition</th><th>Label</th><th>Example</th></tr>
+<tr><td>C1</td><td class="left">mental_state</td><td class="left"><em>He notices the crack.</em></td></tr>
+<tr><td>C2</td><td class="left">dis_mental</td><td class="left"><em>Notice the crack.</em></td></tr>
+<tr><td>C3</td><td class="left">scr_mental</td><td class="left"><em>The crack to notice.</em></td></tr>
+<tr><td>C4</td><td class="left">action</td><td class="left"><em>He fills the crack.</em></td></tr>
+</table>
+
+<p>56 items &times; 4 conditions = 224 sentences.</p>
+
+<!-- ================================================================== -->
+<h2 id="extraction">3. Activation Extraction</h2>
+
+<p>Activations were extracted from <strong>LLaMA-2-13B-Chat</strong> at three token positions (verb, object, period) across all 41 layers (embedding through layer 40), yielding a (224, 3, 41, 5120) activation tensor. See the main methods document for extraction details.</p>
+
+<!-- ================================================================== -->
+<h2 id="confound-matrix">4. Confound Feature Matrix</h2>
+
+<p>We constructed a (224 &times; 4) design matrix <strong>F</strong> with an intercept column and three binary feature columns:</p>
+
+<table>
+<tr><th style="text-align:left">Feature</th><th>C1</th><th>C2</th><th>C3</th><th>C4</th></tr>
+<tr><td class="left">Subject presence (&ldquo;He&rdquo;)</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td class="left">Mental verb</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+<tr><td class="left">Grammaticality</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+</table>
+
+<p><strong>Action verb</strong> was excluded because it is perfectly anti-correlated with mental verb in the C1&ndash;C4 subset (every sentence contains exactly one verb type), so including both would create a rank-deficient design matrix.</p>
+
+<p>The design matrix has rank 4 (intercept + 3 features), verified computationally. Note that C1 is the <em>unique</em> condition satisfying subject=1, mental_verb=1, grammaticality=1. No single feature or feature pair uniquely identifies C1; only the conjunction of all three does. This is precisely why OLS residualization is informative: it removes all linear information about these features, and anything that survives must encode a higher-order or nonlinearly-combined representation.</p>
+
+<!-- ================================================================== -->
+<h2 id="ols">5. OLS Residualization</h2>
+
+<p>For each (position, layer) combination, we applied OLS residualization to the raw activation matrix:</p>
+
+<div class="equation">
+X<sub>resid</sub> = M &middot; X<sub>raw</sub>
+</div>
+
+<p>where <strong>M</strong> is the <em>residual-maker</em> (hat complement) matrix:</p>
+
+<div class="equation">
+M = I &minus; F(F&prime;F)<sup>&minus;1</sup>F&prime;
+</div>
+
+<p>This 224 &times; 224 matrix is computed once and reused across all (position, layer) combinations. For any activation column vector <strong>x</strong>, the product <strong>Mx</strong> removes the component of <strong>x</strong> that lies in the column space of <strong>F</strong> &mdash; i.e., any linear dependence on the intercept and the three confound features. The residual <strong>Mx</strong> is guaranteed to be orthogonal to all columns of <strong>F</strong>, which we verified computationally (max|F&prime; &middot; X<sub>resid</sub>| &lt; 10<sup>&minus;6</sup>).</p>
+
+<div class="note">
+<strong>What is removed vs. preserved:</strong> OLS residualization removes the <em>linear</em> projection of each activation dimension onto the confound features. Any activation variance that is orthogonal to the confound feature space is preserved exactly. This includes: (a) variance unrelated to any feature, (b) variance related to nonlinear interactions or higher-order combinations of features, and (c) variance related to features not in the design matrix (e.g., specific verb identity, object identity, category membership).
+</div>
+
+<!-- ================================================================== -->
+<h2 id="probe">6. Probe Training</h2>
+
+<p>At each (position, layer), we trained a logistic regression classifier (L2-regularized, <em>C</em> = 1.0, LBFGS solver, balanced class weights) to discriminate C1 sentences (label = 1, <em>n</em> = 56) from C2 + C3 + C4 sentences (label = 0, <em>n</em> = 168). The <code>class_weight=&quot;balanced&quot;</code> parameter adjusts for the 1:3 class imbalance by weighting each class inversely proportional to its frequency.</p>
+
+<p>Two probes were trained at each (position, layer):</p>
+<ul>
+<li><strong>Residual probe:</strong> Trained on OLS-residualized activations (confound features removed)</li>
+<li><strong>Raw baseline probe:</strong> Trained on unresidualized activations (same C1&ndash;C4 subset)</li>
+</ul>
+
+<p>The raw baseline provides a within-analysis comparison showing how much signal survives deconfounding.</p>
+
+<!-- ================================================================== -->
+<h2 id="cv">7. Cross-Validation</h2>
+
+<p>We used <strong>leave-one-item-out (LOIO) cross-validation</strong> with 56 folds. Each fold holds out all 4 sentences belonging to one item (one sentence per condition). This ensures:</p>
+
+<ol>
+<li><strong>Item-level generalization:</strong> The probe must generalize to items not seen during training, not just interpolate within the same item&rsquo;s conditions.</li>
+<li><strong>Balanced test sets:</strong> Each held-out fold contains exactly 1 C1 sentence and 3 non-C1 sentences.</li>
+<li><strong>No information leakage:</strong> Sentences from the same item (which share the same verb and object) never appear in both training and test sets.</li>
+</ol>
+
+<!-- ================================================================== -->
+<h2 id="metrics">8. Metrics</h2>
+
+<p><strong>Accuracy:</strong> Proportion of correctly classified sentences across all held-out folds.</p>
+
+<p><strong>ROC AUC:</strong> Area under the receiver operating characteristic curve, computed from predicted probabilities. AUC is the primary metric because it is threshold-independent and handles class imbalance gracefully. An AUC of 0.5 indicates chance performance; 1.0 indicates perfect discrimination.</p>
+
+<!-- ================================================================== -->
+<h2 id="permutation">9. Permutation Testing</h2>
+
+<p>Statistical significance was assessed via permutation testing (200 iterations per position &times; layer combination). On each iteration, the label vector was randomly shuffled (destroying the C1-vs-rest structure while preserving the marginal distribution), and the full LOIO CV procedure was repeated. The p-value is the proportion of null AUC values &ge; the observed AUC:</p>
+
+<div class="equation">
+p = proportion of AUC<sub>null</sub> &ge; AUC<sub>observed</sub>
+</div>
+
+<p>To accelerate the permutation test, activations were PCA-reduced to min(256, <em>n</em> &minus; 4) = 220 components before probe training. Because <em>n</em> = 224 &lt; <em>d</em> = 5120, PCA with 220 components preserves all variance in the data (the remaining components have zero variance), making this a <strong>lossless</strong> dimensionality reduction that eliminates redundant zero-variance dimensions without discarding any information.</p>
+
+<!-- ================================================================== -->
+<h2 id="fdr">10. FDR Correction</h2>
+
+<p><strong>Benjamini&ndash;Hochberg False Discovery Rate correction</strong> was applied at <em>q</em> = 0.05, separately within each (probe_type, position) group across the 41 layers. This controls the expected proportion of false positives among rejected null hypotheses.</p>
+
+<p>The procedure ranks the 41 p-values within each group from smallest to largest, then adjusts each p-value as:</p>
+
+<div class="equation">
+p<sub>adjusted,i</sub> = p<sub>i</sub> &times; 41 / rank<sub>i</sub>
+</div>
+
+<p>with monotonicity enforced (each adjusted p is at least as large as any smaller-ranked adjusted p).</p>
+
+<!-- ================================================================== -->
+<h2 id="baseline">11. Raw Baseline Comparison</h2>
+
+<p><strong>Signal retention</strong> quantifies how much of the raw probe&rsquo;s above-chance signal survives deconfounding:</p>
+
+<div class="equation">
+retention = (AUC<sub>residual</sub> &minus; 0.5) / (AUC<sub>raw</sub> &minus; 0.5)
+</div>
+
+<p>computed at each position&rsquo;s peak layer. A retention of 1.0 means all above-chance signal survives; 0 means the confound features fully explain the raw signal.</p>
+
+<!-- ================================================================== -->
+<h2 id="interpretation">12. Interpretation</h2>
+
+<h3>12.1 Significant Residual Probe</h3>
+
+<p>C1 is distinguishable from C2 + C3 + C4 even after removing subject presence, mental verb, and grammaticality from the activations. This constitutes evidence for an <strong>irreducible mental state attribution representation</strong> &mdash; the model encodes something about the bound proposition {subject + mental verb + object} that cannot be reconstructed from its parts.</p>
+
+<h3>12.2 Non-Significant Residual Probe</h3>
+
+<p>The raw probe&rsquo;s success was entirely driven by the additive combination of the three confound features. The model does not maintain a dedicated attribution representation beyond what these features predict.</p>
+
+<h3>12.3 Caveats</h3>
+
+<ol>
+<li><strong>Linearity assumption:</strong> OLS residualization removes <em>linear</em> effects of the confounds. Nonlinear confound encoding (e.g., multiplicative interactions between subject and verb represented in a nonlinearly-coded subspace) could survive residualization. The probe therefore tests for structure beyond <em>linear</em> confound projections, not confound effects in general.</li>
+<li><strong>Statistical power:</strong> With <em>n</em> = 224 (56 positive), statistical power is limited. A null result does not prove absence of an attribution representation; it may reflect insufficient power to detect a weak signal.</li>
+<li><strong>Feature completeness:</strong> The three features chosen do not exhaust all possible confounds. For example, sentence length differences, specific verb identities, and categorical membership remain in the residuals. However, these are not &ldquo;confounds&rdquo; in the relevant sense &mdash; verb identity and category membership are properties of the mental state attribution itself.</li>
+</ol>
+
+<!-- ================================================================== -->
+<h2 id="software">13. Software and Reproducibility</h2>
+
+<ul class="software">
+<li><strong>Model:</strong> LLaMA-2-13B-Chat (Meta), loaded via HuggingFace Transformers in float16 precision</li>
+<li><strong>OLS residualization:</strong> NumPy <code>linalg.pinv</code> for pseudoinverse; residual-maker matrix computed in float64</li>
+<li><strong>Probe training:</strong> scikit-learn <code>LogisticRegression</code> (C=1.0, LBFGS solver, balanced class weights)</li>
+<li><strong>PCA:</strong> scikit-learn <code>PCA</code> (220 components, random_state=42)</li>
+<li><strong>Permutation testing:</strong> 200 iterations per (position, layer), full LOIO re-run per iteration</li>
+<li><strong>FDR correction:</strong> Benjamini&ndash;Hochberg at <em>q</em> = 0.05</li>
+<li><strong>Random number generation:</strong> NumPy <code>default_rng</code> with seed = 42 + pos&times;100 + layer</li>
+<li><strong>All code:</strong> <code>exp_5/code/probes/8_residual_probes.py</code>, <code>8a_residual_report_generator.py</code></li>
+</ul>
+
+<p class="author">Rachel C. Metzgar &middot; March 2026</p>
+
+</body>
+</html>

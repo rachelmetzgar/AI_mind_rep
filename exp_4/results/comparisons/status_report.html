@@ -76,7 +76,7 @@
 </style>
 </head><body>
 <h1>Experiment 4 — Data Status Report</h1>
-<p>Generated: 2026-03-28 10:17:06</p>
+<p>Generated: 2026-03-30 01:47:53</p>
 <nav class="toc">
 <strong>Contents</strong>
 <ol>
@@ -90,65 +90,66 @@
 </nav>
 <h2 id="summary">Summary</h2>
 <div class="summary-box">
-<div class="summary-card card-total"><span class="count">76</span><span class="label">Expected Files</span></div>
-<div class="summary-card card-found"><span class="count">59</span><span class="label">Found (78%)</span></div>
-<div class="summary-card card-missing"><span class="count">17</span><span class="label">Missing</span></div>
+<div class="summary-card card-total"><span class="count">220</span><span class="label">Expected Files</span></div>
+<div class="summary-card card-found"><span class="count">216</span><span class="label">Found (98%)</span></div>
+<div class="summary-card card-missing"><span class="count">4</span><span class="label">Missing</span></div>
 <div class="summary-card card-na"><span class="count">0</span><span class="label">N/A</span></div>
 </div>
 <h2 id="overview">Overview by Branch</h2>
 <table class="status-table">
-<tr><th>Branch</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th></tr>
-<tr><td><a href="#gray_replication">Gray Replication (Pairwise Behavioral)</a></td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">3/5</td><td class="cell-found">5/5</td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">2/5</td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">2/5</td></tr>
-<tr><td><a href="#gray_simple">Gray Simple (Neural Internals)</a></td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td></tr>
-<tr><td><a href="#human_ai_adaptation">Human/AI Adaptation (Behavioral)</a></td><td class="cell-found">3/3</td><td class="cell-found">3/3</td><td class="cell-missing">0/3</td><td class="cell-found">3/3</td></tr>
-<tr><td><a href="#expanded_mental_concepts">Expanded Mental Concepts</a></td><td class="cell-found">7/7</td><td class="cell-found">7/7</td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">3/7</td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">5/7</td></tr>
+<tr><th>Branch</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th><th>Gemma-2-2B-IT</th><th>Gemma-2-2B Base</th><th>Gemma-2-9B-IT</th><th>Gemma-2-9B Base</th><th>Qwen-2.5-7B-Instruct</th><th>Qwen-2.5-7B Base</th><th>Qwen3-8B</th></tr>
+<tr><td><a href="#gray_replication">Gray Replication (Pairwise Behavioral)</a></td><td class="cell-found">6/6</td><td class="cell-found">6/6</td><td class="cell-found">6/6</td><td class="cell-found">6/6</td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">5/6</td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">5/6</td><td class="cell-found">6/6</td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">5/6</td><td class="cell-found">6/6</td><td style="background:#fff3e0; color:#E65100; font-weight:bold;">5/6</td><td class="cell-found">6/6</td></tr>
+<tr><td><a href="#gray_simple">Gray Simple (Neural Internals)</a></td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td><td class="cell-found">4/4</td></tr>
+<tr><td><a href="#human_ai_adaptation">Human/AI Adaptation (Behavioral)</a></td><td class="cell-found">3/3</td><td class="cell-found">3/3</td><td class="cell-found">3/3</td><td class="cell-found">3/3</td><td class="cell-found">3/3</td><td class="cell-found">3/3</td><td class="cell-found">3/3</td><td class="cell-found">3/3</td><td class="cell-found">3/3</td><td class="cell-found">3/3</td><td class="cell-found">3/3</td></tr>
+<tr><td><a href="#expanded_mental_concepts">Expanded Mental Concepts</a></td><td class="cell-found">7/7</td><td class="cell-found">7/7</td><td class="cell-found">7/7</td><td class="cell-found">7/7</td><td class="cell-found">7/7</td><td class="cell-found">7/7</td><td class="cell-found">7/7</td><td class="cell-found">7/7</td><td class="cell-found">7/7</td><td class="cell-found">7/7</td><td class="cell-found">7/7</td></tr>
 </table>
 <div class="branch-header"><h2 id="gray_replication">Gray Replication (Pairwise Behavioral)</h2></div>
 <p class="branch-desc">Replication of Gray, Gray, &amp; Wegner (2007) pairwise comparison paradigm with 13 entities and 18 mental capacity items.</p>
 <table class="status-table">
-<tr><th>File</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th></tr>
-<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/gray_replication/behavior/with_self/data/</td></tr>
-<tr><td>pairwise_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-missing">&#10007;</td></tr>
-<tr><td>pairwise_human_correlations.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-missing">&#10007;</td></tr>
-<tr><td>pairwise_consistency_stats.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-missing">&#10007;</td></tr>
-<tr><td>individual_pca_results.npz</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
-<tr><td>individual_rating_matrix.npz</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><th>File</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th><th>Gemma-2-2B-IT</th><th>Gemma-2-2B Base</th><th>Gemma-2-9B-IT</th><th>Gemma-2-9B Base</th><th>Qwen-2.5-7B-Instruct</th><th>Qwen-2.5-7B Base</th><th>Qwen3-8B</th></tr>
+<tr><td colspan="12" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/gray_replication/behavior/with_self/data/</td></tr>
+<tr><td>pairwise_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>pairwise_human_correlations.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>pairwise_consistency_stats.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>individual_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>individual_rating_matrix.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>behavioral_rsa_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td></tr>
 </table>
 <div class="branch-header"><h2 id="gray_simple">Gray Simple (Neural Internals)</h2></div>
 <p class="branch-desc">Simple activation extraction (&ldquo;Think about {entity}&rdquo;) for the 13 Gray entities. RSA and neural PCA analyses.</p>
 <table class="status-table">
-<tr><th>File</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th></tr>
-<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/gray_simple/internals/with_self/data/</td></tr>
-<tr><td>rsa_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
-<tr><td>rdm_cosine_per_layer.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
-<tr><td>neural_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
-<tr><td>neural_pca_analysis.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><th>File</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th><th>Gemma-2-2B-IT</th><th>Gemma-2-2B Base</th><th>Gemma-2-9B-IT</th><th>Gemma-2-9B Base</th><th>Qwen-2.5-7B-Instruct</th><th>Qwen-2.5-7B Base</th><th>Qwen3-8B</th></tr>
+<tr><td colspan="12" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/gray_simple/internals/with_self/data/</td></tr>
+<tr><td>rsa_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>rdm_cosine_per_layer.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>neural_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>neural_pca_analysis.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
 </table>
 <div class="branch-header"><h2 id="human_ai_adaptation">Human/AI Adaptation (Behavioral)</h2></div>
 <p class="branch-desc">30 AI/human characters rated on Gray et al. mental capacities via pairwise comparisons.</p>
 <table class="status-table">
-<tr><th>File</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th></tr>
-<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/human_ai_adaptation/behavior/data/</td></tr>
-<tr><td>pairwise_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td></tr>
-<tr><td>pairwise_categorical_analysis.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td></tr>
-<tr><td>pairwise_character_means.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td></tr>
+<tr><th>File</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th><th>Gemma-2-2B-IT</th><th>Gemma-2-2B Base</th><th>Gemma-2-9B-IT</th><th>Gemma-2-9B Base</th><th>Qwen-2.5-7B-Instruct</th><th>Qwen-2.5-7B Base</th><th>Qwen3-8B</th></tr>
+<tr><td colspan="12" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/human_ai_adaptation/behavior/data/</td></tr>
+<tr><td>pairwise_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>pairwise_categorical_analysis.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>pairwise_character_means.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
 </table>
 <div class="branch-header"><h2 id="expanded_mental_concepts">Expanded Mental Concepts</h2></div>
 <p class="branch-desc">28 AI/human characters probed with Exp 3 concept dimensions. Behavioral (PCA), neural (RSA, concept RSA, alignment).</p>
 <table class="status-table">
-<tr><th>File</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th></tr>
-<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/behavior/pca/data/</td></tr>
-<tr><td>pairwise_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td></tr>
-<tr><td>pairwise_categorical_analysis.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-found">&#10003;</td></tr>
-<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/internals/rsa/data/</td></tr>
-<tr><td>rsa_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
-<tr><td>rdm_cosine_per_layer.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
-<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/internals/concept_rsa/data/</td></tr>
-<tr><td>cross_concept_rsa_summary.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
-<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/internals/contrast_alignment/data/</td></tr>
-<tr><td>alignment_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-missing">&#10007;</td></tr>
-<tr><td colspan="5" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/internals/standalone_alignment/data/</td></tr>
-<tr><td>alignment_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-missing">&#10007;</td><td class="cell-missing">&#10007;</td></tr>
+<tr><th>File</th><th>LLaMA-2-13B Chat</th><th>LLaMA-2-13B Base</th><th>LLaMA-3-8B Instruct</th><th>LLaMA-3-8B Base</th><th>Gemma-2-2B-IT</th><th>Gemma-2-2B Base</th><th>Gemma-2-9B-IT</th><th>Gemma-2-9B Base</th><th>Qwen-2.5-7B-Instruct</th><th>Qwen-2.5-7B Base</th><th>Qwen3-8B</th></tr>
+<tr><td colspan="12" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/behavior/pca/data/</td></tr>
+<tr><td>pairwise_pca_results.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>pairwise_categorical_analysis.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td colspan="12" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/internals/rsa/data/</td></tr>
+<tr><td>rsa_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td>rdm_cosine_per_layer.npz</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td colspan="12" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/internals/concept_rsa/data/</td></tr>
+<tr><td>cross_concept_rsa_summary.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td colspan="12" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/internals/contrast_alignment/data/</td></tr>
+<tr><td>alignment_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
+<tr><td colspan="12" class="path-hint" style="background:#fafafa; border-top:2px solid #ddd;">results/{model}/expanded_mental_concepts/internals/standalone_alignment/data/</td></tr>
+<tr><td>alignment_results.json</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td><td class="cell-found">&#10003;</td></tr>
 </table>
 <h2 id="legend">Legend</h2>
 <table class="status-table" style="width:auto;">

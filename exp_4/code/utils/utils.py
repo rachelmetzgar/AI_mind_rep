@@ -451,6 +451,132 @@ def llama_v3_prompt(messages, system_prompt=None):
     return "".join(parts)
 
 
+# ============================================================================
+# GEMMA-2 CHAT PROMPT FORMATTING
+# ============================================================================
+
+def gemma2_prompt(messages, system_prompt=None):
+    """Format messages into Gemma-2 chat template.
+
+    Gemma-2 has no system role. System prompt is folded into the first
+    user message (same strategy as LLaMA-2).
+
+    Format:
+        <start_of_turn>user
+        {content}<end_of_turn>
+        <start_of_turn>model
+    """
+    if system_prompt is None:
+        system_prompt = (
+            "You are a helpful, respectful and honest assistant. "
+            "Always answer as helpfully as possible, while being safe."
+        )
+
+    # Insert system message if not already present
+    if messages[0]["role"] != "system":
+        messages = [{"role": "system", "content": system_prompt}] + messages
+
+    # Fold system prompt into first user message
+    sys_content = messages[0]["content"]
+    messages = [
+        {
+            "role": messages[1]["role"],
+            "content": sys_content + "\n\n" + messages[1]["content"],
+        }
+    ] + messages[2:]
+
+    parts = []
+    for msg in messages:
+        role = msg["role"]
+        content = msg["content"].strip()
+        parts.append(f"<start_of_turn>{role}\n{content}<end_of_turn>\n")
+
+    # Add model header to prompt generation
+    parts.append("<start_of_turn>model\n")
+
+    return "".join(parts)
+
+
+# ============================================================================
+# QWEN-2.5 CHAT PROMPT FORMATTING (ChatML)
+# ============================================================================
+
+def qwen2_prompt(messages, system_prompt=None):
+    """Format messages into Qwen-2.5 ChatML template.
+
+    Format:
+        <|im_start|>system
+        {system_prompt}<|im_end|>
+        <|im_start|>user
+        {content}<|im_end|>
+        <|im_start|>assistant
+    """
+    if system_prompt is None:
+        system_prompt = (
+            "You are a helpful, respectful and honest assistant. "
+            "Always answer as helpfully as possible, while being safe."
+        )
+
+    # Insert system message if not already present
+    if messages[0]["role"] != "system":
+        messages = [{"role": "system", "content": system_prompt}] + messages
+
+    parts = []
+    for msg in messages:
+        parts.append(f"<|im_start|>{msg['role']}\n{msg['content'].strip()}<|im_end|>\n")
+
+    # Add assistant header to prompt generation
+    parts.append("<|im_start|>assistant\n")
+
+    return "".join(parts)
+
+
+# ============================================================================
+# QWEN3 CHAT PROMPT FORMATTING (ChatML + /no_think)
+# ============================================================================
+
+def qwen3_prompt(messages, system_prompt=None):
+    """Format messages into Qwen3 ChatML template with thinking disabled.
+
+    Same ChatML format as Qwen-2.5, but appends /no_think to the system
+    message to suppress chain-of-thought <think> blocks that would break
+    parse_rating().
+    """
+    if system_prompt is None:
+        system_prompt = (
+            "You are a helpful, respectful and honest assistant. "
+            "Always answer as helpfully as possible, while being safe."
+        )
+
+    # Append /no_think to disable thinking mode
+    system_prompt = system_prompt.rstrip() + "\n\n/no_think"
+
+    # Insert system message if not already present
+    if messages[0]["role"] != "system":
+        messages = [{"role": "system", "content": system_prompt}] + messages
+    else:
+        # Ensure /no_think is appended even if system message already exists
+        if "/no_think" not in messages[0]["content"]:
+            messages = list(messages)
+            messages[0] = {
+                "role": "system",
+                "content": messages[0]["content"].rstrip() + "\n\n/no_think",
+            }
+
+    parts = []
+    for msg in messages:
+        parts.append(f"<|im_start|>{msg['role']}\n{msg['content'].strip()}<|im_end|>\n")
+
+    # Add assistant header to prompt generation
+    parts.append("<|im_start|>assistant\n")
+
+    return "".join(parts)
+
+
+# ============================================================================
+# CHAT PROMPT DISPATCHER
+# ============================================================================
+
 def format_chat_prompt(messages, system_prompt=None, family=None):
     """Dispatch to the correct chat template based on model family.
 
@@ -474,6 +600,12 @@ def format_chat_prompt(messages, system_prompt=None, family=None):
         return llama_v2_prompt(messages, system_prompt=system_prompt)
     elif family == "llama3":
         return llama_v3_prompt(messages, system_prompt=system_prompt)
+    elif family == "gemma2":
+        return gemma2_prompt(messages, system_prompt=system_prompt)
+    elif family == "qwen2":
+        return qwen2_prompt(messages, system_prompt=system_prompt)
+    elif family == "qwen3":
+        return qwen3_prompt(messages, system_prompt=system_prompt)
     else:
         raise ValueError(f"Unknown model family: {family}")
 

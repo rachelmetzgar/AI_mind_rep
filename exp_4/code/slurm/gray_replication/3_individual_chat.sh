@@ -2,7 +2,7 @@
 #SBATCH --job-name=exp4_individual_chat
 #SBATCH --output=/mnt/cup/labs/graziano/rachel/mind_rep/exp_4/logs/gray_replication/individual_chat_%j.out
 #SBATCH --error=/mnt/cup/labs/graziano/rachel/mind_rep/exp_4/logs/gray_replication/individual_chat_%j.err
-#SBATCH --gres=gpu:1 --mem=48G --time=2:00:00 --cpus-per-task=4
+#SBATCH --gres=gpu:1 --mem=64G --time=2:00:00 --cpus-per-task=4
 
 export HF_HOME="/mnt/cup/labs/graziano/rachel/.cache_huggingface"
 export HF_HUB_CACHE="/mnt/cup/labs/graziano/rachel/.cache_huggingface/hub"

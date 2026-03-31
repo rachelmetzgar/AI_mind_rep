@@ -71,6 +71,8 @@ from datetime import datetime
 import numpy as np
 
 import torch
+torch._dynamo.config.suppress_errors = True  # Gemma-2 sliding window triggers recompile limit
+torch._dynamo.config.cache_size_limit = 256
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from scipy.stats import spearmanr
 
@@ -571,7 +573,7 @@ def main():
     )
     parser.add_argument(
         "--both", action="store_true",
-        help="Run both chat and base models sequentially"
+        help="Run both with_self and without_self conditions"
     )
     parser.add_argument(
         "--single_order", action="store_true",
@@ -585,17 +587,22 @@ def main():
     )
     args = parser.parse_args()
 
-    if args.both:
-        models_to_run = ["llama2_13b_chat", "llama2_13b_base"]
-    else:
-        models_to_run = [args.model]
+    models_to_run = [args.model]
 
     for model_key in models_to_run:
         print(f"\n{'='*60}")
         print(f"  Running model: {model_key}")
         print(f"{'='*60}\n")
         set_model(model_key)
-        run_replication(args)
+
+        if args.both:
+            # Run without_self first, then with_self
+            args.include_self = False
+            run_replication(args)
+            args.include_self = True
+            run_replication(args)
+        else:
+            run_replication(args)
 
 
 def run_replication(args):

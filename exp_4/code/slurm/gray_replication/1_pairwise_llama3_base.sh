@@ -21,4 +21,4 @@ trap 'set +u; conda deactivate >/dev/null 2>&1 || true; set -u' EXIT
 
 cd /mnt/cup/labs/graziano/rachel/mind_rep/exp_4/code
 
-python gray_replication/behavior/1_pairwise_replication.py --model llama3_8b_base --both
+python gray_replication/behavior/1_pairwise_replication.py --model llama3_8b_base --include_self

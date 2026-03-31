@@ -85,7 +85,9 @@ Use `snapshot_download()`, not `from_pretrained()` (latter loads into RAM → OO
 LLaMA-2-13B-Chat: `/jukebox/graziano/rachel/ai_percep_clean/.cache/huggingface/hub/models--meta-llama--Llama-2-13b-chat-hf/`
 
 ### GPU Jobs
-Typical: `--gres=gpu:1 --mem=48G --time=6:00:00`
+Typical: `--gres=gpu:1 --mem=64G --time=6:00:00`
+
+**SLURM `--mem` is CPU RAM, not GPU VRAM.** `from_pretrained()` loads the full model into CPU RAM before `.half().to(device)` moves it to GPU. This means you need enough `--mem` to hold the model weights in their on-disk dtype (usually bf16/fp32) *plus* Python overhead. Rule of thumb: **`--mem` should be at least 3× the on-disk model size** (e.g., a 20 GB model needs ~64G). Using 32G for models larger than ~8 GB on disk will OOM during checkpoint loading.
 
 ---
 

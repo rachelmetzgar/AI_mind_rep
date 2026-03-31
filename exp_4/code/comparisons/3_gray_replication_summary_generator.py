@@ -34,7 +34,9 @@ from config import ROOT_DIR, COMPARISONS_DIR, VALID_MODELS, MODELS, ensure_dir, 
 from utils.report_utils import (
     REPORT_CSS, build_cross_model_header, build_html_footer, build_toc,
     fig_to_b64, html_figure, MODEL_COLORS, MODEL_LABELS, ALL_MODELS,
-    gray_entities_stimuli_html,
+    gray_entities_stimuli_html, sort_models, GRID_NCOLS, make_model_grid,
+    model_row_td, format_p_cell,
+    methodology_primer_html,
 )
 from utils.utils import nice_entity, nice_capacity
 from entities.gray_entities import (
@@ -148,6 +150,19 @@ def load_model_data():
                     "cap_keys": list(ind_mat["capacity_keys"]),
                 }
 
+            # Behavioral RSA
+            rsa_path = ddir / "behavioral_rsa_results.json"
+            if rsa_path.exists():
+                with open(rsa_path) as f:
+                    entry["behavioral_rsa"] = json.load(f)
+
+            rdm_path = ddir / "behavioral_rdms.npz"
+            if rdm_path.exists():
+                rdm_data = np.load(rdm_path, allow_pickle=True)
+                entry["behavioral_rdms"] = {
+                    k: rdm_data[k] for k in rdm_data.files
+                }
+
             model_data[model] = entry
             print(f"  Loaded {model} ({len(entry['entity_keys'])} entities)")
 
@@ -211,7 +226,8 @@ def fig_scree_comparison(model_data):
                 color=C_HUM)
 
     max_n = 0
-    for model, d in model_data.items():
+    for model in sort_models(model_data):
+        d = model_data[model]
         eig = d["eigenvalues"]
         n = len(eig)
         if n > max_n:
@@ -242,51 +258,65 @@ def fig_scree_comparison(model_data):
     return b64
 
 
-def fig_loadings_per_model(model, d):
-    """Horizontal bar chart of varimax-rotated loadings for one model."""
-    loadings = d["loadings"]        # (18, 2)
-    cap_keys = d["cap_keys"]
-
+def fig_loadings_combined(model_data, sorted_models):
+    """Combined loading chart: family-grouped rows, F1+F2 side by side per model."""
     exp_caps = {c for c, (_, f) in CAPACITY_PROMPTS.items() if f == "E"}
+    LOADING_THRESH = 0.4
 
-    fig, axes = plt.subplots(1, 2, figsize=(10, 6), sharey=True)
-    y = np.arange(len(cap_keys))
-    labels = [nice_capacity(c) for c in cap_keys]
-    colors = [C_EXP if c in exp_caps else C_AGE for c in cap_keys]
+    positions, ordered, nrows, ncols, _ = make_model_grid(sorted_models)
+    actual_ncols = ncols * 2  # F1 + F2 per model
+    fig, axes = plt.subplots(nrows, actual_ncols,
+                             figsize=(4 * actual_ncols, 5 * nrows),
+                             squeeze=False)
 
-    LOADING_THRESH = 0.4  # conventional threshold for "meaningful" loading
+    # Hide all axes first, then show the ones we use
+    for ax in axes.flatten():
+        ax.set_visible(False)
 
-    # Factor 1
-    axes[0].barh(y, loadings[:, 0], color=colors, edgecolor="white", height=0.7)
-    axes[0].set_xlabel("Loading")
-    axes[0].set_title("Factor 1")
-    axes[0].set_yticks(y)
-    axes[0].set_yticklabels(labels, fontsize=9)
-    axes[0].axvline(0, color="gray", lw=0.5)
-    axes[0].axvline(LOADING_THRESH, color="gray", lw=1, ls=":", alpha=0.7)
-    axes[0].axvline(-LOADING_THRESH, color="gray", lw=1, ls=":", alpha=0.7)
-    axes[0].invert_yaxis()
+    for idx, model in enumerate(ordered):
+        d = model_data[model]
+        loadings = d["loadings"]  # (18, 2)
+        cap_keys = d["cap_keys"]
+        y = np.arange(len(cap_keys))
+        labels = [nice_capacity(c) for c in cap_keys]
+        colors = [C_EXP if c in exp_caps else C_AGE for c in cap_keys]
 
-    # Factor 2
-    axes[1].barh(y, loadings[:, 1], color=colors, edgecolor="white", height=0.7)
-    axes[1].set_xlabel("Loading")
-    axes[1].set_title("Factor 2")
-    axes[1].axvline(0, color="gray", lw=0.5)
-    axes[1].axvline(LOADING_THRESH, color="gray", lw=1, ls=":", alpha=0.7)
-    axes[1].axvline(-LOADING_THRESH, color="gray", lw=1, ls=":", alpha=0.7)
+        row, col = positions[idx]
+        col_base = col * 2
+        ax_f1 = axes[row, col_base]
+        ax_f2 = axes[row, col_base + 1]
+        ax_f1.set_visible(True)
+        ax_f2.set_visible(True)
 
-    # Label the threshold on one axis
-    axes[0].text(LOADING_THRESH + 0.01, len(cap_keys) - 0.5,
-                 "|0.4| = meaningful",
-                 fontsize=7.5, color="gray", va="top")
+        # Factor 1
+        ax_f1.barh(y, loadings[:, 0], color=colors, edgecolor="white", height=0.7)
+        ax_f1.set_xlabel("Loading")
+        ax_f1.set_title(f"{MODEL_LABELS[model]}\nFactor 1", fontsize=10)
+        ax_f1.set_yticks(y)
+        ax_f1.set_yticklabels(labels, fontsize=8)
+        ax_f1.axvline(0, color="gray", lw=0.5)
+        ax_f1.axvline(LOADING_THRESH, color="gray", lw=1, ls=":", alpha=0.7)
+        ax_f1.axvline(-LOADING_THRESH, color="gray", lw=1, ls=":", alpha=0.7)
+        ax_f1.invert_yaxis()
+
+        # Factor 2
+        ax_f2.barh(y, loadings[:, 1], color=colors, edgecolor="white", height=0.7)
+        ax_f2.set_xlabel("Loading")
+        ax_f2.set_title("Factor 2", fontsize=10)
+        ax_f2.set_yticks(y)
+        ax_f2.set_yticklabels([], fontsize=8)
+        ax_f2.axvline(0, color="gray", lw=0.5)
+        ax_f2.axvline(LOADING_THRESH, color="gray", lw=1, ls=":", alpha=0.7)
+        ax_f2.axvline(-LOADING_THRESH, color="gray", lw=1, ls=":", alpha=0.7)
+        ax_f2.invert_yaxis()
 
     legend_elements = [
         Patch(facecolor=C_EXP, label="Experience (human)"),
         Patch(facecolor=C_AGE, label="Agency (human)"),
     ]
     fig.legend(handles=legend_elements, loc="lower center", ncol=2,
-               bbox_to_anchor=(0.5, -0.02), fontsize=10)
-    fig.suptitle(f"Varimax-Rotated Loadings: {d['label']}", y=1.01, fontsize=13)
+               bbox_to_anchor=(0.5, -0.01), fontsize=10)
+    fig.suptitle("Varimax-Rotated Factor Loadings: All Models", y=1.01, fontsize=14)
     fig.tight_layout()
 
     b64 = fig_to_b64(fig)
@@ -295,13 +325,13 @@ def fig_loadings_per_model(model, d):
 
 
 def _entity_green_colors():
-    """Compute a dark-to-light green color for each entity based on human scores.
+    """Compute a dark-to-light purple color for each entity based on human scores.
 
     Uses Euclidean distance from origin in the human (Experience, Agency) space
-    mapped to the Greens colormap: light green = low scores, dark green = high.
+    mapped to the Purples colormap: light purple = low scores, dark purple = high.
     Returns dict[entity_key] → RGBA color.
     """
-    cmap = plt.cm.Greens
+    cmap = plt.cm.Purples
     # Compute combined score (Euclidean distance from origin, normalised to 0-1)
     dists = {}
     for e in ENTITY_NAMES:
@@ -326,37 +356,39 @@ def fig_mind_space(model_data):
     are visually intuitive.
     """
     entity_colors = _entity_green_colors()
-    n_panels = 1 + len(model_data)
-    ncols = min(n_panels, 3)
-    nrows = (n_panels + ncols - 1) // ncols
-    fig, axes = plt.subplots(nrows, ncols, figsize=(5.5 * ncols, 5 * nrows))
-    if n_panels == 1:
-        axes = np.array([axes])
-    axes = np.atleast_2d(axes).flatten()
+    positions, ordered, nrows, ncols, human_pos = make_model_grid(
+        model_data.keys(), include_human=True
+    )
+    fig, axes = plt.subplots(nrows, ncols, figsize=(5 * ncols, 5 * nrows),
+                             squeeze=False)
 
-    # Hide unused panels
-    for i in range(n_panels, len(axes)):
-        axes[i].set_visible(False)
+    # Hide all axes first
+    for ax in axes.flatten():
+        ax.set_visible(False)
 
-    # Panel 0: Human reference
-    ax = axes[0]
+    # Human reference panel
+    ax_human = axes[human_pos[0], human_pos[1]]
+    ax_human.set_visible(True)
     h_exp = np.array([GRAY_ET_AL_SCORES[e][0] for e in ENTITY_NAMES])
     h_age = np.array([GRAY_ET_AL_SCORES[e][1] for e in ENTITY_NAMES])
     h_colors = [entity_colors[e] for e in ENTITY_NAMES]
-    ax.scatter(h_age, h_exp, s=70, c=h_colors, edgecolor="white", zorder=5, linewidth=0.5)
+    ax_human.scatter(h_age, h_exp, s=70, c=h_colors, edgecolor="white", zorder=5, linewidth=0.5)
     for i, ek in enumerate(ENTITY_NAMES):
-        ax.annotate(nice_entity(ek), (h_age[i], h_exp[i]),
+        ax_human.annotate(nice_entity(ek), (h_age[i], h_exp[i]),
                     textcoords="offset points", xytext=(5, 4), fontsize=7.5)
-    ax.set_xlabel("Agency")
-    ax.set_ylabel("Experience")
-    ax.set_title("Human (Gray et al., 2007)", fontsize=11)
-    ax.set_xlim(-0.05, 1.12)
-    ax.set_ylim(-0.05, 1.12)
-    ax.set_aspect("equal")
+    ax_human.set_xlabel("Agency")
+    ax_human.set_ylabel("Experience")
+    ax_human.set_title("Human (Gray et al., 2007)", fontsize=11)
+    ax_human.set_xlim(-0.05, 1.12)
+    ax_human.set_ylim(-0.05, 1.12)
+    ax_human.set_aspect("equal")
 
     # Model panels — same entity colors as human panel
-    for idx, (model, d) in enumerate(model_data.items()):
-        ax = axes[idx + 1]
+    for idx, model in enumerate(ordered):
+        d = model_data[model]
+        row, col = positions[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
         scores = d["scores_01"]      # (13, 2)
         ek = d["entity_keys"]
         m_colors = [entity_colors.get(e, "#999999") for e in ek]
@@ -381,7 +413,7 @@ def fig_mind_space(model_data):
 
 
 def fig_individual_heatmap(model, d):
-    """Heatmap of individual Likert ratings for a base model."""
+    """Heatmap of individual Likert ratings for a single model (legacy)."""
     mat_info = d["individual_matrix"]
     matrix = mat_info["matrix"]          # (18, 13)
     entity_keys = mat_info["entity_keys"]
@@ -415,47 +447,221 @@ def fig_individual_heatmap(model, d):
     return b64
 
 
-def fig_individual_scatter(model, d):
-    """Individual PCA factor scatter vs human: 2x2 grid (factor x human dim).
+def fig_individual_heatmaps_combined(model_data, models_with_individual):
+    """All individual Likert rating heatmaps in a family-grouped grid layout."""
+    n = len(models_with_individual)
+    if n == 0:
+        return None
 
-    Each subplot shows one model factor vs one human dimension, with all 13
-    entities labeled. This avoids the confusion of overlaying Experience and
-    Agency on the same axes.
+    exp_caps = {c for c, (_, f) in CAPACITY_PROMPTS.items() if f == "E"}
+
+    positions, ordered, nrows, ncols, _ = make_model_grid(models_with_individual)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(4.5 * ncols, 7 * nrows),
+                             squeeze=False, layout="constrained")
+
+    # Hide all axes first
+    for ax in axes.flatten():
+        ax.set_visible(False)
+
+    im = None
+    visible_axes = []
+    for idx, model in enumerate(ordered):
+        d = model_data[model]
+        mat_info = d["individual_matrix"]
+        matrix = mat_info["matrix"]          # (18, 13)
+        entity_keys = mat_info["entity_keys"]
+        cap_keys = mat_info["cap_keys"]
+
+        row, col = positions[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
+        visible_axes.append(ax)
+        im = ax.imshow(matrix, aspect="auto", cmap="RdYlBu_r",
+                       vmin=2.5, vmax=3.5)
+        ax.set_xticks(range(len(entity_keys)))
+        ax.set_xticklabels([nice_entity(e) for e in entity_keys],
+                           rotation=45, ha="right", fontsize=7)
+        ax.set_title(d["label"], fontsize=10)
+
+        # Show y-axis labels on the first column only
+        if col == 0:
+            ax.set_yticks(range(len(cap_keys)))
+            ylabels = [f"{nice_capacity(c)} ({'E' if c in exp_caps else 'A'})"
+                       for c in cap_keys]
+            ax.set_yticklabels(ylabels, fontsize=8)
+        else:
+            ax.set_yticks(range(len(cap_keys)))
+            ax.set_yticklabels([])
+
+        # Cell values (skip if too many models to keep readable)
+        if n <= 4:
+            for i in range(len(cap_keys)):
+                for j in range(len(entity_keys)):
+                    val = matrix[i, j]
+                    color = "white" if val < 2.8 or val > 3.35 else "black"
+                    ax.text(j, i, f"{val:.2f}", ha="center", va="center",
+                            fontsize=5, color=color)
+
+    fig.suptitle("Individual Likert Ratings: All Models", fontsize=13)
+    if im is not None:
+        fig.colorbar(im, ax=visible_axes, shrink=0.6,
+                     label="Expected Rating (1-5)")
+
+    b64 = fig_to_b64(fig)
+    plt.close(fig)
+    return b64
+
+
+def _best_individual_correlation(d):
+    """Find the strongest significant factor-human correlation for a model.
+
+    Returns (factor_idx, human_dim_name, human_arr, color, rho, p) or None.
     """
     ind = d["individual_pca"]
-    scores = ind["scores_01"]        # (n_ent, 2)
+    scores = ind["scores_01"]
     ek = ind["entity_keys"]
     h_exp = np.array([GRAY_ET_AL_SCORES[e][0] for e in ek])
     h_age = np.array([GRAY_ET_AL_SCORES[e][1] for e in ek])
 
-    human_dims = [
-        (h_exp, "Human Experience", C_EXP),
-        (h_age, "Human Agency", C_AGE),
-    ]
-
-    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
-
-    for fi in range(2):
-        for hi, (h_arr, h_name, h_color) in enumerate(human_dims):
-            ax = axes[fi][hi]
+    candidates = []
+    for fi in range(min(2, scores.shape[1])):
+        for h_arr, h_name, h_color in [(h_exp, "Experience", C_EXP),
+                                        (h_age, "Agency", C_AGE)]:
             rho, p = spearmanr(scores[:, fi], h_arr)
-            stars = _sig_stars(p)
+            candidates.append((fi, h_name, h_arr, h_color, rho, p))
 
-            ax.scatter(h_arr, scores[:, fi], s=70, c=h_color,
-                       edgecolor="white", zorder=5, linewidth=0.5, alpha=0.85)
-            for i, e in enumerate(ek):
-                ax.annotate(nice_entity(e), (h_arr[i], scores[i, fi]),
-                            textcoords="offset points", xytext=(5, 3),
-                            fontsize=7.5, alpha=0.8)
-            ax.set_xlabel(h_name)
-            ax.set_ylabel(f"Model Factor {fi+1} (0-1)")
-            ax.set_title(f"F{fi+1} vs {h_name}\n(ρ = {rho:.3f}{stars})",
-                         fontsize=10)
-            ax.set_xlim(-0.05, 1.12)
-            ax.set_ylim(-0.1, 1.15)
+    # Pick best significant; if none significant, pick highest |rho|
+    sig = [c for c in candidates if c[5] < 0.05]
+    if sig:
+        best = max(sig, key=lambda c: abs(c[4]))
+    else:
+        best = max(candidates, key=lambda c: abs(c[4]))
+    return best
 
-    fig.suptitle(f"Individual Ratings PCA vs Human: {d['label']}", fontsize=13, y=1.02)
+
+def fig_individual_scatter_combined(model_data, models_with_individual):
+    """Combined cross-model scatter: each panel shows the strongest factor-human
+    correlation for that model's individual ratings PCA."""
+    if not models_with_individual:
+        return None
+
+    positions, ordered, nrows, ncols, _ = make_model_grid(models_with_individual)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(5 * ncols, 5 * nrows),
+                             squeeze=False)
+    for ax in axes.flatten():
+        ax.set_visible(False)
+
+    for idx, model in enumerate(ordered):
+        d = model_data[model]
+        row, col = positions[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
+
+        fi, h_name, h_arr, h_color, rho, p = _best_individual_correlation(d)
+        ind = d["individual_pca"]
+        scores = ind["scores_01"]
+        ek = ind["entity_keys"]
+        stars = _sig_stars(p)
+
+        ax.scatter(h_arr, scores[:, fi], s=70, c=h_color,
+                   edgecolor="white", zorder=5, linewidth=0.5, alpha=0.85)
+        for i, e in enumerate(ek):
+            ax.annotate(nice_entity(e), (h_arr[i], scores[i, fi]),
+                        textcoords="offset points", xytext=(5, 3),
+                        fontsize=7.5, alpha=0.8)
+        # Trend line
+        z = np.polyfit(h_arr, scores[:, fi], 1)
+        xline = np.linspace(-0.05, 1.12, 100)
+        ax.plot(xline, np.polyval(z, xline), "--", color=h_color, alpha=0.3)
+
+        ax.set_xlabel(f"Human {h_name}")
+        ax.set_ylabel(f"Model Factor {fi+1} (0-1)")
+        ax.set_title(f"{MODEL_LABELS[model]}\nF{fi+1} vs {h_name} "
+                     f"(ρ={rho:.3f}{stars})", fontsize=10)
+        ax.set_xlim(-0.05, 1.12)
+        ax.set_ylim(-0.1, 1.15)
+
+    fig.suptitle("Individual Ratings: Best Factor-Human Correlation per Model",
+                 fontsize=14)
     fig.tight_layout()
+
+    b64 = fig_to_b64(fig)
+    plt.close(fig)
+    return b64
+
+
+def fig_behavioral_rdm_heatmaps(model_data):
+    """RDM heatmaps: human reference + one per model with behavioral RSA data.
+
+    Shows combined human RDM plus model behavioral RDMs (pairwise PCA source).
+    All panels share the same colormap range for visual comparability.
+    """
+    models_with_rsa = sort_models([m for m in model_data if "behavioral_rdms" in model_data[m]])
+    if not models_with_rsa:
+        return None
+
+    # Get entity keys from first model with RSA data
+    first_rdms = model_data[models_with_rsa[0]]["behavioral_rdms"]
+    entity_keys = list(first_rdms["entity_keys"])
+
+    # Collect all RDMs for shared colorscale (in canonical order)
+    all_rdms = [first_rdms["human_rdm_combined"]]
+    model_rdm_list = []
+    for m in models_with_rsa:
+        rdms = model_data[m]["behavioral_rdms"]
+        if "model_rdm_pairwise_pca" in rdms:
+            model_rdm_list.append((m, rdms["model_rdm_pairwise_pca"]))
+            all_rdms.append(rdms["model_rdm_pairwise_pca"])
+
+    if not model_rdm_list:
+        return None
+
+    vmax = max(r.max() for r in all_rdms)
+    rdm_models = [m for m, _ in model_rdm_list]
+    positions, ordered, nrows, ncols, human_pos = make_model_grid(
+        rdm_models, include_human=True
+    )
+    fig, axes = plt.subplots(nrows, ncols, figsize=(5 * ncols, 5 * nrows),
+                             squeeze=False, layout="constrained")
+
+    # Hide all axes first
+    for ax in axes.flatten():
+        ax.set_visible(False)
+
+    labels = [nice_entity(e) for e in entity_keys]
+
+    # Human panel
+    ax_human = axes[human_pos[0], human_pos[1]]
+    ax_human.set_visible(True)
+    im = ax_human.imshow(first_rdms["human_rdm_combined"], cmap="viridis",
+                         vmin=0, vmax=vmax, aspect="equal")
+    ax_human.set_xticks(range(len(entity_keys)))
+    ax_human.set_xticklabels(labels, rotation=45, ha="right", fontsize=7)
+    ax_human.set_yticks(range(len(entity_keys)))
+    ax_human.set_yticklabels(labels, fontsize=7)
+    ax_human.set_title("Human (Combined)", fontsize=10)
+
+    # Build model key → RDM lookup
+    rdm_by_model = {m: rdm for m, rdm in model_rdm_list}
+
+    # Model panels
+    visible_axes = [ax_human]
+    for idx, model in enumerate(ordered):
+        row, col = positions[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
+        visible_axes.append(ax)
+        rdm = rdm_by_model[model]
+        ax.imshow(rdm, cmap="viridis", vmin=0, vmax=vmax, aspect="equal")
+        ax.set_xticks(range(len(entity_keys)))
+        ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=7)
+        ax.set_yticks(range(len(entity_keys)))
+        ax.set_yticklabels(labels, fontsize=7)
+        ax.set_title(model_data[model]["label"], fontsize=10)
+
+    fig.suptitle("Behavioral RDMs: Human vs Model (Pairwise PCA)", fontsize=13)
+    fig.colorbar(im, ax=visible_axes, shrink=0.5,
+                 label="Distance")
 
     b64 = fig_to_b64(fig)
     plt.close(fig)
@@ -479,7 +685,7 @@ def generate_report():
         print("ERROR: No model data found. Cannot generate report.")
         return None
 
-    models_loaded = list(model_data.keys())
+    models_loaded = sort_models(model_data)
     n_models = len(models_loaded)
     print(f"\nLoaded {n_models} model(s): {', '.join(models_loaded)}")
 
@@ -498,7 +704,16 @@ def generate_report():
     has_individual = any("individual_matrix" in d for d in model_data.values())
     if has_individual:
         sections.append({"id": "individual", "label": "8. Individual Ratings"})
-    sections.append({"id": "takeaways", "label": f"{'9' if has_individual else '8'}. Key Takeaways"})
+
+    # Check if any model has behavioral RSA data
+    has_rsa = any("behavioral_rsa" in d for d in model_data.values())
+    next_num = 8
+    if has_individual:
+        next_num = 9
+    if has_rsa:
+        sections.append({"id": "behavioral-rsa", "label": f"{next_num}. Behavioral RSA"})
+        next_num += 1
+    sections.append({"id": "takeaways", "label": f"{next_num}. Key Takeaways"})
 
     # Start HTML
     html = build_cross_model_header("Exp 4: Gray Replication - Cross-Model Summary")
@@ -567,6 +782,41 @@ def generate_report():
     )
     html += "</ol>\n</div>\n"
 
+    # ── Interpretation Guide ──
+    html += '<h3>Interpretation Guide</h3>\n'
+    html += methodology_primer_html(
+        include_pca=True, include_spearman=True, include_fdr=False,
+        include_prompting=True, include_pairwise=True)
+
+    html += '<div class="method">\n'
+    html += '<h4>Human Reference Scores</h4>\n'
+    html += (
+        '<p>Human Experience and Agency scores were estimated by digitizing '
+        'entity positions from Figure 1 of Gray, Gray, &amp; Wegner (2007). '
+        'These are approximate x&ndash;y coordinates read from the published '
+        '2D scatter plot, rescaled to 0&ndash;1. They serve as the ground-truth '
+        'reference against which model factor scores are correlated.</p>\n')
+    html += '<h4>Pairwise vs. Individual Paradigms</h4>\n'
+    html += (
+        '<p>The <strong>pairwise paradigm</strong> presents entities in pairs '
+        'and asks the model which is &ldquo;more capable&rdquo; of each mental '
+        'capacity. This mirrors Gray et al.&rsquo;s original survey design. '
+        'The <strong>individual paradigm</strong> rates each entity alone on a '
+        '1&ndash;5 Likert scale for each capacity&mdash;no comparison partner '
+        'is shown. Individual ratings provide an absolute rather than relative '
+        'measure. Both are analyzed via the same PCA procedure.</p>\n')
+    html += '<h4>Behavioral RSA</h4>\n'
+    html += (
+        '<p><strong>Behavioral RSA</strong> compares the pairwise distance '
+        'pattern among entities based on behavioral ratings (capacity win-rates '
+        'or absolute Likert scores) to the human reference RDM. This is '
+        'distinct from <em>neural</em> RSA (used in the Gray Simple branch), '
+        'which uses internal activation vector distances. Behavioral RSA tests '
+        'whether the model&rsquo;s <em>overt judgments</em> share geometric '
+        'structure with human judgments; neural RSA tests whether the '
+        'model&rsquo;s <em>internal representations</em> do.</p>\n')
+    html += '</div>\n'
+
     # ── Section 4: Scree Plot ──
     html += '<h2 id="scree">4. Scree Plot Comparison</h2>\n'
     html += (
@@ -602,7 +852,7 @@ def generate_report():
         var_exp = float(np.sum(eig[:2]) / np.sum(eig) * 100)
         eig3 = f"{eig[2]:.2f}" if len(eig) > 2 else "--"
         html += (
-            f"<tr><td>{d['label']}</td>"
+            f"<tr>{model_row_td(model)}"
             f"<td>{eig[0]:.2f}</td><td>{eig[1]:.2f}</td><td>{eig3}</td>"
             f"<td>{n_retained}</td><td>{var_exp:.1f}%</td></tr>\n"
         )
@@ -620,19 +870,16 @@ def generate_report():
     )
 
     print("Generating loading plots...")
-    for model in models_loaded:
-        d = model_data[model]
-        fig_num += 1
-        b64_load = fig_loadings_per_model(model, d)
-        html += html_figure(
-            b64_load,
-            f"Varimax-rotated loadings for {d['label']}. "
-            "Blue bars = Experience capacities, red = Agency capacities "
-            "(human assignment). Higher absolute loading indicates stronger "
-            "association with that factor.",
-            fig_num=fig_num,
-            alt=f"Loadings for {d['label']}",
-        )
+    fig_num += 1
+    b64_load = fig_loadings_combined(model_data, models_loaded)
+    html += html_figure(
+        b64_load,
+        "Varimax-rotated loadings for all models. Each model shows Factor 1 and "
+        "Factor 2 side by side. Blue bars = Experience capacities, red = Agency "
+        "capacities (human assignment). Dashed lines mark |0.4| threshold.",
+        fig_num=fig_num,
+        alt="Factor loadings comparison",
+    )
 
     # ── Section 6: Mind Perception Space ──
     html += '<h2 id="mind-space">6. Mind Perception Space</h2>\n'
@@ -679,14 +926,12 @@ def generate_report():
     for model in models_loaded:
         d = model_data[model]
         corr = d["correlations"]
-        row = f"<tr><td>{d['label']}</td>"
+        row = f"<tr>{model_row_td(model)}"
         for key in ["f1_experience", "f1_agency", "f2_experience", "f2_agency"]:
             if key in corr:
                 rho = corr[key]["rho"]
                 p = _get_p(corr[key])
-                stars = _sig_stars(p)
-                css = ' class="sig"' if p < 0.05 else ""
-                row += f"<td{css}>{rho:.3f}{stars}</td>"
+                row += format_p_cell(rho, p)
                 if abs(rho) > best_rho and p < 0.05:
                     best_rho = abs(rho)
                     best_model = model
@@ -709,9 +954,9 @@ def generate_report():
     html += "</div>\n"
 
     # ── Section 8: Individual Ratings ──
-    models_with_individual = [
+    models_with_individual = sort_models([
         m for m in models_loaded if "individual_matrix" in model_data[m]
-    ]
+    ])
 
     if has_individual:
         html += '<h2 id="individual">8. Individual Ratings</h2>\n'
@@ -722,71 +967,169 @@ def generate_report():
             "This avoids pairwise position bias entirely.</p>\n"
         )
 
-        for model in models_with_individual:
-            d = model_data[model]
-            html += f"<h3>{d['label']}</h3>\n"
-
-            # Heatmap
-            print(f"  Generating individual heatmap for {model}...")
-            fig_num += 1
-            b64_heat = fig_individual_heatmap(model, d)
+        # Combined heatmap (all models side by side)
+        print("  Generating combined individual heatmaps...")
+        fig_num += 1
+        b64_combined = fig_individual_heatmaps_combined(model_data, models_with_individual)
+        if b64_combined:
             html += html_figure(
-                b64_heat,
-                f"Individual Likert rating heatmap for {d['label']}. "
-                "Each cell shows how much the model attributes a specific "
-                "mental capacity (row) to a specific entity (column). The "
-                "value is the expected Likert rating computed from the model's "
-                "next-token logit distribution over tokens '1' through '5', "
-                "where 1 = not at all capable and 5 = extremely capable. "
-                "3.0 is neutral. Colors use a red-yellow-blue scale: red/warm "
-                "tones indicate higher ratings (greater capacity attribution), "
-                "blue/cool tones indicate lower ratings. Row labels indicate "
-                "whether each capacity belongs to the Experience (E) or "
-                "Agency (A) factor from Gray et al.",
+                b64_combined,
+                "Individual Likert rating heatmaps for all models, displayed "
+                "side by side for comparison. Each cell shows the expected "
+                "rating (1-5 scale) computed from the model's next-token logit "
+                "distribution. 3.0 is neutral. Red/warm = higher capacity "
+                "attribution; blue/cool = lower. Row labels indicate Experience "
+                "(E) or Agency (A) factor assignment from Gray et al.",
                 fig_num=fig_num,
-                alt=f"Rating heatmap for {d['label']}",
+                alt="Combined individual rating heatmaps",
             )
 
-            # Factor scatter
-            if "individual_pca" in d:
-                print(f"  Generating individual scatter for {model}...")
-                fig_num += 1
-                b64_scat = fig_individual_scatter(model, d)
+        # Combined scatter: best factor-human correlation per model
+        models_with_pca = sort_models([
+            m for m in models_with_individual if "individual_pca" in model_data[m]
+        ])
+        if models_with_pca:
+            print("  Generating combined individual scatter...")
+            fig_num += 1
+            b64_scat = fig_individual_scatter_combined(model_data, models_with_pca)
+            if b64_scat:
                 html += html_figure(
                     b64_scat,
-                    f"Individual PCA factor scores vs human for {d['label']}. "
-                    "2×2 grid: each subplot shows one model factor (y-axis) vs "
-                    "one human dimension (x-axis). Blue = Experience, red = Agency. "
-                    "Each point is one entity, labeled. Spearman ρ shown in title.",
+                    "Individual ratings PCA: best factor-human correlation for "
+                    "each model. Each panel shows the factor and human dimension "
+                    "(Experience or Agency) with the strongest Spearman rho. "
+                    "Blue = Experience, red = Agency.",
                     fig_num=fig_num,
-                    alt=f"Individual scatter for {d['label']}",
+                    alt="Combined individual scatter",
                 )
 
-            # Individual correlation table
-            if "individual_correlations" in d:
+        # Combined individual correlation table
+        models_with_corr = [
+            m for m in models_with_individual
+            if "individual_correlations" in model_data[m]
+        ]
+        if models_with_corr:
+            html += "<h3>Individual Correlation Summary</h3>\n"
+            html += "<table>\n"
+            html += (
+                "<tr><th>Model</th>"
+                "<th>F1 vs Exp (ρ)</th><th>F1 vs Age (ρ)</th>"
+                "<th>F2 vs Exp (ρ)</th><th>F2 vs Age (ρ)</th></tr>\n"
+            )
+            for model in models_with_corr:
+                d = model_data[model]
                 ind_corr = d["individual_correlations"]
-                html += "<table>\n"
-                html += (
-                    "<tr><th>Comparison</th><th>Spearman rho</th>"
-                    "<th>p-value</th><th>Sig</th></tr>\n"
-                )
-                for key in ["f1_experience", "f1_agency", "f2_experience", "f2_agency"]:
+                color = MODEL_COLORS.get(model, "#333333")
+                row = (f'<tr><td style="border-left: 4px solid {color}; '
+                       f'font-weight: 600;">{d["label"]}</td>')
+                for key in ["f1_experience", "f1_agency",
+                            "f2_experience", "f2_agency"]:
                     if key in ind_corr:
                         rho = ind_corr[key]["rho"]
                         p = _get_p(ind_corr[key])
                         stars = _sig_stars(p)
-                        label = key.replace("f1_", "F1 vs ").replace("f2_", "F2 vs ").replace("_", " ").title()
                         css = ' class="sig"' if p < 0.05 else ""
-                        html += (
-                            f"<tr><td>{label}</td>"
-                            f"<td{css}>{rho:.3f}</td>"
-                            f"<td>{p:.4f}</td>"
-                            f"<td>{stars if stars else 'n.s.'}</td></tr>\n"
-                        )
-                html += "</table>\n"
+                        row += f"<td{css}>{rho:.3f}{stars}</td>"
+                    else:
+                        row += "<td>--</td>"
+                row += "</tr>\n"
+                html += row
+            html += "</table>\n"
 
-    # ── Section 9: Key Takeaways ──
-    takeaway_num = "9" if has_individual else "8"
+    # ── Section N: Behavioral RSA ──
+    models_with_rsa = sort_models([m for m in models_loaded if "behavioral_rsa" in model_data[m]])
+    if has_rsa:
+        rsa_num = 9 if has_individual else 8
+        html += f'<h2 id="behavioral-rsa">{rsa_num}. Behavioral RSA</h2>\n'
+        html += (
+            "<p>Representational Similarity Analysis (RSA) compares the model's "
+            "behavioral similarity structure across entities with the human "
+            "similarity structure from Gray et al. Each RDM captures pairwise "
+            "distances between all 13 entities. The RSA statistic is the Spearman "
+            "rank correlation between the upper triangles of the model and human "
+            "RDMs.</p>\n"
+            "<p>Two RDM sources: <strong>Pairwise PCA</strong> (Euclidean distance "
+            "in the 2D factor space) and <strong>Individual 18D</strong> (correlation "
+            "distance across all 18 capacity ratings). Three human RDM variants: "
+            "Combined (2D Euclidean), Experience-only, and Agency-only.</p>\n"
+        )
+
+        # RSA Summary Table
+        html += "<h3>RSA Summary</h3>\n"
+        html += "<table>\n"
+        html += (
+            "<tr><th>Model</th><th>RDM Source</th>"
+            "<th>vs Combined (rho)</th><th>vs Experience (rho)</th>"
+            "<th>vs Agency (rho)</th></tr>\n"
+        )
+
+        for model in models_with_rsa:
+            d = model_data[model]
+            rsa = d["behavioral_rsa"]
+
+            for source_key, source_label in [
+                ("pairwise_pca", "Pairwise PCA"),
+                ("individual_18d", "Individual 18D"),
+            ]:
+                if source_key not in rsa:
+                    continue
+                source = rsa[source_key]
+                row = f"<tr>{model_row_td(model)}<td>{source_label}</td>"
+                for variant in ["combined", "experience", "agency"]:
+                    if variant in source:
+                        rho = source[variant]["rho"]
+                        p = source[variant]["p_value"]
+                        row += format_p_cell(rho, p)
+                    else:
+                        row += "<td>--</td>"
+                row += "</tr>\n"
+                html += row
+
+        html += "</table>\n"
+
+        # RDM Heatmaps
+        print("Generating behavioral RDM heatmaps...")
+        b64_rdm = fig_behavioral_rdm_heatmaps(model_data)
+        if b64_rdm:
+            fig_num += 1
+            html += html_figure(
+                b64_rdm,
+                "Behavioral RDMs (pairwise PCA source). First panel: human "
+                "combined RDM (Euclidean distance in Experience x Agency space). "
+                "Subsequent panels: model behavioral RDMs (Euclidean distance in "
+                "2D factor space). Shared colormap for visual comparability.",
+                fig_num=fig_num,
+                alt="Behavioral RDM heatmaps",
+            )
+
+        # Interpretation
+        html += '<div class="interpret">\n'
+        best_rsa_rho = 0.0
+        best_rsa_model = None
+        best_rsa_desc = ""
+        for m in models_with_rsa:
+            rsa = model_data[m]["behavioral_rsa"]
+            for src_key, src_label in [("pairwise_pca", "PCA"), ("individual_18d", "18D")]:
+                if src_key in rsa:
+                    for var in ["combined", "experience", "agency"]:
+                        if var in rsa[src_key]:
+                            rho = rsa[src_key][var]["rho"]
+                            p = rsa[src_key][var]["p_value"]
+                            if p < 0.05 and abs(rho) > best_rsa_rho:
+                                best_rsa_rho = abs(rho)
+                                best_rsa_model = m
+                                best_rsa_desc = f"{src_label} vs {var} (rho={rho:.3f})"
+        if best_rsa_model:
+            html += (
+                f"<p><strong>Strongest behavioral RSA:</strong> "
+                f"{MODEL_LABELS[best_rsa_model]}, {best_rsa_desc}.</p>\n"
+            )
+        else:
+            html += "<p>No significant behavioral RSA correlations found.</p>\n"
+        html += "</div>\n"
+
+    # ── Section N+1: Key Takeaways ──
+    takeaway_num = next_num
     html += f'<h2 id="takeaways">{takeaway_num}. Key Takeaways</h2>\n'
 
     # Auto-generate takeaways
@@ -885,6 +1228,33 @@ def generate_report():
             takeaways.append(
                 "<strong>Individual ratings:</strong> No significant human "
                 "correlations found in individual rating factor scores."
+            )
+
+    # Behavioral RSA summary
+    if models_with_rsa:
+        rsa_sigs = []
+        for m in models_with_rsa:
+            rsa = model_data[m]["behavioral_rsa"]
+            for src_key, src_label in [("pairwise_pca", "PCA"), ("individual_18d", "18D")]:
+                if src_key in rsa:
+                    for var in ["combined", "experience", "agency"]:
+                        if var in rsa[src_key]:
+                            p = rsa[src_key][var]["p_value"]
+                            rho = rsa[src_key][var]["rho"]
+                            if p < 0.05:
+                                rsa_sigs.append(
+                                    f"{MODEL_LABELS[m]} {src_label} vs {var} "
+                                    f"(rho={rho:.3f})"
+                                )
+        if rsa_sigs:
+            takeaways.append(
+                "<strong>Behavioral RSA:</strong> Significant model-human RSA: "
+                + "; ".join(rsa_sigs) + "."
+            )
+        else:
+            takeaways.append(
+                "<strong>Behavioral RSA:</strong> No significant RSA correlations "
+                "between model and human behavioral RDMs."
             )
 
     if not takeaways:

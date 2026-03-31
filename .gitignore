@@ -38,12 +38,7 @@ Thumbs.db
 *.bak
 *.log
 
-# Exp 5 analysis code (kept locally, not tracked)
-exp_5/code/rsa/
-exp_5/code/probes/
-exp_5/code/interchange/
-exp_5/code/utils/
-exp_5/results/
+# Exp 5 brainstorm (kept locally, not tracked)
 exp_5/approach_brainstorm.md
 
 # Exp 7 (kept locally, not tracked)
@@ -59,3 +54,8 @@ exp_6/network.md
 **/checkpoints/
 **/tmp/
 *.npz
+
+# Private files (not tracked)
+llama2_layer_8/
+anthropic_application_draft.md
+questions.md

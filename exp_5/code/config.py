@@ -18,7 +18,14 @@ LOGS_DIR = ROOT_DIR / "logs"
 
 # ── Model ────────────────────────────────────────────────────────────────────
 
-VALID_MODELS = ("llama2_13b_chat", "llama3_8b_base", "llama3_8b_instruct")
+VALID_MODELS = (
+    "llama2_13b_chat", "llama2_13b_base",
+    "llama3_8b_instruct", "llama3_8b_base",
+    "gemma2_2b_it", "gemma2_2b",
+    "gemma2_9b_it", "gemma2_9b",
+    "qwen25_7b_instruct", "qwen25_7b",
+    "qwen3_8b",
+)
 
 _HF_CACHE = "/mnt/cup/labs/graziano/rachel/.cache_huggingface/hub"
 
@@ -28,36 +35,61 @@ _MODEL_PATHS = {
         "models--meta-llama--Llama-2-13b-chat-hf/snapshots/"
         "a2cb7a712bb6e5e736ca7f8cd98167f81a0b5bd8"
     ),
-    "llama3_8b_base": None,      # filled by _resolve_snapshot
-    "llama3_8b_instruct": None,  # filled by _resolve_snapshot
-}
-
-_MODEL_HF_NAMES = {
-    "llama3_8b_base": "models--meta-llama--Meta-Llama-3-8B",
-    "llama3_8b_instruct": "models--meta-llama--Meta-Llama-3-8B-Instruct",
+    "llama2_13b_base": (
+        f"{_HF_CACHE}/models--meta-llama--Llama-2-13b-hf/"
+        "snapshots/5c31dfb671ce7cfe2d7bb7c04375e44c55e815b1"
+    ),
+    "llama3_8b_instruct": (
+        f"{_HF_CACHE}/models--meta-llama--Meta-Llama-3-8B-Instruct/"
+        "snapshots/8afb486c1db24fe5011ec46dfbe5b5dccdb575c2"
+    ),
+    "llama3_8b_base": (
+        f"{_HF_CACHE}/models--meta-llama--Meta-Llama-3-8B/"
+        "snapshots/8cde5ca8380496c9a6cc7ef3a8b46a0372a1d920"
+    ),
+    "gemma2_2b_it": (
+        f"{_HF_CACHE}/models--google--gemma-2-2b-it/"
+        "snapshots/299a8560bedf22ed1c72a8a11e7dce4a7f9f51f8"
+    ),
+    "gemma2_2b": (
+        f"{_HF_CACHE}/models--google--gemma-2-2b/"
+        "snapshots/c5ebcd40d208330abc697524c919956e692655cf"
+    ),
+    "gemma2_9b_it": (
+        f"{_HF_CACHE}/models--google--gemma-2-9b-it/"
+        "snapshots/11c9b309abf73637e4b6f9a3fa1e92e615547819"
+    ),
+    "gemma2_9b": (
+        f"{_HF_CACHE}/models--google--gemma-2-9b/"
+        "snapshots/33c193028431c2fde6c6e51f29e6f17b60cbfac6"
+    ),
+    "qwen25_7b_instruct": (
+        f"{_HF_CACHE}/models--Qwen--Qwen2.5-7B-Instruct/"
+        "snapshots/a09a35458c702b33eeacc393d103063234e8bc28"
+    ),
+    "qwen25_7b": (
+        f"{_HF_CACHE}/models--Qwen--Qwen2.5-7B/"
+        "snapshots/d149729398750b98c0af14eb82c78cfe92750796"
+    ),
+    "qwen3_8b": (
+        f"{_HF_CACHE}/models--Qwen--Qwen3-8B/"
+        "snapshots/b968826d9c46dd6066d109eabc6255188de91218"
+    ),
 }
 
 _MODEL_CONFIGS = {
-    "llama2_13b_chat": {"hidden_dim": 5120, "n_layers": 41},
-    "llama3_8b_base": {"hidden_dim": 4096, "n_layers": 33},
+    "llama2_13b_chat":    {"hidden_dim": 5120, "n_layers": 41},
+    "llama2_13b_base":    {"hidden_dim": 5120, "n_layers": 41},
     "llama3_8b_instruct": {"hidden_dim": 4096, "n_layers": 33},
+    "llama3_8b_base":     {"hidden_dim": 4096, "n_layers": 33},
+    "gemma2_2b_it":       {"hidden_dim": 2304, "n_layers": 27},
+    "gemma2_2b":          {"hidden_dim": 2304, "n_layers": 27},
+    "gemma2_9b_it":       {"hidden_dim": 3584, "n_layers": 43},
+    "gemma2_9b":          {"hidden_dim": 3584, "n_layers": 43},
+    "qwen25_7b_instruct": {"hidden_dim": 3584, "n_layers": 29},
+    "qwen25_7b":          {"hidden_dim": 3584, "n_layers": 29},
+    "qwen3_8b":           {"hidden_dim": 4096, "n_layers": 37},
 }
-
-
-def _resolve_snapshot(model_key):
-    """Resolve snapshot path for HF-cached models."""
-    if model_key not in _MODEL_HF_NAMES:
-        return _MODEL_PATHS[model_key]
-    snap_dir = Path(_HF_CACHE) / _MODEL_HF_NAMES[model_key] / "snapshots"
-    if not snap_dir.exists():
-        raise FileNotFoundError(
-            f"Model not downloaded: {snap_dir}\n"
-            f"Download with: huggingface_hub.snapshot_download('{_MODEL_HF_NAMES[model_key].replace('models--', '').replace('--', '/')}')"
-        )
-    snaps = sorted(snap_dir.iterdir())
-    if not snaps:
-        raise FileNotFoundError(f"No snapshots in {snap_dir}")
-    return str(snaps[-1])
 
 # ── Active model state ───────────────────────────────────────────────────────
 
@@ -86,10 +118,7 @@ def add_model_argument(parser):
 
 
 def model_path():
-    m = get_model()
-    if _MODEL_PATHS.get(m) is None:
-        _MODEL_PATHS[m] = _resolve_snapshot(m)
-    return _MODEL_PATHS[m]
+    return _MODEL_PATHS[get_model()]
 
 
 def hidden_dim():

@@ -38,7 +38,7 @@ from utils.report_utils import (
 # Each entry: (relative_path_from_model_root, filename, applicable_models)
 # applicable_models: "all", "base_only", "chat_only", or a tuple of model keys
 
-BASE_MODELS = ("llama2_13b_base", "llama3_8b_base")
+BASE_MODELS = ("llama2_13b_base", "llama3_8b_base", "gemma2_2b", "gemma2_9b", "qwen25_7b")
 ALL = "all"
 BASE_ONLY = "base_only"
 
@@ -55,6 +55,7 @@ EXPECTED_FILES = {
             ("gray_replication/behavior/with_self/data", "pairwise_consistency_stats.json", ALL),
             ("gray_replication/behavior/with_self/data", "individual_pca_results.npz", ALL),
             ("gray_replication/behavior/with_self/data", "individual_rating_matrix.npz", ALL),
+            ("gray_replication/behavior/with_self/data", "behavioral_rsa_results.json", ALL),
         ],
     },
     "gray_simple": {

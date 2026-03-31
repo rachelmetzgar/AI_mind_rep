@@ -37,7 +37,9 @@ from config import ROOT_DIR, COMPARISONS_DIR, VALID_MODELS, MODELS, ensure_dir, 
 from utils.report_utils import (
     REPORT_CSS, build_cross_model_header, build_html_footer, build_toc,
     fig_to_b64, html_figure, MODEL_COLORS, MODEL_LABELS, ALL_MODELS,
-    gray_entities_stimuli_html,
+    gray_entities_stimuli_html, sort_models, GRID_NCOLS, make_model_grid,
+    model_row_td, format_p_cell, INSTRUCTION_TUNING_PAIRS, apply_fdr,
+    methodology_primer_html, neural_methods_primer_html,
 )
 from utils.utils import nice_entity
 from entities.gray_entities import GRAY_ET_AL_SCORES, ENTITY_NAMES
@@ -166,7 +168,7 @@ def generate_report():
         print("ERROR: No model data found. Exiting.")
         return
 
-    available = list(model_data.keys())
+    available = sort_models(list(model_data.keys()))
     fig_num = 0
 
     # -- Sections for TOC --
@@ -236,80 +238,99 @@ def generate_report():
              "space (lower = more similar).</p>\n")
     html += "</div>\n"
 
+    # ── Interpretation Guide ──
+    html += '<h3>Interpretation Guide</h3>\n'
+    html += neural_methods_primer_html(
+        include_layers=True, include_rdm=True, include_rsa=True,
+        include_procrustes=True)
+    html += methodology_primer_html(
+        include_pca=False, include_spearman=True, include_fdr=True,
+        include_prompting=False, include_pairwise=False)
+
+    html += '<div class="method">\n'
+    html += '<h4>Why Three RDM Variants?</h4>\n'
+    html += (
+        '<p>The <strong>combined</strong> RDM (2D Euclidean distance in '
+        'Experience&ndash;Agency space) tests whether the model encodes the '
+        'full mind perception geometry. The <strong>experience-only</strong> '
+        'and <strong>agency-only</strong> variants test each dimension '
+        'independently, revealing which aspect of mind perception the model '
+        'encodes more strongly. If a model shows significant Agency-only RSA '
+        'but not Experience-only, it means the model&rsquo;s entity '
+        'representations capture &ldquo;what can it do&rdquo; more than '
+        '&ldquo;what does it feel.&rdquo;</p>\n')
+    html += '</div>\n'
+
     # ==================================================================
-    # 4. RSA LAYERWISE: ALL MODELS (2x2 grid)
+    # 4. RSA LAYERWISE: BAR CHARTS (colored = FDR significant)
     # ==================================================================
     html += '<h2 id="rsa-layerwise">4. RSA Layerwise: All Models</h2>\n'
 
-    n_models = len(available)
-    nrows = (n_models + 1) // 2
-    fig, axes = plt.subplots(nrows, 2, figsize=(14, 5 * nrows), squeeze=False)
+    # Apply FDR correction to combined RSA for each model
+    for mk in available:
+        apply_fdr(model_data[mk]["rsa"]["combined"])
 
-    # Determine shared y-range
+    # Determine shared y-range across all models (combined only for bars)
     all_rhos = []
     for mk in available:
-        for variant in ["combined", "experience", "agency"]:
-            for r in model_data[mk]["rsa"][variant]:
-                all_rhos.append(clean_rho(r["rho"]))
+        for r in model_data[mk]["rsa"]["combined"]:
+            all_rhos.append(clean_rho(r["rho"]))
     y_min = min(all_rhos) - 0.05
     y_max = max(all_rhos) + 0.1
 
-    for idx, mk in enumerate(available):
-        row, col = divmod(idx, 2)
-        ax = axes[row][col]
-        rsa = model_data[mk]["rsa"]
+    positions, ordered, nrows, ncols, _ = make_model_grid(available)
+    fig, axes = plt.subplots(nrows, ncols, figsize=(6 * ncols, 4.5 * nrows), squeeze=False)
+    for ax in axes.flatten():
+        ax.set_visible(False)
+
+    for idx, mk in enumerate(ordered):
+        row, col = positions[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
+        rsa_combined = model_data[mk]["rsa"]["combined"]
         base_color = MODEL_COLORS[mk]
 
-        for variant, style in RSA_VARIANT_STYLES.items():
-            layers = [r["layer"] for r in rsa[variant]]
-            rhos = [clean_rho(r["rho"]) for r in rsa[variant]]
-            pvals = [clean_p(r["p_value"]) for r in rsa[variant]]
+        layers = [r["layer"] for r in rsa_combined]
+        rhos = [clean_rho(r["rho"]) for r in rsa_combined]
+        qvals = [r.get("q_fdr", 1.0) for r in rsa_combined]
 
-            if variant == "combined":
-                color = base_color
-            elif variant == "experience":
-                # Lighter shade
-                rgb = mcolors.to_rgb(base_color)
-                color = tuple(min(1.0, c * 0.6 + 0.4) for c in rgb)
-            else:
-                rgb = mcolors.to_rgb(base_color)
-                color = tuple(min(1.0, c * 0.4 + 0.3) for c in rgb)
-
-            # Plot line
-            ax.plot(layers, rhos, ls=style["ls"], lw=style["lw"],
-                    color=color, label=style["label"], alpha=0.9)
-
-            # Mark significant layers with filled markers
-            sig_layers = [l for l, p in zip(layers, pvals) if p < 0.05]
-            sig_rhos = [rhos[layers.index(l)] for l in sig_layers]
-            if sig_layers:
-                ax.scatter(sig_layers, sig_rhos, color=color, s=20, zorder=5,
-                           edgecolors="none")
-
+        # Gray bars default, colored if FDR-significant
+        colors = [base_color if q < 0.05 else "#cccccc" for q in qvals]
+        ax.bar(layers, rhos, color=colors, edgecolor="white", width=0.8)
         ax.axhline(0, color="gray", lw=0.5, alpha=0.5)
-        ax.set_xlabel("Layer")
-        ax.set_ylabel("Spearman rho")
-        ax.set_title(MODEL_LABELS[mk])
+        ax.set_xlabel("Transformer Layer")
+        ax.set_ylabel("Spearman ρ")
         ax.set_ylim(y_min, y_max)
-        ax.legend(loc="upper left", fontsize=8)
 
-    # Hide unused panels
-    for idx in range(n_models, nrows * 2):
-        row, col = divmod(idx, 2)
-        axes[row][col].set_visible(False)
+        # Annotate peak
+        peak = get_peak_rsa(rsa_combined)
+        peak_rho = clean_rho(peak["rho"])
+        peak_q = peak.get("q_fdr", 1.0)
+        n_sig = sum(1 for q in qvals if q < 0.05)
+        n_total = len(layers)
+        ax.set_title(f"{MODEL_LABELS[mk]}\n{n_sig}/{n_total} layers q < .05, "
+                     f"peak layer {peak['layer']} (ρ={peak_rho:.3f})",
+                     fontsize=9)
+        if peak["layer"] >= 0:
+            ax.annotate(
+                f"ρ={peak_rho:.3f}\nq={peak_q:.3f}",
+                (peak["layer"], peak_rho),
+                textcoords="offset points", xytext=(12, 8), fontsize=7.5,
+                arrowprops=dict(arrowstyle="->", color="gray", lw=0.8),
+            )
 
-    fig.suptitle("RSA: Model RDM vs Human Mind Perception RDM Across Layers",
-                 fontsize=14, y=1.01)
+    fig.suptitle("Combined RSA: Model RDM vs Human Mind Perception RDM",
+                 fontsize=14)
     fig.tight_layout()
     fig_num += 1
     b64 = fig_to_b64(fig)
     plt.close(fig)
     html += html_figure(
         b64,
-        "Layerwise RSA for each model. Solid lines show combined (Experience + Agency) "
-        "RDM correlation; dashed lines show experience-only; dotted lines show "
-        "agency-only. Filled dots mark layers with p < 0.05.",
-        fig_num=fig_num, alt="RSA layerwise 2x2 grid"
+        "Layerwise RSA (combined Experience + Agency) for each model. "
+        "Colored bars indicate FDR-significant layers (q &lt; .05); gray bars are "
+        "non-significant. Peak layer annotated with ρ and q values.",
+        fig_num=fig_num, alt="RSA bar charts"
     )
 
     # ==================================================================
@@ -355,19 +376,23 @@ def generate_report():
     )
 
     # ==================================================================
-    # 6. PEAK RSA SUMMARY TABLE
+    # 6. PEAK RSA SUMMARY TABLE (3 side-by-side tables)
     # ==================================================================
     html += '<h2 id="rsa-peak-table">6. Peak RSA Summary Table</h2>\n'
 
-    html += ('<table>\n'
-             '<tr><th>Model</th><th>Variant</th><th>Peak Layer</th>'
-             '<th>Peak rho</th><th>p-value</th><th>Sig.</th>'
-             '<th># Layers p&lt;0.05</th></tr>\n')
+    html += ('<div style="display: flex; gap: 20px; flex-wrap: wrap; '
+             'align-items: flex-start;">\n')
 
-    for mk in available:
-        rsa = model_data[mk]["rsa"]
-        mc = MODEL_COLORS[mk]
-        for variant in ["combined", "experience", "agency"]:
+    for variant in ["combined", "experience", "agency"]:
+        html += '<div style="flex: 1; min-width: 280px;">\n'
+        html += f'<h3 style="margin-top: 0;">{variant.title()}</h3>\n'
+        html += ('<table style="width: 100%;">\n'
+                 '<tr><th>Model</th><th>Peak Layer</th>'
+                 '<th>Peak rho</th><th>p</th><th>Sig.</th>'
+                 '<th># Sig Layers</th></tr>\n')
+
+        for mk in available:
+            rsa = model_data[mk]["rsa"]
             rsa_list = rsa[variant]
             peak = get_peak_rsa(rsa_list)
             peak_layer = peak["layer"]
@@ -377,38 +402,38 @@ def generate_report():
             sig = sig_str(peak_p)
             sig_class = ' class="sig"' if peak_p < 0.05 else ''
 
-            html += (f'<tr><td style="border-left: 4px solid {mc}; '
-                     f'font-weight: 600;">{MODEL_LABELS[mk]}</td>'
-                     f'<td>{variant.title()}</td>'
+            html += (f'<tr>{model_row_td(mk)}'
                      f'<td>{peak_layer}</td>'
                      f'<td>{peak_rho:.4f}</td>'
                      f'<td>{peak_p:.4f}</td>'
                      f'<td{sig_class}>{sig}</td>'
                      f'<td>{n_sig}</td></tr>\n')
 
-    html += '</table>\n'
+        html += '</table>\n</div>\n'
+
+    html += '</div>\n'
 
     # ==================================================================
     # 7. RDM AT PEAK LAYER
     # ==================================================================
     html += '<h2 id="rdm-peak">7. RDM at Peak Layer</h2>\n'
 
-    n_panels = 1 + len(available)  # human reference + one per model
-    fig, axes = plt.subplots(1, n_panels, figsize=(5 * n_panels, 4.5))
-    if n_panels == 1:
-        axes = [axes]
+    positions, ordered, nrows_rdm, ncols_rdm, human_pos = make_model_grid(available, include_human=True)
+    fig, axes = plt.subplots(nrows_rdm, ncols_rdm, figsize=(5 * ncols_rdm, 5 * nrows_rdm), squeeze=False, layout="constrained")
+    for ax in axes.flatten():
+        ax.set_visible(False)
 
     # Collect all RDMs to find shared color range
     all_rdm_vals = []
     peak_layers = {}
-    for mk in available:
+    for mk in ordered:
         peak = get_peak_rsa(model_data[mk]["rsa"]["combined"])
         peak_layers[mk] = peak["layer"]
         model_rdm = model_data[mk]["rdm"]["model_rdm"]
         all_rdm_vals.append(model_rdm[peak["layer"]])
 
     # Get human RDM from first available model
-    first_mk = available[0]
+    first_mk = ordered[0]
     set_model(first_mk)
     rdm_data = model_data[first_mk]["rdm"]
     human_rdm = rdm_data["human_rdm_combined"]
@@ -419,18 +444,23 @@ def generate_report():
     vmin = min(v.min() for v in all_rdm_vals)
     vmax = max(v.max() for v in all_rdm_vals)
 
-    # Panel 0: Human RDM
-    ax = axes[0]
-    im = ax.imshow(human_rdm, cmap="viridis", aspect="equal", vmin=vmin, vmax=vmax)
-    ax.set_xticks(range(len(entity_keys)))
-    ax.set_xticklabels(nice_labels, rotation=90, fontsize=7)
-    ax.set_yticks(range(len(entity_keys)))
-    ax.set_yticklabels(nice_labels, fontsize=7)
-    ax.set_title("Human\n(Gray et al.)", fontsize=10)
+    # Human RDM panel
+    ax_human = axes[human_pos[0], human_pos[1]]
+    ax_human.set_visible(True)
+    im = ax_human.imshow(human_rdm, cmap="viridis", aspect="equal", vmin=vmin, vmax=vmax)
+    ax_human.set_xticks(range(len(entity_keys)))
+    ax_human.set_xticklabels(nice_labels, rotation=90, fontsize=7)
+    ax_human.set_yticks(range(len(entity_keys)))
+    ax_human.set_yticklabels(nice_labels, fontsize=7)
+    ax_human.set_title("Human\n(Gray et al.)", fontsize=10)
 
-    # Panels 1+: Model RDMs
-    for i, mk in enumerate(available):
-        ax = axes[i + 1]
+    # Model RDM panels
+    visible_axes = [ax_human]
+    for idx, mk in enumerate(ordered):
+        row, col = positions[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
+        visible_axes.append(ax)
         layer = peak_layers[mk]
         model_rdm = model_data[mk]["rdm"]["model_rdm"][layer]
         peak_rho = clean_rho(get_peak_rsa(model_data[mk]["rsa"]["combined"])["rho"])
@@ -442,9 +472,8 @@ def generate_report():
         ax.set_yticklabels(nice_labels, fontsize=7)
         ax.set_title(f"{MODEL_LABELS[mk]}\nLayer {layer} (rho={peak_rho:.3f})", fontsize=10)
 
-    fig.colorbar(im, ax=axes, shrink=0.7, label="Dissimilarity")
-    fig.suptitle("RDMs at Peak RSA Layer", fontsize=14, y=1.02)
-    fig.tight_layout()
+    fig.colorbar(im, ax=visible_axes, shrink=0.7, label="Dissimilarity")
+    fig.suptitle("RDMs at Peak RSA Layer", fontsize=14)
     fig_num += 1
     b64 = fig_to_b64(fig)
     plt.close(fig)
@@ -494,8 +523,8 @@ def generate_report():
     human_exp = np.array([GRAY_ET_AL_SCORES[e][0] for e in entity_keys])
     human_ag = np.array([GRAY_ET_AL_SCORES[e][1] for e in entity_keys])
 
-    # Green gradient: entity color based on human combined score (dark=high, light=low)
-    cmap = plt.cm.Greens
+    # Purple gradient: entity color based on human combined score (dark=high, light=low)
+    cmap = plt.cm.Purples
     dists = np.sqrt(human_exp ** 2 + human_ag ** 2)
     d_min, d_max = dists.min(), dists.max()
     d_rng = d_max - d_min if d_max > d_min else 1.0
@@ -503,29 +532,30 @@ def generate_report():
     # Build lookup by entity key for model panels
     entity_color_map = {e: entity_colors[i] for i, e in enumerate(entity_keys)}
 
-    n_scatter = 1 + len(available)
-    ncols = min(n_scatter, 3)
-    nrows = (n_scatter + ncols - 1) // ncols
-    fig, axes = plt.subplots(nrows, ncols, figsize=(6.5 * ncols, 6 * nrows))
-    axes = np.atleast_2d(axes).flatten()
-    for i in range(n_scatter, len(axes)):
-        axes[i].set_visible(False)
+    positions_sc, ordered_sc, nrows_sc, ncols_sc, human_pos_sc = make_model_grid(available, include_human=True)
+    panel_size = 6
+    fig, axes = plt.subplots(nrows_sc, ncols_sc, figsize=(panel_size * ncols_sc, panel_size * nrows_sc), squeeze=False)
+    for ax in axes.flatten():
+        ax.set_visible(False)
 
-    # Panel 0: Human reference
-    ax = axes[0]
-    ax.scatter(human_ag, human_exp, s=80, c=entity_colors, edgecolor="white",
-               zorder=5, linewidth=0.5)
+    # Human reference panel
+    ax_human = axes[human_pos_sc[0], human_pos_sc[1]]
+    ax_human.set_visible(True)
+    ax_human.scatter(human_ag, human_exp, s=80, c=entity_colors, edgecolor="white",
+                     zorder=5, linewidth=0.5)
     for i, ek in enumerate(entity_keys):
-        ax.annotate(nice_entity(ek), (human_ag[i], human_exp[i]),
-                    textcoords="offset points", xytext=(5, 4), fontsize=8.5)
-    ax.set_xlabel("Agency")
-    ax.set_ylabel("Experience")
-    ax.set_title("Human\n(Gray et al., 2007)", fontsize=11)
-    ax.set_aspect("equal")
+        ax_human.annotate(nice_entity(ek), (human_ag[i], human_exp[i]),
+                          textcoords="offset points", xytext=(5, 4), fontsize=8.5)
+    ax_human.set_xlabel("Agency")
+    ax_human.set_ylabel("Experience")
+    ax_human.set_title("Human\n(Gray et al., 2007)", fontsize=11)
+    ax_human.set_aspect("equal")
 
     # Model panels: Procrustes-rotated PCA at best layer (same entity colors)
-    for idx, mk in enumerate(available):
-        ax = axes[idx + 1]
+    for idx, mk in enumerate(ordered_sc):
+        row, col = positions_sc[idx]
+        ax = axes[row, col]
+        ax.set_visible(True)
         disparity = model_data[mk]["pca"]["procrustes_disparity"]
         best_layer = int(np.argmin(disparity))
         best_disp = disparity[best_layer]
@@ -563,16 +593,10 @@ def generate_report():
     html += '<h2 id="instruction-tuning">10. Instruction Tuning Effect</h2>\n'
 
     families = OrderedDict()
-    families["LLaMA-2-13B"] = {
-        "base": "llama2_13b_base",
-        "chat": "llama2_13b_chat",
-    }
-    families["LLaMA-3-8B"] = {
-        "base": "llama3_8b_base",
-        "chat": "llama3_8b_instruct",
-    }
+    for fam_name, base_key, chat_key in INSTRUCTION_TUNING_PAIRS:
+        families[fam_name] = {"base": base_key, "chat": chat_key}
 
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, ax = plt.subplots(figsize=(max(8, 2.5 * len(families)), 5))
 
     bar_width = 0.3
     x_positions = []
