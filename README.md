@@ -6,7 +6,7 @@
 
 ## Motivation
 
-Do LLMs construct structured representations of mind during interaction, encoding dimensions like experience, agency, and intentionality in ways that parallel human social cognition? My work investigates both sides of human-AI interaction: using fMRI to study how human brains distinguish AI from human interlocutors, and using mechanistic interpretability methods to ask the complementary question about LLMs.
+Do LLMs construct structured representations of mind during interaction, encoding dimensions like experience and agency in ways that parallel human social cognition? My work investigates both sides of human-AI interaction: using fMRI to study how human brains distinguish AI from human interlocutors, and using mechanistic interpretability methods to ask the complementary question about LLMs.
 
 The project is organized around seven core questions:
 
@@ -14,13 +14,13 @@ The project is organized around seven core questions:
 2. Are partner identity distinctions linearly encoded in model activations, and do they causally influence generation? (Exp 2)
 3. Do partner representations have compositional folk-psychological structure? (Exp 3)
 4. Does LLM mind perception geometry mirror the structure found in human psychology? (Exp 4)
-5. Does the model maintain a dedicated representational structure for mental state attributions that is distinct from its component parts? (Exp 5)
-6. Do LLMs track multi-agent beliefs in their internal representations, beyond surface-level communication structure? (Exp 6)
+5. Does the model maintain a compositional representational structure for mental state attributions ({subject} + {mental state} + {object})? (Exp 5)
+6. *Planned*: Do LLMs track multi-agent beliefs in their internal representations, beyond surface-level communication structure? (Exp 6)
 7. *Future*: Do mental-state vectors activate during theory-of-mind reasoning? (Exp 7)
 
-**Why this matters:** Understanding how LLMs represent conversational partners has direct implications for AI safety (do models treat users differently based on who they think they're talking to?), alignment (are persona representations stable and controllable?), and the broader science of machine cognition (do LLMs develop something functionally analogous to theory of mind during real time interaction?). As AI-AI interaction becomes increasingly common, with models serving as agents, tools, and intermediaries for each other, knowing how partner identity representations shape behavior is critical for predicting how these systems will interact at scale. More broadly, this work probes the conceptual structure of representations of mind in LLMs: how models represent the mind of iteself and the user, what the characterisitcs and functions of those representations are, and whether that structure resembles the folk-psychological framework humans use to understand other agents. As models are deployed in high-stakes social contexts like therapy, education, companionship, the structure of these partner representations shapes how models adapt their behavior, and whether that adaptation is transparent, predictable, and aligned with human expectations.
+**Why this matters:** Understanding how LLMs represent conversational partners has direct implications for AI safety (do models treat users differently based on who they think they're talking to?), alignment (are persona representations stable and controllable?), and the broader science of machine cognition (do LLMs develop something functionally analogous to theory of mind during real time interaction?). As AI-AI interaction becomes increasingly common, with models serving as agents, tools, and intermediaries for each other, knowing how partner identity representations shape behavior is critical for predicting how these systems will interact at scale. More broadly, this work probes how LLMs attribute mental states to different entities: can we isolate internal directions associated with mental state attribution, determine which entities the model attributes mental states to, how that attribution pattern compares to human folk psychology, and where the model places itself along these dimensions? These questions bear on AI self-knowledge, model welfare, and the structure of machine social cognition. As models are deployed in high-stakes social contexts like therapy, education, and companionship, the structure of these representations shapes how models adapt their behavior, and whether that adaptation is transparent, predictable, and aligned with human expectations.
 
-**Relevant Work:** Recent work on model representations of others (including demographic vectors (Chen et al., 2025), persona vectors (Chen et al. 2024), the Assistant Axis (Lu et al., 2026), and the Persona Selection Model (Anthropic, 2026)) has shown that LLMs maintain coherent, causally active identity representations of *user demographics* and *personas*. I extend this line of inquiry to ask: how models represent the identity and *mental properties* of the *user*, and do those representations carry the kind of compositional folk-psychological structure that decades of mind perception research in psychology would predict. Then I extend this work into questions about theory of mind: do models create structured, causally active representations of mental attribution?
+**Relevant Work:** Recent work on model representations of others (including demographic vectors (Chen et al., 2025), persona vectors (Chen et al. 2024), the Assistant Axis (Lu et al., 2026), and the Persona Selection Model (Anthropic, 2026)) has shown that LLMs maintain coherent, causally active identity representations of *user demographics* and *personas*. I extend this line of inquiry to ask: how models represent the identity and *mental properties* of the *user*, and do those representations carry the kind of compositional folk-psychological structure that decades of mind perception research in psychology would predict? Then I extend this work into questions about theory of mind: do models create structured, causally active representations of mental attribution?
 
 ---
 
@@ -36,7 +36,7 @@ Eight experiments address these questions at increasing mechanistic depth:
 | **Exp 3**: Concept-of-Mind Structure | Does the partner representation have compositional folk-psychological structure? | Contrastive concept elicitation (24 dimensions), alignment with partner probes, causal steering, lexical confound analysis | LLaMA-2-13B-Chat |
 | **Exp 4**: Implicit Folk Psychology | Does the LLM's entity mind space mirror human folk psychology? | Gray et al. (2007) replication across 4 branches: pairwise behavioral PCA, neural RSA, 30-character AI/human adaptation, expanded concept alignment | 11 models: LLaMA-2-13B, LLaMA-3-8B, Gemma-2-2B/9B, Qwen-2.5-7B, Qwen3-8B (base + instruct) |
 | **Exp 5**: Mental State Attribution RSA | Does the model have a dedicated representational structure for mental state attributions? | 5-predictor regression RSA on 336 sentences (56 items x 6 conditions) at last-token, verb, and object positions | 11 models: LLaMA-2-13B, LLaMA-3-8B, Gemma-2-2B/9B, Qwen-2.5-7B, Qwen3-8B (base + instruct) |
-| **Exp 6**: Multi-Agent Belief Propagation | Do internal representations track who-believes-what in multi-agent narratives? | 4-agent belief propagation narratives + RSA comparing epistemic vs communication RDMs | LLaMA-2-13B-Chat |
+| **Exp 6 (planned)**: Multi-Agent Belief Propagation | Do internal representations track who-believes-what in multi-agent narratives? | 4-agent belief propagation narratives + RSA comparing epistemic vs communication RDMs | LLaMA-2-13B-Chat |
 | **Exp 7 (future)**: ToM Concept Deployment | Are mental-state concepts activated during theory of mind reasoning? | Project mind vectors onto activations during false belief tasks | LLaMA-2-13B-Chat |
 
 ### Data Versions
@@ -209,10 +209,17 @@ Experiments 2-3 show the model has linearly decodable partner representations wi
 
 ---
 
-## Experiment 6 — Multi-Agent Belief Propagation (`exp_6/`)
+## Experiment 6 — Multi-Agent Belief Propagation (`exp_6/`) *[Planned]*
 
 ### Motivation
-Experiments 1-3 examine 2-agent interactions (human vs AI). Exp 6 scales to 4 agents, asking whether the model's internal representational geometry of agent belief states mirrors the ground-truth epistemic geometry (who-believes-what), in a way that cannot be explained by surface-level features like syntactic proximity, co-occurrence, or communication structure. This parallels Gurnee & Tegmark (2023), who showed LLMs develop internal geographic representations whose distances reflect real-world geography — here applied to the social-cognitive domain.
+Experiments 1-5 examine representations of mind in 1- or 2-agent contexts. Exp 6 scales to 4 agents, asking whether the model's internal representational geometry of agent belief states mirrors the ground-truth epistemic geometry (who-believes-what), in a way that cannot be explained by surface-level features like syntactic proximity, co-occurrence, or communication structure. This parallels Gurnee & Tegmark (2023), who showed LLMs develop internal geographic representations whose distances reflect real-world geography, here applied to the social-cognitive domain.
+
+### Planned Design
+- 96 narratives (3 communication topologies x 4 belief conditions x 8 instantiations), each with 4 agents
+- Activation extraction at agent-mention positions across all layers
+- RDM construction comparing agent belief-state geometry to ground-truth epistemic structure
+- RSA with confound models controlling for syntactic proximity, co-occurrence, and communication topology
+- Tests whether the model maintains distinct belief-state representations for each agent that track information flow through the narrative
 
 ---
 
